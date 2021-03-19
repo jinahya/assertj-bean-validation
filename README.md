@@ -6,16 +6,16 @@ An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for Bean-Val
 ## Usages.
 
 ```java
-final Object bean = bean();
-assertBean(bean).isValid();
+final Object object = bean();
+assertBean(object).isValid();
 
 final Validator validator = validator();
-assertBean(bean).isValidWith(validator);
-assertBean(bean).withValidator(validator).isValid();
+assertBean(object).isValidWith(validator);
+assertThat(bean(object)).withValidator(validator).isValid();
 
 final Class<?>[] groups = groups();
-assertBean(bean).isValidFor(groups);
-assertBean(bean).forGroups(groups).isValid();
+assertThat(bean(object)).isValidFor(groups);
+assertBean(object).forGroups(groups).isValid();
 
-assertBean(bean).isValid(validator, groups);
+assertThat(bean(object)).isValid(validator, groups);
 ```

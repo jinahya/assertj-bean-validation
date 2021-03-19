@@ -14,12 +14,11 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.jinahya.assertj.validation.BeanValidationUtils.requireValid;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 /**
  * Base class for all implementations of assertions for {@code bean}s.
@@ -34,11 +33,8 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
         super(actual, selfType);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     public SELF isValid() {
-        final Set<ConstraintViolation<Object>> constraintViolations
-                = BeanValidationUtils.validate(actual, validator(), groups());
-        assertThat(constraintViolations).isEmpty();
+        assertThatCode(() -> requireValid(actual, validator(), groups())).doesNotThrowAnyException();
         return (SELF) this;
     }
 
@@ -58,7 +54,6 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
                 .isValid();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @SuppressWarnings({"unchecked"})
     public SELF withValidator(final Validator validator) {
         this.validator = validator;
@@ -85,7 +80,6 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
         return groups;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     private Validator validator;
 
     private Class<?>[] groups;

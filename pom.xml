@@ -326,6 +326,9 @@
 
   <profiles>
     <profile>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <!-- https://docs.spring.io/spring-boot/docs/2.4.4/reference/html/appendix-dependency-versions.html -->
       <id>spring-boot-2_4_4</id>
       <properties>
@@ -333,6 +336,14 @@
         <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
         <version.org.hibernate.validator>6.1.7.Final</version.org.hibernate.validator>
       </properties>
+      <dependencies>
+        <dependency>
+          <groupId>org.glassfish</groupId>
+          <artifactId>jakarta.el</artifactId>
+          <version>3.0.3</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
 </project>

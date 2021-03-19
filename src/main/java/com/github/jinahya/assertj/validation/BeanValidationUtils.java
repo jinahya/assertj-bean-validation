@@ -34,7 +34,7 @@ final class BeanValidationUtils {
         return validator.validate(object, groups);
     }
 
-    static <T> void requireValidate(final T object, final Validator validator, final Class<?>... groups) {
+    static <T> void requireValid(final T object, final Validator validator, final Class<?>... groups) {
         final Set<ConstraintViolation<T>> constraintViolations = validate(object, validator, groups);
         if (!constraintViolations.isEmpty()) {
             throw new ConstraintViolationException(constraintViolations);
