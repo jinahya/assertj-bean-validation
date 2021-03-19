@@ -10,12 +10,12 @@ final Object bean = bean();
 assertBean(bean).isValid();
 
 final Validator validator = validator();
-assertBean(bean).isValid(validator);
-assertBean(bean).usingValidator(validator).isValid();
+assertBean(bean).isValidWith(validator);
+assertBean(bean).withValidator(validator).isValid();
 
 final Class<?>[] groups = groups();
-assertBean(bean).isValid(groups);
-assertBean(bean).usingGroups(groups).isValid();
+assertBean(bean).isValidFor(groups);
+assertBean(bean).forGroups(groups).isValid();
 
 assertBean(bean).isValid(validator, groups);
 ```

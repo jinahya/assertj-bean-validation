@@ -2,7 +2,7 @@ package com.github.jinahya.assertj.validation;
 
 import java.util.Objects;
 
-class AbstractBeanValidationAssertTest<T extends AbstractBeanValidationAssert<T>> {
+abstract class AbstractBeanValidationAssertTest<T extends AbstractBeanValidationAssert<T>> {
 
     AbstractBeanValidationAssertTest(final Class<T> assertClass) {
         super();

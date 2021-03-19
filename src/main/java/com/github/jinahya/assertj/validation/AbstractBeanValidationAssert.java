@@ -41,31 +41,31 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
         return (SELF) this;
     }
 
-    public SELF isValid(final Validator validator) {
-        return usingValidator(validator)
+    public SELF isValidWith(final Validator validator) {
+        return withValidator(validator)
                 .isValid();
     }
 
-    public SELF isValid(final Class<?>... groups) {
-        return usingGroups(groups)
+    public SELF isValidFor(final Class<?>... groups) {
+        return forGroups(groups)
                 .isValid();
     }
 
     public SELF isValid(final Validator validator, final Class<?>... groups) {
-        return usingValidator(validator)
-                .usingGroups(groups)
+        return withValidator(validator)
+                .forGroups(groups)
                 .isValid();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @SuppressWarnings({"unchecked"})
-    public SELF usingValidator(final Validator validator) {
+    public SELF withValidator(final Validator validator) {
         this.validator = validator;
         return (SELF) this;
     }
 
     @SuppressWarnings({"unchecked"})
-    public SELF usingGroups(final Class<?>... groups) {
+    public SELF forGroups(final Class<?>... groups) {
         this.groups = groups;
         return (SELF) this;
     }
@@ -78,7 +78,10 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
     }
 
     protected Class<?>[] groups() {
-        return groups == null ? new Class<?>[0] : groups;
+        if (groups == null) {
+            groups = new Class<?>[0];
+        }
+        return groups;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
