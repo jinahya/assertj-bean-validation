@@ -6,6 +6,10 @@ public class BeanValidationAssertions {
         return new BeanValidationAssert(actual);
     }
 
+    public static BeanValidationAssert assertThat(final BeanWrapper<?> actual) {
+        return assertBean(actual.object);
+    }
+
     protected BeanValidationAssertions() {
         super();
     }

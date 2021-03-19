@@ -36,7 +36,8 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
 
     // -----------------------------------------------------------------------------------------------------------------
     public SELF isValid() {
-        final Set<ConstraintViolation<Object>> constraintViolations = validator().validate(actual, groups());
+        final Set<ConstraintViolation<Object>> constraintViolations
+                = BeanValidationUtils.validate(actual, validator(), groups());
         assertThat(constraintViolations).isEmpty();
         return (SELF) this;
     }
