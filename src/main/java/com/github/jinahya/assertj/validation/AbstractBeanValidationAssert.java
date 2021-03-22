@@ -34,7 +34,9 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
     }
 
     public SELF isValid() {
-        assertThatCode(() -> requireValid(actual, validator(), groups())).doesNotThrowAnyException();
+        if (actual != null) {
+            assertThatCode(() -> requireValid(actual, validator(), groups())).doesNotThrowAnyException();
+        }
         return (SELF) this;
     }
 
