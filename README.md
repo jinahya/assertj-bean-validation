@@ -8,6 +8,7 @@ An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for Bean-Val
 ```java
 final Object object = bean();
 assertBean(object).isValid();
+assertThat(bean(object)).isValid();
 
 final Validator validator = validator();
 assertBean(object).isValidWith(validator);
