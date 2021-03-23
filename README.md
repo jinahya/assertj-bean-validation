@@ -10,14 +10,13 @@ Validate a bean object using [`validate(T, Class<?>...)`][validate] method.
 
 ```java
 class User {
-    @NotBlank
-    String name = "UNKNOWN";
 
-    @PositiveOrZero
-    int age;
+    @NotBlank String name = "UNKNOWN";
+
+    @PositiveOrZero int age;
 }
 
-    assertBean(new User()).isValid();
+assertBean(new User()).isValid();
         assretThat(bean(new User())).isValid(); // equivalent
 ```
 
