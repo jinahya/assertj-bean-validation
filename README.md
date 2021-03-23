@@ -27,7 +27,7 @@ using [`validateProperty(T, String, Class<?>...)`][validateProperty] method.
 
 ```java
 assertBean(new User()).hasValidProprty("name");
-        assertThat(bean(new User())).hasValidProperty("age");
+assertThat(bean(new User())).hasValidProperty("age");
 ```
 
 ### `isValidFor(Class<?>, String, Class<?>...)`
