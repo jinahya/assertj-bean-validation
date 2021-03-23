@@ -4,6 +4,11 @@ import static com.github.jinahya.assertj.validation.BeanValidationUtils.validate
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * An assert class for validating values for bean properties.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<BeanPropertyValidationAssert> {
 
     /**
@@ -16,11 +21,10 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
     }
 
     /**
-     * Asserts the {@link #actual} property value is a valid property value of specified property name with specified
-     * bean type.
+     * Asserts the {@link #actual} value is a valid property value for specified property name of specified class.
      *
-     * @param beanType     the bean type.
-     * @param propertyName the property name.
+     * @param beanType     the class whose property are examined.
+     * @param propertyName the name of the property.
      * @return {@link #myself}.
      * @see javax.validation.Validator#validateValue(Class, String, Object, Class[])
      */
