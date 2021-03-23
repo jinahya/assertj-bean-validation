@@ -17,54 +17,52 @@ import org.assertj.core.api.AbstractAssert;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import static com.github.jinahya.assertj.validation.BeanValidationUtils.validate;
-import static com.github.jinahya.assertj.validation.BeanValidationUtils.validateProperty;
-import static java.util.Objects.requireNonNull;
-import static javax.validation.Validation.buildDefaultValidatorFactory;
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * Base class for all implementations of assertions for {@code bean}s.
  *
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
-        extends AbstractAssert<SELF, Object> {
+public abstract class AbstractBeanValidationAssert2<SELF extends AbstractBeanValidationAssert2<SELF, T>, T extends ActualWrapper>
+        extends AbstractAssert<SELF, T> {
 
-    protected AbstractBeanValidationAssert(final Object actual, final Class<?> selfType) {
+    protected AbstractBeanValidationAssert2(final T actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
-    public SELF isValid() {
-        isNotNull();
-        assertThat(validate(validator(), actual, groups())).isEmpty();
-        return (SELF) this;
+    public abstract SELF isValid();
+
+    public SELF isValidWith(final Validator validator) {
+        return withValidator(validator)
+                .isValid();
     }
 
-    public SELF hasValidProperty(final String propertyName) {
-        requireNonNull(propertyName, "propertyName is null");
-        if (actual != null) {
-            assertThat(validateProperty(validator(), actual, propertyName, groups())).isEmpty();
-        }
-        return (SELF) this;
+    public SELF isValidFor(final Class<?>... groups) {
+        return forGroups(groups)
+                .isValid();
+    }
+
+    public SELF isValid(final Validator validator, final Class<?>... groups) {
+        return withValidator(validator)
+                .forGroups(groups)
+                .isValid();
     }
 
     @SuppressWarnings({"unchecked"})
-    public SELF using(final Validator validator) {
+    public SELF withValidator(final Validator validator) {
         this.validator = validator;
         return (SELF) this;
     }
 
     @SuppressWarnings({"unchecked"})
-    public SELF targeting(final Class<?>... groups) {
+    public SELF forGroups(final Class<?>... groups) {
         this.groups = groups;
         return (SELF) this;
     }
 
     protected Validator validator() {
         if (validator == null) {
-            validator = buildDefaultValidatorFactory().getValidator();
+            validator = Validation.buildDefaultValidatorFactory().getValidator();
         }
         return validator;
     }
