@@ -63,7 +63,7 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      */
     protected @NotNull Validator validator() {
         if (validator == null) {
-            validator = buildDefaultValidatorFactory().getValidator();
+            validator = BeanValidationUtils.validator();
         }
         return validator;
     }

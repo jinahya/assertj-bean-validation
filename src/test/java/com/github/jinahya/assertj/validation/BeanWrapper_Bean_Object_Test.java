@@ -7,7 +7,7 @@ import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class BeanWrapper_Bean_Object_Test {
+class BeanWrapper_Bean_Object_Test extends BeanWrapperTest {
 
     @DisplayName("bean(null) throws NullPointerException")
     @Test
