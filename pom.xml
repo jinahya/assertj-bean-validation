@@ -44,12 +44,13 @@
     <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
     <version.animal-sniffer>1.20</version.animal-sniffer>
     <version.assertj-core>3.19.0</version.assertj-core>
+    <version.jakarta.el>3.0.3</version.jakarta.el>
     <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.lombok>1.18.18</version.lombok>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-surefire>3.0.0-M4</version.maven-surefire>
-    <version.org.hibernate.validator>6.2.0.Final</version.org.hibernate.validator>
+    <version.org.hibernate.validator>6.1.0.Final</version.org.hibernate.validator>
     <version.org.junit.jupiter>5.8.0-M1</version.org.junit.jupiter>
   </properties>
 
@@ -74,6 +75,12 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>${version.assertj-core}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>jakarta.el</artifactId>
+      <version>${version.jakarta.el}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -320,39 +327,38 @@
       <id>spring-boot-2_4_4</id>
       <properties>
         <version.assertj-core>3.18.1</version.assertj-core>
+        <version.jakrta.el>3.0.3</version.jakrta.el>
         <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
         <version.org.lombok>1.18.18</version.org.lombok>
         <version.org.hibernate.validator>6.1.7.Final</version.org.hibernate.validator>
         <version.org.junit.jupiter>5.7.1</version.org.junit.jupiter>
       </properties>
-      <dependencies>
-        <dependency>
-          <groupId>org.glassfish</groupId>
-          <artifactId>jakarta.el</artifactId>
-          <version>3.0.3</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
     </profile>
     <profile>
       <!-- https://docs.spring.io/spring-boot/docs/2.4.0/reference/html/appendix-dependency-versions.html -->
       <id>spring-boot-2_4_0</id>
       <properties>
         <version.assertj-core>3.18.1</version.assertj-core>
+        <version.jakrta.el>3.0.3</version.jakrta.el>
         <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
         <version.logback-classic>1.2.3</version.logback-classic>
         <version.org.lombok>1.18.16</version.org.lombok>
         <version.org.hibernate.validator>6.1.6.Final</version.org.hibernate.validator>
         <version.org.junit.jupiter>5.7.0</version.org.junit.jupiter>
       </properties>
-      <dependencies>
-        <dependency>
-          <groupId>org.glassfish</groupId>
-          <artifactId>jakarta.el</artifactId>
-          <version>3.0.3</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
+    </profile>
+    <profile>
+      <!-- https://docs.spring.io/spring-boot/docs/2.3.9.RELEASE/reference/html/appendix-dependency-versions.html -->
+      <id>spring-boot-2_3_9_RELEASE</id>
+      <properties>
+        <version.assertj-core>3.16.1</version.assertj-core>
+        <version.jakrta.el>3.0.3</version.jakrta.el>
+        <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
+        <version.logback-classic>1.2.3</version.logback-classic>
+        <version.org.lombok>1.18.18</version.org.lombok>
+        <version.org.hibernate.validator>6.1.7.Final</version.org.hibernate.validator>
+        <version.org.junit.jupiter>5.6.3</version.org.junit.jupiter>
+      </properties>
     </profile>
   </profiles>
 </project>
