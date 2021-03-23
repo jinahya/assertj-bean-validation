@@ -14,10 +14,12 @@ package com.github.jinahya.assertj.validation;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
+import static javax.validation.Validation.buildDefaultValidatorFactory;
 
 /**
  * Utility class for Bean-Validation.
@@ -26,6 +28,25 @@ import static java.util.Objects.requireNonNull;
  */
 final class BeanValidationUtils {
 
+    /**
+     * Returns a validator from the {@link Validation#buildDefaultValidatorFactory() default-validator-factory}.
+     *
+     * @return a validator from the {@link Validation#buildDefaultValidatorFactory() default-validator-factory}.
+     */
+    static Validator validator() {
+        return buildDefaultValidatorFactory().getValidator();
+    }
+
+    /**
+     * Validates specified object using specified validator and groups.
+     *
+     * @param validator the validator.
+     * @param object    the object to validate.
+     * @param groups    the groups.
+     * @param <T>       object type parameter
+     * @return the result of {@link Validator#validate(Object, Class[])} method invoked on {@code validator} with {@code
+     * object} and {@code groups}.
+     */
     static <T> Set<ConstraintViolation<T>> validate(final Validator validator, final T object,
                                                     final Class<?>... groups) {
         requireNonNull(validator, "validator is null");
@@ -34,10 +55,20 @@ final class BeanValidationUtils {
         return validator.validate(object, groups);
     }
 
+    /**
+     * Checks that the specified object reference is valid using specified validator and groups.
+     *
+     * @param validator the validator.
+     * @param object    the object to validate.
+     * @param groups    the groups.
+     * @param <T>       object type parameter
+     * @throws ConstraintViolationException if one or more constraint violations resulted while validating.
+     * @see #validate(Validator, Object, Class[])
+     */
     static <T> void requireValid(final Validator validator, final T object, final Class<?>... groups) {
-        final Set<ConstraintViolation<T>> constraintViolations = validate(validator, object, groups);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
+        final Set<ConstraintViolation<T>> violations = validate(validator, object, groups);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
         }
     }
 
@@ -52,10 +83,9 @@ final class BeanValidationUtils {
 
     static <T> void requirePropertyValid(final Validator validator, final T object, final String propertyName,
                                          final Class<?>... groups) {
-        final Set<ConstraintViolation<T>> constraintViolations
-                = validateProperty(validator, object, propertyName, groups);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
+        final Set<ConstraintViolation<T>> violations = validateProperty(validator, object, propertyName, groups);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
         }
     }
 
@@ -71,10 +101,9 @@ final class BeanValidationUtils {
 
     static <T> void requireValueValid(final Validator validator, final Class<T> beanType, final String propertyName,
                                       final Object value, final Class<?>... groups) {
-        final Set<ConstraintViolation<T>> constraintViolations
-                = validateValue(validator, beanType, propertyName, value, groups);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
+        final Set<ConstraintViolation<T>> violations = validateValue(validator, beanType, propertyName, value, groups);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
         }
     }
 

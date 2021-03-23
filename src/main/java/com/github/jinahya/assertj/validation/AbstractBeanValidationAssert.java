@@ -15,6 +15,7 @@ package com.github.jinahya.assertj.validation;
 import org.assertj.core.api.AbstractAssert;
 
 import javax.validation.Validator;
+import javax.validation.constraints.NotNull;
 
 import static javax.validation.Validation.buildDefaultValidatorFactory;
 
@@ -27,30 +28,52 @@ import static javax.validation.Validation.buildDefaultValidatorFactory;
 abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
         extends AbstractAssert<SELF, Object> {
 
-    protected AbstractBeanValidationAssert(final Object actual, final Class<?> selfType) {
+    AbstractBeanValidationAssert(final Object actual, final @NotNull Class<SELF> selfType) {
         super(actual, selfType);
     }
 
+    /**
+     * Replaces current validator being used with specified value.
+     *
+     * @param validator new validator.
+     * @return {@link #myself}.
+     */
     @SuppressWarnings({"unchecked"})
-    public SELF using(final Validator validator) {
+    public @NotNull SELF using(final Validator validator) {
         this.validator = validator;
         return (SELF) this;
     }
 
+    /**
+     * Replaces current targeting groups with specified values.
+     *
+     * @param groups new targeting groups.
+     * @return {@link #myself}.
+     */
     @SuppressWarnings({"unchecked"})
-    public SELF targeting(final Class<?>... groups) {
+    public @NotNull SELF targeting(final Class<?>... groups) {
         this.groups = groups;
         return (SELF) this;
     }
 
-    protected Validator validator() {
+    /**
+     * Returns current validator being used.
+     *
+     * @return current validator being used.
+     */
+    protected @NotNull Validator validator() {
         if (validator == null) {
             validator = buildDefaultValidatorFactory().getValidator();
         }
         return validator;
     }
 
-    protected Class<?>[] groups() {
+    /**
+     * Returns current targeting groups.
+     *
+     * @return current targeting groups.
+     */
+    protected @NotNull Class<?>[] groups() {
         if (groups == null) {
             groups = new Class<?>[0];
         }
