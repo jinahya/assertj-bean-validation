@@ -1,18 +1,24 @@
 package com.github.jinahya.assertj.validation;
 
+import javax.validation.constraints.NotNull;
+
 import static java.util.Objects.requireNonNull;
 
-public class BeanWrapper<T> implements ActualWrapper {
+public class BeanWrapper {
 
-    public static <T> BeanWrapper<T> bean(final T object) {
-        requireNonNull(object, "object is null");
-        return new BeanWrapper<>(object);
+    public static BeanWrapper bean(final Object object) {
+        return new BeanWrapper(object);
     }
 
-    BeanWrapper(final T object) {
+    private BeanWrapper(final Object object) {
         super();
         this.object = requireNonNull(object, "object is null");
     }
 
-    final T object;
+    Object getObject() {
+        return object;
+    }
+
+    @NotNull
+    private final Object object;
 }

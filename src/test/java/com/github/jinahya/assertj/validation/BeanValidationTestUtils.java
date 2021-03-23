@@ -6,9 +6,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Set;
 
-final class BeanValidationTestUtils {
+public final class BeanValidationTestUtils {
 
-    static Validator validator() {
+    public static Validator validator() {
         return Validation.buildDefaultValidatorFactory().getValidator();
     }
 
@@ -16,11 +16,11 @@ final class BeanValidationTestUtils {
         return validator().validate(object, groups);
     }
 
-    static <T> boolean isValid(final T object, final Class<?>... groups) {
+    public static <T> boolean isValid(final T object, final Class<?>... groups) {
         return validate(object, groups).isEmpty();
     }
 
-    static <T> T requireValid(final T object, final Class<?>... groups) {
+    public static <T> T requireValid(final T object, final Class<?>... groups) {
         final Set<ConstraintViolation<T>> constraintViolations = validate(object, groups);
         if (!constraintViolations.isEmpty()) {
             throw new ConstraintViolationException(constraintViolations);
@@ -29,6 +29,6 @@ final class BeanValidationTestUtils {
     }
 
     BeanValidationTestUtils() {
-        super();
+        throw new AssertionError("instantiation is not allowed");
     }
 }

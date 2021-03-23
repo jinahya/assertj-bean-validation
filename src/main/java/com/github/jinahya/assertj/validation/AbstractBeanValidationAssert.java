@@ -14,40 +14,21 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 
-import javax.validation.Validation;
 import javax.validation.Validator;
 
-import static com.github.jinahya.assertj.validation.BeanValidationUtils.validate;
-import static com.github.jinahya.assertj.validation.BeanValidationUtils.validateProperty;
-import static java.util.Objects.requireNonNull;
 import static javax.validation.Validation.buildDefaultValidatorFactory;
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Base class for all implementations of assertions for {@code bean}s.
+ * An abstract class for Bean-Validation assert classes.
  *
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
+abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
         extends AbstractAssert<SELF, Object> {
 
     protected AbstractBeanValidationAssert(final Object actual, final Class<?> selfType) {
         super(actual, selfType);
-    }
-
-    public SELF isValid() {
-        isNotNull();
-        assertThat(validate(validator(), actual, groups())).isEmpty();
-        return (SELF) this;
-    }
-
-    public SELF hasValidProperty(final String propertyName) {
-        requireNonNull(propertyName, "propertyName is null");
-        if (actual != null) {
-            assertThat(validateProperty(validator(), actual, propertyName, groups())).isEmpty();
-        }
-        return (SELF) this;
     }
 
     @SuppressWarnings({"unchecked"})

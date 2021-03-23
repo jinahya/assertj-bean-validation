@@ -1,19 +1,19 @@
 package com.github.jinahya.assertj.validation;
 
-import static java.util.Objects.requireNonNull;
+public class BeanPropertyWrapper {
 
-public class BeanPropertyWrapper<T> extends BeanWrapper<T> {
-
-    public static <T> BeanPropertyWrapper<T> beanProperty(final T object, final String propertyName) {
-        requireNonNull(object, "object is null");
-        requireNonNull(propertyName, "propertyName is null");
-        return new BeanPropertyWrapper<>(object, propertyName);
+    public static BeanPropertyWrapper beanProperty(final Object value) {
+        return new BeanPropertyWrapper(value);
     }
 
-    BeanPropertyWrapper(final T object, final String propertyName) {
-        super(object);
-        this.propertyName = requireNonNull(propertyName, "propertyName is null");
+    private BeanPropertyWrapper(final Object value) {
+        super();
+        this.value = value;
     }
 
-    final String propertyName;
+    Object getValue() {
+        return value;
+    }
+
+    private final Object value;
 }
