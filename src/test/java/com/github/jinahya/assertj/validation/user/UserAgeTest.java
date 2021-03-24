@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.BeanPropertyValidationAssert;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -30,6 +31,7 @@ import static com.github.jinahya.assertj.validation.BeanPropertyValidationAssert
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
 class UserAgeTest {
 
     private static IntStream invalidAges() {
@@ -42,16 +44,16 @@ class UserAgeTest {
 
     @MethodSource({"invalidAges"})
     @ParameterizedTest
-    void isValidFor_Fail_InvalidAge(final int invalidAge) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(invalidAge);
+    void isValidFor_Fail_InvalidAge(final int age) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(age);
         assertThatThrownBy(() -> a.isValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
     }
 
     @MethodSource({"validAges"})
     @ParameterizedTest
-    void isValidFor_Succeed_ValidAge(final int validAge) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(validAge);
+    void isValidFor_Succeed_ValidAge(final int age) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(age);
         assertThatCode(() -> a.isValidFor(User.class, "age"))
                 .doesNotThrowAnyException();
     }

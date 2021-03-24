@@ -38,7 +38,7 @@ import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 
 /**
- * An abstract class for Bean-Validation assert classes.
+ * An abstract class for Bean-Validation assertion classes.
  *
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;

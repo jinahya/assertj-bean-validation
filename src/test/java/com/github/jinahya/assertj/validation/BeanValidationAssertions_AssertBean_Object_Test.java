@@ -23,7 +23,6 @@ package com.github.jinahya.assertj.validation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertBean;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -34,17 +33,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 class BeanValidationAssertions_AssertBean_Object_Test extends BeanValidationAssertionsTest {
 
-    @DisplayName("assertBean(object) throws NullPointerException when object is null")
+    @DisplayName("assertBean(null) throws NullPointerException")
     @Test
     void assertBean_NullPointerException_ObjectIsNull() {
-        assertThatThrownBy(() -> assertBean(null))
+        assertThatThrownBy(() -> BeanValidationAssertions.assertBean(null))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("assertBean(object) does not throw any exception")
     @Test
     void assertBean__() {
-        assertThatCode(() -> assertBean(new Object()))
+        assertThatCode(() -> BeanValidationAssertions.assertBean(new Object()))
                 .doesNotThrowAnyException();
     }
 }

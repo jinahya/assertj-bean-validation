@@ -10,14 +10,12 @@ Validate a bean object using [`validate(T, Class<?>...)`][validate] method.
 
 ```java
 class User {
-
     @NotBlank String name = "UNKNOWN";
-
     @PositiveOrZero int age;
 }
 
 assertBean(new User()).isValid();
-        assretThat(bean(new User())).isValid(); // equivalent
+assretThat(bean(new User())).isValid(); // equivalent
 ```
 
 ### `hasValidProperty(String)`
@@ -27,12 +25,12 @@ using [`validateProperty(T, String, Class<?>...)`][validateProperty] method.
 
 ```java
 assertBean(new User()).hasValidProprty("name");
-assertThat(bean(new User())).hasValidProperty("age");
+assertThat(bean(new User())).hasValidProperty("age"); // equivalent
 ```
 
 ### `isValidFor(Class<?>, String, Class<?>...)`
 
-Checks whether a value is valid for a property using [`validateValue(T, String, Object, Class<?>...)`][validateValue]
+Checks whether a property value would be valid for a bean type using [`validateValue(T, String, Object, Class<?>...)`][validateValue]
 method.
 
 ```java
