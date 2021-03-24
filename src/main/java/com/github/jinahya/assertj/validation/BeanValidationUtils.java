@@ -16,6 +16,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
@@ -35,7 +37,7 @@ final class BeanValidationUtils {
      * @return a validator initialized from the {@link Validation#buildDefaultValidatorFactory()
      * default-validator-factory}.
      */
-    static Validator validator() {
+    static @NotNull Validator validator() {
         return buildDefaultValidatorFactory().getValidator();
     }
 
@@ -49,8 +51,8 @@ final class BeanValidationUtils {
      * @return the result of {@link Validator#validate(Object, Class[])} method invoked on {@code validator} with {@code
      * object} and {@code groups}.
      */
-    static <T> Set<ConstraintViolation<T>> validate(final Validator validator, final T object,
-                                                    final Class<?>... groups) {
+    static <T> @NotNull Set<@NotNull ConstraintViolation<T>> validate(
+            final @NotNull Validator validator, final @NotNull T object, final @NotNull Class<?>... groups) {
         requireNonNull(validator, "validator is null");
         requireNonNull(object, "object is null");
         requireNonNull(groups, "groups is null");
@@ -67,15 +69,17 @@ final class BeanValidationUtils {
      * @throws ConstraintViolationException if one or more constraint violations resulted while validating.
      * @see #validate(Validator, Object, Class[])
      */
-    static <T> void requireValid(final Validator validator, final T object, final Class<?>... groups) {
+    static <T> void requireValid(final @NotNull Validator validator, final @NotNull T object,
+                                 final @NotNull Class<?>... groups) {
         final Set<ConstraintViolation<T>> violations = validate(validator, object, groups);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
     }
 
-    static <T> Set<ConstraintViolation<T>> validateProperty(final Validator validator, final T object,
-                                                            final String propertyName, final Class<?>... groups) {
+    static <T> @NotNull Set<@NotNull ConstraintViolation<T>> validateProperty(
+            final @NotNull Validator validator, final @NotNull T object, final @NotBlank String propertyName,
+            final @NotNull Class<?>... groups) {
         requireNonNull(validator, "validator is null");
         requireNonNull(object, "object is null");
         requireNonNull(propertyName, "propertyName is null");
@@ -83,17 +87,18 @@ final class BeanValidationUtils {
         return validator.validateProperty(object, propertyName, groups);
     }
 
-    static <T> void requirePropertyValid(final Validator validator, final T object, final String propertyName,
-                                         final Class<?>... groups) {
+    static <T> void requirePropertyValid(final @NotNull Validator validator, final @NotNull T object,
+                                         final @NotBlank String propertyName,
+                                         final @NotNull Class<?>... groups) {
         final Set<ConstraintViolation<T>> violations = validateProperty(validator, object, propertyName, groups);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
     }
 
-    static <T> Set<ConstraintViolation<T>> validateValue(final Validator validator, final Class<T> beanType,
-                                                         final String propertyName, final Object value,
-                                                         final Class<?>... groups) {
+    static <T> @NotNull Set<@NotNull ConstraintViolation<T>> validateValue(
+            final @NotNull Validator validator, final @NotNull Class<T> beanType, final @NotBlank String propertyName,
+            final Object value, final @NotNull Class<?>... groups) {
         requireNonNull(validator, "validator is null");
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
@@ -101,8 +106,9 @@ final class BeanValidationUtils {
         return validator.validateValue(beanType, propertyName, value, groups);
     }
 
-    static <T> void requireValueValid(final Validator validator, final Class<T> beanType, final String propertyName,
-                                      final Object value, final Class<?>... groups) {
+    static <T> void requireValueValid(final @NotNull Validator validator, final @NotNull Class<T> beanType,
+                                      final @NotBlank String propertyName, final Object value,
+                                      final @NotNull Class<?>... groups) {
         final Set<ConstraintViolation<T>> violations = validateValue(validator, beanType, propertyName, value, groups);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
