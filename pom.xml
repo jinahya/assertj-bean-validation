@@ -139,6 +139,17 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <links>
+              <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}/</link>
+              <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>
+            </links>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${version.maven-surefire}</version>
           <configuration>

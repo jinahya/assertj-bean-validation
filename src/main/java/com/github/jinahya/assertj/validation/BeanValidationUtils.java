@@ -57,12 +57,14 @@ final class BeanValidationUtils {
         try {
             return validatorClassJavax().isInstance(object);
         } catch (final ReflectiveOperationException roe) {
-            try {
-                return validatorClassJakarta().isInstance(object);
-            } catch (final ReflectiveOperationException roe2) {
-                throw new RuntimeException(roe2);
-            }
+            // empty
         }
+        try {
+            return validatorClassJakarta().isInstance(object);
+        } catch (final ReflectiveOperationException roe2) {
+            // empty
+        }
+        throw new RuntimeException("unable to detect validator class for " + object);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
