@@ -22,23 +22,25 @@ import static java.util.Objects.requireNonNull;
 import static javax.validation.Validation.buildDefaultValidatorFactory;
 
 /**
- * Utility class for Bean-Validation.
+ * A utility class for Bean-Validation.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 final class BeanValidationUtils {
 
     /**
-     * Returns a validator from the {@link Validation#buildDefaultValidatorFactory() default-validator-factory}.
+     * Returns a validator initialized from the {@link Validation#buildDefaultValidatorFactory()
+     * default-validator-factory}.
      *
-     * @return a validator from the {@link Validation#buildDefaultValidatorFactory() default-validator-factory}.
+     * @return a validator initialized from the {@link Validation#buildDefaultValidatorFactory()
+     * default-validator-factory}.
      */
     static Validator validator() {
         return buildDefaultValidatorFactory().getValidator();
     }
 
     /**
-     * Validates specified object using specified validator and groups.
+     * Validates specified bean object using specified validator and groups.
      *
      * @param validator the validator.
      * @param object    the object to validate.
