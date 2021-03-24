@@ -20,9 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import static com.github.jinahya.assertj.validation.BeanValidationUtils.validateValue;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,10 +46,8 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
      * @param beanType     the class whose property are examined.
      * @param propertyName the name of the property.
      * @return {@link #myself}.
-     * @see javax.validation.Validator#validateValue(Class, String, Object, Class[])
      */
-    public @NotNull BeanPropertyValidationAssert isValidFor(final @NotNull Class<?> beanType,
-                                                            final @NotBlank String propertyName) {
+    public BeanPropertyValidationAssert isValidFor(final Class<?> beanType, final String propertyName) {
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         assertThat(validateValue(validator(), beanType, propertyName, actual, groups())).isEmpty();

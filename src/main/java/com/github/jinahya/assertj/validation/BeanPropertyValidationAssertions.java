@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
-
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -38,7 +36,7 @@ public class BeanPropertyValidationAssertions {
      * @return an assertion instance for {@code value}.
      * @see #assertThat(BeanPropertyWrapper)
      */
-    public static @NotNull BeanPropertyValidationAssert assertBeanProperty(final Object value) {
+    public static BeanPropertyValidationAssert assertBeanProperty(final Object value) {
         return new BeanPropertyValidationAssert(value);
     }
 
@@ -49,7 +47,7 @@ public class BeanPropertyValidationAssertions {
      * @return an assert for {@code wrapper.value}.
      * @see #assertBeanProperty(Object)
      */
-    public static @NotNull BeanPropertyValidationAssert assertThat(final @NotNull BeanPropertyWrapper wrapper) {
+    public static BeanPropertyValidationAssert assertThat(final BeanPropertyWrapper wrapper) {
         requireNonNull(wrapper, "wrapper is null");
         return assertBeanProperty(wrapper.getValue());
     }

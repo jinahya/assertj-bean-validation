@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
-
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -37,7 +35,7 @@ public class BeanWrapper {
      * @param object the bean object to wrap; must be not {@code null}.
      * @return a new instance wraps {@code object}.
      */
-    public static @NotNull BeanWrapper bean(final @NotNull Object object) {
+    public static BeanWrapper bean(final Object object) {
         requireNonNull(object, "object is null");
         return new BeanWrapper(object);
     }
@@ -64,6 +62,5 @@ public class BeanWrapper {
     /**
      * The wrapped bean object.
      */
-    @NotNull
     private final Object object;
 }

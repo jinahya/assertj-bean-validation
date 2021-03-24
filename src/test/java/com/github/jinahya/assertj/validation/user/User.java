@@ -23,9 +23,6 @@ package com.github.jinahya.assertj.validation.user;
 import com.github.jinahya.assertj.validation.BeanValidationTestUtils;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PositiveOrZero;
-
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 @Data
@@ -69,9 +66,11 @@ class User {
         return setInvalidAge(newValidInstance());
     }
 
-    @NotBlank
+    @javax.validation.constraints.NotBlank
+    @jakarta.validation.constraints.NotBlank
     private String name;
 
-    @PositiveOrZero
+    @javax.validation.constraints.PositiveOrZero
+    @jakarta.validation.constraints.PositiveOrZero
     private int age;
 }

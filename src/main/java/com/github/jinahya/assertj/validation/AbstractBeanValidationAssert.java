@@ -33,9 +33,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
-
-import javax.validation.Validator;
-import javax.validation.constraints.NotNull;
+import org.assertj.core.util.VisibleForTesting;
 
 /**
  * An abstract class for Bean-Validation assertion classes.
@@ -46,7 +44,7 @@ import javax.validation.constraints.NotNull;
 abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
         extends AbstractAssert<SELF, Object> {
 
-    AbstractBeanValidationAssert(final Object actual, final @NotNull Class<SELF> selfType) {
+    AbstractBeanValidationAssert(final Object actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 
@@ -57,10 +55,25 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      * @return {@link #myself}.
      */
     @SuppressWarnings({"unchecked"})
-    public @NotNull SELF using(final Validator validator) {
+    public SELF using(final Object validator) {
+        if (validator != null && !BeanValidationUtils.isValidatorInstance(validator)) {
+            throw new IllegalArgumentException("wrong validator: " + validator);
+        }
         this.validator = validator;
         return (SELF) this;
     }
+
+//    /**
+//     * Replaces current validator being used with specified value.
+//     *
+//     * @param validator new validator.
+//     * @return {@link #myself}.
+//     */
+//    @SuppressWarnings({"unchecked"})
+//    public @NotNull SELF using(final Validator validator) {
+//        this.validator = validator;
+//        return (SELF) this;
+//    }
 
     /**
      * Replaces current targeting groups with specified values.
@@ -69,7 +82,7 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      * @return {@link #myself}.
      */
     @SuppressWarnings({"unchecked"})
-    public @NotNull SELF targeting(final Class<?>... groups) {
+    public SELF targeting(final Class<?>... groups) {
         this.groups = groups;
         return (SELF) this;
     }
@@ -79,9 +92,9 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      *
      * @return current validator being used.
      */
-    protected @NotNull Validator validator() {
+    protected Object validator() {
         if (validator == null) {
-            validator = BeanValidationUtils.validator();
+            validator = BeanValidationUtils.validatorReflected();
         }
         return validator;
     }
@@ -91,14 +104,15 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      *
      * @return current targeting groups.
      */
-    protected @NotNull Class<?>[] groups() {
+    protected Class<?>[] groups() {
         if (groups == null) {
             groups = new Class<?>[0];
         }
         return groups;
     }
 
-    private Validator validator;
+    @VisibleForTesting
+    public Object validator;
 
     private Class<?>[] groups;
 }

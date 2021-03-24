@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.BeanPropertyValidationAssert;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -30,6 +31,7 @@ import static com.github.jinahya.assertj.validation.BeanPropertyValidationAssert
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
 class UserNameTest {
 
     private static Stream<String> invalidNames() {
@@ -42,16 +44,16 @@ class UserNameTest {
 
     @MethodSource({"invalidNames"})
     @ParameterizedTest
-    void isValidFor_Fail_InvalidName(final String invalidName) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(invalidName);
+    void isValidFor_Fail_InvalidName(final String name) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(name);
         assertThatThrownBy(() -> a.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
 
     @MethodSource({"validNames"})
     @ParameterizedTest
-    void isValidFor_Succeed_ValidName(final String validName) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(validName);
+    void isValidFor_Succeed_ValidName(final String name) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(name);
         assertThatCode(() -> a.isValidFor(User.class, "name"))
                 .doesNotThrowAnyException();
     }

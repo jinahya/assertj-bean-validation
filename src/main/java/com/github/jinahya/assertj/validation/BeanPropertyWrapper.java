@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import javax.validation.constraints.NotNull;
-
 /**
  * A class for wrapping a property value.
  *
@@ -36,7 +34,7 @@ public class BeanPropertyWrapper {
      * @param value the property value to wrap.
      * @return a new instance wraps {@code value}.
      */
-    public static @NotNull BeanPropertyWrapper beanProperty(final Object value) {
+    public static BeanPropertyWrapper beanProperty(final Object value) {
         return new BeanPropertyWrapper(value);
     }
 

@@ -47,13 +47,13 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <version.animal-sniffer>1.20</version.animal-sniffer>
     <version.assertj-core>3.19.0</version.assertj-core>
-    <version.jakarta.el>3.0.3</version.jakarta.el>
-    <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
+    <version.jakarta.el>4.0.1</version.jakarta.el> <!-- latest -->
+    <version.jakarta.validation-api>3.0.0</version.jakarta.validation-api> <!-- latest -->
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.lombok>1.18.18</version.lombok>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-surefire>3.0.0-M4</version.maven-surefire>
-    <version.org.hibernate.validator>6.1.0.Final</version.org.hibernate.validator>
+    <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator> <!-- latest -->
     <version.org.junit.jupiter>5.8.0-M1</version.org.junit.jupiter>
   </properties>
 
@@ -72,7 +72,13 @@
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
       <version>${version.jakarta.validation-api}</version>
-      <scope>provided</scope>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -84,7 +90,7 @@
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.el</artifactId>
       <version>${version.jakarta.el}</version>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate.validator</groupId>
@@ -325,6 +331,23 @@
   </reporting>
 
   <profiles>
+    <profile>
+      <id>javax</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <version.jakarta.el>3.0.3</version.jakarta.el>
+        <version.org.hibernate.validator>6.2.0.Final</version.org.hibernate.validator>
+      </properties>
+    </profile>
+    <profile>
+      <id>jakarta</id>
+      <properties>
+        <version.jakarta.el>4.0.1</version.jakarta.el>
+        <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator>
+      </properties>
+    </profile>
     <profile>
       <!-- https://docs.spring.io/spring-boot/docs/2.5.0-M3/reference/html/appendix-dependency-versions.html -->
       <id>spring-boot-2_5_0-M3</id>
