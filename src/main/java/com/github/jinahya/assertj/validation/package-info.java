@@ -1,10 +1,10 @@
 /**
  * Defines <a href="https://assertj.github.io/doc/">AssertJ</a> classes for fluently verifying objects and values
  * against <a href="https://beanvalidation.org/">Jakarta Bean-Validation</a>.
- * <blockquote><pre>{@code
+ * <blockquote><pre>
  * class User {
- *     @NotBlank String name = "UNKNOWN";
- *     @PositiveOrZero int age;
+ *     {@literal @}NotBlank String name = "UNKNOWN";
+ *     {@literal @}PositiveOrZero int age;
  * }
  *
  * assertBean(new User()).isValid();
@@ -21,7 +21,7 @@
  * assertThat(beanProperty(-1)).isValidFor(User.class, "age"); // fail
  * assertBeanProperty(0).isValidFor(User.class, "age");        // succeed
  * assertBeanProperty(1).isValidFor(User.class, "age");        // succeed
- * }</pre></blockquote>
+ * </pre></blockquote>
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
