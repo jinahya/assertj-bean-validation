@@ -20,20 +20,16 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.Set;
 
 public final class BeanValidationTestUtils {
 
-    public static Validator validator() {
-        return Validation.buildDefaultValidatorFactory().getValidator();
+    public static Object validator() {
+        return BeanValidationUtils.validatorReflected();
     }
 
-    static <T> Set<ConstraintViolation<T>> validate(final T object, final Class<?>... groups) {
-        return validator().validate(object, groups);
+    static <T> Set<Object> validate(final T object, final Class<?>... groups) {
+        return BeanValidationUtils.validate(null, object, groups);
     }
 
     public static <T> boolean isValid(final T object, final Class<?>... groups) {
@@ -41,11 +37,7 @@ public final class BeanValidationTestUtils {
     }
 
     public static <T> T requireValid(final T object, final Class<?>... groups) {
-        final Set<ConstraintViolation<T>> constraintViolations = validate(object, groups);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
-        }
-        return object;
+        return BeanValidationUtils.requireValid(null, object, groups);
     }
 
     BeanValidationTestUtils() {

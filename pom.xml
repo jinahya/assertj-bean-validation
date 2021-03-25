@@ -15,7 +15,7 @@
 
   <name>${project.artifactId}</name>
   <description>An AssertJ extension for Bean-Validation</description>
-  <url>https://github.com/jinahya/$project.artifactId}</url>
+  <url>https://github.com/jinahya/${project.artifactId}</url>
   <inceptionYear>2021</inceptionYear>
   <organization>
     <name>Jinahya, Inc.</name>
@@ -33,8 +33,8 @@
     <url>https://github.com/jinahya/${project.artifactId}/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/jinahya/${project.artifactId}</url>
+    <system>GitHub Action</system>
+    <url>https://github.com/jinahya/${project.artifactId}/actions</url>
   </ciManagement>
 
   <properties>
@@ -49,6 +49,7 @@
     <version.assertj-core>3.19.0</version.assertj-core>
     <version.jakarta.el>4.0.1</version.jakarta.el> <!-- latest -->
     <version.jakarta.validation-api>3.0.0</version.jakarta.validation-api> <!-- latest -->
+    <version.javax.validation-api>2.0.1.Final</version.javax.validation-api>
     <version.logback-classic>1.2.3</version.logback-classic>
     <version.lombok>1.18.18</version.lombok>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
@@ -57,10 +58,6 @@
     <version.org.junit.jupiter>5.8.0-M1</version.org.junit.jupiter>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-    </dependencies>
-  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -72,13 +69,13 @@
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
       <version>${version.jakarta.validation-api}</version>
-      <scope>test</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
-      <version>2.0.1.Final</version>
-      <scope>test</scope>
+      <version>${version.javax.validation-api}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -120,18 +117,14 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${version.lombok}</version>
-      <scope>provided</scope>
+      <!--      <scope>provided</scope>-->
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.1</version>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
@@ -143,20 +136,22 @@
           <version>3.2.0</version>
           <configuration>
             <links>
-              <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}/</link>
+              <!--              <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}</link>-->
               <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>
+              <link>https://javadoc.io/static/javax.validation/validation-api/${version.javax.validation-api}/</link>
             </links>
+            <offlineLinks>
+              <offlineLink>
+                <url>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}</url>
+                <location>${project.build.directory}/unpacked-javadoc/assertj-core</location>
+              </offlineLink>
+            </offlineLinks>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${version.maven-surefire}</version>
-          <configuration>
-            <systemPropertyVariables>
-              <org.jboss.logging.provider>jdk</org.jboss.logging.provider>
-            </systemPropertyVariables>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -199,11 +194,59 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
         <configuration>
           <compilerArgs>
             <arg>-Xlint</arg>
           </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <id>unpack-javadocs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.assertj</groupId>
+                  <artifactId>assertj-core</artifactId>
+                  <classifier>javadoc</classifier>
+                  <version>${version.assertj-core}</version>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${project.build.directory}/unpacked-javadoc/assertj-core/</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>copy-element-list-to-package-list</id>
+            <phase>package</phase>
+            <configuration>
+              <!-- https://issues.apache.org/jira/browse/MJAVADOC-674 -->
+              <target>
+                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list"
+                      toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list"/>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -233,6 +276,20 @@
                 <requireJavaVersion>
                   <version>[1.8.0,)</version>
                 </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+          <execution>
+            <id>enforce-require-maven-version-to-[3.5.4,)</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <skip>false</skip>
+              <rules>
+                <requireMavenVersion>
+                  <version>[3.5.4,)</version>
+                </requireMavenVersion>
               </rules>
             </configuration>
           </execution>
@@ -345,7 +402,7 @@
     <profile>
       <id>javax</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <!--        <activeByDefault>true</activeByDefault>-->
       </activation>
       <properties>
         <version.jakarta.el>3.0.3</version.jakarta.el>
@@ -357,147 +414,6 @@
       <properties>
         <version.jakarta.el>4.0.1</version.jakarta.el>
         <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.5.0-M3/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_5_0-M3</id>
-      <properties>
-        <version.assertj-core>3.19.0</version.assertj-core>
-        <version.jakrta.el>3.0.3</version.jakrta.el>
-        <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
-        <version.org.lombok>1.18.18</version.org.lombok>
-        <version.org.hibernate.validator>6.2.0.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.7.1</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.4.4/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_4_4</id>
-      <properties>
-        <version.assertj-core>3.18.1</version.assertj-core>
-        <version.jakrta.el>3.0.3</version.jakrta.el>
-        <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
-        <version.org.lombok>1.18.18</version.org.lombok>
-        <version.org.hibernate.validator>6.1.7.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.7.1</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.4.0/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_4_0</id>
-      <properties>
-        <version.assertj-core>3.18.1</version.assertj-core>
-        <version.jakrta.el>3.0.3</version.jakrta.el>
-        <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.18.16</version.org.lombok>
-        <version.org.hibernate.validator>6.1.6.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.7.0</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.3.9.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_3_9_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.16.1</version.assertj-core>
-        <version.jakrta.el>3.0.3</version.jakrta.el>
-        <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.18.18</version.org.lombok>
-        <version.org.hibernate.validator>6.1.7.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.6.3</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.3.0.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_3_0_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.16.1</version.assertj-core>
-        <version.jakrta.el>3.0.3</version.jakrta.el>
-        <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.18.12</version.org.lombok>
-        <version.org.hibernate.validator>6.1.5.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.6.2</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.2.13.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_2_13_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.13.2</version.assertj-core>
-        <version.jakrta.el>3.0.3</version.jakrta.el>
-        <version.jakarta.validation-api>2.0.2</version.jakarta.validation-api>
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.18.19</version.org.lombok>
-        <version.org.hibernate.validator>6.0.22.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.5.2</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.2.0.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_2_0_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.13.2</version.assertj-core>
-        <version.jakrta.el>3.0.3</version.jakrta.el>
-        <version.jakarta.validation-api>2.0.1</version.jakarta.validation-api>
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.18.10</version.org.lombok>
-        <version.org.hibernate.validator>6.0.17.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.5.2</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.1.18.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_1_18_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.11.1</version.assertj-core>
-        <version.jakrta.el>3.0.2</version.jakrta.el> <!-- org.glassfish:javax.el:3.0.0 -->
-        <version.jakarta.validation-api>2.0.1</version.jakarta.validation-api> <!-- javax.validation:validation-api:2.0.1.Final -->
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.18.16</version.org.lombok>
-        <version.org.hibernate.validator>6.0.21.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.3.2</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_1_0_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.11.1</version.assertj-core>
-        <version.jakrta.el>3.0.2</version.jakrta.el> <!-- org.glassfish:javax.el:3.0.0 -->
-        <version.jakarta.validation-api>2.0.1</version.jakarta.validation-api> <!-- javax.validation:validation-api:2.0.1.Final -->
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.18.2</version.org.lombok>
-        <version.org.hibernate.validator>6.0.13.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.3.1</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.0.9.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_0_9_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.9.1</version.assertj-core>
-        <version.jakrta.el>3.0.2</version.jakrta.el> <!-- org.glassfish:javax.el:3.0.0 -->
-        <version.jakarta.validation-api>2.0.1</version.jakarta.validation-api> <!-- javax.validation:validation-api:2.0.1.Final -->
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.16.22</version.org.lombok>
-        <version.org.hibernate.validator>6.0.16.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.1.1</version.org.junit.jupiter>
-      </properties>
-    </profile>
-    <profile>
-      <!-- https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/html/appendix-dependency-versions.html -->
-      <id>spring-boot-2_0_0_RELEASE</id>
-      <properties>
-        <version.assertj-core>3.9.1</version.assertj-core>
-        <version.jakrta.el>3.0.2</version.jakrta.el> <!-- org.glassfish:javax.el:3.0.0 -->
-        <version.jakarta.validation-api>2.0.1</version.jakarta.validation-api> <!-- javax.validation:validation-api:2.0.1.Final -->
-        <version.logback-classic>1.2.3</version.logback-classic>
-        <version.org.lombok>1.16.20</version.org.lombok>
-        <version.org.hibernate.validator>6.0.7.Final</version.org.hibernate.validator>
-        <version.org.junit.jupiter>5.1.0</version.org.junit.jupiter>
       </properties>
     </profile>
   </profiles>

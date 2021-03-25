@@ -33,7 +33,6 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.util.VisibleForTesting;
 
 /**
  * An abstract class for Bean-Validation assertion classes.
@@ -63,20 +62,32 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
         return (SELF) this;
     }
 
-//    /**
-//     * Replaces current validator being used with specified value.
-//     *
-//     * @param validator new validator.
-//     * @return {@link #myself}.
-//     */
-//    @SuppressWarnings({"unchecked"})
-//    public @NotNull SELF using(final Validator validator) {
-//        this.validator = validator;
-//        return (SELF) this;
-//    }
+    /**
+     * Sets a validator for subsequent verifications.
+     *
+     * @param validator the validator.
+     * @return {@link #myself}.
+     */
+    @SuppressWarnings({"unchecked"})
+    public SELF using(final javax.validation.Validator validator) {
+        this.validator = validator;
+        return (SELF) this;
+    }
 
     /**
-     * Replaces current targeting groups with specified values.
+     * Sets a validator for subsequent verifications.
+     *
+     * @param validator the validator.
+     * @return {@link #myself}.
+     */
+    @SuppressWarnings({"unchecked"})
+    public SELF using(final jakarta.validation.Validator validator) {
+        this.validator = validator;
+        return (SELF) this;
+    }
+
+    /**
+     * Sets targeting groups for subsequent verifications.
      *
      * @param groups new targeting groups.
      * @return {@link #myself}.
@@ -92,7 +103,7 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      *
      * @return current validator being used.
      */
-    protected Object validator() {
+    Object validator() {
         if (validator == null) {
             validator = BeanValidationUtils.validatorReflected();
         }
@@ -104,15 +115,14 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      *
      * @return current targeting groups.
      */
-    protected Class<?>[] groups() {
+    Class<?>[] groups() {
         if (groups == null) {
             groups = new Class<?>[0];
         }
         return groups;
     }
 
-    @VisibleForTesting
-    public Object validator;
+    private Object validator;
 
     private Class<?>[] groups;
 }
