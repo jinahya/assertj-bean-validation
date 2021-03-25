@@ -6,14 +6,15 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation)
 [![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-valiation/javadoc.svg)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-valiation)
 
-
-An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
+An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/). Works for both `javax.validation.*` and `jakarta.validation.*`.
 
 ## Usages
 
 ### `isValid()`
 
-Validate a bean object using [`validate(T, Class<?>...)`][validate] method.
+Validate a bean object.
+
+(See [`validate(T, Class<?>...)`][validate] method.)
 
 ```java
 class User {
@@ -27,8 +28,9 @@ assretThat(bean(new User())).isValid(); // equivalent
 
 ### `hasValidProperty(String)`
 
-Validates current value of a property of specified name
-using [`validateProperty(T, String, Class<?>...)`][validateProperty] method.
+Validates current value of a property of specified name.
+
+(See [`validateProperty(T, String, Class<?>...)`][validateProperty] method.)
 
 ```java
 assertBean(new User()).hasValidProprty("name");
@@ -37,8 +39,9 @@ assertThat(bean(new User())).hasValidProperty("age"); // equivalent
 
 ### `isValidFor(Class<?>, String, Class<?>...)`
 
-Checks whether a property value would be valid for a bean type using [`validateValue(T, String, Object, Class<?>...)`][validateValue]
-method.
+Checks whether a value would be valid for a property of a bean type.
+
+(See [`validateValue(T, String, Object, Class<?>...)`][validateValue] method.)
 
 ```java
 assertBeanProperty(null).isValidFor(User.class, "name");         // fail

@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class BeanValidationAssertions {
+public final class BeanValidationAssertions {
 
     /**
      * Creates a new bean validation assertion instance for specified bean object.
@@ -56,7 +56,7 @@ public class BeanValidationAssertions {
     /**
      * Creates a new instance.
      */
-    protected BeanValidationAssertions() {
-        super();
+    private BeanValidationAssertions() {
+        throw new AssertionError("instantiation is not allowed");
     }
 }

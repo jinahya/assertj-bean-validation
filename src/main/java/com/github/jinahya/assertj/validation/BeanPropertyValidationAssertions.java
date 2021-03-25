@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class BeanPropertyValidationAssertions {
+public final class BeanPropertyValidationAssertions {
 
     /**
      * Creates a new assertion instance with specified property value.
@@ -55,7 +55,7 @@ public class BeanPropertyValidationAssertions {
     /**
      * Creates a new instance.
      */
-    protected BeanPropertyValidationAssertions() {
-        super();
+    private BeanPropertyValidationAssertions() {
+        throw new AssertionError("instantiation is not allowed");
     }
 }

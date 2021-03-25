@@ -133,7 +133,7 @@ final class BeanValidationUtils {
         try {
             return validatorJakarta();
         } catch (final ReflectiveOperationException roe) {
-            // empty;
+            // empty
         }
         throw new RuntimeException("failed to instantiated an instance of Validator");
     }
@@ -170,10 +170,12 @@ final class BeanValidationUtils {
     }
 
     @SuppressWarnings({"unchecked"})
-    static <T> Set<Object> validate(final Object validator, final T object, final Class<?>... groups) {
-        requireNonNull(validator, "validator is null");
+    static <T> Set<Object> validate(Object validator, final T object, final Class<?>... groups) {
         requireNonNull(object, "object is null");
         requireNonNull(groups, "groups is null");
+        if (validator == null) {
+            validator = validatorReflected();
+        }
         try {
             return (Set<Object>) validateMethod(validator).invoke(validator, object, groups);
         } catch (final ReflectiveOperationException roe) {
@@ -209,9 +211,6 @@ final class BeanValidationUtils {
      * @param <T>       object type parameter
      */
     static <T> T requireValid(Object validator, final T object, final Class<?>... groups) {
-        if (validator == null) {
-            validator = validatorReflected();
-        }
         final Set<Object> violations = validate(validator, object, groups);
         if (!violations.isEmpty()) {
             throw new RuntimeException(String.format(
@@ -244,11 +243,13 @@ final class BeanValidationUtils {
     }
 
     @SuppressWarnings({"unchecked"})
-    static <T> Set<Object> validateProperty(final Object validator, final T object, final String propertyName,
+    static <T> Set<Object> validateProperty(Object validator, final T object, final String propertyName,
                                             final Class<?>... groups) {
-        requireNonNull(validator, "validator is null");
         requireNonNull(object, "object is null");
         requireNonNull(groups, "groups is null");
+        if (validator == null) {
+            validator = validatorReflected();
+        }
         try {
             return (Set<Object>) validatePropertyMethod(validator).invoke(validator, object, propertyName, groups);
         } catch (final ReflectiveOperationException roe) {
@@ -258,9 +259,6 @@ final class BeanValidationUtils {
 
     static <T> T requirePropertyValid(Object validator, final T object, final String propertyName,
                                       final Class<?>... groups) {
-        if (validator == null) {
-            validator = validatorReflected();
-        }
         final Set<Object> violations = validateProperty(validator, object, propertyName, groups);
         if (!violations.isEmpty()) {
             throw new RuntimeException(String.format(
@@ -294,12 +292,14 @@ final class BeanValidationUtils {
     }
 
     @SuppressWarnings({"unchecked"})
-    static <T> Set<Object> validateValue(final Object validator, final Class<T> beanType,
-                                         final String propertyName, final Object value, final Class<?>... groups) {
-        requireNonNull(validator, "validator is null");
+    static <T> Set<Object> validateValue(Object validator, final Class<T> beanType, final String propertyName,
+                                         final Object value, final Class<?>... groups) {
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         requireNonNull(groups, "groups is null");
+        if (validator == null) {
+            validator = validatorReflected();
+        }
         try {
             return (Set<Object>) validateValueMethod(validator)
                     .invoke(validator, beanType, propertyName, value, groups);

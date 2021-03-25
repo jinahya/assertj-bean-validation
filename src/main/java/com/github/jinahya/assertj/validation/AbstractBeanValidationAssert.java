@@ -48,7 +48,7 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
     }
 
     /**
-     * Replaces current validator being used with specified value.
+     * Sets a validator used for subsequent verifications.
      *
      * @param validator new validator.
      * @return {@link #myself}.
@@ -62,32 +62,28 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
         return (SELF) this;
     }
 
-    /**
-     * Sets a validator for subsequent verifications.
-     *
-     * @param validator the validator.
-     * @return {@link #myself}.
-     */
-    @SuppressWarnings({"unchecked"})
-    public SELF using(final javax.validation.Validator validator) {
-        this.validator = validator;
-        return (SELF) this;
-    }
+//    /**
+//     * Sets a validator used for subsequent verifications.
+//     *
+//     * @param validator the validator.
+//     * @return {@link #myself}.
+//     */
+//    public SELF using(final javax.validation.Validator validator) {
+//        return using(validator);
+//    }
+//
+//    /**
+//     * Sets a validator used for subsequent verifications.
+//     *
+//     * @param validator the validator.
+//     * @return {@link #myself}.
+//     */
+//    public SELF using(final jakarta.validation.Validator validator) {
+//        return using(validator);
+//    }
 
     /**
-     * Sets a validator for subsequent verifications.
-     *
-     * @param validator the validator.
-     * @return {@link #myself}.
-     */
-    @SuppressWarnings({"unchecked"})
-    public SELF using(final jakarta.validation.Validator validator) {
-        this.validator = validator;
-        return (SELF) this;
-    }
-
-    /**
-     * Sets targeting groups for subsequent verifications.
+     * Sets targeting groups used for subsequent verifications.
      *
      * @param groups new targeting groups.
      * @return {@link #myself}.
@@ -103,7 +99,7 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
      *
      * @return current validator being used.
      */
-    Object validator() {
+    protected Object validator() {
         if (validator == null) {
             validator = BeanValidationUtils.validatorReflected();
         }
@@ -111,11 +107,11 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
     }
 
     /**
-     * Returns current targeting groups.
+     * Returns current targeting groups being used.
      *
-     * @return current targeting groups.
+     * @return current targeting groups being used.
      */
-    Class<?>[] groups() {
+    protected Class<?>[] groups() {
         if (groups == null) {
             groups = new Class<?>[0];
         }

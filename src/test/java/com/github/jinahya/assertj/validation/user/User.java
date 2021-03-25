@@ -47,14 +47,11 @@ class User {
 
     static User newInvalidInstance() {
         final User instance = newValidInstance();
-        do {
-            if (current().nextBoolean()) {
-                setInvalidName(instance);
-            }
-            if (current().nextBoolean()) {
-                setInvalidAge(instance);
-            }
-        } while (BeanValidationTestUtils.isValid(instance));
+        if (current().nextBoolean()) {
+            setInvalidName(instance);
+        } else {
+            setInvalidAge(instance);
+        }
         return instance;
     }
 
