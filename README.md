@@ -23,7 +23,7 @@ class User {
 }
 
 assertBean(new User()).isValid();
-assretThat(bean(new User())).isValid(); // equivalent
+assertThat(bean(new User())).isValid(); // equivalent
 ```
 
 ### `hasValidProperty(String)`
