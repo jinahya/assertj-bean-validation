@@ -48,10 +48,11 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
     }
 
     /**
-     * Sets a validator used for subsequent verifications.
+     * Sets a validator used for subsequent verifications. This method is an alias of {@link #validator(Object)} mthod.
      *
      * @param validator new validator.
      * @return {@link #myself}.
+     * @see #validator(Object)
      */
     @SuppressWarnings({"unchecked"})
     public SELF using(final Object validator) {
@@ -60,6 +61,29 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
         }
         this.validator = validator;
         return (SELF) this;
+    }
+
+    /**
+     * Sets a validator used for subsequent verifications.
+     *
+     * @param validator new validator.
+     * @return {@link #myself}.
+     * @see #using(Object)
+     */
+    public SELF validator(final Object validator) {
+        return using(validator);
+    }
+
+    /**
+     * Returns current validator being used.
+     *
+     * @return current validator being used.
+     */
+    protected Object validator() {
+        if (validator == null) {
+            validator = BeanValidationUtils.validatorReflected();
+        }
+        return validator;
     }
 
 //    /**
@@ -83,10 +107,12 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
 //    }
 
     /**
-     * Sets targeting groups used for subsequent verifications.
+     * Sets targeting groups used for subsequent verifications. This method is an alias of {@link #groups(Class[])}
+     * method.
      *
      * @param groups new targeting groups.
      * @return {@link #myself}.
+     * @see #groups(Class[])
      */
     @SuppressWarnings({"unchecked"})
     public SELF targeting(final Class<?>... groups) {
@@ -95,15 +121,14 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
     }
 
     /**
-     * Returns current validator being used.
+     * Sets targeting groups used for subsequent verifications.
      *
-     * @return current validator being used.
+     * @param groups new targeting groups.
+     * @return {@link #myself}.
+     * @see #targeting(Class[])
      */
-    protected Object validator() {
-        if (validator == null) {
-            validator = BeanValidationUtils.validatorReflected();
-        }
-        return validator;
+    public SELF groups(final Class<?>... groups) {
+        return targeting(groups);
     }
 
     /**
