@@ -30,14 +30,16 @@ class BeanValidationAssert_Targeting_Test {
     @Test
     void targeting_DoesNotThrow_GroupsIsNull() {
         final BeanValidationAssert a = new BeanValidationAssert(new Object());
-        assertThatCode(() -> a.targeting((Class<?>[]) null)).doesNotThrowAnyException();
+        assertThatCode(() -> a.targeting((Class<?>[]) null))
+                .doesNotThrowAnyException();
         assertThat(a.groups()).isNotNull();
     }
 
     @Test
     void groups_DoesNotThrow_GroupsIsNull() {
         final BeanValidationAssert a = new BeanValidationAssert(new Object());
-        assertThatCode(() -> a.groups((Class<?>[]) null)).doesNotThrowAnyException();
+        assertThatCode(() -> a.groups((Class<?>[]) null))
+                .doesNotThrowAnyException();
         assertThat(a.groups()).isNotNull();
     }
 }

@@ -36,14 +36,20 @@ class BeanValidationAssertions_AssertBean_Object_Test extends BeanValidationAsse
     @DisplayName("assertBean(null) throws NullPointerException")
     @Test
     void assertBean_NullPointerException_ObjectIsNull() {
-        assertThatThrownBy(() -> BeanValidationAssertions.assertBean(null))
+        assertThatThrownBy(
+                () -> {
+                    BeanValidationAssertions.assertBean(null);
+                })
                 .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("assertBean(object) does not throw any exception")
     @Test
     void assertBean__() {
-        assertThatCode(() -> BeanValidationAssertions.assertBean(new Object()))
+        assertThatCode(
+                () -> {
+                    BeanValidationAssertions.assertBean(new Object());
+                })
                 .doesNotThrowAnyException();
     }
 }

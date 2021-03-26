@@ -20,7 +20,6 @@ package com.github.jinahya.assertj.validation.user.group;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.BeanValidationTestUtils;
 import lombok.Data;
 
 import javax.validation.groups.Default;
@@ -34,7 +33,7 @@ class User {
         final User instance = new User();
         instance.setName(Long.toString(System.nanoTime()));
         instance.setAge(current().nextInt() & Integer.MAX_VALUE);
-        return BeanValidationTestUtils.requireValid(instance);
+        return instance;
     }
 
     static User setInvalidName(final User instance) {

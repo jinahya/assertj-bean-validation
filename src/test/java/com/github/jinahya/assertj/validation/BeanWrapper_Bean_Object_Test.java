@@ -31,14 +31,20 @@ class BeanWrapper_Bean_Object_Test extends BeanWrapperTest {
     @DisplayName("bean(null) throws NullPointerException")
     @Test
     void bean_NullPointerException_ObjectIsNull() {
-        assertThatThrownBy(() -> BeanWrapper.bean(null))
+        assertThatThrownBy(
+                () -> {
+                    BeanWrapper.bean(null);
+                })
                 .isInstanceOf(NullPointerException.class);
     }
 
     @DisplayName("bean(object) does not throw any exception")
     @Test
     void bean_NoException_() {
-        assertThatCode(() -> BeanWrapper.bean(new Object()))
+        assertThatCode(
+                () -> {
+                    BeanWrapper.bean(new Object());
+                })
                 .doesNotThrowAnyException();
     }
 }

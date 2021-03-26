@@ -20,6 +20,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+/**
+ * An abstract class for testing functionalities of {@link BeanWrapper} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 abstract class BeanWrapperTest {
 
 }

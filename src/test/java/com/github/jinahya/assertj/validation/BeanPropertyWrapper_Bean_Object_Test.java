@@ -31,14 +31,20 @@ class BeanPropertyWrapper_Bean_Object_Test extends BeanPropertyWrapperTest {
     @DisplayName("beanProperty(null) does not throw any exception")
     @Test
     void bean_NullPointerException_ObjectIsNull() {
-        assertThatCode(() -> beanProperty(null))
+        assertThatCode(
+                () -> {
+                    final BeanPropertyWrapper w = beanProperty(null);
+                })
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("beanProperty(value) does not throw any exception")
     @Test
     void bean_NoException_() {
-        assertThatCode(() -> beanProperty(new Object()))
+        assertThatCode(
+                () -> {
+                    final BeanPropertyWrapper w = beanProperty(new Object());
+                })
                 .doesNotThrowAnyException();
     }
 }

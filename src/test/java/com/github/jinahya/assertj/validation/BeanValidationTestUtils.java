@@ -20,24 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.Set;
-
 public final class BeanValidationTestUtils {
 
     public static Object validator() {
         return BeanValidationUtils.validatorReflected();
-    }
-
-    static <T> Set<Object> validate(final T object, final Class<?>... groups) {
-        return BeanValidationUtils.validate(null, object, groups);
-    }
-
-    public static <T> boolean isValid(final T object, final Class<?>... groups) {
-        return validate(object, groups).isEmpty();
-    }
-
-    public static <T> T requireValid(final T object, final Class<?>... groups) {
-        return BeanValidationUtils.requireValid(null, object, groups);
     }
 
     BeanValidationTestUtils() {

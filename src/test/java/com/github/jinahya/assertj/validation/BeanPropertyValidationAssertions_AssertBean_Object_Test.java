@@ -23,7 +23,6 @@ package com.github.jinahya.assertj.validation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.BeanPropertyValidationAssertions.assertBeanProperty;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 /**
@@ -36,14 +35,20 @@ class BeanPropertyValidationAssertions_AssertBean_Object_Test extends BeanProper
     @DisplayName("assertBeanProperty(null) does not throw any exception")
     @Test
     void assertBeanProperty_NullPointerException_ValueIsNull() {
-        assertThatCode(() -> assertBeanProperty(null))
+        assertThatCode(
+                () -> {
+                    BeanPropertyValidationAssertions.assertBeanProperty(null);
+                })
                 .doesNotThrowAnyException();
     }
 
     @DisplayName("assertBeanProperty(value) does not throw any exception")
     @Test
     void assertBeanProperty__() {
-        assertThatCode(() -> assertBeanProperty(new Object()))
+        assertThatCode(
+                () -> {
+                    BeanPropertyValidationAssertions.assertBeanProperty(new Object());
+                })
                 .doesNotThrowAnyException();
     }
 }

@@ -20,7 +20,6 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.BeanValidationTestUtils;
 import lombok.Data;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -32,7 +31,7 @@ class User {
         final User instance = new User();
         instance.setName(Long.toString(System.nanoTime()));
         instance.setAge(current().nextInt() & Integer.MAX_VALUE);
-        return BeanValidationTestUtils.requireValid(instance);
+        return instance;
     }
 
     private static User setInvalidName(final User instance) {
