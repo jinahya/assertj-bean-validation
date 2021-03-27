@@ -6,12 +6,41 @@ import static java.util.Objects.requireNonNull;
 
 final class ConstraintViolationUtils {
 
+    private static Class<?> constraintViolationClassJakarta() throws ClassNotFoundException {
+        return Class.forName("jakarta.validation.ConstraintViolation");
+    }
+
     private static Class<?> constraintViolationClassJavax() throws ClassNotFoundException {
         return Class.forName("javax.validation.ConstraintViolation");
     }
 
-    private static Class<?> constraintViolationClassJakarta() throws ClassNotFoundException {
-        return Class.forName("jakarta.validation.ConstraintViolation");
+    /**
+     * Indicates whether specified object is an instance of {@code javax.validation.ConstraintViolation} or is an
+     * instance of {@code jakarta.validation.ConstraintViolation}.
+     *
+     * @param object the object to be tested.
+     * @return {@code true} if {@code object} is an instance of {@code ConstraintViolation}; {@code false} otherwise.
+     * @see #constraintViolationClassJakarta()
+     * @see #constraintViolationClassJavax()
+     */
+    static boolean isConstraintViolationInstance(final Object object) {
+        Class<?> classJavax = null;
+        try {
+            classJavax = constraintViolationClassJavax();
+        } catch (final ClassNotFoundException cnfe) {
+            // empty
+        }
+        Class<?> classJakarta = null;
+        try {
+            classJakarta = constraintViolationClassJakarta();
+        } catch (final ClassNotFoundException cnfe) {
+            // empty
+        }
+        if (classJavax == null && classJakarta == null) {
+            throw new RuntimeException("unable to find the ....validation.ConstraintViolation class");
+        }
+        return (classJavax != null && classJavax.isInstance(object))
+               || (classJakarta != null && classJakarta.isInstance(object));
     }
 
     // ------------------------------------------------------------------------------------------------- getInvalidValue

@@ -84,8 +84,8 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
      * Verifies that the {@link #actual} object is invalid. This method is an alias of {@link #isNotValid(Consumer)}
      * method.
      *
-     * @param consumer a consumer for consuming a set of constraint violations of either {@link
-     *                 javax.validation.ConstraintViolation} or {@link jakarta.validation.ConstraintVaiolation}; may be
+     * @param consumer a consumer for consuming a set of constraint violations of either {@code
+     *                 javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintVaiolation}; may be
      *                 {@code null}.
      * @return {@link #myself self}.
      */
@@ -96,8 +96,8 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
     /**
      * Verifies that the {@link #actual} object is not valid.
      *
-     * @param consumer a consumer for as set of constraint violations of either {@link javax.validation.ConstraintViolation}
-     *                 or {@link jakarta.validation.ConstraintVaiolation}; may be {@code null}.
+     * @param consumer a consumer for as set of constraint violations of either {@code javax.validation.ConstraintViolation}
+     *                 or {@code jakarta.validation.ConstraintViolation}; may be {@code null}.
      * @return {@link #myself self}.
      */
     public BeanValidationAssert isNotValid(final Consumer<? super Set<?>> consumer) {
