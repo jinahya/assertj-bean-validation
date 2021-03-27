@@ -40,22 +40,40 @@ import org.assertj.core.api.AbstractAssert;
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
+public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
         extends AbstractAssert<SELF, Object> {
 
-    AbstractBeanValidationAssert(final Object actual, final Class<SELF> selfType) {
+    /**
+     * Creates a new instance with specified actual value and self type.
+     *
+     * @param actual   the actual value.
+     * @param selfType the self type.
+     */
+    protected AbstractBeanValidationAssert(final Object actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 
     /**
-     * Sets a validator used for subsequent verifications. This method is an alias of {@link #validator(Object)} mthod.
+     * Sets a validator for subsequent verifications. This method is an alias of {@link #validator(Object)} method.
      *
-     * @param validator new validator.
-     * @return {@link #myself}.
+     * @param validator the validator; may be {@code null}.
+     * @return {@link #myself self}.
      * @see #validator(Object)
      */
-    @SuppressWarnings({"unchecked"})
     public SELF using(final Object validator) {
+        return validator(validator);
+    }
+
+    /**
+     * Sets a validator for subsequent verifications.
+     *
+     * @param validator the validator; may be {@code null} yet must be an instance of either {@code
+     *                  javax.validation.Validator} or {@code jakarta.validation.Validator}.
+     * @return {@link #myself self}.
+     * @see #using(Object)
+     */
+    @SuppressWarnings({"unchecked"})
+    public SELF validator(final Object validator) {
         if (validator != null && !BeanValidationUtils.isValidatorInstance(validator)) {
             throw new IllegalArgumentException("wrong validator: " + validator);
         }
@@ -64,20 +82,9 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
     }
 
     /**
-     * Sets a validator used for subsequent verifications.
+     * Returns current validator instance being used.
      *
-     * @param validator new validator.
-     * @return {@link #myself}.
-     * @see #using(Object)
-     */
-    public SELF validator(final Object validator) {
-        return using(validator);
-    }
-
-    /**
-     * Returns current validator being used.
-     *
-     * @return current validator being used.
+     * @return current validator instance being used; never {@code null}.
      */
     protected Object validator() {
         if (validator == null) {
@@ -90,7 +97,7 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
 //     * Sets a validator used for subsequent verifications.
 //     *
 //     * @param validator the validator.
-//     * @return {@link #myself}.
+//     * @return {@link #myself self}.
 //     */
 //    public SELF using(final javax.validation.Validator validator) {
 //        return using(validator);
@@ -100,41 +107,40 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
 //     * Sets a validator used for subsequent verifications.
 //     *
 //     * @param validator the validator.
-//     * @return {@link #myself}.
+//     * @return {@link #myself self}.
 //     */
 //    public SELF using(final jakarta.validation.Validator validator) {
 //        return using(validator);
 //    }
 
     /**
-     * Sets targeting groups used for subsequent verifications. This method is an alias of {@link #groups(Class[])}
-     * method.
+     * Sets targeting groups for subsequent verifications. This method is an alias of {@link #groups(Class[])} method.
      *
-     * @param groups new targeting groups.
-     * @return {@link #myself}.
+     * @param groups the targeting groups; may be {@code null}.
+     * @return {@link #myself self}.
      * @see #groups(Class[])
      */
-    @SuppressWarnings({"unchecked"})
     public SELF targeting(final Class<?>... groups) {
+        return groups(groups);
+    }
+
+    /**
+     * Sets targeting groups for subsequent verifications.
+     *
+     * @param groups the targeting groups; may be {@code null}.
+     * @return {@link #myself self}.
+     * @see #targeting(Class[])
+     */
+    @SuppressWarnings({"unchecked"})
+    public SELF groups(final Class<?>... groups) {
         this.groups = groups;
         return (SELF) this;
     }
 
     /**
-     * Sets targeting groups used for subsequent verifications.
-     *
-     * @param groups new targeting groups.
-     * @return {@link #myself}.
-     * @see #targeting(Class[])
-     */
-    public SELF groups(final Class<?>... groups) {
-        return targeting(groups);
-    }
-
-    /**
      * Returns current targeting groups being used.
      *
-     * @return current targeting groups being used.
+     * @return current targeting groups being used; never {@code null} yet may be empty.
      */
     protected Class<?>[] groups() {
         if (groups == null) {
@@ -143,7 +149,17 @@ abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationA
         return groups;
     }
 
+    /**
+     * The validator being used.
+     *
+     * @see #validator()
+     */
     private Object validator;
 
+    /**
+     * The targeting groups being used.
+     *
+     * @see #groups()
+     */
     private Class<?>[] groups;
 }

@@ -34,7 +34,7 @@ public final class BeanValidationAssertions {
      * Creates a new assertion instance for specified bean object reference.
      *
      * @param object the bean object to be verified.
-     * @return a new bean validation assertion instance.
+     * @return a new assertion instance for {@code object}.
      * @see #assertThat(BeanWrapper)
      */
     public static BeanValidationAssert assertBean(final Object object) {
@@ -42,10 +42,11 @@ public final class BeanValidationAssertions {
     }
 
     /**
-     * Creates a new assertion instance for the bean object reference wrapped in specified wrapper.
+     * Creates a new assertion instance for the bean object reference wrapped in specified wrapper. This method invokes
+     * {@link #assertBean(Object)} method with {@link BeanWrapper#getObject() wrapper.object} and returns the result.
      *
      * @param wrapper the wrapper wraps the bean object reference; must be not {@code null}.
-     * @return a new bean validation assertion instance.
+     * @return a assertion instance for {@link BeanWrapper#getObject() wrapper.object}.
      * @see BeanWrapper#bean(Object)
      * @see #assertBean(Object)
      */

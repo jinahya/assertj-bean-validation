@@ -31,8 +31,8 @@ public class BeanPropertyWrapper {
     /**
      * Creates a new instance wraps specified property value.
      *
-     * @param value the property value to wrap.
-     * @return a new instance wraps {@code value}.
+     * @param value the property value to wrap; may be {@code null}.
+     * @return a new instance wraps given {@code value}.
      */
     public static BeanPropertyWrapper beanProperty(final Object value) {
         return new BeanPropertyWrapper(value);

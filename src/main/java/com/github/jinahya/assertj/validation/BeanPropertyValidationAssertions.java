@@ -34,7 +34,7 @@ public final class BeanPropertyValidationAssertions {
      * Creates a new assertion instance with specified property value.
      *
      * @param value the property value.
-     * @return an assertion instance for {@code value}.
+     * @return an assertion for {@code value}.
      * @see #assertThat(BeanPropertyWrapper)
      */
     public static BeanPropertyValidationAssert assertBeanProperty(final Object value) {
@@ -42,10 +42,12 @@ public final class BeanPropertyValidationAssertions {
     }
 
     /**
-     * Creates a new assertion instance for the property value wrapped in specified wrapper.
+     * Creates a new assertion instance for the property value wrapped in specified wrapper. This method invokes {@link
+     * #assertBeanProperty(Object)} method with {@link BeanPropertyWrapper#getValue() wrapper.value} and returns the
+     * result.
      *
      * @param wrapper the wrapper wraps the property value; must be not {@code null}.
-     * @return an assert for {@code wrapper.value}.
+     * @return an assertion for {@link BeanPropertyWrapper#getValue() wrapper.value}.
      * @see BeanPropertyWrapper#beanProperty(Object)
      * @see #assertBeanProperty(Object)
      */
