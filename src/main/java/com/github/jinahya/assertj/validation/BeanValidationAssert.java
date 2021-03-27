@@ -44,6 +44,21 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
 
     /**
      * Verifies that the {@link #actual actual} is valid.
+     * <p>
+     * This method is equivalent to
+     * <blockquote><pre>{@code
+     * Assertions.assertThat(
+     *         validator().validate(actual, groups())
+     * ).isEmpty();
+     * }</pre></blockquote>.
+     * <p>
+     * Which is, in its default state, equivalent to
+     * <blockquote><pre>{@code
+     * Assertions.assertThat(
+     *         Validation.buildDefaultValidatorFactory().getValidator()
+     *             .validate(actual)
+     * ).isEmpty();
+     * }</pre></blockquote>.
      *
      * @return {@link #myself self}.
      * @see #using(Object)
@@ -61,6 +76,21 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
 
     /**
      * Verifies that the {@link #actual actual}'s current property of specified name is valid.
+     * <p>
+     * This method is equivalent to
+     * <blockquote><pre>{@code
+     * Assertions.assertThat(
+     *         validator().validateProperty(actual, propertyName, groups())
+     * ).isEmpty();
+     * }</pre></blockquote>.
+     * <p>
+     * Which is, in its default state, equivalent to
+     * <blockquote><pre>{@code
+     * Assertions.assertThat(
+     *         Validation.buildDefaultValidatorFactory().getValidator()
+     *             .validateProperty(actual, propertyName)
+     * ).isEmpty();
+     * }</pre></blockquote>.
      *
      * @param propertyName the name of the property to verify.
      * @return {@link #myself self}

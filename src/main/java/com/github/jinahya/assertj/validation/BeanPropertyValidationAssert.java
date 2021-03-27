@@ -20,6 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.Assertions;
+
 import static com.github.jinahya.assertj.validation.BeanValidationUtils.validateValue;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +44,21 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
 
     /**
      * Verifies that the {@link #actual actual} would be valid for specified property of specified class.
+     * <p>
+     * This method is equivalent to
+     * <blockquote><pre>{@code
+     * Assertions.assertThat(
+     *         validator().validateValue(beanType, propertyName, actual, groups())
+     * ).isEmpty();
+     * }</pre></blockquote>.
+     * <p>
+     * Which is, in its default state, equivalent to
+     * <blockquote><pre>{@code
+     * Assertions.assertThat(
+     *         Validation.buildDefaultValidatorFactory().getValidator()
+     *             .validateValue(beanType, propertyName, actual)
+     * ).isEmpty();
+     * }</pre></blockquote>.
      *
      * @param beanType     the class whose all constraints placed on specified property are examined.
      * @param propertyName the name of the property.

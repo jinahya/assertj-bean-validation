@@ -45,6 +45,8 @@ import static java.util.Objects.requireNonNull;
  */
 final class BeanValidationUtils {
 
+    // ---------------------------------------------------------------------------------- Class<...validation.Validator>
+
     /**
      * Returns the class of {@code javax.validation.Validator}.
      *
@@ -85,7 +87,7 @@ final class BeanValidationUtils {
         throw new RuntimeException("unable to detect validator class for " + object);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------- ...validation.Validator
     private static Object validatorFactoryJavax = null;
 
     /**
@@ -138,18 +140,7 @@ final class BeanValidationUtils {
         throw new RuntimeException("failed to instantiated an instance of Validator");
     }
 
-//    /**
-//     * Returns a validator initialized from the {@link Validation#buildDefaultValidatorFactory()
-//     * default-validator-factory}.
-//     *
-//     * @return a validator initialized from the {@link Validation#buildDefaultValidatorFactory()
-//     * default-validator-factory}.
-//     */
-//    static @NotNull Validator validator() {
-//        return buildDefaultValidatorFactory().getValidator();
-//    }
-
-    // -----------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------- Validator#validate(Object, Class...)
     private static Method validateMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
@@ -169,6 +160,16 @@ final class BeanValidationUtils {
         throw new RuntimeException("failed to get validate method for " + validator);
     }
 
+    /**
+     * Invokes the {@code validate(T, Class...)} method on specified validator with given arguments and returns the
+     * result.
+     *
+     * @param validator the validator on which the {@code validate(...)} method is invoked; may be {@code null}.
+     * @param object    a value for {@code object} parameter.
+     * @param groups    a value for {@code groups} parameter.
+     * @param <T>       {@code object} type parameter
+     * @return the result of the invocation which is a set of {@code ConstraintViolation}s.
+     */
     @SuppressWarnings({"unchecked"})
     static <T> Set<Object> validate(Object validator, final T object, final Class<?>... groups) {
         requireNonNull(object, "object is null");
@@ -183,44 +184,7 @@ final class BeanValidationUtils {
         }
     }
 
-//    /**
-//     * Validates specified bean object using specified validator and groups.
-//     *
-//     * @param validator the validator.
-//     * @param object    the object to validate.
-//     * @param groups    the groups.
-//     * @param <T>       object type parameter
-//     * @return the result of {@link Validator#validate(Object, Class[])} method invoked on {@code validator} with {@code
-//     * object} and {@code groups}.
-//     */
-//    static <T> @NotNull Set<@NotNull ConstraintViolation<T>> validate(
-//            final @NotNull Validator validator, final @NotNull T object, final @NotNull Class<?>... groups) {
-//        requireNonNull(validator, "validator is null");
-//        requireNonNull(object, "object is null");
-//        requireNonNull(groups, "groups is null");
-//        return validator.validate(object, groups);
-//    }
-//
-
-    /**
-     * Checks that the specified object reference is valid.
-     *
-     * @param validator a validator.
-     * @param object    the object to validate.
-     * @param groups    a targeting groups.
-     * @param <T>       object type parameter
-     */
-    static <T> T requireValid(Object validator, final T object, final Class<?>... groups) {
-        final Set<Object> violations = validate(validator, object, groups);
-        if (!violations.isEmpty()) {
-            throw new RuntimeException(String.format(
-                    "invalid; validator: %1$s, object: %2$s, groups: %3$s, violations: %4$s",
-                    validator, object, Arrays.toString(groups), violations));
-        }
-        return object;
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------- Validator#validateProperty(Object String, Class...)
     private static Method validatePropertyMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
@@ -242,6 +206,19 @@ final class BeanValidationUtils {
         throw new RuntimeException("failed to get validateProperty method for " + validator);
     }
 
+    /**
+     * Invokes {@code Validator#validateProperty(T, String, Class...)} method on specified validator with given
+     * arguments and returns the result.
+     *
+     * @param validator    the validator on which the {@code validateProperty(...)} method is invokes.
+     * @param object       a value for {@code object} parameter.
+     * @param propertyName a value for {@code propertyName} parameter.
+     * @param groups       a value for {@code groups} parameter.
+     * @param <T>          {@code object} type parameter
+     * @return the result of the invocation which is a set of {@code ConstraintViolation}s
+     * @see javax.validation.Validator#validateProperty(Object, String, Class[])
+     * @see jakarta.validation.Validator#validateProperty(Object, String, Class[])
+     */
     @SuppressWarnings({"unchecked"})
     static <T> Set<Object> validateProperty(Object validator, final T object, final String propertyName,
                                             final Class<?>... groups) {
@@ -255,18 +232,6 @@ final class BeanValidationUtils {
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }
-    }
-
-    static <T> T requirePropertyValid(Object validator, final T object, final String propertyName,
-                                      final Class<?>... groups) {
-        final Set<Object> violations = validateProperty(validator, object, propertyName, groups);
-        if (!violations.isEmpty()) {
-            throw new RuntimeException(String.format(
-                    "invalid property; validator: %1$s, object: %2$s, propertyName: %3$s, groups: %4$s,"
-                    + " violations: %5$s",
-                    validator, object, propertyName, Arrays.toString(groups), violations));
-        }
-        return object;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -291,6 +256,20 @@ final class BeanValidationUtils {
         throw new RuntimeException("failed to get validateValue method for " + validator);
     }
 
+    /**
+     * Invokes the {@code Validator#validateValue(Class<T>, String, Object, Class...)} method on specified validator
+     * with given arguments and returns the result.
+     *
+     * @param validator    the validator on which the {@code validateValue(...)} method is invoked.
+     * @param beanType     a value for {@code beanType} parameter.
+     * @param propertyName a value for {@code propertyName} parameter.
+     * @param value        a value for {@code value} parameter.
+     * @param groups       a value for {@code groups} parameter.
+     * @param <T>          the type of the class modeled by the {@code beanType}.
+     * @return the result of the invocation which is a set of {@code ConstraintViolation}s.
+     * @see javax.validation.Validator#validateValue(Class, String, Object, Class[])
+     * @see jakarta.validation.Validator#validateValue(Class, String, Object, Class[])
+     */
     @SuppressWarnings({"unchecked"})
     static <T> Set<Object> validateValue(Object validator, final Class<T> beanType, final String propertyName,
                                          final Object value, final Class<?>... groups) {
@@ -306,18 +285,6 @@ final class BeanValidationUtils {
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }
-    }
-
-    static <T> Object requireValidValue(Object validator, final Class<T> beanType, final String propertyName,
-                                        final Object value, final Class<?>... groups) {
-        final Set<Object> violations = validateValue(validator, beanType, propertyName, value, groups);
-        if (!violations.isEmpty()) {
-            throw new RuntimeException(String.format(
-                    "invalid value; validator: %1$s, beanType: %2$s, propertyName: %3$s, value: %4$s, groups: %5$s,"
-                    + " violations: %6$s",
-                    validator, beanType, propertyName, value, Arrays.toString(groups), violations));
-        }
-        return value;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
