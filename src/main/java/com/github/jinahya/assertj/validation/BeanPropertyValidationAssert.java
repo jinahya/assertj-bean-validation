@@ -41,7 +41,7 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
     }
 
     /**
-     * Verifies that the {@link #actual} value would be a valid for specified property of specified class.
+     * Verifies that the {@link #actual actual} would be valid for specified property of specified class.
      *
      * @param beanType     the class whose all constraints placed on specified property are examined.
      * @param propertyName the name of the property.

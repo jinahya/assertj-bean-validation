@@ -43,7 +43,7 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
     }
 
     /**
-     * Verifies that the {@link #actual} is valid.
+     * Verifies that the {@link #actual actual} is valid.
      *
      * @return {@link #myself self}.
      * @see #using(Object)
@@ -60,7 +60,7 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
     }
 
     /**
-     * Verifies that the {@link #actual} has a valid property.
+     * Verifies that the {@link #actual actual}'s current property of specified name is valid.
      *
      * @param propertyName the name of the property to verify.
      * @return {@link #myself self}
