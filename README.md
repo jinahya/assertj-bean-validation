@@ -16,9 +16,7 @@ An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Va
 
 ### `isValid()`
 
-Validate a bean object.
-
-(See [`validate(T, Class<?>...)`][validate] method.)
+Validates a bean object reference. (See [`validate`][validate].)
 
 ```java
 class User {
@@ -32,20 +30,16 @@ assertThat(bean(new User())).isValid(); // equivalent
 
 ### `hasValidProperty(String)`
 
-Validates current value of a property of specified name.
-
-(See [`validateProperty(T, String, Class<?>...)`][validateProperty] method.)
+Validates current value of a property of specified name. (See [`validateProperty`][validateProperty].)
 
 ```java
 assertBean(new User()).hasValidProprty("name");
 assertThat(bean(new User())).hasValidProperty("age"); // equivalent
 ```
 
-### `isValidFor(Class<?>, String, Class<?>...)`
+### `isValidFor(Class<?>, String)`
 
-Checks whether a value would be valid for a property of a bean type.
-
-(See [`validateValue(T, String, Object, Class<?>...)`][validateValue] method.)
+Checks whether a value would be valid for a property of a bean type. (See [`validateValue`][validateValue].)
 
 ```java
 assertBeanProperty(null).isValidFor(User.class, "name");         // fail
@@ -56,6 +50,17 @@ assertThat(beanProperty("Jane")).isValidFor(User.class, "name"); // succeed
 assertThat(beanProperty(-1)).isValidFor(User.class, "age"); // fail
 assertBeanProperty(0).isValidFor(User.class, "age");        // succeed
 assertBeanProperty(1).isValidFor(User.class, "age");        // succeed
+```
+
+### Using custom validators and/or targeting groups
+
+```java
+Validator validator = validator();
+Class<?>[] groups = groups();
+assert...(...)
+        .using(validator)  // using a custom validator
+        .targeting(groups) // using custom groups
+        .(is|has)...(...);
 ```
 
 [validate]: https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validate-T-java.lang.Class...-
