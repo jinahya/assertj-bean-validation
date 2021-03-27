@@ -45,7 +45,7 @@ public final class BeanValidationAssertions {
      * Creates a new assertion instance for the bean object reference wrapped in specified wrapper. This method invokes
      * {@link #assertBean(Object)} method with {@link BeanWrapper#getObject() wrapper.object} and returns the result.
      *
-     * @param wrapper the wrapper wraps the bean object reference; must be not {@code null}.
+     * @param wrapper the wrapper wraps the bean object reference; must not be {@code null}.
      * @return a assertion instance for {@link BeanWrapper#getObject() wrapper.object}.
      * @see BeanWrapper#bean(Object)
      * @see #assertBean(Object)

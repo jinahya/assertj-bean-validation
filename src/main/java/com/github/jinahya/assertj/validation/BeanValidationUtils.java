@@ -158,15 +158,17 @@ final class BeanValidationUtils {
     private static Method validateMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
-            if (validatorClassJavax().isInstance(validator)) {
-                return validatorClassJavax().getMethod("validate", Object.class, Class[].class);
+            final Class<?> validatorClassJavax = validatorClassJavax();
+            if (validatorClassJavax.isInstance(validator)) {
+                return validatorClassJavax.getMethod("validate", Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
         }
         try {
-            if (validatorClassJakarta().isInstance(validator)) {
-                return validatorClassJakarta().getMethod("validate", Object.class, Class[].class);
+            final Class<?> validatorClassJakarta = validatorClassJakarta();
+            if (validatorClassJakarta.isInstance(validator)) {
+                return validatorClassJakarta.getMethod("validate", Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty

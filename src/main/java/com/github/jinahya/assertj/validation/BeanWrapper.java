@@ -32,7 +32,7 @@ public class BeanWrapper {
     /**
      * Creates a new instance wraps specified bean object.
      *
-     * @param object the bean object to wrap; must be not {@code null}.
+     * @param object the bean object to wrap; must not be {@code null}.
      * @return a new instance wraps {@code object}.
      */
     public static BeanWrapper bean(final Object object) {
@@ -43,7 +43,7 @@ public class BeanWrapper {
     /**
      * Creates a new instance with specified bean object.
      *
-     * @param object the bean object to wrap; must be not {@code null}.
+     * @param object the bean object to wrap; must not be {@code null}.
      */
     private BeanWrapper(final Object object) {
         super();

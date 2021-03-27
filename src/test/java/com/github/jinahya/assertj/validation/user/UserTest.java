@@ -21,6 +21,9 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.BeanValidationAssert;
+import com.github.jinahya.assertj.validation.ConstraintViolationTestUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -31,10 +34,14 @@ import static com.github.jinahya.assertj.validation.BeanValidationAssertions.ass
 import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.BeanValidationTestUtils.validator;
 import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
+import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.ConstraintViolationWrapper.constraintViolation;
+import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.assertThat;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
 class UserTest {
 
     static Stream<String> validNames() {
@@ -94,6 +101,73 @@ class UserTest {
         assertThat(a.using(validator())).isNotNull();
         assertThatThrownBy(a::isValid)
                 .isInstanceOf(AssertionError.class);
+    }
+
+    // ------------------------------------------------------------------------------------------------------- isInvalid
+    @MethodSource({"validInstances"})
+    @ParameterizedTest
+    void isInvalid_Fail_Valid(final User user) {
+        final BeanValidationAssert a = assertThat(bean(user));
+        assertThatThrownBy(() -> a.isInvalid(null)).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(
+                () -> a.isInvalid(s -> {
+                }))
+                .isInstanceOf(AssertionError.class);
+    }
+
+    @MethodSource({"invalidInstances"})
+    @ParameterizedTest
+    void isInvalid_Succeed_Invalid(final User user) {
+        final BeanValidationAssert a = assertBean(user);
+        assertThatCode(() -> a.isInvalid(null)).doesNotThrowAnyException();
+        assertThatCode(
+                () -> a.isInvalid(s -> {
+                    assertThat(s).isNotEmpty();
+                }))
+                .doesNotThrowAnyException();
+    }
+
+    @MethodSource({"instancesWithInvalidName"})
+    @ParameterizedTest
+    void isValid_Succeed_InvalidName(final User user) {
+        Assertions.setMaxStackTraceElementsDisplayed(1024);
+        final BeanValidationAssert a = assertBean(user);
+        assertThatCode(
+                () -> a.isInvalid(s -> {
+                    assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
+                        log.debug("violation: {}", v);
+                        log.debug("violation.message: {}", ConstraintViolationTestUtils.getMessage(v));
+                        assertThat(constraintViolation(v))
+                                .hasInvalidValue(user.getName())
+                                .hasLeafBean(user)
+                                .hasMessage("must not be blank")
+                                .hasRootBean(user)
+                                .hasRootBeanClass(User.class)
+                                ;
+                    });
+                }))
+                .doesNotThrowAnyException();
+    }
+
+    @MethodSource({"instancesWithInvalidAge"})
+    @ParameterizedTest
+    void isValid_Succeed_InvalidAge(final User user) {
+        final BeanValidationAssert a = assertBean(user);
+        assertThatCode(
+                () -> a.isInvalid(s -> {
+                    assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
+                        log.debug("violation: {}", v);
+                        log.debug("violation.message: {}", ConstraintViolationTestUtils.getMessage(v));
+                        assertThat(constraintViolation(v))
+                                .hasInvalidValue(user.getAge())
+                                .hasLeafBean(user)
+                                .hasMessage("must be greater than or equal to 0")
+                                .hasRootBean(user)
+                                .hasRootBeanClass(User.class)
+                                ;
+                    });
+                }))
+                .doesNotThrowAnyException();
     }
 
     // ------------------------------------------------------------------------------------------------ hasValidProperty
