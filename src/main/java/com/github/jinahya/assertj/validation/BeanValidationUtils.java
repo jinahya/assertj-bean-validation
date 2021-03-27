@@ -33,7 +33,6 @@ package com.github.jinahya.assertj.validation;
  */
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
@@ -78,13 +77,23 @@ final class BeanValidationUtils {
      * @see #validatorClassJakarta()
      */
     static boolean isValidatorInstance(final Object object) {
-        requireNonNull(object, "object is null");
+        Class<?> validatorClassJavax = null;
         try {
-            return validatorClassJavax().isInstance(object) || validatorClassJakarta().isInstance(object);
+            validatorClassJavax = validatorClassJavax();
         } catch (final ClassNotFoundException cnfe) {
             // empty
         }
-        throw new RuntimeException("unable to detect validator class for " + object);
+        Class<?> validatorClassJakarta = null;
+        try {
+            validatorClassJakarta = validatorClassJakarta();
+        } catch (final ClassNotFoundException cnfe) {
+            // empty
+        }
+        if (validatorClassJavax == null && validatorClassJakarta == null) {
+            throw new RuntimeException("unable to find the ....validation.Validator class");
+        }
+        return (validatorClassJavax != null && validatorClassJavax.isInstance(object))
+               || (validatorClassJakarta != null && validatorClassJakarta.isInstance(object));
     }
 
     // ----------------------------------------------------------------------------------------- ...validation.Validator
@@ -216,8 +225,6 @@ final class BeanValidationUtils {
      * @param groups       a value for {@code groups} parameter.
      * @param <T>          {@code object} type parameter
      * @return the result of the invocation which is a set of {@code ConstraintViolation}s
-     * @see javax.validation.Validator#validateProperty(Object, String, Class[])
-     * @see jakarta.validation.Validator#validateProperty(Object, String, Class[])
      */
     @SuppressWarnings({"unchecked"})
     static <T> Set<Object> validateProperty(Object validator, final T object, final String propertyName,
@@ -235,7 +242,7 @@ final class BeanValidationUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static Method validateValueMethod(final Object validator) throws ReflectiveOperationException {
+    private static Method validateValueMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
             if (validatorClassJavax().isInstance(validator)) {
@@ -267,8 +274,6 @@ final class BeanValidationUtils {
      * @param groups       a value for {@code groups} parameter.
      * @param <T>          the type of the class modeled by the {@code beanType}.
      * @return the result of the invocation which is a set of {@code ConstraintViolation}s.
-     * @see javax.validation.Validator#validateValue(Class, String, Object, Class[])
-     * @see jakarta.validation.Validator#validateValue(Class, String, Object, Class[])
      */
     @SuppressWarnings({"unchecked"})
     static <T> Set<Object> validateValue(Object validator, final Class<T> beanType, final String propertyName,

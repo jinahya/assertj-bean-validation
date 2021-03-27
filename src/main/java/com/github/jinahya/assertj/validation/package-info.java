@@ -3,23 +3,36 @@
  * against <a href="https://beanvalidation.org/">Jakarta Bean-Validation</a>.
  * <blockquote><pre>
  * class User {
+ *
  *     {@literal @}NotBlank String name = "UNKNOWN";
+ *
  *     {@literal @}PositiveOrZero int age;
+ *
  * }
  *
- * assertBean(new User()).isValid();
- * assertThat(bean(new User())).isValid(); // equivalent
  *
- * assertBean(new User()).hasValidProprty("name");
- * assertThat(bean(new User())).hasValidProperty("age"); // equivalent
+ * assertBean(new User()).isValid();
+ *
+ * assertThat(bean(new User())).isValid();
+ *
+ *
+ * assertBean(new User()).hasValidProperty("name");
+ *
+ * assertThat(bean(new User())).hasValidProperty("age");
+ *
  *
  * assertBeanProperty(null).isValidFor(User.class, "name");         // fail
+ *
  * assertBeanProperty("").isValidFor(User.class, "name");           // fail
+ *
  * assertBeanProperty(" ").isValidFor(User.class, "name");          // fail
+ *
  * assertThat(beanProperty("Jane")).isValidFor(User.class, "name"); // succeed
  *
  * assertThat(beanProperty(-1)).isValidFor(User.class, "age"); // fail
+ *
  * assertBeanProperty(0).isValidFor(User.class, "age");        // succeed
+ *
  * assertBeanProperty(1).isValidFor(User.class, "age");        // succeed
  * </pre></blockquote>
  *

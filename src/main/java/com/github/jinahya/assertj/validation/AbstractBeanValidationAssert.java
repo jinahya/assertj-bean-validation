@@ -93,26 +93,6 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
         return validator;
     }
 
-//    /**
-//     * Sets a validator used for subsequent verifications.
-//     *
-//     * @param validator the validator.
-//     * @return {@link #myself self}.
-//     */
-//    public SELF using(final javax.validation.Validator validator) {
-//        return using(validator);
-//    }
-//
-//    /**
-//     * Sets a validator used for subsequent verifications.
-//     *
-//     * @param validator the validator.
-//     * @return {@link #myself self}.
-//     */
-//    public SELF using(final jakarta.validation.Validator validator) {
-//        return using(validator);
-//    }
-
     /**
      * Sets targeting groups for subsequent verifications. This method is an alias of {@link #groups(Class[])} method.
      *
