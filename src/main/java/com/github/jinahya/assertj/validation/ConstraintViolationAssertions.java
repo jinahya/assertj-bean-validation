@@ -4,18 +4,15 @@ import static java.util.Objects.requireNonNull;
 
 public final class ConstraintViolationAssertions {
 
-    public static class ConstraintViolationWrapper {
+    public static class ConstraintViolationWrapper extends Wrapper<Object> {
 
         public static ConstraintViolationWrapper constraintViolation(final Object actual) {
             return new ConstraintViolationWrapper(actual);
         }
 
-        private ConstraintViolationWrapper(final Object actual) {
-            super();
-            this.actual = actual;
+        private ConstraintViolationWrapper(final Object wrapped) {
+            super(wrapped);
         }
-
-        private final Object actual;
     }
 
     public static ConstraintViolationAssert assertConstraintViolation(final Object actual) {
@@ -24,7 +21,7 @@ public final class ConstraintViolationAssertions {
 
     public static ConstraintViolationAssert assertThat(final ConstraintViolationWrapper wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertConstraintViolation(wrapper.actual);
+        return assertConstraintViolation(wrapper.getWrapped());
     }
 
     private ConstraintViolationAssertions() {

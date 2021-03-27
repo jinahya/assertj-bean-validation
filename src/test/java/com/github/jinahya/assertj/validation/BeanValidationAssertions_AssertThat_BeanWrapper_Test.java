@@ -23,7 +23,7 @@ package com.github.jinahya.assertj.validation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
+import static com.github.jinahya.assertj.validation.BeanValidationAssertions.BeanWrapper.bean;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

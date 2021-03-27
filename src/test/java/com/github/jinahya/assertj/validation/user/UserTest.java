@@ -30,10 +30,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.github.jinahya.assertj.validation.BeanValidationAssertions.BeanWrapper.bean;
 import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertBean;
 import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.BeanValidationTestUtils.validator;
-import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.ConstraintViolationWrapper.constraintViolation;
 import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.assertThat;
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -143,7 +143,7 @@ class UserTest {
                                 .hasMessage("must not be blank")
                                 .hasRootBean(user)
                                 .hasRootBeanClass(User.class)
-                                ;
+                        ;
                     });
                 }))
                 .doesNotThrowAnyException();
@@ -164,7 +164,7 @@ class UserTest {
                                 .hasMessage("must be greater than or equal to 0")
                                 .hasRootBean(user)
                                 .hasRootBeanClass(User.class)
-                                ;
+                        ;
                     });
                 }))
                 .doesNotThrowAnyException();

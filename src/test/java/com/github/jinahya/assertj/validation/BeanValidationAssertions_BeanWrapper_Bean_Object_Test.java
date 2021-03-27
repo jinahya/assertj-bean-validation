@@ -26,14 +26,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class BeanWrapper_Bean_Object_Test extends BeanWrapperTest {
+class BeanValidationAssertions_BeanWrapper_Bean_Object_Test extends BeanValidationAssertions_BeanWrapperTest {
 
     @DisplayName("bean(null) throws NullPointerException")
     @Test
     void bean_NullPointerException_ObjectIsNull() {
         assertThatThrownBy(
                 () -> {
-                    BeanWrapper.bean(null);
+                    BeanValidationAssertions.BeanWrapper.bean(null);
                 })
                 .isInstanceOf(NullPointerException.class);
     }
@@ -43,7 +43,7 @@ class BeanWrapper_Bean_Object_Test extends BeanWrapperTest {
     void bean_NoException_() {
         assertThatCode(
                 () -> {
-                    BeanWrapper.bean(new Object());
+                    BeanValidationAssertions.BeanWrapper.bean(new Object());
                 })
                 .doesNotThrowAnyException();
     }

@@ -2,16 +2,16 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getInvalidValue;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getLeafBean;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getRootBean;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getRootBeanClass;
+import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class ConstraintViolationAssert extends AbstractAssert<ConstraintViolationAssert, Object> {
 
     public ConstraintViolationAssert(final Object actual) {
         super(actual, ConstraintViolationAssert.class);
+        if (actual != null && !ConstraintViolationUtils.isConstraintViolationInstance(actual)) {
+            throw new IllegalArgumentException("not an instance of ConstraintViolation: " + actual);
+        }
     }
 
     public ConstraintViolationAssert hasInvalidValue(final Object expected) {
