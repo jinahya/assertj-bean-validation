@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.Assertions;
-
 import static com.github.jinahya.assertj.validation.BeanValidationUtils.validateValue;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,16 +45,17 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
      * <p>
      * This method is equivalent to
      * <blockquote><pre>{@code
-     * Assertions.assertThat(
-     *         validator().validateValue(beanType, propertyName, actual, groups())
+     * assertThat(
+     *     validator()
+     *         .validateValue(beanType, propertyName, actual, groups())
      * ).isEmpty();
      * }</pre></blockquote>.
      * <p>
      * Which is, in its default state, equivalent to
      * <blockquote><pre>{@code
-     * Assertions.assertThat(
-     *         Validation.buildDefaultValidatorFactory().getValidator()
-     *             .validateValue(beanType, propertyName, actual)
+     * assertThat(
+     *     Validation.buildDefaultValidatorFactory().getValidator()
+     *         .validateValue(beanType, propertyName, actual, new Class<?>[0])
      * ).isEmpty();
      * }</pre></blockquote>.
      *

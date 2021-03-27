@@ -26,16 +26,16 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * An assertion class for validating a bean object and its properties.
+ * An assertion class for validating a bean and its properties.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValidationAssert> {
 
     /**
-     * Creates a new instance with specified bean object reference.
+     * Creates a new instance with specified bean.
      *
-     * @param actual the actual bean object; must be not {@code null}.
+     * @param actual the actual bean to verify.
      * @see #actual
      */
     public BeanValidationAssert(final Object actual) {
@@ -47,16 +47,19 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
      * <p>
      * This method is equivalent to
      * <blockquote><pre>{@code
-     * Assertions.assertThat(
-     *         validator().validate(actual, groups())
+     * assertThat(actual).isNotNull();
+     * assertThat(
+     *     validator()
+     *         .validate(actual, groups())
      * ).isEmpty();
      * }</pre></blockquote>.
      * <p>
      * Which is, in its default state, equivalent to
      * <blockquote><pre>{@code
-     * Assertions.assertThat(
-     *         Validation.buildDefaultValidatorFactory().getValidator()
-     *             .validate(actual)
+     * assertThat(actual).isNotNull();
+     * assertThat(
+     *     Validation.buildDefaultValidatorFactory().getValidator()
+     *         .validate(actual, new Class<?>[0])
      * ).isEmpty();
      * }</pre></blockquote>.
      *
@@ -79,16 +82,19 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
      * <p>
      * This method is equivalent to
      * <blockquote><pre>{@code
-     * Assertions.assertThat(
-     *         validator().validateProperty(actual, propertyName, groups())
+     * assertThat(actual).isNotNull();
+     * assertThat(
+     *     validator()
+     *         .validateProperty(actual, propertyName, groups())
      * ).isEmpty();
      * }</pre></blockquote>.
      * <p>
      * Which is, in its default state, equivalent to
      * <blockquote><pre>{@code
-     * Assertions.assertThat(
-     *         Validation.buildDefaultValidatorFactory().getValidator()
-     *             .validateProperty(actual, propertyName)
+     * assertThat(actual).isNotNull();
+     * assertThat(
+     *     Validation.buildDefaultValidatorFactory().getValidator()
+     *         .validateProperty(actual, propertyName, new Class<?>[0])
      * ).isEmpty();
      * }</pre></blockquote>.
      *
