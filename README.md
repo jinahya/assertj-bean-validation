@@ -10,11 +10,15 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation)
 [![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation/javadoc.svg)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation)
 
-An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/). Works for both `javax.validation.*` and `jakarta.validation.*`.
+An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
+
+This module works for both `javax.validation.*` and `jakarta.validation.*` without directly (nor transitively) depending on any of these APIs.
 
 ## Usages
 
-### `isValid()`
+### Verifying a bean and/or its properties.
+
+#### `isValid()`
 
 Validates a bean object reference. (See [`validate`][validate].)
 
@@ -28,7 +32,7 @@ assertBean(new User()).isValid();
 assertThat(bean(new User())).isValid(); // equivalent
 ```
 
-### `hasValidProperty(String)`
+#### `hasValidProperty(String)`
 
 Validates current value of a property of specified name. (See [`validateProperty`][validateProperty].)
 
@@ -37,7 +41,9 @@ assertBean(new User()).hasValidProprty("name");
 assertThat(bean(new User())).hasValidProperty("age"); // equivalent
 ```
 
-### `isValidFor(Class<?>, String)`
+### Verifying a value for a specific property of a bean type
+
+#### `isValidFor(Class<?>, String)`
 
 Checks whether a value would be valid for a property of a bean type. (See [`validateValue`][validateValue].)
 
@@ -60,7 +66,7 @@ Class<?>[] groups = groups();
 assert...(...)
         .using(validator)  // using a custom validator
         .targeting(groups) // using custom groups
-        .(is|has)...(...);
+        .(is|has)Valid...(...);
 ```
 
 [validate]: https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validate-T-java.lang.Class...-
