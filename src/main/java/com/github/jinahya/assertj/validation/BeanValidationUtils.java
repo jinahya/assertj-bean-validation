@@ -96,7 +96,7 @@ final class BeanValidationUtils {
                || (validatorClassJakarta != null && validatorClassJakarta.isInstance(object));
     }
 
-    // ----------------------------------------------------------------------------------------- ...validation.Validator
+    // ---------------------------------------------------------------------------------------- ....validation.Validator
     private static Object validatorFactoryJavax = null;
 
     /**
@@ -105,7 +105,7 @@ final class BeanValidationUtils {
      * @return an instance of {@code javax.validation.Validator}
      * @throws ReflectiveOperationException if failed to reflect classes and methods.
      */
-    static Object validatorJavax() throws ReflectiveOperationException {
+    private static Object validatorJavax() throws ReflectiveOperationException {
         if (validatorFactoryJavax == null) {
             final Class<?> clazz = Class.forName("javax.validation.Validation");
             final Method method = clazz.getMethod("buildDefaultValidatorFactory");
@@ -124,7 +124,7 @@ final class BeanValidationUtils {
      * @return an instance of {@code jakarta.validation.Validator}
      * @throws ReflectiveOperationException if failed to reflect classes and methods.
      */
-    static Object validatorJakarta() throws ReflectiveOperationException {
+    private static Object validatorJakarta() throws ReflectiveOperationException {
         if (validatorFactoryJakarta == null) {
             final Class<?> clazz = Class.forName("jakarta.validation.Validation");
             final Method method = clazz.getMethod("buildDefaultValidatorFactory");
@@ -135,6 +135,11 @@ final class BeanValidationUtils {
         return method.invoke(validatorFactoryJakarta);
     }
 
+    /**
+     * Returns an instance of {@code ....validation.Validator}.
+     *
+     * @return an instance of {@code ....validation.Validator}.
+     */
     static Object validatorReflected() {
         try {
             return validatorJavax();
@@ -245,16 +250,18 @@ final class BeanValidationUtils {
     private static Method validateValueMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
-            if (validatorClassJavax().isInstance(validator)) {
-                return validatorClassJavax().getMethod(
+            final Class<?> validatorClassJavax = validatorClassJavax();
+            if (validatorClassJavax.isInstance(validator)) {
+                return validatorClassJavax.getMethod(
                         "validateValue", Class.class, String.class, Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
         }
         try {
-            if (validatorClassJakarta().isInstance(validator)) {
-                return validatorClassJakarta().getMethod(
+            final Class<?> validatorClassJakarta = validatorClassJakarta();
+            if (validatorClassJakarta.isInstance(validator)) {
+                return validatorClassJakarta.getMethod(
                         "validateValue", Class.class, String.class, Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
