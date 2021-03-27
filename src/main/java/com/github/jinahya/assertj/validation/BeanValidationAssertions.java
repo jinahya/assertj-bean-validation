@@ -23,29 +23,30 @@ package com.github.jinahya.assertj.validation;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A class for creating bean validation assertion instances.
+ * A utility class for fluently creating instances of {@link BeanValidationAssert}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BeanValidationAssert
  */
 public final class BeanValidationAssertions {
 
     /**
-     * Creates a new bean validation assertion instance for specified bean object.
+     * Creates a new assertion instance for specified bean object reference.
      *
-     * @param object the bean object to be verified; must be not {@code null}.
+     * @param object the bean object to be verified.
      * @return a new bean validation assertion instance.
      * @see #assertThat(BeanWrapper)
      */
     public static BeanValidationAssert assertBean(final Object object) {
-        requireNonNull(object, "object is null");
         return new BeanValidationAssert(object);
     }
 
     /**
-     * Creates a new bean validation assertion instance for the bean object wrapped in specified wrapper.
+     * Creates a new assertion instance for the bean object reference wrapped in specified wrapper.
      *
-     * @param wrapper the wrapper wraps the bean object to be verified; must be not {@code null}.
+     * @param wrapper the wrapper wraps the bean object reference; must be not {@code null}.
      * @return a new bean validation assertion instance.
+     * @see BeanWrapper#bean(Object)
      * @see #assertBean(Object)
      */
     public static BeanValidationAssert assertThat(final BeanWrapper wrapper) {

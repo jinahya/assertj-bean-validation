@@ -23,9 +23,10 @@ package com.github.jinahya.assertj.validation;
 import static java.util.Objects.requireNonNull;
 
 /**
- * An assertion class for validating a value for a property of a bean type.
+ * A class for fluently creating instances of {@link BeanPropertyValidationAssert}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see BeanPropertyValidationAssert
  */
 public final class BeanPropertyValidationAssertions {
 
@@ -43,8 +44,9 @@ public final class BeanPropertyValidationAssertions {
     /**
      * Creates a new assertion instance for the property value wrapped in specified wrapper.
      *
-     * @param wrapper the wrapper wraps the property value.
+     * @param wrapper the wrapper wraps the property value; must be not {@code null}.
      * @return an assert for {@code wrapper.value}.
+     * @see BeanPropertyWrapper#beanProperty(Object)
      * @see #assertBeanProperty(Object)
      */
     public static BeanPropertyValidationAssert assertThat(final BeanPropertyWrapper wrapper) {

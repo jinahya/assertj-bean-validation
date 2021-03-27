@@ -26,27 +26,32 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * An assertion class for validating a bean and its properties.
+ * An assertion class for validating a bean object and its properties.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValidationAssert> {
 
     /**
-     * Creates a new instance with specified actual bean object.
+     * Creates a new instance with specified bean object reference.
      *
      * @param actual the actual bean object; must be not {@code null}.
      * @see #actual
      */
     public BeanValidationAssert(final Object actual) {
-        super(requireNonNull(actual, "actual is null"), BeanValidationAssert.class);
+        super(actual, BeanValidationAssert.class);
     }
 
     /**
-     * Verifies that the {@link #actual} bean object is valid against current {@link #validator() validator} and {@link
-     * #groups() targeting groups}.
+     * Verifies that the {@link #actual} is valid.
      *
-     * @return {@link #myself}.
+     * @return {@link #myself self}.
+     * @see #using(Object)
+     * @see #targeting(Class[])
+     * @see <a href="https://javadoc.io/static/javax.validation/validation-api/2.0.1.Final/javax/validation/Validator.html#validate-T-java.lang.Class...-">javax...#validate(T,
+     * Class...)</a>
+     * @see <a href="https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validate-T-java.lang.Class...-">jakarta...#validate(T,
+     * Class...)</a>
      */
     public BeanValidationAssert isValid() {
         isNotNull();
@@ -55,11 +60,16 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
     }
 
     /**
-     * Verifies that current value of the property of specified name is valid against current {@link #validator()
-     * validator} and {@link #groups() targeting groups}.
+     * Verifies that the {@link #actual} has a valid property.
      *
-     * @param propertyName the name of the property to validate.
-     * @return {@link #myself}
+     * @param propertyName the name of the property to verify.
+     * @return {@link #myself self}
+     * @see #using(Object)
+     * @see #targeting(Class[])
+     * @see <a href="https://javadoc.io/static/javax.validation/validation-api/2.0.1.Final/javax/validation/Validator.html#validateProperty-T-java.lang.String-java.lang.Class...-">javax...#validateProperty(T,
+     * String, Class...)</a>
+     * @see <a href="https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateProperty-T-java.lang.String-java.lang.Class...-">jakarta...#validateProperty(T,
+     * String, Class...)</a>
      */
     public BeanValidationAssert hasValidProperty(final String propertyName) {
         requireNonNull(propertyName, "propertyName is null");
