@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValidationAssert> {
+public class BeanValidationAssert<T> extends AbstractBeanValidationAssert<BeanValidationAssert<T>, T> {
 
     /**
      * Creates a new instance with specified bean.
@@ -41,7 +41,7 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
      * @param actual the actual bean to verify.
      * @see #actual
      */
-    public BeanValidationAssert(final Object actual) {
+    public BeanValidationAssert(final T actual) {
         super(actual, BeanValidationAssert.class);
     }
 

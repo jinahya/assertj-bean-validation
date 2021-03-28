@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<BeanPropertyValidationAssert> {
+public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<BeanPropertyValidationAssert, Object> {
 
     /**
      * Creates a new instance with specified value.
@@ -72,7 +72,7 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
      * @see <a href="https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateValue-java.lang.Class-java.lang.String-java.lang.Object-java.lang.Class...-">jakarta....#validate(Class,
      * String, Object, Class...)</a>
      */
-    public BeanPropertyValidationAssert isValidFor(final Class<?> beanType, final String propertyName) {
+    public <T> BeanPropertyValidationAssert isValidFor(final Class<T> beanType, final String propertyName) {
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         assertThat(validateValue(validator(), beanType, propertyName, actual, groups())).isEmpty();
@@ -87,8 +87,8 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
      * @param consumer     a consumer accepts a set of constraint violations which is verified as not empty.
      * @return {@link #myself self}.
      */
-    public BeanPropertyValidationAssert isNotValidFor(final Class<?> beanType, final String propertyName,
-                                                      final Consumer<? super Set<Object>> consumer) {
+    public <T> BeanPropertyValidationAssert isNotValidFor(final Class<T> beanType, final String propertyName,
+                                                          final Consumer<? super Set<Object>> consumer) {
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         final Set<Object> violations = validateValue(validator(), beanType, propertyName, actual, groups());

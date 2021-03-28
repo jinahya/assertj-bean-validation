@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.github.jinahya.assertj.validation.BeanValidationAssertions.BeanWrapper.bean;
+import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertBean;
 import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.BeanValidationTestUtils.validator;
@@ -126,7 +126,7 @@ class UserTest {
     @MethodSource({"invalidInstances"})
     @ParameterizedTest
     void isInvalid_Succeed_Invalid(final User user) {
-        final BeanValidationAssert a = assertBean(user);
+        final BeanValidationAssert<User> a = assertBean(user);
         assertThatCode(() -> a.isNotValid(null)).doesNotThrowAnyException();
         assertThatCode(
                 () -> a.isNotValid(s -> {
@@ -151,7 +151,7 @@ class UserTest {
     @ParameterizedTest
     void isInvalid_Succeed_InvalidName(final User user) {
         Assertions.setMaxStackTraceElementsDisplayed(1024);
-        final BeanValidationAssert a = assertBean(user);
+        final BeanValidationAssert<User> a = assertBean(user);
         assertThatCode(
                 () -> a.isNotValid(s -> {
                     assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
@@ -189,7 +189,7 @@ class UserTest {
     @MethodSource({"instancesWithInvalidAge"})
     @ParameterizedTest
     void isInvalid_Succeed_InvalidAge(final User user) {
-        final BeanValidationAssert a = assertBean(user);
+        final BeanValidationAssert<User> a = assertBean(user);
         assertThatCode(
                 () -> a.isNotValid(s -> {
                     assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
@@ -239,7 +239,7 @@ class UserTest {
     @MethodSource({"instancesWithInvalidName"})
     @ParameterizedTest
     void hasValidProperty_Fail_InvalidName(final User userWithInvalidName) {
-        final BeanValidationAssert a = assertBean(userWithInvalidName);
+        final BeanValidationAssert<User> a = assertBean(userWithInvalidName);
         assertThatThrownBy(() -> a.hasValidProperty("name")).isInstanceOf(AssertionError.class);
         a.hasValidProperty("age");
     }
@@ -247,7 +247,7 @@ class UserTest {
     @MethodSource({"instancesWithInvalidAge"})
     @ParameterizedTest
     void hasValidProperty_Fail_InvalidAge(final User userWithInvalidAge) {
-        final BeanValidationAssert a = assertBean(userWithInvalidAge);
+        final BeanValidationAssert<User> a = assertBean(userWithInvalidAge);
         assertThatThrownBy(() -> a.hasValidProperty("age")).isInstanceOf(AssertionError.class);
         a.hasValidProperty("name");
     }
@@ -256,7 +256,7 @@ class UserTest {
     @MethodSource({"validInstances"})
     @ParameterizedTest
     void doesNotHaveValidProperty_Fail_Valid(final User user) {
-        final BeanValidationAssert a = assertBean(user);
+        final BeanValidationAssert<User> a = assertBean(user);
         assertThatThrownBy(
                 () -> {
                     a.doesNotHaveValidProperty("name", null);
@@ -272,7 +272,7 @@ class UserTest {
     @MethodSource({"instancesWithInvalidName"})
     @ParameterizedTest
     void doesNotHaveValidProperty_Succeed_InvalidName(final User user) {
-        final BeanValidationAssert a = assertBean(user);
+        final BeanValidationAssert<User> a = assertBean(user);
         assertThatCode(
                 () -> a.doesNotHaveValidProperty("name", s -> {
                     assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
@@ -303,7 +303,7 @@ class UserTest {
     @MethodSource({"instancesWithInvalidAge"})
     @ParameterizedTest
     void doesNotHaveValidProperty_Fail_InvalidAge(final User user) {
-        final BeanValidationAssert a = assertBean(user);
+        final BeanValidationAssert<User> a = assertBean(user);
         assertThatCode(
                 () -> a.doesNotHaveValidProperty("age", s -> {
                     assertThat(s).isNotNull().doesNotContainNull().hasSize(1).allSatisfy(v -> {

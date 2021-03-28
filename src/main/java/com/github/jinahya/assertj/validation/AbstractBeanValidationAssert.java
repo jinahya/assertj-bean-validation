@@ -40,8 +40,8 @@ import org.assertj.core.api.AbstractAssert;
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF>>
-        extends AbstractAssert<SELF, Object> {
+public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF, T>, T>
+        extends AbstractAssert<SELF, T> {
 
     /**
      * Creates a new instance with specified actual value and self type.
@@ -49,7 +49,7 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
      * @param actual   the actual value.
      * @param selfType the self type.
      */
-    protected AbstractBeanValidationAssert(final Object actual, final Class<SELF> selfType) {
+    protected AbstractBeanValidationAssert(final T actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
