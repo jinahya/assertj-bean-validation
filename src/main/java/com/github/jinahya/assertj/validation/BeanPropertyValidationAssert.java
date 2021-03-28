@@ -20,6 +20,9 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.util.Set;
+import java.util.function.Consumer;
+
 import static com.github.jinahya.assertj.validation.BeanValidationUtils.validateValue;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,6 +76,26 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         assertThat(validateValue(validator(), beanType, propertyName, actual, groups())).isEmpty();
-        return this;
+        return myself;
+    }
+
+    /**
+     * Verifies that {@link #actual actual} is not valid for the property of specified name of specified bean type.
+     *
+     * @param beanType     the bean type.
+     * @param propertyName the property name.
+     * @param consumer     a consumer accepts a set of constraint violations which is verified as not empty.
+     * @return {@link #myself self}.
+     */
+    public BeanPropertyValidationAssert isNotValidFor(final Class<?> beanType, final String propertyName,
+                                                      final Consumer<? super Set<Object>> consumer) {
+        requireNonNull(beanType, "beanType is null");
+        requireNonNull(propertyName, "propertyName is null");
+        final Set<Object> violations = validateValue(validator(), beanType, propertyName, actual, groups());
+        assertThat(violations).isNotEmpty();
+        if (consumer != null) {
+            consumer.accept(violations);
+        }
+        return myself;
     }
 }

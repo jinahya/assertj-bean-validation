@@ -57,4 +57,25 @@ class UserNameTest {
         assertThatCode(() -> a.isValidFor(User.class, "name"))
                 .doesNotThrowAnyException();
     }
+
+    // --------------------------------------------------------------------------------------------------- isNotValidFor
+    @MethodSource({"invalidNames"})
+    @ParameterizedTest
+    void isNotValidFor_Succeed_InvalidName(final String name) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(name);
+        assertThatCode(
+                () -> a.isNotValidFor(User.class, "name", s -> {
+                }))
+                .doesNotThrowAnyException();
+    }
+
+    @MethodSource({"validNames"})
+    @ParameterizedTest
+    void isNotValidFor_Fail_ValidName(final String name) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(name);
+        assertThatThrownBy(
+                () -> a.isNotValidFor(User.class, "name", s -> {
+                }))
+                .isInstanceOf(AssertionError.class);
+    }
 }

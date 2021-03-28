@@ -20,6 +20,9 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.util.Set;
+import java.util.function.Consumer;
+
 import static com.github.jinahya.assertj.validation.BeanValidationUtils.validate;
 import static com.github.jinahya.assertj.validation.BeanValidationUtils.validateProperty;
 import static java.util.Objects.requireNonNull;
@@ -74,8 +77,29 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
     public BeanValidationAssert isValid() {
         isNotNull();
         assertThat(validate(validator(), actual, groups())).isEmpty();
-        return this;
+        return myself;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Verifies that the {@link #actual} is not valid.
+     *
+     * @param consumer a consumer for as set of constraint violations of either {@code javax.validation.ConstraintViolation}
+     *                 or {@link jakarta.validation.ConstraintViolation}; may be {@code null}.
+     * @return {@link #myself self}.
+     */
+    public BeanValidationAssert isNotValid(final Consumer<? super Set<?>> consumer) {
+        isNotNull();
+        final Set<Object> violations = validate(validator(), actual, groups());
+        assertThat(violations).isNotEmpty();
+        if (consumer != null) {
+            consumer.accept(violations);
+        }
+        return myself;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Verifies that the {@link #actual actual}'s current property of specified name is valid.
@@ -111,6 +135,25 @@ public class BeanValidationAssert extends AbstractBeanValidationAssert<BeanValid
         requireNonNull(propertyName, "propertyName is null");
         isNotNull();
         assertThat(validateProperty(validator(), actual, propertyName, groups())).isEmpty();
-        return this;
+        return myself;
+    }
+
+    /**
+     * Verifies that current value of specified property of {@link #actual actual} is not valid.
+     *
+     * @param propertyName the name of the property.
+     * @param consumer     a consumer accepts a set of constraint violations.
+     * @return {@link #myself self}.
+     */
+    public BeanValidationAssert doesNotHaveValidProperty(final String propertyName,
+                                                         final Consumer<? super Set<Object>> consumer) {
+        requireNonNull(propertyName, "propertyName is null");
+        isNotNull();
+        final Set<Object> violations = validateProperty(validator(), actual, propertyName, groups());
+        assertThat(violations).isNotEmpty();
+        if (consumer != null) {
+            consumer.accept(violations);
+        }
+        return myself;
     }
 }

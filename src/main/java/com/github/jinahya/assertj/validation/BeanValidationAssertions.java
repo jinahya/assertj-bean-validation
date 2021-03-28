@@ -31,6 +31,34 @@ import static java.util.Objects.requireNonNull;
 public final class BeanValidationAssertions {
 
     /**
+     * A class for wrapping bean object.
+     *
+     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+     */
+    public static class BeanWrapper extends Wrapper<Object> {
+
+        /**
+         * Creates a new instance wraps specified bean object.
+         *
+         * @param wrapped the bean object to wrap; must not be {@code null}.
+         * @return a new instance wraps {@code object}.
+         */
+        public static BeanWrapper bean(final Object wrapped) {
+            requireNonNull(wrapped, "object is null");
+            return new BeanWrapper(wrapped);
+        }
+
+        /**
+         * Creates a new instance with specified bean object.
+         *
+         * @param wrapped the bean object to wrap; must not be {@code null}.
+         */
+        private BeanWrapper(final Object wrapped) {
+            super(wrapped);
+        }
+    }
+
+    /**
      * Creates a new assertion instance for specified bean object reference.
      *
      * @param object the bean object to be verified.
@@ -43,16 +71,17 @@ public final class BeanValidationAssertions {
 
     /**
      * Creates a new assertion instance for the bean object reference wrapped in specified wrapper. This method invokes
-     * {@link #assertBean(Object)} method with {@link BeanWrapper#getObject() wrapper.object} and returns the result.
+     * {@link #assertBean(Object)} method with {@link BeanWrapper#getWrapped()} wrapper.wrapped} and returns the
+     * result.
      *
-     * @param wrapper the wrapper wraps the bean object reference; must be not {@code null}.
-     * @return a assertion instance for {@link BeanWrapper#getObject() wrapper.object}.
+     * @param wrapper the wrapper wraps the bean object reference; must not be {@code null}.
+     * @return a assertion instance for {@link BeanWrapper#getWrapped()} wrapper.wrapped}.
      * @see BeanWrapper#bean(Object)
      * @see #assertBean(Object)
      */
     public static BeanValidationAssert assertThat(final BeanWrapper wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertBean(wrapper.getObject());
+        return assertBean(wrapper.getWrapped());
     }
 
     /**

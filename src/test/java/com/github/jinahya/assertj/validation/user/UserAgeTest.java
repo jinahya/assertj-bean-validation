@@ -42,6 +42,7 @@ class UserAgeTest {
         return UserTest.validAges();
     }
 
+    // ------------------------------------------------------------------------------------------------------ isValidFor
     @MethodSource({"invalidAges"})
     @ParameterizedTest
     void isValidFor_Fail_InvalidAge(final int age) {
@@ -56,5 +57,26 @@ class UserAgeTest {
         final BeanPropertyValidationAssert a = assertBeanProperty(age);
         assertThatCode(() -> a.isValidFor(User.class, "age"))
                 .doesNotThrowAnyException();
+    }
+
+    // --------------------------------------------------------------------------------------------------- isNotValidFor
+    @MethodSource({"invalidAges"})
+    @ParameterizedTest
+    void isNotValidFor_Succeed_InvalidAge(final int age) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(age);
+        assertThatCode(
+                () -> a.isNotValidFor(User.class, "age", s -> {
+                }))
+                .doesNotThrowAnyException();
+    }
+
+    @MethodSource({"validAges"})
+    @ParameterizedTest
+    void isNotValidFor_Fail_ValidAge(final int age) {
+        final BeanPropertyValidationAssert a = assertBeanProperty(age);
+        assertThatThrownBy(
+                () -> a.isNotValidFor(User.class, "age", s -> {
+                }))
+                .isInstanceOf(AssertionError.class);
     }
 }

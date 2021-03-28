@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -134,6 +135,13 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.2.0</version>
           <configuration>
+            <additionalDependencies>
+              <additionalDependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${version.jakarta.validation-api}</version>
+              </additionalDependency>
+            </additionalDependencies>
             <links>
               <!--              <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}</link>-->
               <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>
@@ -237,7 +245,8 @@
             <configuration>
               <!-- https://issues.apache.org/jira/browse/MJAVADOC-674 -->
               <target>
-                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list" toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list" />
+                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list"
+                      toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list"/>
               </target>
             </configuration>
             <goals>
@@ -256,7 +265,7 @@
             <configuration>
               <skip>true</skip>
               <rules>
-                <dependencyConvergence />
+                <dependencyConvergence/>
               </rules>
             </configuration>
             <goals>

@@ -46,7 +46,7 @@ public final class BeanPropertyValidationAssertions {
      * #assertBeanProperty(Object)} method with {@link BeanPropertyWrapper#getValue() wrapper.value} and returns the
      * result.
      *
-     * @param wrapper the wrapper wraps the property value; must be not {@code null}.
+     * @param wrapper the wrapper wraps the property value; must not be {@code null}.
      * @return an assertion for {@link BeanPropertyWrapper#getValue() wrapper.value}.
      * @see BeanPropertyWrapper#beanProperty(Object)
      * @see #assertBeanProperty(Object)

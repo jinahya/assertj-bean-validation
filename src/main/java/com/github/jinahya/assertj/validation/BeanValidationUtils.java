@@ -77,23 +77,23 @@ final class BeanValidationUtils {
      * @see #validatorClassJakarta()
      */
     static boolean isValidatorInstance(final Object object) {
-        Class<?> validatorClassJavax = null;
+        Class<?> javax = null;
         try {
-            validatorClassJavax = validatorClassJavax();
+            javax = validatorClassJavax();
         } catch (final ClassNotFoundException cnfe) {
             // empty
         }
-        Class<?> validatorClassJakarta = null;
+        Class<?> jakarta = null;
         try {
-            validatorClassJakarta = validatorClassJakarta();
+            jakarta = validatorClassJakarta();
         } catch (final ClassNotFoundException cnfe) {
             // empty
         }
-        if (validatorClassJavax == null && validatorClassJakarta == null) {
+        if (javax == null && jakarta == null) {
             throw new RuntimeException("unable to find the ....validation.Validator class");
         }
-        return (validatorClassJavax != null && validatorClassJavax.isInstance(object))
-               || (validatorClassJakarta != null && validatorClassJakarta.isInstance(object));
+        return (javax != null && javax.isInstance(object))
+               || (jakarta != null && jakarta.isInstance(object));
     }
 
     // ---------------------------------------------------------------------------------------- ....validation.Validator
@@ -158,15 +158,17 @@ final class BeanValidationUtils {
     private static Method validateMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
-            if (validatorClassJavax().isInstance(validator)) {
-                return validatorClassJavax().getMethod("validate", Object.class, Class[].class);
+            final Class<?> c = validatorClassJavax();
+            if (c.isInstance(validator)) {
+                return c.getMethod("validate", Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
         }
         try {
-            if (validatorClassJakarta().isInstance(validator)) {
-                return validatorClassJakarta().getMethod("validate", Object.class, Class[].class);
+            final Class<?> c = validatorClassJakarta();
+            if (c.isInstance(validator)) {
+                return c.getMethod("validate", Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
@@ -202,17 +204,17 @@ final class BeanValidationUtils {
     private static Method validatePropertyMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
-            if (validatorClassJavax().isInstance(validator)) {
-                return validatorClassJavax()
-                        .getMethod("validateProperty", Object.class, String.class, Class[].class);
+            final Class<?> c = validatorClassJavax();
+            if (c.isInstance(validator)) {
+                return c.getMethod("validateProperty", Object.class, String.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
         }
         try {
-            if (validatorClassJakarta().isInstance(validator)) {
-                return validatorClassJakarta()
-                        .getMethod("validateProperty", Object.class, String.class, Class[].class);
+            final Class<?> c = validatorClassJakarta();
+            if (c.isInstance(validator)) {
+                return c.getMethod("validateProperty", Object.class, String.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
@@ -250,19 +252,17 @@ final class BeanValidationUtils {
     private static Method validateValueMethod(final Object validator) {
         requireNonNull(validator, "validator is null");
         try {
-            final Class<?> validatorClassJavax = validatorClassJavax();
-            if (validatorClassJavax.isInstance(validator)) {
-                return validatorClassJavax.getMethod(
-                        "validateValue", Class.class, String.class, Object.class, Class[].class);
+            final Class<?> c = validatorClassJavax();
+            if (c.isInstance(validator)) {
+                return c.getMethod("validateValue", Class.class, String.class, Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
         }
         try {
-            final Class<?> validatorClassJakarta = validatorClassJakarta();
-            if (validatorClassJakarta.isInstance(validator)) {
-                return validatorClassJakarta.getMethod(
-                        "validateValue", Class.class, String.class, Object.class, Class[].class);
+            final Class<?> c = validatorClassJakarta();
+            if (c.isInstance(validator)) {
+                return c.getMethod("validateValue", Class.class, String.class, Object.class, Class[].class);
             }
         } catch (final ReflectiveOperationException roe) {
             // empty
