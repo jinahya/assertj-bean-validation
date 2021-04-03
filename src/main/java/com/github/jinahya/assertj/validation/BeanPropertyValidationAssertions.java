@@ -26,34 +26,36 @@ import static java.util.Objects.requireNonNull;
  * A class for fluently creating instances of {@link BeanPropertyValidationAssert}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see BeanPropertyValidationAssert
  */
 public final class BeanPropertyValidationAssertions {
 
     /**
-     * Creates a new assertion instance with specified property value.
+     * Creates a new assertion instance for specified property value.
      *
-     * @param value the property value.
-     * @return an assertion for {@code value}.
+     * @param <ACTUAL> property type parameter
+     * @param actual   the property value.
+     * @return an assertion instance for {@code actual}.
      * @see #assertThat(BeanPropertyWrapper)
      */
-    public static BeanPropertyValidationAssert assertBeanProperty(final Object value) {
-        return new BeanPropertyValidationAssert(value);
+    @SuppressWarnings({"java:S119"})
+    public static <ACTUAL> BeanPropertyValidationAssert<ACTUAL> assertBeanProperty(final ACTUAL actual) {
+        return new BeanPropertyValidationAssert<>(actual);
     }
 
     /**
-     * Creates a new assertion instance for the property value wrapped in specified wrapper. This method invokes {@link
-     * #assertBeanProperty(Object)} method with {@link BeanPropertyWrapper#getValue() wrapper.value} and returns the
-     * result.
+     * Creates a new assertion instance for the property value wrapped in specified wrapper.
      *
-     * @param wrapper the wrapper wraps the property value; must not be {@code null}.
-     * @return an assertion for {@link BeanPropertyWrapper#getValue() wrapper.value}.
+     * @param <ACTUAL> property type parameter
+     * @param wrapper  the wrapper wraps the property value; must not be {@code null}.
+     * @return an assertion instance for {@link BeanPropertyWrapper#getActual() wrapper.actual}.
      * @see BeanPropertyWrapper#beanProperty(Object)
      * @see #assertBeanProperty(Object)
      */
-    public static BeanPropertyValidationAssert assertThat(final BeanPropertyWrapper wrapper) {
+    @SuppressWarnings({"java:S119"})
+    public static <ACTUAL> BeanPropertyValidationAssert<ACTUAL> assertThat(
+            final BeanPropertyWrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertBeanProperty(wrapper.getValue());
+        return assertBeanProperty(wrapper.getActual());
     }
 
     /**

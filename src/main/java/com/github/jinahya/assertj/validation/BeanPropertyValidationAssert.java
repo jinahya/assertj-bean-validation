@@ -30,49 +30,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * An assertion class for validating a value against constraints defined on a bean property.
  *
+ * @param <ACTUAL> actual property value type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<BeanPropertyValidationAssert, Object> {
+@SuppressWarnings({"java:S119"})
+public class BeanPropertyValidationAssert<ACTUAL>
+        extends AbstractBeanValidationAssert<BeanPropertyValidationAssert<ACTUAL>, ACTUAL> {
 
     /**
      * Creates a new instance with specified value.
      *
-     * @param value the value for a property.
+     * @param actual the value for a property.
      */
-    public BeanPropertyValidationAssert(final Object value) {
-        super(value, BeanPropertyValidationAssert.class);
+    public BeanPropertyValidationAssert(final ACTUAL actual) {
+        super(actual, BeanPropertyValidationAssert.class);
     }
 
     /**
      * Verifies that the {@link #actual actual} would be valid for specified property of specified class.
-     * <p>
-     * This method is equivalent to
-     * <blockquote><pre>{@code
-     * assertThat(
-     *     validator()
-     *         .validateValue(beanType, propertyName, actual, groups())
-     * ).isEmpty();
-     * }</pre></blockquote>.
-     * <p>
-     * Which is, in its default state, equivalent to
-     * <blockquote><pre>{@code
-     * assertThat(
-     *     Validation.buildDefaultValidatorFactory().getValidator()
-     *         .validateValue(beanType, propertyName, actual, new Class<?>[0])
-     * ).isEmpty();
-     * }</pre></blockquote>.
      *
      * @param beanType     the class whose all constraints placed on specified property are examined.
      * @param propertyName the name of the property.
+     * @param <T>          bean type parameter
      * @return {@link #myself self}.
-     * @see #using(Object)
-     * @see #targeting(Class[])
-     * @see <a href="https://javadoc.io/static/javax.validation/validation-api/2.0.1.Final/javax/validation/Validator.html#validateValue-java.lang.Class-java.lang.String-java.lang.Object-java.lang.Class...-">javax....#validate(Class,
-     * String, Object, Class...)</a>
-     * @see <a href="https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateValue-java.lang.Class-java.lang.String-java.lang.Object-java.lang.Class...-">jakarta....#validate(Class,
-     * String, Object, Class...)</a>
      */
-    public <T> BeanPropertyValidationAssert isValidFor(final Class<T> beanType, final String propertyName) {
+    public <T> BeanPropertyValidationAssert<ACTUAL> isValidFor(final Class<T> beanType, final String propertyName) {
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         assertThat(validateValue(validator(), beanType, propertyName, actual, groups())).isEmpty();
@@ -80,15 +62,21 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
     }
 
     /**
-     * Verifies that {@link #actual actual} is not valid for the property of specified name of specified bean type.
+     * Verifies that {@link #actual actual} is not valid for specified property of specified class and accepts a
+     * non-empty set of constraint violations to specified consumer.
      *
-     * @param beanType     the bean type.
-     * @param propertyName the property name.
-     * @param consumer     a consumer accepts a set of constraint violations which is verified as not empty.
+     * @param beanType     the class whose all constraints places on specified property are examined.
+     * @param propertyName the name of the property.
+     * @param consumer     the consumer accepts a set of constraint violations whose elements are all instances of
+     *                     either {@code javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintViolation};
+     *                     may be {@code null}.
+     * @param <T>          bean type parameter
      * @return {@link #myself self}.
+     * @see #isValidFor(Class, String)
+     * @see #isNotValidFor(Class, String)
      */
-    public <T> BeanPropertyValidationAssert isNotValidFor(final Class<T> beanType, final String propertyName,
-                                                          final Consumer<? super Set<Object>> consumer) {
+    public <T> BeanPropertyValidationAssert<ACTUAL> isNotValidFor(final Class<T> beanType, final String propertyName,
+                                                                  final Consumer<? super Set<?>> consumer) {
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         final Set<Object> violations = validateValue(validator(), beanType, propertyName, actual, groups());
@@ -97,5 +85,19 @@ public class BeanPropertyValidationAssert extends AbstractBeanValidationAssert<B
             consumer.accept(violations);
         }
         return myself;
+    }
+
+    /**
+     * Verifies that {@link #actual actual} is not valid for specified property of specified class.
+     *
+     * @param beanType     the class whose all constraints places on specified property are examined.
+     * @param propertyName the name of the property.
+     * @param <T>          bean type parameter
+     * @return {@link #myself self}.
+     * @see #isValidFor(Class, String)
+     * @see #isNotValidFor(Class, String, Consumer)
+     */
+    public <T> BeanPropertyValidationAssert<ACTUAL> isNotValidFor(final Class<T> beanType, final String propertyName) {
+        return isNotValidFor(beanType, propertyName, null);
     }
 }

@@ -23,42 +23,30 @@ package com.github.jinahya.assertj.validation;
 /**
  * A class for wrapping a property value.
  *
+ * @param <ACTUAL> property type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BeanPropertyValidationAssertions#assertThat(BeanPropertyWrapper)
  */
-public class BeanPropertyWrapper {
+@SuppressWarnings({"java:S119"})
+public class BeanPropertyWrapper<ACTUAL> extends Wrapper<ACTUAL> {
 
     /**
      * Creates a new instance wraps specified property value.
      *
-     * @param value the property value to wrap; may be {@code null}.
+     * @param <T>    type parameter
+     * @param actual the property value to wrap; may be {@code null}.
      * @return a new instance wraps given {@code value}.
      */
-    public static BeanPropertyWrapper beanProperty(final Object value) {
-        return new BeanPropertyWrapper(value);
+    public static <T> BeanPropertyWrapper<T> beanProperty(final T actual) {
+        return new BeanPropertyWrapper<>(actual);
     }
 
     /**
-     * Creates a new instance with specified property value.
+     * Creates a new instance wraps specified property value.
      *
-     * @param value the property value to wrap.
+     * @param actual the property value to wrap.
      */
-    private BeanPropertyWrapper(final Object value) {
-        super();
-        this.value = value;
+    private BeanPropertyWrapper(final ACTUAL actual) {
+        super(actual);
     }
-
-    /**
-     * Returns the wrapped property value.
-     *
-     * @return the wrapped property value.
-     */
-    Object getValue() {
-        return value;
-    }
-
-    /**
-     * The wrapped property value.
-     */
-    private final Object value;
 }

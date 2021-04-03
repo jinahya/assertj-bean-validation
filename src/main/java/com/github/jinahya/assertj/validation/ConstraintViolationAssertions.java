@@ -10,7 +10,7 @@ public final class ConstraintViolationAssertions {
 
     public static ConstraintViolationAssert assertThat(final ConstraintViolationWrapper wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertConstraintViolation(wrapper.getWrapped());
+        return assertConstraintViolation(wrapper.getActual());
     }
 
     private ConstraintViolationAssertions() {

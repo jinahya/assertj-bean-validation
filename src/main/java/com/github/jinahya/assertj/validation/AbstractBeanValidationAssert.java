@@ -37,11 +37,13 @@ import org.assertj.core.api.AbstractAssert;
 /**
  * An abstract class for Bean-Validation assertion classes.
  *
- * @param <SELF> self type parameter
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual value type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF, T>, T>
-        extends AbstractAssert<SELF, T> {
+@SuppressWarnings({"java:S119", "java:S2160"})
+public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF, ACTUAL>, ACTUAL>
+        extends AbstractAssert<SELF, ACTUAL> {
 
     /**
      * Creates a new instance with specified actual value and self type.
@@ -49,7 +51,7 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
      * @param actual   the actual value.
      * @param selfType the self type.
      */
-    protected AbstractBeanValidationAssert(final T actual, final Class<?> selfType) {
+    protected AbstractBeanValidationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
@@ -75,7 +77,7 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
     @SuppressWarnings({"unchecked"})
     public SELF validator(final Object validator) {
         if (validator != null && !BeanValidationUtils.isValidatorInstance(validator)) {
-            throw new IllegalArgumentException("wrong validator: " + validator);
+            throw new IllegalArgumentException("wrong type of validator: " + validator);
         }
         this.validator = validator;
         return (SELF) this;
@@ -88,7 +90,7 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
      */
     protected Object validator() {
         if (validator == null) {
-            validator = BeanValidationUtils.validatorReflected();
+            validator = BeanValidationUtils.validator();
         }
         return validator;
     }

@@ -16,6 +16,22 @@ final class Utils {
         return Class.forName("jakarta.validation." + name);
     }
 
+    static <R> R applyClass(final String suffix, final Function<? super Class<?>, ? extends R> function) {
+        requireNonNull(suffix, "suffix is null");
+        requireNonNull(function, "function is null");
+        try {
+            return function.apply(classJavax(suffix));
+        } catch (final ClassNotFoundException cnfe) {
+            // empty;
+        }
+        try {
+            return function.apply(classJakarta(suffix));
+        } catch (final ClassNotFoundException cnfe) {
+            // empty;
+        }
+        throw new RuntimeException("unable to get class for " + suffix);
+    }
+
     static <R> R applyClassFor(final String suffix, final Object instance,
                                final Function<? super Class<?>, ? extends R> function) {
         requireNonNull(suffix, "suffix is null");

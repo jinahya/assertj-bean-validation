@@ -23,7 +23,7 @@ package com.github.jinahya.assertj.validation;
 public final class BeanValidationTestUtils {
 
     public static Object validator() {
-        return BeanValidationUtils.validatorReflected();
+        return BeanValidationUtils.validator();
     }
 
     BeanValidationTestUtils() {

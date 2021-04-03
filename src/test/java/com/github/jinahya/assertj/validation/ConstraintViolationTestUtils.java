@@ -14,7 +14,7 @@ public class ConstraintViolationTestUtils {
         return ConstraintViolationUtils.getMessage(violation);
     }
 
-    public static Iterable<?> getPropertyPath(final Object actual) {
+    public static Object getPropertyPath(final Object actual) {
         return ConstraintViolationUtils.getPropertyPath(actual);
     }
 

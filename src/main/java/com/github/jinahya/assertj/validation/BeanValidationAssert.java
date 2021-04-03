@@ -31,9 +31,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * An assertion class for validating a bean and its properties.
  *
+ * @param <ACTUAL> actual bean type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class BeanValidationAssert<T> extends AbstractBeanValidationAssert<BeanValidationAssert<T>, T> {
+@SuppressWarnings({"java:S119"})
+public class BeanValidationAssert<ACTUAL>
+        extends AbstractBeanValidationAssert<BeanValidationAssert<ACTUAL>, ACTUAL> {
 
     /**
      * Creates a new instance with specified bean.
@@ -41,55 +44,36 @@ public class BeanValidationAssert<T> extends AbstractBeanValidationAssert<BeanVa
      * @param actual the actual bean to verify.
      * @see #actual
      */
-    public BeanValidationAssert(final T actual) {
+    public BeanValidationAssert(final ACTUAL actual) {
         super(actual, BeanValidationAssert.class);
     }
 
+    // -------------------------------------------------------------------------------------------------------- validate
+
     /**
      * Verifies that the {@link #actual actual} is valid.
-     * <p>
-     * This method is equivalent to
-     * <blockquote><pre>{@code
-     * assertThat(actual).isNotNull();
-     * assertThat(
-     *     validator()
-     *         .validate(actual, groups())
-     * ).isEmpty();
-     * }</pre></blockquote>.
-     * <p>
-     * Which is, in its default state, equivalent to
-     * <blockquote><pre>{@code
-     * assertThat(actual).isNotNull();
-     * assertThat(
-     *     Validation.buildDefaultValidatorFactory().getValidator()
-     *         .validate(actual, new Class<?>[0])
-     * ).isEmpty();
-     * }</pre></blockquote>.
      *
      * @return {@link #myself self}.
-     * @see #using(Object)
-     * @see #targeting(Class[])
-     * @see <a href="https://javadoc.io/static/javax.validation/validation-api/2.0.1.Final/javax/validation/Validator.html#validate-T-java.lang.Class...-">javax...#validate(T,
-     * Class...)</a>
-     * @see <a href="https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validate-T-java.lang.Class...-">jakarta...#validate(T,
-     * Class...)</a>
+     * @see #isNotValid(Consumer)
+     * @see #isNotValid()
      */
-    public BeanValidationAssert isValid() {
+    public BeanValidationAssert<ACTUAL> isValid() {
         isNotNull();
         assertThat(validate(validator(), actual, groups())).isEmpty();
         return myself;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-
     /**
-     * Verifies that the {@link #actual} is not valid.
+     * Verifies that the {@link #actual} is not valid and accepts a non-empty set of constraint violations to specified
+     * consumer.
      *
-     * @param consumer a consumer for as set of constraint violations of either {@code javax.validation.ConstraintViolation}
-     *                 or {@link jakarta.validation.ConstraintViolation}; may be {@code null}.
+     * @param consumer the consumer accepts a set of constraint violations whose elements are all instances of either
+     *                 {@code javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintViolation};
+     *                 may be {@code null}.
      * @return {@link #myself self}.
+     * @see #isNotValid()
      */
-    public BeanValidationAssert isNotValid(final Consumer<? super Set<?>> consumer) {
+    public BeanValidationAssert<ACTUAL> isNotValid(final Consumer<? super Set<?>> consumer) {
         isNotNull();
         final Set<Object> violations = validate(validator(), actual, groups());
         assertThat(violations).isNotEmpty();
@@ -99,39 +83,27 @@ public class BeanValidationAssert<T> extends AbstractBeanValidationAssert<BeanVa
         return myself;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    /**
+     * Verifies that the {@link #actual} is not valid.
+     *
+     * @return {@link #myself self}.
+     * @see #isNotValid(Consumer)
+     */
+    public BeanValidationAssert<ACTUAL> isNotValid() {
+        return isNotValid(null);
+    }
+
+    // ------------------------------------------------------------------------------------------------ validateProperty
 
     /**
      * Verifies that the {@link #actual actual}'s current property of specified name is valid.
-     * <p>
-     * This method is equivalent to
-     * <blockquote><pre>{@code
-     * assertThat(actual).isNotNull();
-     * assertThat(
-     *     validator()
-     *         .validateProperty(actual, propertyName, groups())
-     * ).isEmpty();
-     * }</pre></blockquote>.
-     * <p>
-     * Which is, in its default state, equivalent to
-     * <blockquote><pre>{@code
-     * assertThat(actual).isNotNull();
-     * assertThat(
-     *     Validation.buildDefaultValidatorFactory().getValidator()
-     *         .validateProperty(actual, propertyName, new Class<?>[0])
-     * ).isEmpty();
-     * }</pre></blockquote>.
      *
-     * @param propertyName the name of the property to verify.
+     * @param propertyName the name of the property to validate.
      * @return {@link #myself self}
-     * @see #using(Object)
-     * @see #targeting(Class[])
-     * @see <a href="https://javadoc.io/static/javax.validation/validation-api/2.0.1.Final/javax/validation/Validator.html#validateProperty-T-java.lang.String-java.lang.Class...-">javax...#validateProperty(T,
-     * String, Class...)</a>
-     * @see <a href="https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateProperty-T-java.lang.String-java.lang.Class...-">jakarta...#validateProperty(T,
-     * String, Class...)</a>
+     * @see #doesNotHaveValidProperty(String, Consumer)
+     * @see #doesNotHaveValidProperty(String)
      */
-    public BeanValidationAssert hasValidProperty(final String propertyName) {
+    public BeanValidationAssert<ACTUAL> hasValidProperty(final String propertyName) {
         requireNonNull(propertyName, "propertyName is null");
         isNotNull();
         assertThat(validateProperty(validator(), actual, propertyName, groups())).isEmpty();
@@ -139,14 +111,19 @@ public class BeanValidationAssert<T> extends AbstractBeanValidationAssert<BeanVa
     }
 
     /**
-     * Verifies that current value of specified property of {@link #actual actual} is not valid.
+     * Verifies that the {@link #actual actual}'s current property of specified name is not valid and accepts a
+     * non-empty set of constraint violations to specified consumer.
      *
-     * @param propertyName the name of the property.
-     * @param consumer     a consumer accepts a set of constraint violations.
+     * @param propertyName the name of the property to validate.
+     * @param consumer     the consumer accepts a set of constraint violations whose elements are all instances of
+     *                     either {@code javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintViolation};
+     *                     may be {@code null}.
      * @return {@link #myself self}.
+     * @see #hasValidProperty(String)
+     * @see #doesNotHaveValidProperty(String)
      */
-    public BeanValidationAssert doesNotHaveValidProperty(final String propertyName,
-                                                         final Consumer<? super Set<Object>> consumer) {
+    public BeanValidationAssert<ACTUAL> doesNotHaveValidProperty(final String propertyName,
+                                                                 final Consumer<? super Set<Object>> consumer) {
         requireNonNull(propertyName, "propertyName is null");
         isNotNull();
         final Set<Object> violations = validateProperty(validator(), actual, propertyName, groups());
@@ -155,5 +132,17 @@ public class BeanValidationAssert<T> extends AbstractBeanValidationAssert<BeanVa
             consumer.accept(violations);
         }
         return myself;
+    }
+
+    /**
+     * Verifies that the {@link #actual actual}'s current property of specified name is not valid.
+     *
+     * @param propertyName the name of the property to validate.
+     * @return {@link #myself self}.
+     * @see #hasValidProperty(String)
+     * @see #doesNotHaveValidProperty(String, Consumer)
+     */
+    public BeanValidationAssert<ACTUAL> doesNotHaveValidProperty(final String propertyName) {
+        return doesNotHaveValidProperty(propertyName, null);
     }
 }

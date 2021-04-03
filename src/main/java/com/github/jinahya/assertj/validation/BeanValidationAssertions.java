@@ -33,27 +33,29 @@ public final class BeanValidationAssertions {
     /**
      * Creates a new assertion instance for specified bean object reference.
      *
-     * @param actual the bean object to be verified.
+     * @param <ACTUAL> actual bean value type parameter
+     * @param actual   the bean object to be verified.
      * @return a new assertion instance for {@code object}.
      * @see #assertThat(BeanWrapper)
      */
-    public static <T> BeanValidationAssert<T> assertBean(final T actual) {
+    @SuppressWarnings({"java:S119"})
+    public static <ACTUAL> BeanValidationAssert<ACTUAL> assertBean(final ACTUAL actual) {
         return new BeanValidationAssert<>(actual);
     }
 
     /**
-     * Creates a new assertion instance for the bean object reference wrapped in specified wrapper. This method invokes
-     * {@link #assertBean(Object)} method with {@link BeanWrapper#getWrapped()} wrapper.wrapped} and returns the
-     * result.
+     * Creates a new assertion instance for the bean object reference wrapped in specified wrapper.
      *
-     * @param wrapper the wrapper wraps the bean object reference; must not be {@code null}.
-     * @return a assertion instance for {@link BeanWrapper#getWrapped()} wrapper.wrapped}.
+     * @param <ACTUAL> actual bean value type parameter
+     * @param wrapper  the wrapper wraps the actual bean value; must not be {@code null}.
+     * @return a assertion instance for {@link BeanWrapper#getActual()} wrapper.wrapped}.
      * @see BeanWrapper#bean(Object)
      * @see #assertBean(Object)
      */
-    public static <T> BeanValidationAssert<T> assertThat(final BeanWrapper<T> wrapper) {
+    @SuppressWarnings({"java:S119"})
+    public static <ACTUAL> BeanValidationAssert<ACTUAL> assertThat(final BeanWrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertBean(wrapper.getWrapped());
+        return assertBean(wrapper.getActual());
     }
 
     /**

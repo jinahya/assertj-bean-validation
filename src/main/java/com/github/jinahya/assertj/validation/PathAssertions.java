@@ -12,7 +12,7 @@ public class PathAssertions {
 
         public static PathAssert.NodeAssert assertThat(final PathWrapper.NodeWrapper wrapper) {
             requireNonNull(wrapper, "wrapper is null");
-            return assertNode(wrapper.getWrapped());
+            return assertNode(wrapper.getActual());
         }
 
         private NodeAssertions() {
@@ -28,7 +28,7 @@ public class PathAssertions {
 
         public static PathAssert.BeanNodeAssert assertThat(final PathWrapper.BeanNodeWrapper wrapper) {
             requireNonNull(wrapper, "wrapper is null");
-            return assertBeanNode(wrapper.getWrapped());
+            return assertBeanNode(wrapper.getActual());
         }
 
         private BeanNodeAssertions() {
@@ -61,7 +61,7 @@ public class PathAssertions {
     public static <PathType extends Iterable<NodeType>, NodeType> PathAssert<NodeType> assertThat(
             final PathWrapper<PathType, NodeType> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertPath(wrapper.getWrapped());
+        return assertPath(wrapper.getActual());
     }
 
     private PathAssertions() {

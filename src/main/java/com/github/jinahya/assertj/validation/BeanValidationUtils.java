@@ -70,13 +70,14 @@ final class BeanValidationUtils {
      * Indicates whether specified object is an instance of {@code javax.validation.Validator} or is an instance of
      * {@code jakarta.validation.Validator}.
      *
-     * @param object the object to be tested.
+     * @param validator the object to be tested.
      * @return {@code true} if {@code object} is an instance of {@code Validator}; {@code false} otherwise.
      * @throws RuntimeException if both class cannot be located.
      * @see #validatorClassJavax()
      * @see #validatorClassJakarta()
      */
-    static boolean isValidatorInstance(final Object object) {
+    static boolean isValidatorInstance(final Object validator) {
+        requireNonNull(validator, "validator is null");
         Class<?> javax = null;
         try {
             javax = validatorClassJavax();
@@ -92,8 +93,8 @@ final class BeanValidationUtils {
         if (javax == null && jakarta == null) {
             throw new RuntimeException("unable to find the ....validation.Validator class");
         }
-        return (javax != null && javax.isInstance(object))
-               || (jakarta != null && jakarta.isInstance(object));
+        return (javax != null && javax.isInstance(validator))
+               || (jakarta != null && jakarta.isInstance(validator));
     }
 
     // ---------------------------------------------------------------------------------------- ....validation.Validator
@@ -140,7 +141,7 @@ final class BeanValidationUtils {
      *
      * @return an instance of {@code ....validation.Validator}.
      */
-    static Object validatorReflected() {
+    static Object validator() {
         try {
             return validatorJavax();
         } catch (final ReflectiveOperationException roe) {
@@ -187,12 +188,10 @@ final class BeanValidationUtils {
      * @return the result of the invocation which is a set of {@code ConstraintViolation}s.
      */
     @SuppressWarnings({"unchecked"})
-    static <T> Set<Object> validate(Object validator, final T object, final Class<?>... groups) {
+    static <T> Set<Object> validate(final Object validator, final T object, final Class<?>... groups) {
+        requireNonNull(validator, "validator is null");
         requireNonNull(object, "object is null");
         requireNonNull(groups, "groups is null");
-        if (validator == null) {
-            validator = validatorReflected();
-        }
         try {
             return (Set<Object>) validateMethod(validator).invoke(validator, object, groups);
         } catch (final ReflectiveOperationException roe) {
@@ -239,7 +238,7 @@ final class BeanValidationUtils {
         requireNonNull(object, "object is null");
         requireNonNull(groups, "groups is null");
         if (validator == null) {
-            validator = validatorReflected();
+            validator = validator();
         }
         try {
             return (Set<Object>) validatePropertyMethod(validator).invoke(validator, object, propertyName, groups);
@@ -283,14 +282,12 @@ final class BeanValidationUtils {
      * @return the result of the invocation which is a set of {@code ConstraintViolation}s.
      */
     @SuppressWarnings({"unchecked"})
-    static <T> Set<Object> validateValue(Object validator, final Class<T> beanType, final String propertyName,
+    static <T> Set<Object> validateValue(final Object validator, final Class<T> beanType, final String propertyName,
                                          final Object value, final Class<?>... groups) {
+        requireNonNull(validator, "validator is null");
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         requireNonNull(groups, "groups is null");
-        if (validator == null) {
-            validator = validatorReflected();
-        }
         try {
             return (Set<Object>) validateValueMethod(validator)
                     .invoke(validator, beanType, propertyName, value, groups);

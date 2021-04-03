@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
-public final class ElementKindUtils {
+final class ElementKindUtils {
 
     private static <R> R applyElementKindClassFor(final Object instance,
                                                   final Function<? super Class<?>, ? extends R> function) {

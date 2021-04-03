@@ -10,7 +10,7 @@ public class ElementKindAssertions {
 
     public static ElementKindAssert assertThat(final ElementKindWrapper wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertElementKind(wrapper.getWrapped());
+        return assertElementKind(wrapper.getActual());
     }
 
     public ElementKindAssertions() {
