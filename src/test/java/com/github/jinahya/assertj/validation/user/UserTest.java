@@ -22,7 +22,6 @@ package com.github.jinahya.assertj.validation.user;
 
 import com.github.jinahya.assertj.validation.BeanValidationAssert;
 import com.github.jinahya.assertj.validation.ConstraintViolationTestUtils;
-import com.github.jinahya.assertj.validation.PathTestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,19 +30,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertBean;
 import static com.github.jinahya.assertj.validation.BeanValidationAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.BeanValidationTestUtils.validator;
+import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.assertThat;
-import static com.github.jinahya.assertj.validation.ConstraintViolationTestUtils.getPropertyPath;
 import static com.github.jinahya.assertj.validation.ConstraintViolationWrapper.constraintViolation;
-import static com.github.jinahya.assertj.validation.ElementKindAssertions.assertThat;
-import static com.github.jinahya.assertj.validation.ElementKindWrapper.elementKind;
-import static com.github.jinahya.assertj.validation.PathAssertions.NodeAssertions.assertThat;
-import static com.github.jinahya.assertj.validation.PathAssertions.assertThat;
-import static com.github.jinahya.assertj.validation.PathWrapper.NodeWrapper.node;
-import static com.github.jinahya.assertj.validation.PathWrapper.path;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;

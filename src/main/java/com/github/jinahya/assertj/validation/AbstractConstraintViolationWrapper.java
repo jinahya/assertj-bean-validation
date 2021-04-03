@@ -21,30 +21,21 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping bean object.
+ * An abstract base class for wrapping specific type of {@code ConstraintViolation}.
  *
+ * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public class BeanWrapper<ACTUAL>
+public abstract class AbstractConstraintViolationWrapper<ACTUAL>
         extends Wrapper<ACTUAL> {
 
     /**
-     * Creates a new instance wraps specified bean object.
+     * Creates a new instance for specified actual value.
      *
-     * @param actual the bean object to wrap; must not be {@code null}.
-     * @return a new instance wraps {@code object}.
+     * @param actual the actual value to verify.
      */
-    public static <T> BeanWrapper<T> bean(final T actual) {
-        return new BeanWrapper<>(actual);
-    }
-
-    /**
-     * Creates a new instance with specified bean object.
-     *
-     * @param actual the bean object to wrap; must not be {@code null}.
-     */
-    private BeanWrapper(final ACTUAL actual) {
+    protected AbstractConstraintViolationWrapper(final ACTUAL actual) {
         super(actual);
     }
 }
