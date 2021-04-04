@@ -20,13 +20,33 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ElementKindWrapper extends Wrapper<Object> {
+/**
+ * A class for wrapping a value of {@code ....validation.ElementKind}.
+ *
+ * @param <ACTUAL> the type of {@code ....validation.ElementKind}.
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
+@SuppressWarnings({"java:S119"})
+public class ElementKindWrapper<ACTUAL>
+        extends Wrapper<ACTUAL> {
 
-    public static ElementKindWrapper elementKind(final Object actual) {
-        return new ElementKindWrapper(actual);
+    /**
+     * Creates a new instance wraps specified actual value.
+     *
+     * @param actual   the actual value to wrap.
+     * @param <ACTUAL> actual value type parameter
+     * @return a new instance wraps {@code actual}.
+     */
+    public static <ACTUAL> ElementKindWrapper<ACTUAL> elementKind(final ACTUAL actual) {
+        return new ElementKindWrapper<>(actual);
     }
 
-    private ElementKindWrapper(final Object wrapped) {
-        super(wrapped);
+    /**
+     * Creates a new instance wraps specified actual value.
+     *
+     * @param actual the actual value to wrap.
+     */
+    private ElementKindWrapper(final ACTUAL actual) {
+        super(actual);
     }
 }

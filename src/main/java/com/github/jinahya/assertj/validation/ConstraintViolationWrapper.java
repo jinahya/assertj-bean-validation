@@ -25,8 +25,8 @@ package com.github.jinahya.assertj.validation;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class ConstraintViolationWrapper
-        extends AbstractConstraintViolationWrapper<Object> {
+public class ConstraintViolationWrapper<T>
+        extends Wrapper<T> {
 
     /**
      * Creates a new instance wraps specified constraint violation.
@@ -34,11 +34,16 @@ public class ConstraintViolationWrapper
      * @param actual the constraint violation to wrap.
      * @return a new instance wraps {@code actual}.
      */
-    public static ConstraintViolationWrapper constraintViolation(final Object actual) {
-        return new ConstraintViolationWrapper(actual);
+    public static <T> ConstraintViolationWrapper<T> constraintViolation(final T actual) {
+        return new ConstraintViolationWrapper<>(actual);
     }
 
-    private ConstraintViolationWrapper(final Object actual) {
+    /**
+     * Creates a new instance wraps specified actual value.
+     *
+     * @param actual the actual value to wrap.
+     */
+    private ConstraintViolationWrapper(final T actual) {
         super(actual);
     }
 }

@@ -22,18 +22,20 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
-public class ElementKindAssertions {
+public class ViolationExceptionAssertions {
 
-    public static <ACTUAL> ElementKindAssert<ACTUAL> assertElementKind(final ACTUAL actual) {
-        return new ElementKindAssert<>(actual);
+    public static <ACTUAL extends Exception> ViolationExceptionAssert<ACTUAL> assertViolationException(
+            final ACTUAL actual) {
+        return new ViolationExceptionAssert<>(actual);
     }
 
-    public static <ACTUAL> ElementKindAssert<ACTUAL> assertThat(final ElementKindWrapper<? extends ACTUAL> wrapper) {
+    public static <ACTUAL extends Exception> ViolationExceptionAssert<ACTUAL> assertThat(
+            final ViolationExceptionWrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertElementKind(wrapper.getActual());
+        return assertViolationException(wrapper.getActual());
     }
 
-    private ElementKindAssertions() {
-        throw new AssertionError("instantiation is not allowed");
+    private ViolationExceptionAssertions() {
+        throw new NonInstantiatableAssertionError();
     }
 }

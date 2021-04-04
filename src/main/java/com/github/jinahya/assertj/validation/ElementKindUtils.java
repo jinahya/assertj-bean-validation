@@ -26,37 +26,55 @@ import static java.util.Objects.requireNonNull;
 
 final class ElementKindUtils {
 
-    private static <R> R applyElementKindClassFor(final Object instance,
-                                                  final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassFor("ElementKind", instance, function);
+    private static final String SUFFIX = "ElementKind";
+
+    private static <R> R applyElementKindClass(final Function<? super Class<?>, ? extends R> function) {
+        return Utils.applyClassForSuffix(SUFFIX, function);
     }
 
-    private static Class<?> getElementKindClass(final Object instance) {
+    private static Class<?> getElementKindClass() {
+        return applyElementKindClass(Function.identity());
+    }
+
+    private static <R> R applyElementKindClassFor(final Object instance,
+                                                  final Function<? super Class<?>, ? extends R> function) {
+        return Utils.applyClassFor(SUFFIX, instance, function);
+    }
+
+    private static Class<?> getElementKindClassFor(final Object instance) {
         return applyElementKindClassFor(instance, Function.identity());
     }
 
     /**
-     * Indicates whether specified object is an instance of either {@code javax.validation.ElementKind} or {@link
-     * jakarta.validation.ElementKind}.
+     * Indicates whether specified object is an instance of {@code ....validation.ElementKind}.
      *
      * @param actual the object to be tested.
-     * @return {@code true} if {@code object} is an instance of {@code ElementKind}; {@code false} otherwise.
+     * @return {@code true} if {@code actual} is an instance of {@code ....validation.ElementKind}; {@code false}
+     * otherwise.
      */
     static boolean isElementKindInstance(final Object actual) {
         return applyElementKindClassFor(actual, c -> true);
     }
 
     /**
-     * Checks whether specified object is an instance of either {@code javax.validation.ElementKind} or {@link
-     * jakarta.validation.ElementKind}.
+     * Checks whether specified object is an instance of {@code ....validation.ElementKind}.
      *
      * @param actual the object to be tested.
      */
     static <T> T requireElementKindInstance(final T actual) {
+        if (actual == null) {
+            return null;
+        }
         return applyElementKindClassFor(actual, c -> actual);
     }
 
-    static String name(final Object actual) {
+    /**
+     * Returns the value of {@code actual#getName()}.
+     *
+     * @param actual the actual value.
+     * @return the value of {@code actual#getName()}.
+     */
+    static String getName(final Object actual) {
         requireNonNull(actual, "actual is null");
         if (!actual.getClass().isEnum()) {
             throw new IllegalArgumentException("not an enum constant: " + actual);

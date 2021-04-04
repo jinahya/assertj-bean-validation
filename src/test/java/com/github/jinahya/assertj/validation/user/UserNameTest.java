@@ -28,6 +28,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static com.github.jinahya.assertj.validation.BeanPropertyValidationAssertions.assertBeanProperty;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -42,10 +43,11 @@ class UserNameTest {
         return UserTest.validNames();
     }
 
+    // ------------------------------------------------------------------------------------------------------ isValidFor
     @MethodSource({"invalidNames"})
     @ParameterizedTest
     void isValidFor_Fail_InvalidName(final String name) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(name);
+        final BeanPropertyValidationAssert<String> a = assertBeanProperty(name);
         assertThatThrownBy(() -> a.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
@@ -53,7 +55,7 @@ class UserNameTest {
     @MethodSource({"validNames"})
     @ParameterizedTest
     void isValidFor_Succeed_ValidName(final String name) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(name);
+        final BeanPropertyValidationAssert<String> a = assertBeanProperty(name);
         assertThatCode(() -> a.isValidFor(User.class, "name"))
                 .doesNotThrowAnyException();
     }
@@ -62,9 +64,11 @@ class UserNameTest {
     @MethodSource({"invalidNames"})
     @ParameterizedTest
     void isNotValidFor_Succeed_InvalidName(final String name) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(name);
+        final BeanPropertyValidationAssert<String> a = assertBeanProperty(name);
         assertThatCode(
                 () -> a.isNotValidFor(User.class, "name", s -> {
+                    assertThat(s).isNotNull().doesNotContainNull().hasSize(1).allSatisfy(v -> {
+                    });
                 }))
                 .doesNotThrowAnyException();
     }
@@ -72,10 +76,8 @@ class UserNameTest {
     @MethodSource({"validNames"})
     @ParameterizedTest
     void isNotValidFor_Fail_ValidName(final String name) {
-        final BeanPropertyValidationAssert a = assertBeanProperty(name);
-        assertThatThrownBy(
-                () -> a.isNotValidFor(User.class, "name", s -> {
-                }))
+        final BeanPropertyValidationAssert<String> a = assertBeanProperty(name);
+        assertThatThrownBy(() -> a.isNotValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
 }

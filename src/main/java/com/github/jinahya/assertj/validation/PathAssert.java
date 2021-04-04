@@ -21,254 +21,458 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.IterableAssert;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getIndex;
-import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getKey;
 import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getKind;
+import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getName;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PathAssert<NodeType> extends IterableAssert<NodeType> {
+/**
+ * An assertion class for verifying instances of {@code ....validation.Path}.
+ *
+ * @param <NODE> the type of {@code ....validation.Path.Node}.
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
+@SuppressWarnings({"java:S119", "java:S125"})
+public class PathAssert<PATH extends Iterable<NODE>, NODE>
+        extends IterableAssert<NODE> {
 
-    abstract static class AbstractNodeAssert<SELF extends AbstractNodeAssert<SELF>>
-            extends AbstractAssert<SELF, Object> {
+    @SuppressWarnings({"java:S119"})
+    abstract static class AbstractNodeAssert<SELF extends AbstractNodeAssert<SELF, ACTUAL>, ACTUAL>
+            extends AbstractAssert<SELF, ACTUAL> {
 
-        AbstractNodeAssert(final Object actual, final Class<?> selfType) {
+        AbstractNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
         }
 
+        // ------------------------------------------------------------------------------- getIndex()Ljava.lang.Integer;
         public SELF hasIndexSatisfying(final Consumer<? super Integer> requirements) {
             isNotNull();
-            assertThat(getIndex(actual)).satisfies(requirements::accept);
+            assertThat(PathUtils.NodeUtils.getIndex(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
-        public SELF hasIndex(final Integer expected) {
-            return hasIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+        public SELF hasIndexEqualTo(final Object expected) {
+            return hasIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
 
+        // ---------------------------------------------------------------------------------- getKey()Ljava.lang.Object;
         public SELF hasKeySatisfying(final Consumer<Object> requirements) {
             isNotNull();
-            assertThat(getKey(actual)).satisfies(requirements);
+            assertThat(PathUtils.NodeUtils.getKey(actual))
+                    .satisfies(requirements);
             return myself;
         }
 
-        public SELF hasKey(final Object expected) {
-            return hasKeySatisfying(v -> assertThat(v).isEqualTo(expected));
+        public SELF hasKeyEqualTo(final Object expected) {
+            return hasKeySatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
 
+        // ------------------------------------------------------------------------ getKind()L...validation.ElementKind;
         public SELF hasKindSatisfying(final Consumer<Object> requirements) {
             isNotNull();
-            assertThat(getKind(actual)).satisfies(requirements);
+            assertThat(getKind(actual))
+                    .satisfies(requirements);
             return myself;
         }
 
-        public SELF hasKind(final Object expected) {
-            return hasKindSatisfying(v -> assertThat(v).isEqualTo(expected));
+        public SELF hasKindSameAs(final Object expected) {
+            return hasKindSatisfying(v -> {
+                assertThat(v).isSameAs(expected);
+            });
         }
 
+        // --------------------------------------------------------------------------------- getName()Ljava.lang.String;
+
+        /**
+         * Verifies that the value of {@code actual#getName()} satisfies requirements expressed in specified consumer.
+         *
+         * @param requirements the consumer accepts and verifies the value of {@code actual#getName()}.
+         * @return {@link #myself self}.
+         * @see #hasNameEqualTo(Object)
+         * @see javax.validation.Path.Node#getName()
+         * @see jakarta.validation.Path.Node#getName()
+         */
         public SELF hasNameSatisfying(final Consumer<? super String> requirements) {
             isNotNull();
-            assertThat(PathUtils.NodeUtils.getName(actual)).satisfies(requirements::accept);
+            assertThat(getName(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
         /**
-         * Verifies that {@code actual#getName()} returns specified value.
+         * Verifies that the value of {@code actual#getName()} is {@link AbstractAssert#isEqualTo(Object) equal} to
+         * specified value.
          *
-         * @param expected the expected value.
+         * @param expected the expected value of {@code actual#getName()}.
          * @return {@link #myself self}.
+         * @see #hasNameSatisfying(Consumer)
+         * @see javax.validation.Path.Node#getName()
+         * @see jakarta.validation.Path.Node#getName()
          */
-        public SELF hasName(final String expected) {
-            return hasNameSatisfying(v -> assertThat(v).isEqualTo(expected));
+        public SELF hasNameEqualTo(final Object expected) {
+            return hasNameSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
 
-        public SELF isInIterableSatisfies(final Consumer<? super Boolean> requirements) {
+        // --------------------------------------------------------------------------------------------- inInIterable()Z
+
+        /**
+         * Verifies that the value of {@code actual.isInIterable()} satisfies requirements expressed in specified
+         * consumer.
+         *
+         * @param requirements the consumer accepts and verifies the value of {@code actual.isInIterable()}.
+         * @return {@link #myself self}.
+         * @see #isInIterable()
+         * @see #isNotInIterable()
+         * @see javax.validation.Path.Node#isInIterable()
+         * @see jakarta.validation.Path.Node#isInIterable()
+         */
+        public SELF hasInIterableSatisfying(final Consumer<? super Boolean> requirements) {
             isNotNull();
-            assertThat(PathUtils.NodeUtils.isInIterable(actual)).satisfies(requirements::accept);
+            assertThat(PathUtils.NodeUtils.isInIterable(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
         /**
-         * Verifies that {@code actual#isIterable()} is {@code true}.
+         * Verifies that the value of {@code actual.isInIterable()} {@link AbstractBooleanAssert#isTrue() is true}.
          *
          * @return {@link #myself self}.
+         * @see #hasInIterableSatisfying(Consumer)
+         * @see #isNotInIterable()
+         * @see javax.validation.Path.Node#isInIterable()
+         * @see jakarta.validation.Path.Node#isInIterable()
          */
         public SELF isInIterable() {
-            return isInIterableSatisfies(v -> assertThat(v).isTrue());
+            return hasInIterableSatisfying(v -> {
+                assertThat(v).isTrue();
+            });
         }
 
         /**
-         * Verifies that {@code actual#isIterable()} is {@code false}.
+         * Verifies that the value of {@code actual.isInIterable()} {@link AbstractBooleanAssert#isFalse() is false}.
+         *
+         * @return {@link #myself self}.
+         * @see #hasInIterableSatisfying(Consumer)
+         * @see #isInIterable()
+         * @see javax.validation.Path.Node#isInIterable()
+         * @see jakarta.validation.Path.Node#isInIterable()
+         */
+        public SELF isNotInIterable() {
+            return hasInIterableSatisfying(v -> {
+                assertThat(v).isFalse();
+            });
+        }
+
+        // ---------------------------------------------------------------------------------------------------- BeanNode
+
+        /**
+         * Verifies that the {@link #actual} is an instance of {@code ....validation.Path.BeanNode}.
          *
          * @return {@link #myself self}.
          */
-        public SELF isNotInIterable() {
-            return isInIterableSatisfies(v -> assertThat(v).isFalse());
+        public SELF isBeanNode() {
+            assertThat(PathUtils.BeanNodeUtils.isBeanNodeInstance(actual)).isTrue();
+            return myself;
+        }
+
+        @SuppressWarnings({"unchecked"})
+        public <T> BeanNodeAssert<T> asBeanNode() {
+            isBeanNode();
+            return new BeanNodeAssert<>((T) actual);
+        }
+
+        // ------------------------------------------------------------------------------------------------ PropertyNode
+
+        /**
+         * Verifies that the {@link #actual} is an instance of {@code ....validation.Path.PropertyNode}.
+         *
+         * @return {@link #myself self}.
+         */
+        public SELF isPropertyNode() {
+            isNotNull();
+            assertThat(PathUtils.PropertyNodeUtils.isPropertyNodeInstance(actual))
+                    .isTrue();
+            return myself;
+        }
+
+        @SuppressWarnings({"unchecked"})
+        public <T> PropertyNodeAssert<T> asPropertyNode() {
+            isPropertyNode();
+            return new PropertyNodeAssert<>((T) actual);
         }
     }
 
-    public static class NodeAssert extends AbstractNodeAssert<NodeAssert> {
+    /**
+     * An assertion class for verifying instance of {@code ....validation.Path.Node}.
+     *
+     * @param <ACTUAL> actual type parameter
+     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+     */
+    public static class NodeAssert<ACTUAL>
+            extends AbstractNodeAssert<NodeAssert<ACTUAL>, ACTUAL> {
 
-        public NodeAssert(final Object actual) {
+        /**
+         * Creates a new instance for verifying specified value.
+         *
+         * @param actual the value to verify.
+         */
+        public NodeAssert(final ACTUAL actual) {
             super(actual, NodeAssert.class);
         }
     }
 
-    public static class BeanNodeAssert extends AbstractNodeAssert<BeanNodeAssert> {
+    /**
+     * An assertion class for verifying instances of {@code ....validation.Path.BeanNode}.
+     *
+     * @param <ACTUAL> actual type parameter
+     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+     */
+    public static class BeanNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<BeanNodeAssert<ACTUAL>, ACTUAL> {
 
-        public BeanNodeAssert(final Object actual) {
+        /**
+         * Creates a new instance for verifying specified value.
+         *
+         * @param actual the value to verify.
+         */
+        public BeanNodeAssert(final ACTUAL actual) {
             super(actual, BeanNodeAssert.class);
         }
 
-        public BeanNodeAssert hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
+        /**
+         * Verifies that the value of {@code actual.getContainerClass()} satisfies requirements by being accepted to
+         * specified consumer.
+         *
+         * @param requirements the consumer accepts and verifies the value of {@code actual.getContainerClass()}.
+         * @return {@link #myself self}.
+         * @see #hasContainerClassSameAs(Object)
+         * @see javax.validation.Path.BeanNode#getContainerClass()
+         * @see jakarta.validation.Path.BeanNode#getContainerClass()
+         */
+        public BeanNodeAssert<ACTUAL> hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
             isNotNull();
-            assertThat(PathUtils.BeanNodeUtils.getContainerClass(actual)).satisfies(requirements::accept);
+            assertThat(PathUtils.BeanNodeUtils.getContainerClass(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
-        public BeanNodeAssert hasContainerClass(final Class<?> expected) {
-            return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
+        /**
+         * Verifies that the value of {@code actual.getContainerClass()} {@link AbstractAssert#isSameAs(Object) is same
+         * as} specified value.
+         *
+         * @param expected the value of {@code actual.getContainerClass()} expected to be same as.
+         * @return {@link #myself self}.
+         * @see #hasContainerClassSatisfying(Consumer)
+         * @see javax.validation.Path.BeanNode#getContainerClass()
+         * @see jakarta.validation.Path.BeanNode#getContainerClass()
+         */
+        public BeanNodeAssert<ACTUAL> hasContainerClassSameAs(final Object expected) {
+            return hasContainerClassSatisfying(v -> {
+                assertThat(v).isSameAs(expected);
+            });
         }
 
-        public BeanNodeAssert hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
+        public BeanNodeAssert<ACTUAL> hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
             isNotNull();
-            assertThat(PathUtils.BeanNodeUtils.getTypeArgumentIndex(actual)).satisfies(requirements::accept);
+            assertThat(PathUtils.BeanNodeUtils.getTypeArgumentIndex(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
-        public BeanNodeAssert hasTypeArgumentIndex(final Integer expected) {
-            return hasTypeArgumentIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+        public BeanNodeAssert<ACTUAL> hasTypeArgumentIndexEqualTo(final Object expected) {
+            return hasTypeArgumentIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
-    public static class ConstructorNodeAssert extends AbstractNodeAssert<ConstructorNodeAssert> {
+    public static class ConstructorNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<ConstructorNodeAssert<ACTUAL>, ACTUAL> {
 
-        public ConstructorNodeAssert(final Object actual) {
+        public ConstructorNodeAssert(final ACTUAL actual) {
             super(actual, ConstructorNodeAssert.class);
         }
 
-        public ConstructorNodeAssert hasParameterTypesSatisfying(
+        // ------------------------------------------------------------------------------------------- getParameterTypes
+        public ConstructorNodeAssert<ACTUAL> hasParameterTypesSatisfying(
                 final Consumer<? super List<? extends Class<?>>> requirements) {
             isNotNull();
-            assertThat(PathUtils.ConstructorNodeUtils.getParameterTypes(actual)).satisfies(requirements::accept);
+            assertThat(PathUtils.ConstructorNodeUtils.getParameterTypes(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
-        public ConstructorNodeAssert hasParameterTypes(final List<Class<?>> expected) {
+        public ConstructorNodeAssert<ACTUAL> hasParameterTypesEqual(final Object expected) {
             return hasParameterTypesSatisfying(v -> assertThat(v).isEqualTo(expected));
         }
     }
 
-    public static class ContainerElementNodeAssert extends AbstractNodeAssert<ContainerElementNodeAssert> {
+    public static class ContainerElementNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<ContainerElementNodeAssert<ACTUAL>, ACTUAL> {
 
-        public ContainerElementNodeAssert(final Object actual) {
+        public ContainerElementNodeAssert(final ACTUAL actual) {
             super(actual, ContainerElementNodeAssert.class);
         }
 
-        public ContainerElementNodeAssert hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
+        // ----------------------------------------------------------------------------------------- getContainerClass()
+        public ContainerElementNodeAssert<ACTUAL> hasContainerClassSatisfying(
+                final Consumer<? super Class<?>> requirements) {
             isNotNull();
             assertThat(PathUtils.ContainerElementNodeUtils.getContainerClass(actual)).satisfies(requirements::accept);
             return myself;
         }
 
-        public ContainerElementNodeAssert hasContainerClass(final Class<?> expected) {
+        public ContainerElementNodeAssert<ACTUAL> hasContainerClassSameAs(final Object expected) {
             return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
         }
 
-        public ContainerElementNodeAssert hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
+        // -------------------------------------------------------------------------------------- getTypeArgumentIndex()
+        public ContainerElementNodeAssert<ACTUAL> hasTypeArgumentIndexSatisfying(
+                final Consumer<? super Integer> requirements) {
             isNotNull();
             assertThat(PathUtils.ContainerElementNodeUtils.getTypeArgumentIndex(actual))
                     .satisfies(requirements::accept);
             return myself;
         }
 
-        public ContainerElementNodeAssert hasTypeArgumentIndex(final Integer expected) {
+        public ContainerElementNodeAssert<ACTUAL> hasTypeArgumentIndexEqualTo(final Object expected) {
             return hasTypeArgumentIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
         }
     }
 
-    public static class CrossParameterNodeAssert extends AbstractNodeAssert<CrossParameterNodeAssert> {
+    public static class CrossParameterNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<CrossParameterNodeAssert<ACTUAL>, ACTUAL> {
 
-        public CrossParameterNodeAssert(final Object actual) {
+        public CrossParameterNodeAssert(final ACTUAL actual) {
             super(actual, CrossParameterNodeAssert.class);
         }
     }
 
-    public static class MethodNodeAssert extends AbstractNodeAssert<MethodNodeAssert> {
+    public static class MethodNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<MethodNodeAssert<ACTUAL>, ACTUAL> {
 
-        public MethodNodeAssert(final Object actual) {
+        public MethodNodeAssert(final ACTUAL actual) {
             super(actual, MethodNodeAssert.class);
         }
 
-        public MethodNodeAssert hasParameterTypesSatisfying(
+        public MethodNodeAssert<ACTUAL> hasParameterTypesSatisfying(
                 final Consumer<? super List<? extends Class<?>>> requirements) {
             isNotNull();
             assertThat(PathUtils.MethodNodeUtils.getParameterTypes(actual)).satisfies(requirements::accept);
             return myself;
         }
 
-        public MethodNodeAssert hasParameterTypes(final List<Class<?>> expected) {
+        public MethodNodeAssert<ACTUAL> hasParameterTypesEqualTo(final Object expected) {
             return hasParameterTypesSatisfying(v -> assertThat(v).isEqualTo(expected));
         }
     }
 
-    public static class ParameterNodeAssert extends AbstractNodeAssert<ParameterNodeAssert> {
+    public static class ParameterNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<ParameterNodeAssert<ACTUAL>, ACTUAL> {
 
-        public ParameterNodeAssert(final Object actual) {
+        public ParameterNodeAssert(final ACTUAL actual) {
             super(actual, ParameterNodeAssert.class);
         }
 
-        public ParameterNodeAssert hasParameterIndexSatisfying(final Consumer<? super Integer> requirements) {
+        public ParameterNodeAssert<ACTUAL> hasParameterIndexSatisfying(final Consumer<? super Integer> requirements) {
             isNotNull();
             assertThat(PathUtils.ParameterNodeUtils.getParameterIndex(actual)).satisfies(requirements::accept);
             return myself;
         }
 
-        public ParameterNodeAssert hasParameterIndex(final Integer expected) {
+        public ParameterNodeAssert<ACTUAL> hasParameterIndexEqualTo(final Object expected) {
             return hasParameterIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
         }
     }
 
-    public static class PropertyNodeAssert extends AbstractNodeAssert<PropertyNodeAssert> {
+    public static class PropertyNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<PropertyNodeAssert<ACTUAL>, ACTUAL> {
 
-        public PropertyNodeAssert(final Object actual) {
+        public PropertyNodeAssert(final ACTUAL actual) {
             super(actual, PropertyNodeAssert.class);
         }
 
-        public PropertyNodeAssert hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
+        public PropertyNodeAssert<ACTUAL> hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
             isNotNull();
-            assertThat(PathUtils.PropertyNodeUtils.getContainerClass(actual)).satisfies(requirements::accept);
+            assertThat(PathUtils.PropertyNodeUtils.getContainerClass(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
-        public PropertyNodeAssert hasContainerClass(final Class<?> expected) {
+        public PropertyNodeAssert<ACTUAL> hasContainerClassSameAs(final Object expected) {
             return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
         }
 
-        public PropertyNodeAssert hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
+        /**
+         * Verifies that the value of {@code actual#getTypeArgumentIndex()} satisfies some requirements by being
+         * accepted to specified consumer.
+         *
+         * @param requirements the consumer accepts and verifies the value of {@code actual#getTypeArgumentIndex()}.
+         * @return {@link #myself self}.
+         * @see #hasTypeArgumentIndexEqualTo(Object)
+         * @see javax.validation.Path.PropertyNode#getTypeArgumentIndex()
+         * @see jakarta.validation.Path.PropertyNode#getTypeArgumentIndex()
+         */
+        public PropertyNodeAssert<ACTUAL> hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
             isNotNull();
-            assertThat(PathUtils.PropertyNodeUtils.getTypeArgumentIndex(actual)).satisfies(requirements::accept);
+            assertThat(PathUtils.PropertyNodeUtils.getTypeArgumentIndex(actual))
+                    .satisfies(requirements::accept);
             return myself;
         }
 
-        public PropertyNodeAssert hasTypeArgumentIndex(final Integer expected) {
+        /**
+         * Verifies that the value of {@code actual#getTypeArgumentIndex()} is {@link AbstractAssert#isEqualTo(Object)
+         * equal} to specified value.
+         *
+         * @param expected the value of {@code actual#getTypeArgumentIndex()} expected to be equal.
+         * @return {@link #myself self}.
+         * @see #hasTypeArgumentIndexSatisfying(Consumer)
+         * @see javax.validation.Path.PropertyNode#getTypeArgumentIndex()
+         * @see jakarta.validation.Path.PropertyNode#getTypeArgumentIndex()
+         */
+        public PropertyNodeAssert<ACTUAL> hasTypeArgumentIndexEqualTo(final Object expected) {
             return hasTypeArgumentIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
         }
     }
 
-    public static class ReturnValueNodeAssert extends AbstractNodeAssert<ReturnValueNodeAssert> {
+    /**
+     * An assertion class for verifying {@code ....validation.Path.ReturnValueNode}.
+     *
+     * @param <ACTUAL> actual type parameter
+     */
+    public static class ReturnValueNodeAssert<ACTUAL>
+            extends AbstractNodeAssert<ReturnValueNodeAssert<ACTUAL>, ACTUAL> {
 
-        public ReturnValueNodeAssert(final Object actual) {
+        /**
+         * Creates a new instance with specified value.
+         *
+         * @param actual the value to verify.
+         */
+        public ReturnValueNodeAssert(final ACTUAL actual) {
             super(actual, ReturnValueNodeAssert.class);
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public PathAssert(final Iterable<? extends NodeType> actual) {
+
+    /**
+     * Creates a new instance with specified value.
+     *
+     * @param actual the value to verify.
+     */
+    public PathAssert(final PATH actual) {
         super(actual);
     }
 }

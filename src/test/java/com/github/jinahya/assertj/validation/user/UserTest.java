@@ -22,6 +22,7 @@ package com.github.jinahya.assertj.validation.user;
 
 import com.github.jinahya.assertj.validation.BeanValidationAssert;
 import com.github.jinahya.assertj.validation.ConstraintViolationTestUtils;
+import com.github.jinahya.assertj.validation.PathTestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,6 +37,12 @@ import static com.github.jinahya.assertj.validation.BeanValidationTestUtils.vali
 import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.ConstraintViolationWrapper.constraintViolation;
+import static com.github.jinahya.assertj.validation.ElementKindAssertions.assertThat;
+import static com.github.jinahya.assertj.validation.ElementKindWrapper.elementKind;
+import static com.github.jinahya.assertj.validation.PathAssertions.NodeAssertions.assertThat;
+import static com.github.jinahya.assertj.validation.PathAssertions.assertThat;
+import static com.github.jinahya.assertj.validation.PathWrapper.NodeWrapper.node;
+import static com.github.jinahya.assertj.validation.PathWrapper.path;
 import static java.util.concurrent.ThreadLocalRandom.current;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -142,46 +149,45 @@ class UserTest {
 
     @MethodSource({"instancesWithInvalidName"})
     @ParameterizedTest
-    void isInvalid_Succeed_InvalidName(final User user) {
+    void isNotValid_Succeed_InvalidName(final User user) {
         Assertions.setMaxStackTraceElementsDisplayed(1024);
         final BeanValidationAssert<User> a = assertBean(user);
-        assertThatCode(
-                () -> a.isNotValid(s -> {
-                    assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
-                        assertThat(constraintViolation(v))
-                                .hasInvalidValueEqualTo(user.getName())
-                                .hasLeafBeanSameAs(user)
-                                .hasMessageEqualTo("must not be blank")
-                                .hasPropertyPathSatisfying(p -> {
-//                                    assertThat(path(p)).doesNotContainNull().hasSize(1).allSatisfy(n -> {
-//                                        log.debug("node: {}({})", n, n.getClass());
-//                                        log.debug("node.index: {}", PathTestUtils.NodeTestUtils.getIndex(n));
-//                                        log.debug("node.key: {}", PathTestUtils.NodeTestUtils.getKey(n));
-//                                        log.debug("node.kind: {}", PathTestUtils.NodeTestUtils.getKind(n));
-//                                        log.debug("node.name: {}", PathTestUtils.NodeTestUtils.getName(n));
-//                                        log.debug("node.iterable: {}", PathTestUtils.NodeTestUtils.isInIterable(n));
-//                                        assertThat(node(n))
-//                                                .hasIndex(null)
-//                                                .hasKey(null)
-//                                                .hasKindSatisfying(k -> {
-//                                                    assertThat(elementKind(k)).hasName("PROPERTY");
-//                                                })
-//                                                .hasName("name")
-//                                                .isNotInIterable()
-//                                        ;
-//                                    });
-                                })
-                                .hasRootBeanClassSameAs(User.class)
-                                .hasRootBeanSameAs(user)
-                        ;
-                    });
-                }))
+        assertThatCode(() -> a.isNotValid(s -> {
+            assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
+                assertThat(constraintViolation(v))
+                        .hasInvalidValueEqualTo(user.getName())
+                        .hasLeafBeanSameAs(user)
+                        .hasMessageEqualTo("must not be blank")
+                        .hasPropertyPathSatisfying(p -> {
+                            assertThat(path(p)).doesNotContainNull().hasSize(1).allSatisfy(n -> {
+                                log.debug("node: {}({})", n, n.getClass());
+                                log.debug("node.index: {}", PathTestUtils.NodeTestUtils.getIndex(n));
+                                log.debug("node.key: {}", PathTestUtils.NodeTestUtils.getKey(n));
+                                log.debug("node.kind: {}", PathTestUtils.NodeTestUtils.getKind(n));
+                                log.debug("node.name: {}", PathTestUtils.NodeTestUtils.getName(n));
+                                log.debug("node.iterable: {}", PathTestUtils.NodeTestUtils.isInIterable(n));
+                                assertThat(node(n))
+                                        .hasIndexEqualTo(null)
+                                        .hasKeyEqualTo(null)
+                                        .hasKindSatisfying(k -> {
+                                            assertThat(elementKind(k)).hasNameEqualTo("PROPERTY");
+                                        })
+                                        .hasNameEqualTo("name")
+                                        .isNotInIterable()
+                                ;
+                            });
+                        })
+                        .hasRootBeanClassSameAs(User.class)
+                        .hasRootBeanSameAs(user)
+                ;
+            });
+        }))
                 .doesNotThrowAnyException();
     }
 
     @MethodSource({"instancesWithInvalidAge"})
     @ParameterizedTest
-    void isInvalid_Succeed_InvalidAge(final User user) {
+    void isNotValid_Succeed_InvalidAge(final User user) {
         final BeanValidationAssert<User> a = assertBean(user);
         assertThatCode(
                 () -> a.isNotValid(s -> {
@@ -193,23 +199,23 @@ class UserTest {
                                 .hasLeafBeanSameAs(user)
                                 .hasMessageEqualTo("must be greater than or equal to 0")
                                 .hasPropertyPathSatisfying(p -> {
-//                                    assertThat(path(p)).doesNotContainNull().hasSize(1).allSatisfy(n -> {
-//                                        log.debug("node: {}({})", n, n.getClass());
-//                                        log.debug("node.index: {}", PathTestUtils.NodeTestUtils.getIndex(n));
-//                                        log.debug("node.key: {}", PathTestUtils.NodeTestUtils.getKey(n));
-//                                        log.debug("node.kind: {}", PathTestUtils.NodeTestUtils.getKind(n));
-//                                        log.debug("node.name: {}", PathTestUtils.NodeTestUtils.getName(n));
-//                                        log.debug("node.iterable: {}", PathTestUtils.NodeTestUtils.isInIterable(n));
-//                                        assertThat(node(n))
-//                                                .hasIndex(null)
-//                                                .hasKey(null)
-//                                                .hasKindSatisfying(k -> {
-//                                                    assertThat(elementKind(k)).hasName("PROPERTY");
-//                                                })
-//                                                .hasName("age")
-//                                                .isNotInIterable()
-//                                        ;
-//                                    });
+                                    assertThat(path(p)).doesNotContainNull().hasSize(1).allSatisfy(n -> {
+                                        log.debug("node: {}({})", n, n.getClass());
+                                        log.debug("node.index: {}", PathTestUtils.NodeTestUtils.getIndex(n));
+                                        log.debug("node.key: {}", PathTestUtils.NodeTestUtils.getKey(n));
+                                        log.debug("node.kind: {}", PathTestUtils.NodeTestUtils.getKind(n));
+                                        log.debug("node.name: {}", PathTestUtils.NodeTestUtils.getName(n));
+                                        log.debug("node.iterable: {}", PathTestUtils.NodeTestUtils.isInIterable(n));
+                                        assertThat(node(n))
+                                                .hasIndexEqualTo(null)
+                                                .hasKeyEqualTo(null)
+                                                .hasKindSatisfying(k -> {
+                                                    assertThat(elementKind(k)).hasNameEqualTo("PROPERTY");
+                                                })
+                                                .hasNameEqualTo("age")
+                                                .isNotInIterable()
+                                        ;
+                                    });
                                 })
                                 .hasRootBeanClassSameAs(User.class)
                                 .hasRootBeanSameAs(user)
@@ -297,6 +303,8 @@ class UserTest {
     @ParameterizedTest
     void doesNotHaveValidProperty_Fail_InvalidAge(final User user) {
         final BeanValidationAssert<User> a = assertBean(user);
+        assertThatCode(() -> a.doesNotHaveValidProperty("age"))
+                .doesNotThrowAnyException();
         assertThatCode(
                 () -> a.doesNotHaveValidProperty("age", s -> {
                     assertThat(s).isNotNull().doesNotContainNull().hasSize(1).allSatisfy(v -> {
@@ -305,17 +313,17 @@ class UserTest {
                                 .hasLeafBeanSameAs(user)
                                 .hasMessageEqualTo("must be greater than or equal to 0")
                                 .hasPropertyPathSatisfying(p -> {
-//                                    assertThat(path(p)).doesNotContainNull().hasSize(1).allSatisfy(n -> {
-//                                        assertThat(node(n))
-//                                                .hasIndex(null)
-//                                                .hasKey(null)
-//                                                .hasKindSatisfying(k -> {
-//                                                    assertThat(elementKind(k)).hasName("PROPERTY");
-//                                                })
-//                                                .hasName("age")
-//                                                .isNotInIterable()
-//                                        ;
-//                                    });
+                                    assertThat(path(p)).doesNotContainNull().hasSize(1).allSatisfy(n -> {
+                                        assertThat(node(n))
+                                                .hasIndexEqualTo(null)
+                                                .hasKeyEqualTo(null)
+                                                .hasKindSatisfying(k -> {
+                                                    assertThat(elementKind(k)).hasNameEqualTo("PROPERTY");
+                                                })
+                                                .hasNameEqualTo("age")
+                                                .isNotInIterable()
+                                        ;
+                                    });
                                 })
                                 .hasRootBeanSameAs(user)
                                 .hasRootBeanClassSameAs(User.class);

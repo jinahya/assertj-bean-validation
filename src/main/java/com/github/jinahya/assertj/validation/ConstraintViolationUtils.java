@@ -28,7 +28,7 @@ final class ConstraintViolationUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
     static <R> R applyConstraintViolationClass(final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClass("ConstraintViolation", function);
+        return Utils.applyClassForSuffix("ConstraintViolation", function);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -64,21 +64,6 @@ final class ConstraintViolationUtils {
     }
 
     // ------------------------------------------------------------------------------------------------- getInvalidValue
-    static <T> Object getInvalidValue(final Class<T> clazz, final T instance) {
-        requireNonNull(clazz, "clazz is null");
-        requireNonNull(instance, "instance is null");
-        try {
-            return clazz.getMethod("getInvalidValue").invoke(instance);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
-    }
-
-    static <T> Object getInvalidValueHelper(final Class<T> clazz, final Object instance) {
-        requireNonNull(clazz, "clazz is null");
-        return getInvalidValue(clazz, clazz.cast(instance));
-    }
-
     static Object getInvalidValue(final Object actual) {
         try {
             return getConstraintViolationClassFor(actual).getMethod("getInvalidValue").invoke(actual);
@@ -88,21 +73,6 @@ final class ConstraintViolationUtils {
     }
 
     // ----------------------------------------------------------------------------------------------------- getLeafBean
-    static <T> Object getLeafBean(final Class<T> clazz, final T instance) {
-        requireNonNull(clazz, "clazz is null");
-        requireNonNull(instance, "instance is null");
-        try {
-            return clazz.getMethod("getLeafBean").invoke(instance);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
-    }
-
-    static <T> Object getLeafBeanHelper(final Class<T> clazz, final Object instance) {
-        requireNonNull(clazz, "clazz is null");
-        return getLeafBean(clazz, clazz.cast(instance));
-    }
-
     static Object getLeafBean(final Object actual) {
         try {
             return getConstraintViolationClassFor(actual).getMethod("getLeafBean").invoke(actual);
@@ -121,7 +91,6 @@ final class ConstraintViolationUtils {
     }
 
     // ------------------------------------------------------------------------------------------------- getPropertyPath
-    @SuppressWarnings({"unchecked"})
     static Object getPropertyPath(final Object actual) {
         try {
             return getConstraintViolationClassFor(actual).getMethod("getPropertyPath").invoke(actual);

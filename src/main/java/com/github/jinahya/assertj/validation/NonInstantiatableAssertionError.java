@@ -20,20 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import static java.util.Objects.requireNonNull;
+class NonInstantiatableAssertionError
+        extends AssertionError {
 
-public class ElementKindAssertions {
-
-    public static <ACTUAL> ElementKindAssert<ACTUAL> assertElementKind(final ACTUAL actual) {
-        return new ElementKindAssert<>(actual);
-    }
-
-    public static <ACTUAL> ElementKindAssert<ACTUAL> assertThat(final ElementKindWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertElementKind(wrapper.getActual());
-    }
-
-    private ElementKindAssertions() {
-        throw new AssertionError("instantiation is not allowed");
+    public NonInstantiatableAssertionError() {
+        super("instantiation is not allowed");
     }
 }

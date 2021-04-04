@@ -22,18 +22,44 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 
+import java.util.function.Consumer;
+
 import static com.github.jinahya.assertj.validation.ElementKindUtils.requireElementKindInstance;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ElementKindAssert extends AbstractAssert<ElementKindAssert, Object> {
+@SuppressWarnings({"java:S119"})
+public class ElementKindAssert<ACTUAL>
+        extends AbstractAssert<ElementKindAssert<ACTUAL>, ACTUAL> {
 
-    public ElementKindAssert(final Object actual) {
+    /**
+     * Creates a new instance for verifying specified actual value.
+     *
+     * @param actual the actual value to verify.
+     */
+    public ElementKindAssert(final ACTUAL actual) {
         super(requireElementKindInstance(actual), ElementKindAssert.class);
     }
 
-    public ElementKindAssert hasName(final String expected) {
+    // ------------------------------------------------------------------------------------------------------- getName()
+
+    /**
+     * Verifies that the {@link Enum#name() actual.name()} satisfies some requirements by being accepted to specified
+     * consumer.
+     *
+     * @param requirements the consumer accepts and verifies the value of {@code actual.name()}.
+     * @return {@link #myself self}.
+     */
+    public ElementKindAssert<ACTUAL> hasNameSatisfying(final Consumer<? super String> requirements) {
         isNotNull();
-        assertThat(ElementKindUtils.name(actual)).isEqualTo(expected);
+        assertThat(ElementKindUtils.getName(actual))
+                .satisfies(requirements::accept);
+        return myself;
+    }
+
+    public ElementKindAssert<ACTUAL> hasNameEqualTo(final Object expected) {
+        isNotNull();
+        assertThat(ElementKindUtils.getName(actual))
+                .isEqualTo(expected);
         return myself;
     }
 }

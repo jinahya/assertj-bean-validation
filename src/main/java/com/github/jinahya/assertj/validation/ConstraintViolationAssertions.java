@@ -22,14 +22,32 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * A class for creating assertion instance for constraint violations.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public final class ConstraintViolationAssertions {
 
+    /**
+     * Creates a new assertion instance for specified constraint violation value.
+     *
+     * @param actual the constraint violation value to assert.
+     * @param <T>    constraint violation type parameter
+     * @return a new assertion instance.
+     */
     public static <T> ConstraintViolationAssert<T> assertConstraintViolation(final T actual) {
         return new ConstraintViolationAssert<>(actual);
     }
 
-    public static <T> ConstraintViolationAssert<T> assertThat(
-            final AbstractConstraintViolationWrapper<? extends T> wrapper) {
+    /**
+     * Creates a new assertion instance for the constraint violation value wrapped in specified wrapper.
+     *
+     * @param wrapper the wrapper wraps the constraint violation value.
+     * @param <T>     constraint violation type parameter
+     * @return a new assertion instance.
+     */
+    public static <T> ConstraintViolationAssert<T> assertThat(final ConstraintViolationWrapper<? extends T> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
         return assertConstraintViolation(wrapper.getActual());
     }

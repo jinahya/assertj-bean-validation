@@ -36,7 +36,7 @@ final class Utils {
         return Class.forName("jakarta.validation." + name);
     }
 
-    static <R> R applyClass(final String suffix, final Function<? super Class<?>, ? extends R> function) {
+    static <R> R applyClassForSuffix(final String suffix, final Function<? super Class<?>, ? extends R> function) {
         requireNonNull(suffix, "suffix is null");
         requireNonNull(function, "function is null");
         try {
@@ -73,7 +73,7 @@ final class Utils {
         } catch (final ClassNotFoundException cnfe) {
             // empty;
         }
-        throw new RuntimeException("unable to get class for " + suffix + " with " + instance);
+        throw new RuntimeException("unable to get class for " + suffix + " for " + instance);
     }
 
     static Class<?> getClassFor(final String suffix, final Object instance) {

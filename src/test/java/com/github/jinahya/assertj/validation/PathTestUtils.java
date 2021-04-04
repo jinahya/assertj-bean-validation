@@ -49,6 +49,21 @@ public final class PathTestUtils {
         }
     }
 
+    public static final class PropertyNodeTestUtils {
+
+        public static Class<?> getContainerClass(final Object actual) {
+            return PathUtils.PropertyNodeUtils.getContainerClass(actual);
+        }
+
+        public static Integer getTypeArgumentIndex(final Object actual) {
+            return PathUtils.PropertyNodeUtils.getTypeArgumentIndex(actual);
+        }
+
+        private PropertyNodeTestUtils() {
+            throw new NonInstantiatableAssertionError();
+        }
+    }
+
     private PathTestUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
