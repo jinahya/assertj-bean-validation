@@ -34,11 +34,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * An assertion class for verifying instances of {@code ....validation.Path}.
  *
- * @param <NODE> the type of {@code ....validation.Path.Node}.
+ * @param <ACTUAL> actual type parameter
+ * @param <NODE>   the type of {@code ....validation.Path.Node}.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119", "java:S125"})
-public class PathAssert<PATH extends Iterable<NODE>, NODE>
+public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         extends IterableAssert<NODE> {
 
     @SuppressWarnings({"java:S119"})
@@ -472,7 +473,7 @@ public class PathAssert<PATH extends Iterable<NODE>, NODE>
      *
      * @param actual the value to verify.
      */
-    public PathAssert(final PATH actual) {
+    public PathAssert(final ACTUAL actual) {
         super(actual);
     }
 }

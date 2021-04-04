@@ -23,18 +23,20 @@ package com.github.jinahya.assertj.validation;
 /**
  * A class for wrapping constraint violations of unknown type.
  *
+ * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class ConstraintViolationWrapper<T>
-        extends Wrapper<T> {
+public class ConstraintViolationWrapper<ACTUAL>
+        extends Wrapper<ACTUAL> {
 
     /**
      * Creates a new instance wraps specified constraint violation.
      *
-     * @param actual the constraint violation to wrap.
+     * @param <ACTUAL> actual type parameter
+     * @param actual   the constraint violation to wrap.
      * @return a new instance wraps {@code actual}.
      */
-    public static <T> ConstraintViolationWrapper<T> constraintViolation(final T actual) {
+    public static <ACTUAL> ConstraintViolationWrapper<ACTUAL> constraintViolation(final ACTUAL actual) {
         return new ConstraintViolationWrapper<>(actual);
     }
 
@@ -43,7 +45,7 @@ public class ConstraintViolationWrapper<T>
      *
      * @param actual the actual value to wrap.
      */
-    private ConstraintViolationWrapper(final T actual) {
+    private ConstraintViolationWrapper(final ACTUAL actual) {
         super(actual);
     }
 }

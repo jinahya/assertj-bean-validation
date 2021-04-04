@@ -153,6 +153,11 @@
                 <artifactId>jakarta.validation-api</artifactId>
                 <version>${version.jakarta.validation-api}</version>
               </additionalDependency>
+              <additionalDependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${version.javax.validation-api}</version>
+              </additionalDependency>
             </additionalDependencies>
             <links>
               <!--              <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}</link>-->

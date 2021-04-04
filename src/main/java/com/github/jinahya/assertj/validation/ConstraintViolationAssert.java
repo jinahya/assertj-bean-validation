@@ -132,15 +132,16 @@ public class ConstraintViolationAssert<T>
     /**
      * Verifies that the {@code actual.propertyPath} satisfies given requirements expresses as a {@link Consumer}.
      *
+     * @param <PATH>       path type parameter
      * @param requirements the consumer accepts and verifies the {@code actual.propertyPath}.
      * @return {@link #myself self}
      */
     @SuppressWarnings({"unchecked"})
-    public <U extends Iterable<?>> ConstraintViolationAssert<T> hasPropertyPathSatisfying(
-            final Consumer<? super U> requirements) {
+    public <PATH extends Iterable<?>> ConstraintViolationAssert<T> hasPropertyPathSatisfying(
+            final Consumer<? super PATH> requirements) {
         requireNonNull(requirements, "requirements is null");
         isNotNull();
-        assertThat(getPropertyPath(actual)).satisfies(v -> requirements.accept((U) v));
+        assertThat(getPropertyPath(actual)).satisfies(v -> requirements.accept((PATH) v));
         return myself;
     }
 

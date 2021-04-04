@@ -188,21 +188,25 @@ public class PathAssertions {
     /**
      * Creates a new instance for specified {@code ....validation.Path} value.
      *
-     * @param actual the value of {@code .....validation.Path} to assert.
+     * @param <ACTUAL> actual type parameter
+     * @param <NODE>   node type parameter
+     * @param actual   the value of {@code .....validation.Path} to assert.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <PATH extends Iterable<NODE>, NODE> PathAssert<PATH, NODE> assertPath(final PATH actual) {
+    public static <ACTUAL extends Iterable<NODE>, NODE> PathAssert<ACTUAL, NODE> assertPath(final ACTUAL actual) {
         return new PathAssert<>(actual);
     }
 
     /**
      * Creates a new assertion for the actual value wrapped in specified wrapper.
      *
-     * @param wrapper the wrapper wraps the actual value.
+     * @param <ACTUAL> actual type parameter
+     * @param <NODE>   node type parameter
+     * @param wrapper  the wrapper wraps the actual value.
      * @return a new assertion instance for {@code wrapper.actual}.
      */
-    public static <PATH extends Iterable<NODE>, NODE> PathAssert<PATH, NODE> assertThat(
-            final PathWrapper<PATH, NODE> wrapper) {
+    public static <ACTUAL extends Iterable<NODE>, NODE> PathAssert<ACTUAL, NODE> assertThat(
+            final PathWrapper<ACTUAL, NODE> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
         return assertPath(wrapper.getActual());
     }

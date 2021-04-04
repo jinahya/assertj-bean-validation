@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.internal.bytebuddy.implementation.auxiliary.AuxiliaryType;
-
 import java.util.Set;
 import java.util.function.Function;
 

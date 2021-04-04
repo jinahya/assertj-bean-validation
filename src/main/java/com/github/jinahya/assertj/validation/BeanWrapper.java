@@ -23,6 +23,7 @@ package com.github.jinahya.assertj.validation;
 /**
  * A class for wrapping bean object.
  *
+ * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
@@ -32,10 +33,11 @@ public class BeanWrapper<ACTUAL>
     /**
      * Creates a new instance wraps specified bean object.
      *
-     * @param actual the bean object to wrap; must not be {@code null}.
+     * @param <ACTUAL> actual type parameter
+     * @param actual   the bean object to wrap; must not be {@code null}.
      * @return a new instance wraps {@code object}.
      */
-    public static <T> BeanWrapper<T> bean(final T actual) {
+    public static <ACTUAL> BeanWrapper<ACTUAL> bean(final ACTUAL actual) {
         return new BeanWrapper<>(actual);
     }
 

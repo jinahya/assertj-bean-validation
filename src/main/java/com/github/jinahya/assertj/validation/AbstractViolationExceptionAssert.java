@@ -49,6 +49,7 @@ public abstract class AbstractViolationExceptionAssert<
      * Verifies that the {@link #actual} value is an instance of {@code ....validation.ConstraintViolationException},
      * and returns a {@link ConstraintViolationExceptionAssert} for subsequent assertions.
      *
+     * @param <T> constraint violation exception type parameter
      * @return {@link #myself self}.
      */
     @SuppressWarnings({"unchecked"})
