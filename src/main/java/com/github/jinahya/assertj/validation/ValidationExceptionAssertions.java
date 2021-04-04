@@ -22,20 +22,20 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
-public class ViolationExceptionAssertions {
+public class ValidationExceptionAssertions {
 
-    public static <ACTUAL extends Exception> ViolationExceptionAssert<ACTUAL> assertViolationException(
+    public static <ACTUAL extends RuntimeException> ValidationExceptionAssert<ACTUAL> assertValidationException(
             final ACTUAL actual) {
-        return new ViolationExceptionAssert<>(actual);
+        return new ValidationExceptionAssert<>(actual);
     }
 
-    public static <ACTUAL extends Exception> ViolationExceptionAssert<ACTUAL> assertThat(
-            final ViolationExceptionWrapper<? extends ACTUAL> wrapper) {
+    public static <ACTUAL extends RuntimeException> ValidationExceptionAssert<ACTUAL> assertThat(
+            final ValidationExceptionWrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
-        return assertViolationException(wrapper.getActual());
+        return assertValidationException(wrapper.getActual());
     }
 
-    private ViolationExceptionAssertions() {
+    private ValidationExceptionAssertions() {
         throw new NonInstantiatableAssertionError();
     }
 }

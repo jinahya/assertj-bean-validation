@@ -20,10 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ViolationExceptionAssert<ACTUAL extends Exception>
-        extends AbstractViolationExceptionAssert<ViolationExceptionAssert<ACTUAL>, ACTUAL> {
+public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
+        extends AbstractValidationExceptionAssert<ValidationExceptionAssert<ACTUAL>, ACTUAL> {
 
-    public ViolationExceptionAssert(final ACTUAL actual) {
-        super(actual, ViolationExceptionAssert.class);
+    public ValidationExceptionAssert(final ACTUAL actual) {
+        super(actual, ValidationExceptionAssert.class);
     }
 }

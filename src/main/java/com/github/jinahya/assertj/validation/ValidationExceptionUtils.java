@@ -23,9 +23,9 @@ package com.github.jinahya.assertj.validation;
 import java.util.function.Function;
 
 @SuppressWarnings({"java:S125"})
-final class ViolationExceptionUtils {
+final class ValidationExceptionUtils {
 
-    private static final String SUFFIX = "ViolationException";
+    private static final String SUFFIX = "ValidationException";
 
     /**
      * Applies the class of {@code ....validation.ViolationException} to specified function and returns the result.
@@ -34,7 +34,7 @@ final class ViolationExceptionUtils {
      * @param <R>      result type parameter
      * @return the result of the {@code function}.
      */
-    static <R> R applyViolationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
+    static <R> R applyValidationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassForSuffix(SUFFIX, function);
     }
 
@@ -43,17 +43,17 @@ final class ViolationExceptionUtils {
      *
      * @return the class of {@code ....validation.Path.PropertyNode}.
      */
-    static Class<?> getViolationExceptionClass() {
-        return applyViolationExceptionClass(Function.identity());
+    static Class<?> getValidationExceptionClass() {
+        return applyValidationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyViolationExceptionClassFor(final Exception actual,
-                                                         final Function<? super Class<?>, ? extends R> function) {
+    private static <R> R applyValidationExceptionClassFor(final RuntimeException actual,
+                                                          final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getViolationExceptionClassFor(final Exception actual) {
-        return applyViolationExceptionClassFor(actual, Function.identity());
+    private static Class<?> getValidationExceptionClassFor(final RuntimeException actual) {
+        return applyValidationExceptionClassFor(actual, Function.identity());
     }
 
     /**
@@ -63,11 +63,11 @@ final class ViolationExceptionUtils {
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ViolationException}; {@code false}
      * otherwise.
      */
-    static boolean isViolationExceptionInstance(final Exception actual) {
+    static boolean isValidationExceptionInstance(final RuntimeException actual) {
         if (actual == null) {
             return true;
         }
-        return applyViolationExceptionClassFor(actual, c -> true);
+        return applyValidationExceptionClassFor(actual, c -> true);
     }
 
     /**
@@ -75,14 +75,14 @@ final class ViolationExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends Exception> T requireViolationExceptionInstance(final T actual) {
+    static <T extends RuntimeException> T requireValidationExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }
-        return applyViolationExceptionClassFor(actual, c -> actual);
+        return applyValidationExceptionClassFor(actual, c -> actual);
     }
 
-    private ViolationExceptionUtils() {
+    private ValidationExceptionUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

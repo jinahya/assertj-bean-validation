@@ -25,8 +25,8 @@ import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConstraintViolationExceptionAssert<ACTUAL extends Exception>
-        extends AbstractViolationExceptionAssert<ConstraintViolationExceptionAssert<ACTUAL>, ACTUAL> {
+public class ConstraintViolationExceptionAssert<ACTUAL extends RuntimeException>
+        extends AbstractValidationExceptionAssert<ConstraintViolationExceptionAssert<ACTUAL>, ACTUAL> {
 
     public ConstraintViolationExceptionAssert(final ACTUAL actual) {
         super(actual, ConstraintViolationExceptionAssert.class);

@@ -20,8 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ConstraintDeclarationExceptionAssert<ACTUAL extends Exception>
-        extends AbstractViolationExceptionAssert<ConstraintDeclarationExceptionAssert<ACTUAL>, ACTUAL> {
+public class ConstraintDeclarationExceptionAssert<ACTUAL extends RuntimeException>
+        extends AbstractValidationExceptionAssert<ConstraintDeclarationExceptionAssert<ACTUAL>, ACTUAL> {
 
     public ConstraintDeclarationExceptionAssert(final ACTUAL actual) {
         super(actual, ConstraintDeclarationExceptionAssert.class);

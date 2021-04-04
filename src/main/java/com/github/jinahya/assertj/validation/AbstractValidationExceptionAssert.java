@@ -24,14 +24,14 @@ import org.assertj.core.api.AbstractThrowableAssert;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class AbstractViolationExceptionAssert<
-        SELF extends AbstractViolationExceptionAssert<SELF, ACTUAL>,
-        ACTUAL extends Exception>
+public abstract class AbstractValidationExceptionAssert<
+        SELF extends AbstractValidationExceptionAssert<SELF, ACTUAL>,
+        ACTUAL extends RuntimeException>
         extends AbstractThrowableAssert<SELF, ACTUAL> {
 
-    protected AbstractViolationExceptionAssert(ACTUAL actual, final Class<?> selfClass) {
+    protected AbstractValidationExceptionAssert(ACTUAL actual, final Class<?> selfClass) {
         super(actual, selfClass);
-        ViolationExceptionUtils.requireViolationExceptionInstance(super.actual);
+        ValidationExceptionUtils.requireValidationExceptionInstance(super.actual);
     }
 
     /**
@@ -47,13 +47,13 @@ public abstract class AbstractViolationExceptionAssert<
 
     /**
      * Verifies that the {@link #actual} value is an instance of {@code ....validation.ConstraintViolationException},
-     * and returns a {@link ConstraintViolationExceptionAssert} for subsequent assertions.
+     * and returns an instance of {@link ConstraintViolationExceptionAssert} for subsequent assertions.
      *
      * @param <T> constraint violation exception type parameter
      * @return {@link #myself self}.
      */
     @SuppressWarnings({"unchecked"})
-    public <T extends Exception> ConstraintViolationExceptionAssert<T> asConstraintViolationException() {
+    public <T extends RuntimeException> ConstraintViolationExceptionAssert<T> asConstraintViolationException() {
         isConstraintViolationException();
         return new ConstraintViolationExceptionAssert<>((T) actual);
     }

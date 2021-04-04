@@ -20,14 +20,31 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ConstraintDeclarationExceptionWrapper<ACTUAL extends Exception>
+/**
+ * A class for wrapping actual values of {@code ...validation.ConstraintViolationException}.
+ *
+ * @param <ACTUAL> actual value type parameter
+ */
+public class ConstraintDeclarationExceptionWrapper<ACTUAL extends RuntimeException>
         extends Wrapper<ACTUAL> {
 
-    public static <ACTUAL extends Exception> ConstraintDeclarationExceptionWrapper<ACTUAL>
+    /**
+     * Creates a new instance wraps specified actual value.
+     *
+     * @param actual   the actual value to wrap.
+     * @param <ACTUAL> actual value type parameter
+     * @return a new instance wraps {@code actual}.
+     */
+    public static <ACTUAL extends RuntimeException> ConstraintDeclarationExceptionWrapper<ACTUAL>
     constraintDeclarationException(final ACTUAL actual) {
         return new ConstraintDeclarationExceptionWrapper<>(actual);
     }
 
+    /**
+     * Creates a new instance with specified actual value.
+     *
+     * @param actual the actual value to wrap.
+     */
     private ConstraintDeclarationExceptionWrapper(final ACTUAL actual) {
         super(actual);
     }

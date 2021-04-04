@@ -48,12 +48,12 @@ final class ConstraintDeclarationExceptionUtils {
         return applyConstraintDeclarationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyConstraintDeclarationExceptionClassFor(final Exception actual,
+    private static <R> R applyConstraintDeclarationExceptionClassFor(final RuntimeException actual,
                                                                      final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getConstraintDeclarationExceptionClassFor(final Exception actual) {
+    private static Class<?> getConstraintDeclarationExceptionClassFor(final RuntimeException actual) {
         return applyConstraintDeclarationExceptionClassFor(actual, Function.identity());
     }
 
@@ -64,7 +64,7 @@ final class ConstraintDeclarationExceptionUtils {
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintDeclarationException};
      * {@code false} otherwise.
      */
-    static boolean isConstraintDeclarationExceptionInstance(final Exception actual) {
+    static boolean isConstraintDeclarationExceptionInstance(final RuntimeException actual) {
         if (actual == null) {
             return true;
         }
@@ -76,7 +76,7 @@ final class ConstraintDeclarationExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends Exception> T requireConstraintDeclarationExceptionInstance(final T actual) {
+    static <T extends RuntimeException> T requireConstraintDeclarationExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }

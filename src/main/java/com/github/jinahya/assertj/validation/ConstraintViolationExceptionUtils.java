@@ -49,12 +49,12 @@ final class ConstraintViolationExceptionUtils {
         return applyConstraintViolationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyConstraintViolationExceptionClassFor(final Exception actual,
+    private static <R> R applyConstraintViolationExceptionClassFor(final RuntimeException actual,
                                                                    final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getConstraintViolationExceptionClassFor(final Exception actual) {
+    private static Class<?> getConstraintViolationExceptionClassFor(final RuntimeException actual) {
         return applyConstraintViolationExceptionClassFor(actual, Function.identity());
     }
 
@@ -65,7 +65,7 @@ final class ConstraintViolationExceptionUtils {
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintViolationException};
      * {@code false} otherwise.
      */
-    static boolean isConstraintViolationExceptionInstance(final Exception actual) {
+    static boolean isConstraintViolationExceptionInstance(final RuntimeException actual) {
         if (actual == null) {
             return true;
         }
@@ -77,14 +77,14 @@ final class ConstraintViolationExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends Exception> T requireConstraintViolationExceptionInstance(final T actual) {
+    static <T extends RuntimeException> T requireConstraintViolationExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }
         return applyConstraintViolationExceptionClassFor(actual, c -> actual);
     }
 
-    static <T> Set<T> getConstraintViolations(final Exception actual) {
+    static <T> Set<T> getConstraintViolations(final RuntimeException actual) {
         return applyConstraintViolationExceptionClassFor(actual, c -> {
             try {
                 @SuppressWarnings({"unchecked"})

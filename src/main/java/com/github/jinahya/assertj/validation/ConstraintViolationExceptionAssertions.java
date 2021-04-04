@@ -24,13 +24,13 @@ import static java.util.Objects.requireNonNull;
 
 public class ConstraintViolationExceptionAssertions {
 
-    public static <ACTUAL extends Exception> ConstraintViolationExceptionAssert<ACTUAL>
+    public static <ACTUAL extends RuntimeException> ConstraintViolationExceptionAssert<ACTUAL>
     assertConstraintViolationException(
             final ACTUAL actual) {
         return new ConstraintViolationExceptionAssert<>(actual);
     }
 
-    public static <ACTUAL extends Exception> ConstraintViolationExceptionAssert<ACTUAL> assertThat(
+    public static <ACTUAL extends RuntimeException> ConstraintViolationExceptionAssert<ACTUAL> assertThat(
             final ConstraintViolationExceptionWrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
         return assertConstraintViolationException(wrapper.getActual());
