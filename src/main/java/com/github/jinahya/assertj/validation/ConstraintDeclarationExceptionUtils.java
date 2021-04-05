@@ -48,12 +48,12 @@ final class ConstraintDeclarationExceptionUtils {
         return applyConstraintDeclarationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyConstraintDeclarationExceptionClassFor(final RuntimeException actual,
+    private static <R> R applyConstraintDeclarationExceptionClassFor(final Object actual,
                                                                      final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getConstraintDeclarationExceptionClassFor(final RuntimeException actual) {
+    private static Class<?> getConstraintDeclarationExceptionClassFor(final Object actual) {
         return applyConstraintDeclarationExceptionClassFor(actual, Function.identity());
     }
 
@@ -64,7 +64,7 @@ final class ConstraintDeclarationExceptionUtils {
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintDeclarationException};
      * {@code false} otherwise.
      */
-    static boolean isConstraintDeclarationExceptionInstance(final RuntimeException actual) {
+    static boolean isConstraintDeclarationExceptionInstance(final Object actual) {
         if (actual == null) {
             return true;
         }
@@ -76,14 +76,17 @@ final class ConstraintDeclarationExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends RuntimeException> T requireConstraintDeclarationExceptionInstance(final T actual) {
+    static <T> T requireConstraintDeclarationExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }
-        return applyConstraintDeclarationExceptionClassFor(actual, c -> actual);
+        return applyConstraintDeclarationExceptionClassFor(
+                ValidationExceptionUtils.requireValidationExceptionInstance(actual),
+                c -> actual
+        );
     }
 
     private ConstraintDeclarationExceptionUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

@@ -54,8 +54,7 @@ public final class BeanValidationAssertions {
      */
     @SuppressWarnings({"java:S119"})
     public static <ACTUAL> BeanValidationAssert<ACTUAL> assertThat(final BeanWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertBean(wrapper.getActual());
+        return assertBean(requireNonNull(wrapper).getActual());
     }
 
     /**

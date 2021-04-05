@@ -36,6 +36,7 @@ import static com.github.jinahya.assertj.validation.BeanValidationAssertions.ass
 import static com.github.jinahya.assertj.validation.BeanValidationTestUtils.validator;
 import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.assertThat;
+import static com.github.jinahya.assertj.validation.ConstraintViolationTestUtils.getPropertyPath;
 import static com.github.jinahya.assertj.validation.ConstraintViolationWrapper.constraintViolation;
 import static com.github.jinahya.assertj.validation.ElementKindAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.ElementKindWrapper.elementKind;
@@ -136,12 +137,12 @@ class UserTest {
                                 .hasRootBeanClassSameAs(User.class)
                                 .hasRootBeanSameAs(user)
                         ;
-//                        assertThat(path(getPropertyPath(v))).satisfies(i -> {
-//                            i.forEach(n -> {
-//                                log.debug("node: {}({})", n, n.getClass());
-//                                assertThat(n).isNotNull();
-//                            });
-//                        });
+                        assertThat(path(getPropertyPath(v))).satisfies(i -> {
+                            i.forEach(n -> {
+                                log.debug("node: {}({})", n, n.getClass());
+                                assertThat(n).isNotNull();
+                            });
+                        });
                     });
                 }))
                 .doesNotThrowAnyException();

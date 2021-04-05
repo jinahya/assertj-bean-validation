@@ -39,15 +39,19 @@ final class Utils {
     static <R> R applyClassForSuffix(final String suffix, final Function<? super Class<?>, ? extends R> function) {
         requireNonNull(suffix, "suffix is null");
         requireNonNull(function, "function is null");
-        try {
-            return function.apply(classJavax(suffix));
-        } catch (final ClassNotFoundException cnfe) {
-            // empty;
+        if (SpiUtils.providedByJakarta()) {
+            try {
+                return function.apply(classJakarta(suffix));
+            } catch (final ClassNotFoundException cnfe) {
+                // empty;
+            }
         }
-        try {
-            return function.apply(classJakarta(suffix));
-        } catch (final ClassNotFoundException cnfe) {
-            // empty;
+        if (SpiUtils.providedByJavax()) {
+            try {
+                return function.apply(classJavax(suffix));
+            } catch (final ClassNotFoundException cnfe) {
+                // empty;
+            }
         }
         throw new RuntimeException("unable to get class for " + suffix);
     }
@@ -63,7 +67,7 @@ final class Utils {
                 return function.apply(c);
             }
         } catch (final ClassNotFoundException cnfe) {
-            // empty;
+            // empty
         }
         try {
             final Class<?> c = classJakarta(suffix);
@@ -71,9 +75,9 @@ final class Utils {
                 return function.apply(c);
             }
         } catch (final ClassNotFoundException cnfe) {
-            // empty;
+            // empty
         }
-        throw new RuntimeException("unable to get class for " + suffix + " for " + instance);
+        throw new RuntimeException("unable to get class suffixed with '" + suffix + "' for " + instance);
     }
 
     static Class<?> getClassFor(final String suffix, final Object instance) {

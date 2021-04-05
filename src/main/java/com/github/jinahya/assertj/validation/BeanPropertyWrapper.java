@@ -28,14 +28,15 @@ package com.github.jinahya.assertj.validation;
  * @see BeanPropertyValidationAssertions#assertThat(BeanPropertyWrapper)
  */
 @SuppressWarnings({"java:S119"})
-public class BeanPropertyWrapper<ACTUAL> extends Wrapper<ACTUAL> {
+public class BeanPropertyWrapper<ACTUAL>
+        extends Wrapper<ACTUAL> {
 
     /**
      * Creates a new instance wraps specified property value.
      *
      * @param <T>    type parameter
-     * @param actual the property value to wrap; may be {@code null}.
-     * @return a new instance wraps given {@code value}.
+     * @param actual the value to wrap; may be {@code null}.
+     * @return a new instance wraps {@code actual}.
      */
     public static <T> BeanPropertyWrapper<T> beanProperty(final T actual) {
         return new BeanPropertyWrapper<>(actual);

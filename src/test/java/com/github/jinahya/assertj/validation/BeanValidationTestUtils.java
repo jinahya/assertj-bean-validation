@@ -20,13 +20,26 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
+
 public final class BeanValidationTestUtils {
 
     public static Object validator() {
         return BeanValidationUtils.validator();
     }
 
+    public static <T> Set<T> validate(Object validator, final Object object, final Class<?>... groups) {
+        requireNonNull(object, "object is null");
+        requireNonNull(groups, "groups is null");
+        if (validator == null) {
+            validator = validator();
+        }
+        return BeanValidationUtils.validate(validator, object, groups);
+    }
+
     BeanValidationTestUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

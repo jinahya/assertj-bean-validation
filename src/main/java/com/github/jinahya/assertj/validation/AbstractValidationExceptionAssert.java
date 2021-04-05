@@ -24,14 +24,59 @@ import org.assertj.core.api.AbstractThrowableAssert;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class AbstractValidationExceptionAssert<
-        SELF extends AbstractValidationExceptionAssert<SELF, ACTUAL>,
-        ACTUAL extends RuntimeException>
-        extends AbstractThrowableAssert<SELF, ACTUAL> {
+abstract class AbstractValidationExceptionAssert<SELF extends AbstractValidationExceptionAssert<SELF>>
+        extends AbstractThrowableAssert<SELF, RuntimeException> {
 
-    protected AbstractValidationExceptionAssert(ACTUAL actual, final Class<?> selfClass) {
-        super(actual, selfClass);
-        ValidationExceptionUtils.requireValidationExceptionInstance(super.actual);
+    protected AbstractValidationExceptionAssert(final Object actual, final Class<?> selfClass) {
+        super((RuntimeException) actual, selfClass);
+    }
+
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code ....validation.ConstraintDeclarationException}.
+     *
+     * @return {@link #myself self}.
+     */
+    public SELF isConstraintDeclarationException() {
+        return isNotNull().satisfies(a -> {
+            assertThat(ConstraintDeclarationExceptionUtils.isConstraintDeclarationExceptionInstance(a)).isTrue();
+        });
+    }
+
+    /**
+     * Verifies that the {@link #actual} value is an instance of {@code ....validation.ConstraintDeclarationException},
+     * and returns an instance of {@link ConstraintDeclarationExceptionAssert} for subsequent assertions.
+     *
+     * @param <T> constraint violation exception type parameter
+     * @return {@link #myself self}.
+     */
+    @SuppressWarnings({"unchecked"})
+    public <T> ConstraintDeclarationExceptionAssert<T> asConstraintDeclarationException() {
+        isConstraintDeclarationException();
+        return new ConstraintDeclarationExceptionAssert<>((T) actual);
+    }
+
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code ....validation.ConstraintDefinitionException}.
+     *
+     * @return {@link #myself self}.
+     */
+    public SELF isConstraintDefinitionException() {
+        return isNotNull().satisfies(a -> {
+            assertThat(ConstraintDefinitionExceptionUtils.isConstraintDefinitionExceptionInstance(a)).isTrue();
+        });
+    }
+
+    /**
+     * Verifies that the {@link #actual} value is an instance of {@code ....validation.ConstraintDefinitionException},
+     * and returns an instance of {@link ConstraintDefinitionExceptionAssert} for subsequent assertions.
+     *
+     * @param <T> constraint violation exception type parameter
+     * @return {@link #myself self}.
+     */
+    @SuppressWarnings({"unchecked"})
+    public <T> ConstraintDefinitionExceptionAssert<T> asConstraintDefinitionException() {
+        isConstraintDefinitionException();
+        return new ConstraintDefinitionExceptionAssert<>((T) actual);
     }
 
     /**
@@ -53,8 +98,32 @@ public abstract class AbstractValidationExceptionAssert<
      * @return {@link #myself self}.
      */
     @SuppressWarnings({"unchecked"})
-    public <T extends RuntimeException> ConstraintViolationExceptionAssert<T> asConstraintViolationException() {
+    public <T> ConstraintViolationExceptionAssert<T> asConstraintViolationException() {
         isConstraintViolationException();
         return new ConstraintViolationExceptionAssert<>((T) actual);
+    }
+
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code ....validation.GroupDefinitionException}.
+     *
+     * @return {@link #myself self}.
+     */
+    public SELF isGroupDefinitionException() {
+        return isNotNull().satisfies(a -> {
+            assertThat(GroupDefinitionExceptionUtils.isGroupDefinitionExceptionInstance(a)).isTrue();
+        });
+    }
+
+    /**
+     * Verifies that the {@link #actual} value is an instance of {@code ....validation.GroupDefinitionException}, and
+     * returns an instance of {@link GroupDefinitionExceptionAssert} for subsequent assertions.
+     *
+     * @param <T> group violation exception type parameter
+     * @return {@link #myself self}.
+     */
+    @SuppressWarnings({"unchecked"})
+    public <T> GroupDefinitionExceptionAssert<T> asGroupDefinitionException() {
+        isGroupDefinitionException();
+        return new GroupDefinitionExceptionAssert<>((T) actual);
     }
 }

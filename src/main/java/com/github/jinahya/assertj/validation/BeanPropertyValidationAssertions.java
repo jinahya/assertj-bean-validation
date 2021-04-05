@@ -54,8 +54,7 @@ public final class BeanPropertyValidationAssertions {
     @SuppressWarnings({"java:S119"})
     public static <ACTUAL> BeanPropertyValidationAssert<ACTUAL> assertThat(
             final BeanPropertyWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertBeanProperty(wrapper.getActual());
+        return assertBeanProperty(requireNonNull(wrapper).getActual());
     }
 
     /**

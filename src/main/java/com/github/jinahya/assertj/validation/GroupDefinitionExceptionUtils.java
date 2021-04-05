@@ -49,11 +49,11 @@ final class GroupDefinitionExceptionUtils {
     }
 
     private static <R> R applyGroupDefinitionExceptionClassFor(
-            final RuntimeException actual, final Function<? super Class<?>, ? extends R> function) {
+            final Object actual, final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getGroupDefinitionExceptionClassFor(final RuntimeException actual) {
+    private static Class<?> getGroupDefinitionExceptionClassFor(final Object actual) {
         return applyGroupDefinitionExceptionClassFor(actual, Function.identity());
     }
 
@@ -61,10 +61,10 @@ final class GroupDefinitionExceptionUtils {
      * Indicates whether specified object is an instance of {@code ....validation.GroupDefinitionException}.
      *
      * @param actual the object to be tested.
-     * @return {@code true} if {@code actual} is an instance of {@code ....validation.GroupDefinitionException};
-     * {@code false} otherwise.
+     * @return {@code true} if {@code actual} is an instance of {@code ....validation.GroupDefinitionException}; {@code
+     * false} otherwise.
      */
-    static boolean isGroupDefinitionExceptionInstance(final RuntimeException actual) {
+    static boolean isGroupDefinitionExceptionInstance(final Object actual) {
         if (actual == null) {
             return true;
         }
@@ -76,14 +76,17 @@ final class GroupDefinitionExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends RuntimeException> T requireGroupDefinitionExceptionInstance(final T actual) {
+    static <T> T requireGroupDefinitionExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }
-        return applyGroupDefinitionExceptionClassFor(actual, c -> actual);
+        return applyGroupDefinitionExceptionClassFor(
+                ValidationExceptionUtils.requireValidationExceptionInstance(actual),
+                c -> actual
+        );
     }
 
     private GroupDefinitionExceptionUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

@@ -20,10 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ConstraintViolationExceptionWrapper<ACTUAL extends RuntimeException>
+public class ConstraintViolationExceptionWrapper<ACTUAL>
         extends Wrapper<ACTUAL> {
 
-    public static <ACTUAL extends RuntimeException> ConstraintViolationExceptionWrapper<ACTUAL>
+    public static <ACTUAL> ConstraintViolationExceptionWrapper<ACTUAL>
     constraintViolationException(final ACTUAL actual) {
         return new ConstraintViolationExceptionWrapper<>(actual);
     }

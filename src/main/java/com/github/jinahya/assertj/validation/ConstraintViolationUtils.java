@@ -22,8 +22,6 @@ package com.github.jinahya.assertj.validation;
 
 import java.util.function.Function;
 
-import static java.util.Objects.requireNonNull;
-
 final class ConstraintViolationUtils {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -53,14 +51,15 @@ final class ConstraintViolationUtils {
     }
 
     /**
-     * Checks whether specified object is an instance of either {@code javax.validation.ConstraintViolation} or {@code
-     * jakarta.validation.ConstraintViolation}.
+     * Checks whether specified object is an instance of {@code ....validation.ConstraintViolation}.
      *
-     * @param object the object to be tested.
+     * @param actual the object to be tested.
      */
-    static <T> T requireConstraintViolationInstance(final T object) {
-        requireNonNull(object, "object is null");
-        return applyConstraintViolationClassFor(object, c -> object);
+    static <ACTUAL> ACTUAL requireConstraintViolationInstance(final ACTUAL actual) {
+        if (actual == null) {
+            return actual;
+        }
+        return applyConstraintViolationClassFor(actual, c -> actual);
     }
 
     // ------------------------------------------------------------------------------------------------- getInvalidValue
@@ -91,27 +90,30 @@ final class ConstraintViolationUtils {
     }
 
     // ------------------------------------------------------------------------------------------------- getPropertyPath
-    static Object getPropertyPath(final Object actual) {
+    @SuppressWarnings({"unchecked"})
+    static <PATH extends Iterable<?>> PATH getPropertyPath(final Object actual) {
         try {
-            return getConstraintViolationClassFor(actual).getMethod("getPropertyPath").invoke(actual);
+            return (PATH) getConstraintViolationClassFor(actual).getMethod("getPropertyPath").invoke(actual);
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }
     }
 
     // ----------------------------------------------------------------------------------------------------- getRootBean
-    static Object getRootBean(final Object actual) {
+    @SuppressWarnings({"unchecked"})
+    static <T> T getRootBean(final Object actual) {
         try {
-            return getConstraintViolationClassFor(actual).getMethod("getRootBean").invoke(actual);
+            return (T) getConstraintViolationClassFor(actual).getMethod("getRootBean").invoke(actual);
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }
     }
 
     // ------------------------------------------------------------------------------------------------ getRootBeanClass
-    static Class<?> getRootBeanClass(final Object actual) {
+    @SuppressWarnings({"unchecked"})
+    static <T> Class<T> getRootBeanClass(final Object actual) {
         try {
-            return (Class<?>) getConstraintViolationClassFor(actual).getMethod("getRootBeanClass").invoke(actual);
+            return (Class<T>) getConstraintViolationClassFor(actual).getMethod("getRootBeanClass").invoke(actual);
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }

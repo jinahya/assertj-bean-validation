@@ -47,12 +47,12 @@ final class ValidationExceptionUtils {
         return applyValidationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyValidationExceptionClassFor(final RuntimeException actual,
+    private static <R> R applyValidationExceptionClassFor(final Object actual,
                                                           final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getValidationExceptionClassFor(final RuntimeException actual) {
+    private static Class<?> getValidationExceptionClassFor(final Object actual) {
         return applyValidationExceptionClassFor(actual, Function.identity());
     }
 
@@ -63,7 +63,7 @@ final class ValidationExceptionUtils {
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ViolationException}; {@code false}
      * otherwise.
      */
-    static boolean isValidationExceptionInstance(final RuntimeException actual) {
+    static boolean isValidationExceptionInstance(final Object actual) {
         if (actual == null) {
             return true;
         }
@@ -75,7 +75,7 @@ final class ValidationExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends RuntimeException> T requireValidationExceptionInstance(final T actual) {
+    static <T> T requireValidationExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }
@@ -83,6 +83,6 @@ final class ValidationExceptionUtils {
     }
 
     private ValidationExceptionUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

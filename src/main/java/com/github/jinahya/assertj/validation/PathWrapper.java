@@ -23,126 +23,126 @@ package com.github.jinahya.assertj.validation;
 /**
  * A class for wrapping {@code ....validation.Path}.
  *
- * @param <PATH> the type of {@code ....validation.Path}.
- * @param <NODE> the type of {@code ....validation.Path.Node}
+ * @param <ACTUAL> the type of {@code ....validation.Path}.
+ * @param <NODE>   the type of {@code ....validation.Path.Node}
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public final class PathWrapper<PATH extends Iterable<NODE>, NODE>
-        extends Wrapper<PATH> {
+public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
+        extends Wrapper<ACTUAL> {
 
-    abstract static class AbstractNodeWrapper<T> extends Wrapper<T> {
+    abstract static class AbstractNodeWrapper<ACTUAL> extends Wrapper<ACTUAL> {
 
-        protected AbstractNodeWrapper(final T actual) {
+        protected AbstractNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class NodeWrapper<T> extends AbstractNodeWrapper<T> {
+    public static class NodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> NodeWrapper<T> node(final T actual) {
+        public static <ACTUAL> NodeWrapper<ACTUAL> node(final ACTUAL actual) {
             return new NodeWrapper<>(actual);
         }
 
-        private NodeWrapper(final T actual) {
+        private NodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class BeanNodeWrapper<T> extends NodeWrapper<T> {
+    public static class BeanNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> BeanNodeWrapper<T> beanNode(final T actual) {
+        public static <ACTUAL> BeanNodeWrapper<ACTUAL> beanNode(final ACTUAL actual) {
             return new BeanNodeWrapper<>(actual);
         }
 
-        private BeanNodeWrapper(final T actual) {
+        private BeanNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class ConstructorNodeWrapper<T> extends NodeWrapper<T> {
+    public static class ConstructorNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
         public static <T> ConstructorNodeWrapper<T> constructorNode(final T actual) {
             return new ConstructorNodeWrapper<>(actual);
         }
 
-        private ConstructorNodeWrapper(final T actual) {
+        private ConstructorNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class ContainerElementNodeWrapper<T> extends NodeWrapper<T> {
+    public static class ContainerElementNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> ContainerElementNodeWrapper<T> containerElementNode(final T actual) {
+        public static <ACTUAL> ContainerElementNodeWrapper<ACTUAL> containerElementNode(final ACTUAL actual) {
             return new ContainerElementNodeWrapper<>(actual);
         }
 
-        private ContainerElementNodeWrapper(final T actual) {
+        private ContainerElementNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class CrossParameterNodeWrapper<T> extends NodeWrapper<T> {
+    public static class CrossParameterNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> CrossParameterNodeWrapper<T> crossParameterNode(final T actual) {
+        public static <ACTUAL> CrossParameterNodeWrapper<ACTUAL> crossParameterNode(final ACTUAL actual) {
             return new CrossParameterNodeWrapper<>(actual);
         }
 
-        private CrossParameterNodeWrapper(final T actual) {
+        private CrossParameterNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class MethodNodeWrapper<T> extends NodeWrapper<T> {
+    public static class MethodNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> MethodNodeWrapper<T> methodNode(final T actual) {
+        public static <ACTUAL> MethodNodeWrapper<ACTUAL> methodNode(final ACTUAL actual) {
             return new MethodNodeWrapper<>(actual);
         }
 
-        private MethodNodeWrapper(final T actual) {
+        private MethodNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class ParameterNodeWrapper<T> extends NodeWrapper<T> {
+    public static class ParameterNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> ParameterNodeWrapper<T> parameterNode(final T actual) {
+        public static <ACTUAL> ParameterNodeWrapper<ACTUAL> parameterNode(final ACTUAL actual) {
             return new ParameterNodeWrapper<>(actual);
         }
 
-        private ParameterNodeWrapper(final T actual) {
+        private ParameterNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class PropertyNodeWrapper<T> extends NodeWrapper<T> {
+    public static class PropertyNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> PropertyNodeWrapper<T> propertyNode(final T actual) {
+        public static <ACTUAL> PropertyNodeWrapper<ACTUAL> propertyNode(final ACTUAL actual) {
             return new PropertyNodeWrapper<>(actual);
         }
 
-        private PropertyNodeWrapper(final T actual) {
+        private PropertyNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
-    public static class ReturnValueNodeWrapper<T> extends NodeWrapper<T> {
+    public static class ReturnValueNodeWrapper<ACTUAL> extends AbstractNodeWrapper<ACTUAL> {
 
-        public static <T> ReturnValueNodeWrapper<T> returnValueNode(final T actual) {
+        public static <ACTUAL> ReturnValueNodeWrapper<ACTUAL> returnValueNode(final ACTUAL actual) {
             return new ReturnValueNodeWrapper<>(actual);
         }
 
-        private ReturnValueNodeWrapper(final T actual) {
+        private ReturnValueNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static <PATH extends Iterable<NODE>, NODE> PathWrapper<PATH, NODE> path(final PATH actual) {
+    public static <ACTUAL extends Iterable<NODE>, NODE> PathWrapper<ACTUAL, NODE> path(final ACTUAL actual) {
         return new PathWrapper<>(actual);
     }
 
-    private PathWrapper(final PATH actual) {
+    private PathWrapper(final ACTUAL actual) {
         super(actual);
     }
 }

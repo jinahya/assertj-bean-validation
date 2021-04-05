@@ -59,9 +59,10 @@ final class ElementKindUtils {
     /**
      * Checks whether specified object is an instance of {@code ....validation.ElementKind}.
      *
-     * @param actual the object to be tested.
+     * @param <ACTUAL> the type of actual {@code ....validation.ElementKind}
+     * @param actual   the object to be tested.
      */
-    static <T> T requireElementKindInstance(final T actual) {
+    static <ACTUAL> ACTUAL requireElementKindInstance(final ACTUAL actual) {
         if (actual == null) {
             return null;
         }

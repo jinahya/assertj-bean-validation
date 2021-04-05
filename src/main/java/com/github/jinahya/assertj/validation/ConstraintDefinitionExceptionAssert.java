@@ -20,13 +20,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ConstraintDefinitionExceptionAssert<ACTUAL extends RuntimeException>
-        extends AbstractValidationExceptionAssert<ConstraintDefinitionExceptionAssert<ACTUAL>, ACTUAL> {
+public class ConstraintDefinitionExceptionAssert<ACTUAL>
+        extends AbstractValidationExceptionAssert<ConstraintDefinitionExceptionAssert<ACTUAL>> {
 
     public ConstraintDefinitionExceptionAssert(final ACTUAL actual) {
-        super(actual, ConstraintDefinitionExceptionAssert.class);
-        if (super.actual != null) {
-            ConstraintDefinitionExceptionUtils.requireConstraintDefinitionExceptionInstance(super.actual);
-        }
+        super(ConstraintDefinitionExceptionUtils.requireConstraintDefinitionExceptionInstance(actual),
+              ConstraintDefinitionExceptionAssert.class);
     }
 }

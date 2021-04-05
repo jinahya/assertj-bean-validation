@@ -24,15 +24,14 @@ import static java.util.Objects.requireNonNull;
 
 public class GroupDefinitionExceptionAssertions {
 
-    public static <ACTUAL extends RuntimeException> GroupDefinitionExceptionAssert<ACTUAL>
+    public static <ACTUAL> GroupDefinitionExceptionAssert<ACTUAL>
     assertGroupDefinitionException(final ACTUAL actual) {
         return new GroupDefinitionExceptionAssert<>(actual);
     }
 
-    public static <ACTUAL extends RuntimeException> GroupDefinitionExceptionAssert<ACTUAL> assertThat(
+    public static <ACTUAL> GroupDefinitionExceptionAssert<ACTUAL> assertThat(
             final GroupDefinitionExceptionWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertGroupDefinitionException(wrapper.getActual());
+        return assertGroupDefinitionException(requireNonNull(wrapper).getActual());
     }
 
     private GroupDefinitionExceptionAssertions() {

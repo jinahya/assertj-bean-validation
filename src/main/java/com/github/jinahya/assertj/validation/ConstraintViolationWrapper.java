@@ -26,6 +26,7 @@ package com.github.jinahya.assertj.validation;
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
+@SuppressWarnings({"java:S119"})
 public class ConstraintViolationWrapper<ACTUAL>
         extends Wrapper<ACTUAL> {
 

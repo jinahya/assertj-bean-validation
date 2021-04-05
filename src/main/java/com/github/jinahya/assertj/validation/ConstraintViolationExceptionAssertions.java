@@ -24,13 +24,27 @@ import static java.util.Objects.requireNonNull;
 
 public class ConstraintViolationExceptionAssertions {
 
-    public static <ACTUAL extends RuntimeException> ConstraintViolationExceptionAssert<ACTUAL>
-    assertConstraintViolationException(
-            final ACTUAL actual) {
+    /**
+     * Creates a new assertion instance for specified actual value.
+     *
+     * @param actual   the actual value to verify.
+     * @param <ACTUAL> actual value type parameter
+     * @return a new assertion instance.
+     */
+    public static <ACTUAL> ConstraintViolationExceptionAssert<ACTUAL>
+    assertConstraintViolationException(final ACTUAL actual) {
         return new ConstraintViolationExceptionAssert<>(actual);
     }
 
-    public static <ACTUAL extends RuntimeException> ConstraintViolationExceptionAssert<ACTUAL> assertThat(
+    /**
+     * Creates a new assertion instance for the actual value wrapped in specified wrapper.
+     *
+     * @param wrapper  the wrapper wraps the actual value; must not be {@code null}.
+     * @param <ACTUAL> actual value type parameter
+     * @return a new assertion instance.
+     * @see ConstraintViolationExceptionWrapper#constraintViolationException(Object)
+     */
+    public static <ACTUAL> ConstraintViolationExceptionAssert<ACTUAL> assertThat(
             final ConstraintViolationExceptionWrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
         return assertConstraintViolationException(wrapper.getActual());

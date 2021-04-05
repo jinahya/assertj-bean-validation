@@ -28,7 +28,7 @@ public class ElementKindAssertions {
         return new ElementKindAssert<>(actual);
     }
 
-    public static <ACTUAL> ElementKindAssert<ACTUAL> assertThat(final ElementKindWrapper<? extends ACTUAL> wrapper) {
+    public static <ACTUAL> ElementKindAssert<ACTUAL> assertThat(final Wrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
         return assertElementKind(wrapper.getActual());
     }

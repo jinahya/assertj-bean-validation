@@ -42,7 +42,7 @@ import org.assertj.core.api.AbstractAssert;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119", "java:S2160"})
-public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanValidationAssert<SELF, ACTUAL>, ACTUAL>
+abstract class AbstractValidationAssert<SELF extends AbstractValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractAssert<SELF, ACTUAL> {
 
     /**
@@ -51,7 +51,7 @@ public abstract class AbstractBeanValidationAssert<SELF extends AbstractBeanVali
      * @param actual   the actual value.
      * @param selfType the self type.
      */
-    protected AbstractBeanValidationAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 

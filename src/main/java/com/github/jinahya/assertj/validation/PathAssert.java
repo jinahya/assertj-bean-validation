@@ -28,14 +28,12 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getKind;
-import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getName;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * An assertion class for verifying instances of {@code ....validation.Path}.
  *
- * @param <ACTUAL> actual type parameter
+ * @param <ACTUAL> the type of {@code ....validation.Path}.
  * @param <NODE>   the type of {@code ....validation.Path.Node}.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -51,12 +49,11 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             super(actual, selfType);
         }
 
-        // ------------------------------------------------------------------------------- getIndex()Ljava.lang.Integer;
         public SELF hasIndexSatisfying(final Consumer<? super Integer> requirements) {
-            isNotNull();
-            assertThat(PathUtils.NodeUtils.getIndex(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.NodeUtils.getIndex(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         public SELF hasIndexEqualTo(final Object expected) {
@@ -65,12 +62,11 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             });
         }
 
-        // ---------------------------------------------------------------------------------- getKey()Ljava.lang.Object;
         public SELF hasKeySatisfying(final Consumer<Object> requirements) {
-            isNotNull();
-            assertThat(PathUtils.NodeUtils.getKey(actual))
-                    .satisfies(requirements);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.NodeUtils.getKey(a))
+                        .satisfies(requirements);
+            });
         }
 
         public SELF hasKeyEqualTo(final Object expected) {
@@ -79,12 +75,11 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             });
         }
 
-        // ------------------------------------------------------------------------ getKind()L...validation.ElementKind;
         public SELF hasKindSatisfying(final Consumer<Object> requirements) {
-            isNotNull();
-            assertThat(getKind(actual))
-                    .satisfies(requirements);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.NodeUtils.getKind(a))
+                        .satisfies(requirements);
+            });
         }
 
         public SELF hasKindSameAs(final Object expected) {
@@ -92,8 +87,6 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
                 assertThat(v).isSameAs(expected);
             });
         }
-
-        // --------------------------------------------------------------------------------- getName()Ljava.lang.String;
 
         /**
          * Verifies that the value of {@code actual#getName()} satisfies requirements expressed in specified consumer.
@@ -105,10 +98,10 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
          * @see jakarta.validation.Path.Node#getName()
          */
         public SELF hasNameSatisfying(final Consumer<? super String> requirements) {
-            isNotNull();
-            assertThat(getName(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.NodeUtils.getName(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         /**
@@ -141,10 +134,10 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
          * @see jakarta.validation.Path.Node#isInIterable()
          */
         public SELF hasInIterableSatisfying(final Consumer<? super Boolean> requirements) {
-            isNotNull();
-            assertThat(PathUtils.NodeUtils.isInIterable(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.NodeUtils.isInIterable(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         /**
@@ -185,8 +178,9 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
          * @return {@link #myself self}.
          */
         public SELF isBeanNode() {
-            assertThat(PathUtils.BeanNodeUtils.isBeanNodeInstance(actual)).isTrue();
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.BeanNodeUtils.isBeanNodeInstance(a)).isTrue();
+            });
         }
 
         @SuppressWarnings({"unchecked"})
@@ -203,10 +197,9 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
          * @return {@link #myself self}.
          */
         public SELF isPropertyNode() {
-            isNotNull();
-            assertThat(PathUtils.PropertyNodeUtils.isPropertyNodeInstance(actual))
-                    .isTrue();
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.PropertyNodeUtils.isPropertyNodeInstance(a)).isTrue();
+            });
         }
 
         @SuppressWarnings({"unchecked"})
@@ -264,10 +257,10 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
          * @see jakarta.validation.Path.BeanNode#getContainerClass()
          */
         public BeanNodeAssert<ACTUAL> hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
-            isNotNull();
-            assertThat(PathUtils.BeanNodeUtils.getContainerClass(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.BeanNodeUtils.getContainerClass(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         /**
@@ -287,10 +280,10 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         }
 
         public BeanNodeAssert<ACTUAL> hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
-            isNotNull();
-            assertThat(PathUtils.BeanNodeUtils.getTypeArgumentIndex(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.BeanNodeUtils.getTypeArgumentIndex(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         public BeanNodeAssert<ACTUAL> hasTypeArgumentIndexEqualTo(final Object expected) {
@@ -307,17 +300,18 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             super(actual, ConstructorNodeAssert.class);
         }
 
-        // ------------------------------------------------------------------------------------------- getParameterTypes
         public ConstructorNodeAssert<ACTUAL> hasParameterTypesSatisfying(
                 final Consumer<? super List<? extends Class<?>>> requirements) {
-            isNotNull();
-            assertThat(PathUtils.ConstructorNodeUtils.getParameterTypes(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.ConstructorNodeUtils.getParameterTypes(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         public ConstructorNodeAssert<ACTUAL> hasParameterTypesEqual(final Object expected) {
-            return hasParameterTypesSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasParameterTypesSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
@@ -331,26 +325,31 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         // ----------------------------------------------------------------------------------------- getContainerClass()
         public ContainerElementNodeAssert<ACTUAL> hasContainerClassSatisfying(
                 final Consumer<? super Class<?>> requirements) {
-            isNotNull();
-            assertThat(PathUtils.ContainerElementNodeUtils.getContainerClass(actual)).satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.ContainerElementNodeUtils.getContainerClass(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         public ContainerElementNodeAssert<ACTUAL> hasContainerClassSameAs(final Object expected) {
-            return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
+            return hasContainerClassSatisfying(v -> {
+                assertThat(v).isSameAs(expected);
+            });
         }
 
         // -------------------------------------------------------------------------------------- getTypeArgumentIndex()
         public ContainerElementNodeAssert<ACTUAL> hasTypeArgumentIndexSatisfying(
                 final Consumer<? super Integer> requirements) {
-            isNotNull();
-            assertThat(PathUtils.ContainerElementNodeUtils.getTypeArgumentIndex(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.ContainerElementNodeUtils.getTypeArgumentIndex(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         public ContainerElementNodeAssert<ACTUAL> hasTypeArgumentIndexEqualTo(final Object expected) {
-            return hasTypeArgumentIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasTypeArgumentIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
@@ -371,13 +370,16 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
 
         public MethodNodeAssert<ACTUAL> hasParameterTypesSatisfying(
                 final Consumer<? super List<? extends Class<?>>> requirements) {
-            isNotNull();
-            assertThat(PathUtils.MethodNodeUtils.getParameterTypes(actual)).satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.MethodNodeUtils.getParameterTypes(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         public MethodNodeAssert<ACTUAL> hasParameterTypesEqualTo(final Object expected) {
-            return hasParameterTypesSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasParameterTypesSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
@@ -389,13 +391,15 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         }
 
         public ParameterNodeAssert<ACTUAL> hasParameterIndexSatisfying(final IntConsumer requirements) {
-            isNotNull();
-            assertThat(PathUtils.ParameterNodeUtils.getParameterIndex(actual)).satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.ParameterNodeUtils.getParameterIndex(actual)).satisfies(requirements::accept);
+            });
         }
 
         public ParameterNodeAssert<ACTUAL> hasParameterIndexEqualTo(final Object expected) {
-            return hasParameterIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasParameterIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
@@ -407,14 +411,16 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         }
 
         public PropertyNodeAssert<ACTUAL> hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
-            isNotNull();
-            assertThat(PathUtils.PropertyNodeUtils.getContainerClass(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.PropertyNodeUtils.getContainerClass(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         public PropertyNodeAssert<ACTUAL> hasContainerClassSameAs(final Object expected) {
-            return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
+            return hasContainerClassSatisfying(v -> {
+                assertThat(v).isSameAs(expected);
+            });
         }
 
         /**
@@ -428,10 +434,10 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
          * @see jakarta.validation.Path.PropertyNode#getTypeArgumentIndex()
          */
         public PropertyNodeAssert<ACTUAL> hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
-            isNotNull();
-            assertThat(PathUtils.PropertyNodeUtils.getTypeArgumentIndex(actual))
-                    .satisfies(requirements::accept);
-            return myself;
+            return isNotNull().satisfies(a -> {
+                assertThat(PathUtils.PropertyNodeUtils.getTypeArgumentIndex(a))
+                        .satisfies(requirements::accept);
+            });
         }
 
         /**
@@ -445,7 +451,9 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
          * @see jakarta.validation.Path.PropertyNode#getTypeArgumentIndex()
          */
         public PropertyNodeAssert<ACTUAL> hasTypeArgumentIndexEqualTo(final Object expected) {
-            return hasTypeArgumentIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasTypeArgumentIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 

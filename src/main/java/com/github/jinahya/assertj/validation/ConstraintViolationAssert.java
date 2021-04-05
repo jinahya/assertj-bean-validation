@@ -28,20 +28,18 @@ import java.util.function.Consumer;
 import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getInvalidValue;
 import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getLeafBean;
 import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getMessage;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getPropertyPath;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getRootBean;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getRootBeanClass;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * An assertion class for verifying an instance of {@code ConstraintViolation}.
+ * An assertion class for verifying instances of {@code ....validation.ConstraintViolation}.
  *
- * @param <T> the type of the root bean of the constraint violation
+ * @param <ACTUAL> the actual type of {@code ....validation.ConstraintViolation}.
+ * @param <T>      the type of the root bean of the constraint violation
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class ConstraintViolationAssert<T>
-        extends AbstractAssert<ConstraintViolationAssert<T>, Object> {
+public class ConstraintViolationAssert<ACTUAL, T>
+        extends AbstractAssert<ConstraintViolationAssert<ACTUAL, T>, ACTUAL> {
 
     /**
      * Creates a new instance for specified actual value.
@@ -50,11 +48,9 @@ public class ConstraintViolationAssert<T>
      *               javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintViolation}.
      * @see #actual
      */
-    public ConstraintViolationAssert(final Object actual) {
-        super(actual, ConstraintViolationAssert.class);
+    public ConstraintViolationAssert(final ACTUAL actual) {
+        super(ConstraintViolationUtils.requireConstraintViolationInstance(actual), ConstraintViolationAssert.class);
     }
-
-    // ------------------------------------------------------------------------------------------------- getInvalidValue
 
     /**
      * Verifies that the {@code actual.invalidValue} satisfies given requirements expressed as a {@link Consumer}.
@@ -62,10 +58,10 @@ public class ConstraintViolationAssert<T>
      * @param requirements the consumer accepts {@code actual.invalidValue}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasInvalidValueSatisfying(final Consumer<Object> requirements) {
-        isNotNull();
-        assertThat(getInvalidValue(actual)).satisfies(requirements);
-        return myself;
+    public ConstraintViolationAssert<ACTUAL, T> hasInvalidValueSatisfying(final Consumer<Object> requirements) {
+        return isNotNull().satisfies(a -> {
+            assertThat(getInvalidValue(a)).satisfies(requirements);
+        });
     }
 
     /**
@@ -75,11 +71,9 @@ public class ConstraintViolationAssert<T>
      * @param expected the expected value of {@code actual.invalidValue}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasInvalidValueEqualTo(final Object expected) {
+    public ConstraintViolationAssert<ACTUAL, T> hasInvalidValueEqualTo(final Object expected) {
         return hasInvalidValueSatisfying(v -> assertThat(v).isEqualTo(expected));
     }
-
-    // ----------------------------------------------------------------------------------------------------- getLeafBean
 
     /**
      * Verifies that the {@code actual.leafBean} satisfies given requirements expresses as a {@link Consumer}.
@@ -87,10 +81,10 @@ public class ConstraintViolationAssert<T>
      * @param requirements the consumer accepts and verifies the {@code actual.leafBean}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasLeafBeanSatisfying(final Consumer<Object> requirements) {
-        isNotNull();
-        assertThat(getLeafBean(actual)).satisfies(requirements);
-        return myself;
+    public ConstraintViolationAssert<ACTUAL, T> hasLeafBeanSatisfying(final Consumer<Object> requirements) {
+        return isNotNull().satisfies(a -> {
+            assertThat(getLeafBean(a)).satisfies(requirements);
+        });
     }
 
     /**
@@ -99,11 +93,9 @@ public class ConstraintViolationAssert<T>
      * @param expected the expected value of {@code actual.leafBean} method.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasLeafBeanSameAs(final Object expected) {
+    public ConstraintViolationAssert<ACTUAL, T> hasLeafBeanSameAs(final Object expected) {
         return hasLeafBeanSatisfying(v -> assertThat(v).isSameAs(expected));
     }
-
-    // ------------------------------------------------------------------------------------------------------ getMessage
 
     /**
      * Verifies that the {@code actual.message} satisfies given requirements expresses as a {@link Consumer}.
@@ -111,10 +103,11 @@ public class ConstraintViolationAssert<T>
      * @param requirements the consumer accepts and verifies the {@code actual.message}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasMessageSatisfying(final Consumer<? super String> requirements) {
-        isNotNull();
-        assertThat(getMessage(actual)).satisfies(requirements::accept);
-        return myself;
+    public ConstraintViolationAssert<ACTUAL, T> hasMessageSatisfying(final Consumer<? super String> requirements) {
+        requireNonNull(requirements, "requirements is null");
+        return isNotNull().satisfies(a -> {
+            assertThat(getMessage(a)).satisfies(requirements::accept);
+        });
     }
 
     /**
@@ -123,11 +116,9 @@ public class ConstraintViolationAssert<T>
      * @param expected the expected value of {@code actual.message}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasMessageEqualTo(final Object expected) {
+    public ConstraintViolationAssert<ACTUAL, T> hasMessageEqualTo(final Object expected) {
         return hasMessageSatisfying(v -> assertThat(v).isEqualTo(expected));
     }
-
-    // ------------------------------------------------------------------------------------------------- getPropertyPath
 
     /**
      * Verifies that the {@code actual.propertyPath} satisfies given requirements expresses as a {@link Consumer}.
@@ -137,12 +128,16 @@ public class ConstraintViolationAssert<T>
      * @return {@link #myself self}
      */
     @SuppressWarnings({"unchecked"})
-    public <PATH extends Iterable<?>> ConstraintViolationAssert<T> hasPropertyPathSatisfying(
+    public <PATH extends Iterable<?>> ConstraintViolationAssert<ACTUAL, T> hasPropertyPathSatisfying(
             final Consumer<? super PATH> requirements) {
         requireNonNull(requirements, "requirements is null");
-        isNotNull();
-        assertThat(getPropertyPath(actual)).satisfies(v -> requirements.accept((PATH) v));
-        return myself;
+        return isNotNull()
+                .satisfies(a -> {
+                    assertThat(ConstraintViolationUtils.<PATH>getPropertyPath(a))
+                            .satisfies(v -> {
+                                requirements.accept((PATH) v);
+                            });
+                });
     }
 
     /**
@@ -152,11 +147,9 @@ public class ConstraintViolationAssert<T>
      * @param expected the expected value of {@code actual.message}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasPropertyPathEqualTo(final Object expected) {
+    public ConstraintViolationAssert<ACTUAL, T> hasPropertyPathEqualTo(final Object expected) {
         return hasPropertyPathSatisfying(v -> assertThat(v).isEqualTo(expected));
     }
-
-    // ----------------------------------------------------------------------------------------------------- getRootBean
 
     /**
      * Verifies that the {@code actual.rootBean} satisfies given requirements expresses as a {@link Consumer}.
@@ -164,12 +157,13 @@ public class ConstraintViolationAssert<T>
      * @param requirements the consumer accepts and verifies the {@code actual.rootBean}.
      * @return {@link #myself self}
      */
-    @SuppressWarnings({"unchecked"})
-    public ConstraintViolationAssert<T> hasRootBeanSatisfying(final Consumer<? super T> requirements) {
+    public ConstraintViolationAssert<ACTUAL, T> hasRootBeanSatisfying(final Consumer<? super T> requirements) {
         requireNonNull(requirements, "requirements is null");
-        isNotNull();
-        assertThat(getRootBean(actual)).satisfies(v -> requirements.accept((T) v));
-        return myself;
+        return isNotNull()
+                .satisfies(a -> {
+                    assertThat(ConstraintViolationUtils.<T>getRootBean(a))
+                            .satisfies(requirements::accept);
+                });
     }
 
     /**
@@ -178,8 +172,10 @@ public class ConstraintViolationAssert<T>
      * @param expected the expected value of {@code actual.rootBean}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasRootBeanSameAs(final Object expected) {
-        return hasRootBeanSatisfying(v -> assertThat(v).isSameAs(expected));
+    public ConstraintViolationAssert<ACTUAL, T> hasRootBeanSameAs(final Object expected) {
+        return hasRootBeanSatisfying(v -> {
+            assertThat(v).isSameAs(expected);
+        });
     }
 
     // ------------------------------------------------------------------------------------------------ getRootBeanClass
@@ -191,11 +187,15 @@ public class ConstraintViolationAssert<T>
      * @return {@link #myself self}
      */
     @SuppressWarnings({"unchecked"})
-    public ConstraintViolationAssert<T> hasRootBeanClassSatisfying(final Consumer<? super Class<T>> requirements) {
+    public ConstraintViolationAssert<ACTUAL, T> hasRootBeanClassSatisfying(
+            final Consumer<? super Class<T>> requirements) {
         requireNonNull(requirements, "requirements is null");
-        isNotNull();
-        assertThat(getRootBeanClass(actual)).satisfies(v -> requirements.accept((Class<T>) v));
-        return myself;
+        return isNotNull().satisfies(a -> {
+            assertThat(ConstraintViolationUtils.<T>getRootBeanClass(actual))
+                    .satisfies(v -> {
+                        requirements.accept((Class<T>) v);
+                    });
+        });
     }
 
     /**
@@ -205,7 +205,9 @@ public class ConstraintViolationAssert<T>
      * @param expected the expected value of {@code actual.rootBeanClass}.
      * @return {@link #myself self}
      */
-    public ConstraintViolationAssert<T> hasRootBeanClassSameAs(final Object expected) {
-        return hasRootBeanClassSatisfying(v -> assertThat(v).isSameAs(expected));
+    public ConstraintViolationAssert<ACTUAL, T> hasRootBeanClassSameAs(final Object expected) {
+        return hasRootBeanClassSatisfying(v -> {
+            assertThat(v).isSameAs(expected);
+        });
     }
 }

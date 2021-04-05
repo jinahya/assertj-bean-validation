@@ -28,19 +28,19 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * An assertion class for validating a value against constraints defined on a bean property.
+ * An assertion class for validating values against constraints defined on property of specified bean type.
  *
- * @param <ACTUAL> actual property value type parameter
+ * @param <ACTUAL> the value of actual property value.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
 public class BeanPropertyValidationAssert<ACTUAL>
-        extends AbstractBeanValidationAssert<BeanPropertyValidationAssert<ACTUAL>, ACTUAL> {
+        extends AbstractValidationAssert<BeanPropertyValidationAssert<ACTUAL>, ACTUAL> {
 
     /**
-     * Creates a new instance with specified value.
+     * Creates a new instance with specified actual value.
      *
-     * @param actual the value for a property.
+     * @param actual the actual value to verify.
      */
     public BeanPropertyValidationAssert(final ACTUAL actual) {
         super(actual, BeanPropertyValidationAssert.class);

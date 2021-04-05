@@ -40,7 +40,7 @@ public class ElementKindAssert<ACTUAL>
         super(requireElementKindInstance(actual), ElementKindAssert.class);
     }
 
-    // ------------------------------------------------------------------------------------------------------- getName()
+    // ---------------------------------------------------------------------------------------------------------- name()
 
     /**
      * Verifies that the {@link Enum#name() actual.name()} satisfies some requirements by being accepted to specified
@@ -50,16 +50,15 @@ public class ElementKindAssert<ACTUAL>
      * @return {@link #myself self}.
      */
     public ElementKindAssert<ACTUAL> hasNameSatisfying(final Consumer<? super String> requirements) {
-        isNotNull();
-        assertThat(ElementKindUtils.getName(actual))
-                .satisfies(requirements::accept);
-        return myself;
+        return isNotNull().satisfies(a -> {
+            assertThat(ElementKindUtils.getName(a))
+                    .satisfies(requirements::accept);
+        });
     }
 
     public ElementKindAssert<ACTUAL> hasNameEqualTo(final Object expected) {
-        isNotNull();
-        assertThat(ElementKindUtils.getName(actual))
-                .isEqualTo(expected);
-        return myself;
+        return hasNameSatisfying(v -> {
+            assertThat(v).isEqualTo(expected);
+        });
     }
 }

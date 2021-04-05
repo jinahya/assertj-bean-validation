@@ -20,10 +20,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
-        extends AbstractValidationExceptionAssert<ValidationExceptionAssert<ACTUAL>, ACTUAL> {
+@SuppressWarnings({"java:S119"})
+public class ValidationExceptionAssert<ACTUAL>
+        extends AbstractValidationExceptionAssert<ValidationExceptionAssert<ACTUAL>> {
 
     public ValidationExceptionAssert(final ACTUAL actual) {
-        super(actual, ValidationExceptionAssert.class);
+        super(ValidationExceptionUtils.requireValidationExceptionInstance(actual), ValidationExceptionAssert.class);
     }
 }

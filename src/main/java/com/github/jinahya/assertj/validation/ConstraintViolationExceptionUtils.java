@@ -49,12 +49,12 @@ final class ConstraintViolationExceptionUtils {
         return applyConstraintViolationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyConstraintViolationExceptionClassFor(final RuntimeException actual,
+    private static <R> R applyConstraintViolationExceptionClassFor(final Object actual,
                                                                    final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getConstraintViolationExceptionClassFor(final RuntimeException actual) {
+    private static Class<?> getConstraintViolationExceptionClassFor(final Object actual) {
         return applyConstraintViolationExceptionClassFor(actual, Function.identity());
     }
 
@@ -65,7 +65,7 @@ final class ConstraintViolationExceptionUtils {
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintViolationException};
      * {@code false} otherwise.
      */
-    static boolean isConstraintViolationExceptionInstance(final RuntimeException actual) {
+    static boolean isConstraintViolationExceptionInstance(final Object actual) {
         if (actual == null) {
             return true;
         }
@@ -77,14 +77,17 @@ final class ConstraintViolationExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends RuntimeException> T requireConstraintViolationExceptionInstance(final T actual) {
+    static <T> T requireConstraintViolationExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }
-        return applyConstraintViolationExceptionClassFor(actual, c -> actual);
+        return applyConstraintViolationExceptionClassFor(
+                ValidationExceptionUtils.requireValidationExceptionInstance(actual),
+                c -> actual
+        );
     }
 
-    static <T> Set<T> getConstraintViolations(final RuntimeException actual) {
+    static <T> Set<T> getConstraintViolations(final Object actual) {
         return applyConstraintViolationExceptionClassFor(actual, c -> {
             try {
                 @SuppressWarnings({"unchecked"})

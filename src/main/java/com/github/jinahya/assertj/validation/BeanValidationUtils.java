@@ -181,19 +181,20 @@ final class BeanValidationUtils {
      * Invokes the {@code validate(T, Class...)} method on specified validator with given arguments and returns the
      * result.
      *
-     * @param validator the validator on which the {@code validate(...)} method is invoked; may be {@code null}.
+     * @param validator the validator on which the {@code validate(...)} method is invoked.
      * @param object    a value for {@code object} parameter.
      * @param groups    a value for {@code groups} parameter.
-     * @param <T>       {@code object} type parameter
+     * @param <ACTUAL>  {@code object} type parameter
+     * @param <T>       the type of {@code ....validation.ConstraintViolation}
      * @return the result of the invocation which is a set of {@code ConstraintViolation}s.
      */
     @SuppressWarnings({"unchecked"})
-    static <T> Set<Object> validate(final Object validator, final T object, final Class<?>... groups) {
+    static <ACTUAL, T> Set<T> validate(final Object validator, final ACTUAL object, final Class<?>... groups) {
         requireNonNull(validator, "validator is null");
         requireNonNull(object, "object is null");
         requireNonNull(groups, "groups is null");
         try {
-            return (Set<Object>) validateMethod(validator).invoke(validator, object, groups);
+            return (Set<T>) validateMethod(validator).invoke(validator, object, groups);
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }
@@ -229,19 +230,17 @@ final class BeanValidationUtils {
      * @param object       a value for {@code object} parameter.
      * @param propertyName a value for {@code propertyName} parameter.
      * @param groups       a value for {@code groups} parameter.
-     * @param <T>          {@code object} type parameter
+     * @param <ACTUAL>     {@code object} type parameter
      * @return the result of the invocation which is a set of {@code ConstraintViolation}s
      */
     @SuppressWarnings({"unchecked"})
-    static <T> Set<Object> validateProperty(Object validator, final T object, final String propertyName,
-                                            final Class<?>... groups) {
+    static <ACTUAL, T> Set<T> validateProperty(final Object validator, final ACTUAL object, final String propertyName,
+                                               final Class<?>... groups) {
+        requireNonNull(validator, "validator is null");
         requireNonNull(object, "object is null");
         requireNonNull(groups, "groups is null");
-        if (validator == null) {
-            validator = validator();
-        }
         try {
-            return (Set<Object>) validatePropertyMethod(validator).invoke(validator, object, propertyName, groups);
+            return (Set<T>) validatePropertyMethod(validator).invoke(validator, object, propertyName, groups);
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }

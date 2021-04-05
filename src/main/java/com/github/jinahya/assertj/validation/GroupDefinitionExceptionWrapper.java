@@ -25,7 +25,7 @@ package com.github.jinahya.assertj.validation;
  *
  * @param <ACTUAL> actual value type parameter
  */
-public class GroupDefinitionExceptionWrapper<ACTUAL extends RuntimeException>
+public class GroupDefinitionExceptionWrapper<ACTUAL>
         extends Wrapper<ACTUAL> {
 
     /**
@@ -35,7 +35,7 @@ public class GroupDefinitionExceptionWrapper<ACTUAL extends RuntimeException>
      * @param <ACTUAL> actual value type parameter
      * @return a new instance wraps {@code actual}.
      */
-    public static <ACTUAL extends RuntimeException> GroupDefinitionExceptionWrapper<ACTUAL>
+    public static <ACTUAL> GroupDefinitionExceptionWrapper<ACTUAL>
     groupDefinitionException(final ACTUAL actual) {
         return new GroupDefinitionExceptionWrapper<>(actual);
     }

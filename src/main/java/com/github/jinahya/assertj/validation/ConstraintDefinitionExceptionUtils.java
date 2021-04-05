@@ -49,11 +49,11 @@ final class ConstraintDefinitionExceptionUtils {
     }
 
     private static <R> R applyConstraintDefinitionExceptionClassFor(
-            final RuntimeException actual, final Function<? super Class<?>, ? extends R> function) {
+            final Object actual, final Function<? super Class<?>, ? extends R> function) {
         return Utils.applyClassFor(SUFFIX, actual, function);
     }
 
-    private static Class<?> getConstraintDefinitionExceptionClassFor(final RuntimeException actual) {
+    private static Class<?> getConstraintDefinitionExceptionClassFor(final Object actual) {
         return applyConstraintDefinitionExceptionClassFor(actual, Function.identity());
     }
 
@@ -64,7 +64,7 @@ final class ConstraintDefinitionExceptionUtils {
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintDefinitionException};
      * {@code false} otherwise.
      */
-    static boolean isConstraintDefinitionExceptionInstance(final RuntimeException actual) {
+    static boolean isConstraintDefinitionExceptionInstance(final Object actual) {
         if (actual == null) {
             return true;
         }
@@ -76,14 +76,17 @@ final class ConstraintDefinitionExceptionUtils {
      *
      * @param actual the object to be tested.
      */
-    static <T extends RuntimeException> T requireConstraintDefinitionExceptionInstance(final T actual) {
+    static <T> T requireConstraintDefinitionExceptionInstance(final T actual) {
         if (actual == null) {
             return null;
         }
-        return applyConstraintDefinitionExceptionClassFor(actual, c -> actual);
+        return applyConstraintDefinitionExceptionClassFor(
+                ValidationExceptionUtils.requireValidationExceptionInstance(actual),
+                c -> actual
+        );
     }
 
     private ConstraintDefinitionExceptionUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

@@ -20,13 +20,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class GroupDefinitionExceptionAssert<ACTUAL extends RuntimeException>
-        extends AbstractValidationExceptionAssert<GroupDefinitionExceptionAssert<ACTUAL>, ACTUAL> {
+public class GroupDefinitionExceptionAssert<ACTUAL>
+        extends AbstractValidationExceptionAssert<GroupDefinitionExceptionAssert<ACTUAL>> {
 
     public GroupDefinitionExceptionAssert(final ACTUAL actual) {
-        super(actual, GroupDefinitionExceptionAssert.class);
-        if (super.actual != null) {
-            GroupDefinitionExceptionUtils.requireGroupDefinitionExceptionInstance(super.actual);
-        }
+        super(GroupDefinitionExceptionUtils.requireGroupDefinitionExceptionInstance(actual),
+              GroupDefinitionExceptionAssert.class);
     }
 }

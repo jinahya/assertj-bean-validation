@@ -20,13 +20,22 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ConstraintDeclarationExceptionAssert<ACTUAL extends RuntimeException>
-        extends AbstractValidationExceptionAssert<ConstraintDeclarationExceptionAssert<ACTUAL>, ACTUAL> {
+/**
+ * An assertion class for {@code ....validation.ConstraintDeclarationException}.
+ *
+ * @param <ACTUAL> the type of {@code ....validation.ConstraintViolationException}.
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
+public class ConstraintDeclarationExceptionAssert<ACTUAL>
+        extends AbstractValidationExceptionAssert<ConstraintDeclarationExceptionAssert<ACTUAL>> {
 
+    /**
+     * Creates a new instance with specified actual value.
+     *
+     * @param actual the actual value to verify.
+     */
     public ConstraintDeclarationExceptionAssert(final ACTUAL actual) {
-        super(actual, ConstraintDeclarationExceptionAssert.class);
-        if (super.actual != null) {
-            ConstraintDeclarationExceptionUtils.requireConstraintDeclarationExceptionInstance(super.actual);
-        }
+        super(ConstraintDeclarationExceptionUtils.requireConstraintDeclarationExceptionInstance(actual),
+              ConstraintDeclarationExceptionAssert.class);
     }
 }

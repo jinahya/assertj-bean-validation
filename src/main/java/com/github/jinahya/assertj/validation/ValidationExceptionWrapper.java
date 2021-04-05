@@ -20,10 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ValidationExceptionWrapper<ACTUAL extends RuntimeException>
+public class ValidationExceptionWrapper<ACTUAL>
         extends Wrapper<ACTUAL> {
 
-    public static <ACTUAL extends RuntimeException> ValidationExceptionWrapper<ACTUAL> validationException(
+    public static <ACTUAL> ValidationExceptionWrapper<ACTUAL> validationException(
             final ACTUAL actual) {
         return new ValidationExceptionWrapper<>(actual);
     }

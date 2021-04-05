@@ -20,31 +20,31 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConstraintViolationExceptionAssert<ACTUAL extends RuntimeException>
-        extends AbstractValidationExceptionAssert<ConstraintViolationExceptionAssert<ACTUAL>, ACTUAL> {
+@SuppressWarnings({"java:S119"})
+public class ConstraintViolationExceptionAssert<ACTUAL>
+        extends AbstractValidationExceptionAssert<ConstraintViolationExceptionAssert<ACTUAL>> {
 
     public ConstraintViolationExceptionAssert(final ACTUAL actual) {
-        super(actual, ConstraintViolationExceptionAssert.class);
-        if (super.actual != null) {
-            ConstraintViolationExceptionUtils.requireConstraintViolationExceptionInstance(super.actual);
-        }
+        super(ConstraintViolationExceptionUtils.requireConstraintViolationExceptionInstance(actual),
+              ConstraintViolationExceptionAssert.class);
     }
 
     public <T> ConstraintViolationExceptionAssert<ACTUAL> hasConstraintViolationsSatisfying(
-            final Consumer<? super Iterable<? extends T>> requirements) {
+            final Consumer<? super Set<? extends T>> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(ConstraintViolationExceptionUtils.<T>getConstraintViolations(a))
-                    .satisfies(requirements::accept);
+            final Set<T> constraintViolations = ConstraintViolationExceptionUtils.getConstraintViolations(a);
+            requirements.accept(constraintViolations);
         });
     }
 
-    public <T> ConstraintViolationExceptionAssert<ACTUAL> hasConstraintViolationsEqualsTo(final Object expected) {
+    public <T> ConstraintViolationExceptionAssert<ACTUAL> hasConstraintViolationsEqualTo(final Object expected) {
         return this.<T>hasConstraintViolationsSatisfying(v -> {
             assertThat(v).isEqualTo(expected);
         });

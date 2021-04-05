@@ -25,7 +25,7 @@ package com.github.jinahya.assertj.validation;
  *
  * @param <ACTUAL> actual value type parameter
  */
-public class ConstraintDefinitionExceptionWrapper<ACTUAL extends RuntimeException>
+public class ConstraintDefinitionExceptionWrapper<ACTUAL>
         extends Wrapper<ACTUAL> {
 
     /**
@@ -35,7 +35,7 @@ public class ConstraintDefinitionExceptionWrapper<ACTUAL extends RuntimeExceptio
      * @param <ACTUAL> actual value type parameter
      * @return a new instance wraps {@code actual}.
      */
-    public static <ACTUAL extends RuntimeException> ConstraintDefinitionExceptionWrapper<ACTUAL>
+    public static <ACTUAL> ConstraintDefinitionExceptionWrapper<ACTUAL>
     constraintDefinitionException(final ACTUAL actual) {
         return new ConstraintDefinitionExceptionWrapper<>(actual);
     }
