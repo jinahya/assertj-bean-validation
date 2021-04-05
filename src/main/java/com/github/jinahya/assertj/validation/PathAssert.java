@@ -26,6 +26,7 @@ import org.assertj.core.api.IterableAssert;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getKind;
 import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.getName;
@@ -387,7 +388,7 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             super(actual, ParameterNodeAssert.class);
         }
 
-        public ParameterNodeAssert<ACTUAL> hasParameterIndexSatisfying(final Consumer<? super Integer> requirements) {
+        public ParameterNodeAssert<ACTUAL> hasParameterIndexSatisfying(final IntConsumer requirements) {
             isNotNull();
             assertThat(PathUtils.ParameterNodeUtils.getParameterIndex(actual)).satisfies(requirements::accept);
             return myself;

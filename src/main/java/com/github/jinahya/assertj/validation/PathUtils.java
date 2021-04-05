@@ -323,10 +323,11 @@ final class PathUtils {
             return Utils.applyClassFor("Path$ParameterNode", node, function);
         }
 
-        static Integer getParameterIndex(final Object actual) {
+        // getParameterIndex()I
+        static int getParameterIndex(final Object actual) {
             return applyClassFor(actual, c -> {
                 try {
-                    return (Integer) c.getMethod("getParameterIndex").invoke(actual);
+                    return (int) c.getMethod("getParameterIndex").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
                     throw new RuntimeException(roe);
                 }

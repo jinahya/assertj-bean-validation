@@ -21,11 +21,11 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping actual values of {@code ...validation.ConstraintDeclarationException}.
+ * A class for wrapping actual values of {@code ...validation.GroupDefinitionException}.
  *
  * @param <ACTUAL> actual value type parameter
  */
-public class ConstraintDeclarationExceptionWrapper<ACTUAL extends RuntimeException>
+public class GroupDefinitionExceptionWrapper<ACTUAL extends RuntimeException>
         extends Wrapper<ACTUAL> {
 
     /**
@@ -35,9 +35,9 @@ public class ConstraintDeclarationExceptionWrapper<ACTUAL extends RuntimeExcepti
      * @param <ACTUAL> actual value type parameter
      * @return a new instance wraps {@code actual}.
      */
-    public static <ACTUAL extends RuntimeException> ConstraintDeclarationExceptionWrapper<ACTUAL>
-    constraintDeclarationException(final ACTUAL actual) {
-        return new ConstraintDeclarationExceptionWrapper<>(actual);
+    public static <ACTUAL extends RuntimeException> GroupDefinitionExceptionWrapper<ACTUAL>
+    groupDefinitionException(final ACTUAL actual) {
+        return new GroupDefinitionExceptionWrapper<>(actual);
     }
 
     /**
@@ -45,7 +45,7 @@ public class ConstraintDeclarationExceptionWrapper<ACTUAL extends RuntimeExcepti
      *
      * @param actual the actual value to wrap.
      */
-    private ConstraintDeclarationExceptionWrapper(final ACTUAL actual) {
+    private GroupDefinitionExceptionWrapper(final ACTUAL actual) {
         super(actual);
     }
 }
