@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
-public class ConstraintViolationExceptionAssertions {
+public final class ConstraintViolationExceptionAssertions {
 
     /**
      * Creates a new assertion instance for specified actual value.
@@ -31,8 +31,8 @@ public class ConstraintViolationExceptionAssertions {
      * @param <ACTUAL> actual value type parameter
      * @return a new assertion instance.
      */
-    public static <ACTUAL> ConstraintViolationExceptionAssert<ACTUAL>
-    assertConstraintViolationException(final ACTUAL actual) {
+    public static <ACTUAL> ConstraintViolationExceptionAssert<ACTUAL> assertConstraintViolationException(
+            final ACTUAL actual) {
         return new ConstraintViolationExceptionAssert<>(actual);
     }
 
@@ -46,8 +46,7 @@ public class ConstraintViolationExceptionAssertions {
      */
     public static <ACTUAL> ConstraintViolationExceptionAssert<ACTUAL> assertThat(
             final ConstraintViolationExceptionWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertConstraintViolationException(wrapper.getActual());
+        return assertConstraintViolationException(requireNonNull(wrapper).getActual());
     }
 
     private ConstraintViolationExceptionAssertions() {

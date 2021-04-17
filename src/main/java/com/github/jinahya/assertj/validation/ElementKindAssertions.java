@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
-public class ElementKindAssertions {
+public final class ElementKindAssertions {
 
     public static <ACTUAL> ElementKindAssert<ACTUAL> assertElementKind(final ACTUAL actual) {
         return new ElementKindAssert<>(actual);

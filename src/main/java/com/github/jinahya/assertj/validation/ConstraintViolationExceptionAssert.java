@@ -26,17 +26,36 @@ import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * An assertion class for {@code ....validation.ConstraintViolationException} class.
+ *
+ * @param <ACTUAL> the type of actual {@code ....validation.ConstraintViolationException}.
+ */
 @SuppressWarnings({"java:S119"})
 public class ConstraintViolationExceptionAssert<ACTUAL>
         extends AbstractValidationExceptionAssert<ConstraintViolationExceptionAssert<ACTUAL>> {
 
+    /**
+     * Creates a new instance with specified actual value.
+     *
+     * @param actual the actual value to verify.
+     */
     public ConstraintViolationExceptionAssert(final ACTUAL actual) {
         super(ConstraintViolationExceptionUtils.requireConstraintViolationExceptionInstance(actual),
               ConstraintViolationExceptionAssert.class);
     }
 
+    /**
+     * Verifies that the {@code getConstraintViolations()} of {@link #actual} satisfies specified requirements by being
+     * accepted to specified consumer.
+     *
+     * @param requirements the consumer accepts and verifies the set of {@code ConstraintViolations} contained in {@code
+     *                     actual}.
+     * @param <T>          actual type of {@code ConstraintViolation}.
+     * @return {@link #myself self}.
+     */
     public <T> ConstraintViolationExceptionAssert<ACTUAL> hasConstraintViolationsSatisfying(
-            final Consumer<? super Set<? extends T>> requirements) {
+            final Consumer<? super Set<T>> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
             final Set<T> constraintViolations = ConstraintViolationExceptionUtils.getConstraintViolations(a);
@@ -44,8 +63,15 @@ public class ConstraintViolationExceptionAssert<ACTUAL>
         });
     }
 
-    public <T> ConstraintViolationExceptionAssert<ACTUAL> hasConstraintViolationsEqualTo(final Object expected) {
-        return this.<T>hasConstraintViolationsSatisfying(v -> {
+    /**
+     * Verifies that the {@code getConstraintViolations()} of {@link #actual} is {@link
+     * org.assertj.core.api.AbstractIterableAssert#isEqualTo(Object) equal} to specified value.
+     *
+     * @param expected the expected value of {@code actual#getConstraintViolations()}.
+     * @return {@link #myself self}.
+     */
+    public ConstraintViolationExceptionAssert<ACTUAL> hasConstraintViolationsEqualTo(final Object expected) {
+        return hasConstraintViolationsSatisfying(v -> {
             assertThat(v).isEqualTo(expected);
         });
     }
