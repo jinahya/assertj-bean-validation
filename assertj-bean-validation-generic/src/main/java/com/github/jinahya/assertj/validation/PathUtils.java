@@ -168,27 +168,33 @@ final class PathUtils {
 
     static final class ConstructorNodeUtils {
 
+        private static final String SUFFIX = "Path$ConstructorNode";
+
+        private static <R> R applyConstructorNodeClass(final Function<? super Class<?>, ? extends R> function) {
+            return Utils.applyClassForSuffix(SUFFIX, function);
+        }
+
         private static <R> R applyClassFor(final Object node, final Function<? super Class<?>, ? extends R> function) {
             return Utils.applyClassFor("Path$ConstructorNode", node, function);
         }
 
-        static boolean isConstructorNodeInstance(final Object actual) {
+        static boolean isNullOrInstanceOfConstructorNode(final Object actual) {
             if (actual == null) {
                 return true;
             }
-            return applyClassFor(actual, c -> true);
+            return Utils.isInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
-        static <T> T requireConstructorNodeInstance(final T actual) {
+        static <T> T requireNullOrInstanceOfConstructorNode(final T actual) {
             if (actual == null) {
                 return null;
             }
-            return applyClassFor(actual, c -> actual);
+            return Utils.requireInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
         @SuppressWarnings({"unchecked"})
         static List<Class<?>> getParameterTypes(final Object actual) {
-            return applyClassFor(actual, c -> {
+            return applyConstructorNodeClass(c -> {
                 try {
                     return (List<Class<?>>) c.getMethod("getParameterTypes").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
@@ -204,26 +210,32 @@ final class PathUtils {
 
     static final class ContainerElementNodeUtils {
 
+        private static final String SUFFIX = "Path$ContainerElementNode";
+
+        private static <R> R applyContainerElementNodeClass(final Function<? super Class<?>, ? extends R> function) {
+            return Utils.applyClassForSuffix(SUFFIX, function);
+        }
+
         private static <R> R applyClassFor(final Object node, final Function<? super Class<?>, ? extends R> function) {
             return Utils.applyClassFor("Path$ContainerElementNode", node, function);
         }
 
-        static boolean isContainerElementNodeInstance(final Object actual) {
-            if (actual == null) {
+        static boolean isNullOrInstanceOfContainerElementNode(final Object object) {
+            if (object == null) {
                 return true;
             }
-            return applyClassFor(actual, c -> true);
+            return Utils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
-        static <T> T requireContainerElementNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfContainerElementNode(final T object) {
+            if (object == null) {
                 return null;
             }
-            return applyClassFor(actual, c -> actual);
+            return Utils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static Class<?> getContainerClass(final Object actual) {
-            return applyClassFor(actual, c -> {
+            return applyContainerElementNodeClass(c -> {
                 try {
                     return (Class<?>) c.getMethod("getContainerClass").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
@@ -233,7 +245,7 @@ final class PathUtils {
         }
 
         static Integer getTypeArgumentIndex(final Object actual) {
-            return applyClassFor(actual, c -> {
+            return applyContainerElementNodeClass(c -> {
                 try {
                     return (Integer) c.getMethod("getTypeArgumentIndex").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
@@ -249,22 +261,28 @@ final class PathUtils {
 
     static final class CrossParameterNodeUtils {
 
+        private static final String SUFFIX = "Path$CrossParameterNode";
+
+        private static <R> R applyCrossParameterNodeClass(final Function<? super Class<?>, ? extends R> function) {
+            return Utils.applyClassForSuffix(SUFFIX, function);
+        }
+
         private static <R> R applyClassFor(final Object node, final Function<? super Class<?>, ? extends R> function) {
             return Utils.applyClassFor("Path$CrossParameterNode", node, function);
         }
 
-        static boolean isConstructorNodeInstance(final Object actual) {
-            if (actual == null) {
+        static boolean isNullOrInstanceOfCrossParameterNode(final Object object) {
+            if (object == null) {
                 return true;
             }
-            return applyClassFor(actual, c -> true);
+            return Utils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
-        static <T> T requireCrossParameterNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfCrossParameterNode(final T object) {
+            if (object == null) {
                 return null;
             }
-            return applyClassFor(actual, c -> actual);
+            return Utils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         private CrossParameterNodeUtils() {
@@ -274,27 +292,33 @@ final class PathUtils {
 
     static final class MethodNodeUtils {
 
+        private static final String SUFFIX = "Path$MethodNode";
+
+        private static <R> R applyMethodNodeClass(final Function<? super Class<?>, ? extends R> function) {
+            return Utils.applyClassForSuffix(SUFFIX, function);
+        }
+
         private static <R> R applyClassFor(final Object node, final Function<? super Class<?>, ? extends R> function) {
             return Utils.applyClassFor("Path$MethodNode", node, function);
         }
 
-        static boolean isMethodNodeNodeInstance(final Object actual) {
-            if (actual == null) {
+        static boolean isNullOrInstanceOfMethodNode(final Object object) {
+            if (object == null) {
                 return true;
             }
-            return applyClassFor(actual, c -> true);
+            return Utils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
-        static <T> T requireMethodNodeNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfMethodNode(final T object) {
+            if (object == null) {
                 return null;
             }
-            return applyClassFor(actual, c -> actual);
+            return Utils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         @SuppressWarnings({"unchecked"})
         static List<Class<?>> getParameterTypes(final Object actual) {
-            return applyClassFor(actual, c -> {
+            return applyMethodNodeClass(c -> {
                 try {
                     return (List<Class<?>>) c.getMethod("getParameterTypes").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
@@ -310,27 +334,33 @@ final class PathUtils {
 
     static final class ParameterNodeUtils {
 
+        private static final String SUFFIX = "Path$ParameterNode";
+
+        private static <R> R applyParameterNodeClass(final Function<? super Class<?>, ? extends R> function) {
+            return Utils.applyClassForSuffix(SUFFIX, function);
+        }
+
         private static <R> R applyClassFor(final Object node, final Function<? super Class<?>, ? extends R> function) {
             return Utils.applyClassFor("Path$ParameterNode", node, function);
         }
 
-        static boolean isParameterNodeInstance(final Object actual) {
-            if (actual == null) {
+        static boolean isNullOrInstanceOfParameterNode(final Object object) {
+            if (object == null) {
                 return true;
             }
-            return applyClassFor(actual, c -> true);
+            return Utils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
-        static <T> T requireParameterNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfParameterNode(final T object) {
+            if (object == null) {
                 return null;
             }
-            return applyClassFor(actual, c -> actual);
+            return Utils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         // getParameterIndex()I
         static int getParameterIndex(final Object actual) {
-            return applyClassFor(actual, c -> {
+            return applyParameterNodeClass(c -> {
                 try {
                     return (int) c.getMethod("getParameterIndex").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
@@ -348,64 +378,26 @@ final class PathUtils {
 
         private static final String SUFFIX = "Path$PropertyNode";
 
-        /**
-         * Applies the class of {@code ....validation.Path.PropertyNode} to specified function and returns the result.
-         *
-         * @param function the function to applied with the class of {@code ....validation.Path.PropertyNode}.
-         * @param <R>      result type parameter
-         * @return the result of the {@code function}.
-         */
         static <R> R applyPropertyNodeClass(final Function<? super Class<?>, ? extends R> function) {
             return applyClassForSuffix(SUFFIX, function);
         }
 
-        /**
-         * Returns the class of {@code ....validation.Path.PropertyNode}.
-         *
-         * @return the class of {@code ....validation.Path.PropertyNode}.
-         */
-        static Class<?> getPropertyNodeNodeClass() {
-            return applyPropertyNodeClass(Function.identity());
-        }
-
-        private static <R> R applyPropertyNodeClassFor(final Object actual,
-                                                       final Function<? super Class<?>, ? extends R> function) {
-            return Utils.applyClassFor(SUFFIX, actual, function);
-        }
-
-        private static Class<?> getPropertyNodeClassFor(final Object actual) {
-            return applyPropertyNodeClassFor(actual, Function.identity());
-        }
-
-        /**
-         * Indicates whether specified object is an instance of either {@code ....validation.Path.PropertyNode}.
-         *
-         * @param actual the object to be tested.
-         * @return {@code true} if {@code actual} is an instance of {@code ....validation.Path.PropertyNode}; {@code
-         * false} otherwise.
-         */
-        static boolean isPropertyNodeInstance(final Object actual) {
-            if (actual == null) {
+        static boolean isNullOrInstanceOfPropertyNode(final Object object) {
+            if (object == null) {
                 return true;
             }
-            return applyPropertyNodeClassFor(actual, c -> true);
+            return Utils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
-        /**
-         * Checks whether specified object is an instance of either {@code ....validation.Path.PropertyNode}.
-         *
-         * @param actual the object to be tested.
-         */
-        static <T> T requirePropertyNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfPropertyNode(final T object) {
+            if (object == null) {
                 return null;
             }
-            return applyPropertyNodeClassFor(actual, c -> actual);
+            return Utils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
-        // ------------------------------------------------------------------------ getContainerClass()Ljava.lang.Class;
         static Class<?> getContainerClass(final Object actual) {
-            return applyPropertyNodeClassFor(actual, c -> {
+            return applyPropertyNodeClass(c -> {
                 try {
                     return (Class<?>) c.getMethod("getContainerClass").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
@@ -416,7 +408,7 @@ final class PathUtils {
 
         // ------------------------------------------------------------------- getTypeArgumentIndex()Ljava.lang.Integer;
         static Integer getTypeArgumentIndex(final Object actual) {
-            return applyPropertyNodeClassFor(actual, c -> {
+            return applyPropertyNodeClass(c -> {
                 try {
                     return (Integer) c.getMethod("getTypeArgumentIndex").invoke(actual);
                 } catch (final ReflectiveOperationException roe) {
@@ -432,22 +424,20 @@ final class PathUtils {
 
     static final class ReturnValueNodeUtils {
 
-        private static <R> R applyClassFor(final Object node, final Function<? super Class<?>, ? extends R> function) {
-            return Utils.applyClassFor("Path$ReturnValueNode", node, function);
-        }
+        private static final String SUFFIX = "Path$ReturnValueNode";
 
-        static boolean isReturnValueNodeInstance(final Object actual) {
-            if (actual == null) {
+        static boolean isNullOrInstanceOfReturnValueNode(final Object object) {
+            if (object == null) {
                 return true;
             }
-            return applyClassFor(actual, c -> true);
+            return Utils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
-        static <T> T requireReturnValueNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfReturnValueNode(final T object) {
+            if (object == null) {
                 return null;
             }
-            return applyClassFor(actual, c -> actual);
+            return Utils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         private ReturnValueNodeUtils() {
