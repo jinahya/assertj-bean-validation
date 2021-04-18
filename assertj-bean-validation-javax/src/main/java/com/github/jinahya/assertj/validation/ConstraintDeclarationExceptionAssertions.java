@@ -46,7 +46,6 @@ public final class ConstraintDeclarationExceptionAssertions {
      *
      * @param actual the actual value to verify.
      * @return a new assertion instance for {@code actual}.
-     * @apiNote This method invokes {@link #assertThat(ConstraintDeclarationException)} method with {@code actual}.
      */
     public static ConstraintDeclarationExceptionAssert assertConstraintDeclarationException(
             final ConstraintDeclarationException actual) {
@@ -58,8 +57,6 @@ public final class ConstraintDeclarationExceptionAssertions {
      *
      * @param wrapper the wrapper wraps the actual value; must not be {@code null}.
      * @return a new assertion instance for {@code wrapper.actual}.
-     * @apiNote This method invokes {@link #assertConstraintDeclarationException(ConstraintDeclarationException)} method
-     * with {@code wrapper.actual}.
      * @see ConstraintDeclarationExceptionWrapper#constraintDeclarationException(ConstraintDeclarationException)
      */
     public static ConstraintDeclarationExceptionAssert assertThat(

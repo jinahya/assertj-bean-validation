@@ -46,8 +46,6 @@ public final class GroupDefinitionExceptionAssertions {
      *
      * @param actual the actual value to verify.
      * @return a new assertion for {@code actual}.
-     * @apiNote This method invokes {@link #assertThat(GroupDefinitionException)} method with {@code actual} and returns
-     * the result.
      * @see #assertThat(GroupDefinitionException)
      */
     public static GroupDefinitionExceptionAssert assertGroupDefinitionException(final GroupDefinitionException actual) {
@@ -59,8 +57,6 @@ public final class GroupDefinitionExceptionAssertions {
      *
      * @param wrapper the wrapper wraps the actual value to verify.
      * @return a new assertion for {@code wrapper.actual}.
-     * @apiNote This method invokes {@link #assertThat(GroupDefinitionException)} method with {@code wrapper.actual} and
-     * returns the result.
      * @see #assertThat(GroupDefinitionException)
      * @see GroupDefinitionExceptionWrapper#groupDefinitionException(GroupDefinitionException)
      */

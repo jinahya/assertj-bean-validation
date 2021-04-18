@@ -28,8 +28,6 @@ public final class ConstraintViolationAssertions {
      * @param actual the actual value to verify.
      * @param <T>    the type of the root bean of {@code actual}.
      * @return a new assertion instance for {@code actual}.
-     * @apiNote This method invokes {@link #assertThat(ConstraintViolation)} method with {@code actual} and returns the
-     * result.
      * @see #assertThat(ConstraintViolation)
      */
     public static <T> ConstraintViolationAssert<T> assertConstraintViolation(final ConstraintViolation<T> actual) {
@@ -42,8 +40,6 @@ public final class ConstraintViolationAssertions {
      * @param wrapper the wrapper wraps the actual value.
      * @param <T>     the type of the root bean of {@code wrapper.actual}.
      * @return a new assertion instance for {@code wrapper.actual}.
-     * @apiNote This method invokes {@link #assertThat(ConstraintViolation)} method with {@code wrapper.actual} and
-     * returns the result.
      * @see #assertThat(ConstraintViolation)
      * @see ConstraintViolationWrapper#constraintViolation(ConstraintViolation)
      */
