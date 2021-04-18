@@ -27,7 +27,7 @@ final class ConstraintViolationUtils {
     private static final String SUFFIX = "ConstraintViolation";
 
     static <R> R applyConstraintViolationClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix("ConstraintViolation", function);
+        return ReflectionUtils.applyClassForSuffix("ConstraintViolation", function);
     }
 
     /**
@@ -41,7 +41,7 @@ final class ConstraintViolationUtils {
         if (object == null) {
             return true;
         }
-        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
@@ -53,7 +53,7 @@ final class ConstraintViolationUtils {
         if (object == null) {
             return null;
         }
-        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     // ------------------------------------------------------------------------------------------------- getInvalidValue

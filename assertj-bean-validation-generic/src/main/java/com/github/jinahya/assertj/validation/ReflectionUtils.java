@@ -24,7 +24,7 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
-final class ValidationReflectionUtils {
+final class ReflectionUtils {
 
     static <R> R applyClassForSuffix(final String suffix, final Function<? super Class<?>, ? extends R> function) {
         requireNonNull(suffix, "suffix is null");
@@ -51,7 +51,7 @@ final class ValidationReflectionUtils {
         return object;
     }
 
-    private ValidationReflectionUtils() {
+    private ReflectionUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

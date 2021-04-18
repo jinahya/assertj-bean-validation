@@ -35,7 +35,7 @@ final class ValidationExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyValidationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -58,7 +58,7 @@ final class ValidationExceptionUtils {
         if (object == null) {
             return true;
         }
-        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
@@ -70,7 +70,7 @@ final class ValidationExceptionUtils {
         if (object == null) {
             return null;
         }
-        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     private ValidationExceptionUtils() {

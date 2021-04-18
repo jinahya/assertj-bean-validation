@@ -23,7 +23,7 @@ package com.github.jinahya.assertj.validation;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.github.jinahya.assertj.validation.ValidationReflectionUtils.applyClassForSuffix;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.applyClassForSuffix;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings({"java:S125"})
@@ -34,21 +34,21 @@ final class PathUtils {
         private static final String SUFFIX = "Path$Node";
 
         static <R> R applyNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrNodeInstance(final Object actual) {
             if (actual == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
         static <T> T requireNullOrNodeInstance(final T actual) {
             if (actual == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
         // ------------------------------------------------------------------------------- getIndex()Ljava.lang.Integer;
@@ -122,21 +122,21 @@ final class PathUtils {
         private static final String SUFFIX = "Path$BeanNode";
 
         static <R> R applyBeanNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrBeanNodeInstance(final Object actual) {
             if (actual == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
         static <T> T requireNullOrBeanNodeInstance(final T actual) {
             if (actual == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
         static Class<?> getContainerClass(final Object actual) {
@@ -171,21 +171,21 @@ final class PathUtils {
         private static final String SUFFIX = "Path$ConstructorNode";
 
         private static <R> R applyConstructorNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrInstanceOfConstructorNodeClass(final Object actual) {
             if (actual == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
         static <T> T requireNullOrInstanceOfConstructorNodeClass(final T actual) {
             if (actual == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
         }
 
         @SuppressWarnings({"unchecked"})
@@ -209,21 +209,21 @@ final class PathUtils {
         private static final String SUFFIX = "Path$ContainerElementNode";
 
         private static <R> R applyContainerElementNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrInstanceOfContainerElementNodeClass(final Object object) {
             if (object == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static <T> T requireNullOrInstanceOfContainerElementNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static Class<?> getContainerClass(final Object actual) {
@@ -256,21 +256,21 @@ final class PathUtils {
         private static final String SUFFIX = "Path$CrossParameterNode";
 
         private static <R> R applyCrossParameterNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrInstanceOfCrossParameterNodeClass(final Object object) {
             if (object == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static <T> T requireNullOrInstanceOfCrossParameterNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         private CrossParameterNodeUtils() {
@@ -283,21 +283,21 @@ final class PathUtils {
         private static final String SUFFIX = "Path$MethodNode";
 
         private static <R> R applyMethodNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrInstanceOfMethodNodeClass(final Object object) {
             if (object == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static <T> T requireNullOrInstanceOfMethodNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         @SuppressWarnings({"unchecked"})
@@ -321,21 +321,21 @@ final class PathUtils {
         private static final String SUFFIX = "Path$ParameterNode";
 
         private static <R> R applyParameterNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrInstanceOfParameterNodeClass(final Object object) {
             if (object == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static <T> T requireNullOrInstanceOfParameterNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         // getParameterIndex()I
@@ -366,14 +366,14 @@ final class PathUtils {
             if (object == null) {
                 return true;
             }
-            return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static <T> T requireNullOrInstanceOfPropertyNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
         }
 
         static Class<?> getContainerClass(final Object actual) {
@@ -407,7 +407,7 @@ final class PathUtils {
         private static final String SUFFIX = "Path$ReturnValueNode";
 
         static <R> R applyReturnValueNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         private static Class<?> returnValueNodeClass = null;
@@ -446,7 +446,7 @@ final class PathUtils {
     private static final String SUFFIX = "Path";
 
     static <R> R applyPathClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     private static Class<?> pathClass = null;

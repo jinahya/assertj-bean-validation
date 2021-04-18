@@ -42,11 +42,12 @@ public final class ConstraintViolationExceptionAssertions {
      * @param wrapper  the wrapper wraps the actual value; must not be {@code null}.
      * @param <ACTUAL> actual value type parameter
      * @return a new assertion instance.
-     * @see ConstraintViolationExceptionWrapper#constraintViolationException(Object)
+     * @see ConstraintViolationExceptionWrapper#constraintViolationException(RuntimeException)
      */
     public static <ACTUAL extends RuntimeException> ConstraintViolationExceptionAssert<ACTUAL> assertThat(
             final ConstraintViolationExceptionWrapper<? extends ACTUAL> wrapper) {
-        return assertConstraintViolationException(requireNonNull(wrapper).getActual());
+        requireNonNull(wrapper, "wrapper is null");
+        return assertConstraintViolationException(wrapper.getActual());
     }
 
     private ConstraintViolationExceptionAssertions() {

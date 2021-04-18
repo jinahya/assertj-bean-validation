@@ -47,7 +47,7 @@ final class ValidatorUtils {
     private static final String SUFFIX = "Validator";
 
     static <R> R applyValidatorClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     static Class<?> getValidatorClass() {
@@ -58,14 +58,14 @@ final class ValidatorUtils {
         if (object == null) {
             return true;
         }
-        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     static <T> T requireNullOrInstanceOfValidatorClass(final T object) {
         if (object == null) {
             return null;
         }
-        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     @SuppressWarnings({"unchecked"})

@@ -36,7 +36,7 @@ final class ConstraintDefinitionExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyConstraintDefinitionExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -59,7 +59,7 @@ final class ConstraintDefinitionExceptionUtils {
         if (object == null) {
             return true;
         }
-        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
@@ -71,7 +71,7 @@ final class ConstraintDefinitionExceptionUtils {
         if (object == null) {
             return null;
         }
-        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     private ConstraintDefinitionExceptionUtils() {

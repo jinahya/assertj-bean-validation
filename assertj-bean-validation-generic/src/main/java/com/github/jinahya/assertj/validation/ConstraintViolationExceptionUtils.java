@@ -37,7 +37,7 @@ final class ConstraintViolationExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyConstraintViolationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -60,7 +60,7 @@ final class ConstraintViolationExceptionUtils {
         if (object == null) {
             return true;
         }
-        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
@@ -72,7 +72,7 @@ final class ConstraintViolationExceptionUtils {
         if (object == null) {
             return null;
         }
-        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     static <T> Set<T> getConstraintViolations(final Object actual) {

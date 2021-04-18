@@ -27,51 +27,34 @@ final class ConstraintDeclarationExceptionUtils {
 
     private static final String SUFFIX = "ConstraintDeclarationException";
 
-    /**
-     * Applies the class of {@code ....validation.ConstraintDeclarationException} to specified function and returns the
-     * result.
-     *
-     * @param function the function to applied with the class of {@code ....validation.ConstraintDeclarationException}.
-     * @param <R>      result type parameter
-     * @return the result of the {@code function}.
-     */
     static <R> R applyConstraintDeclarationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
-    /**
-     * Returns the class of {@code ....validation.Path.PropertyNode}.
-     *
-     * @return the class of {@code ....validation.Path.PropertyNode}.
-     */
+    private static Class<?> constraintViolationExceptionClass = null;
+
     static Class<?> getConstraintDeclarationExceptionClass() {
-        return applyConstraintDeclarationExceptionClass(Function.identity());
+        if (constraintViolationExceptionClass == null) {
+            constraintViolationExceptionClass = applyConstraintDeclarationExceptionClass(Function.identity());
+        }
+        return constraintViolationExceptionClass;
     }
 
-    /**
-     * Indicates whether specified object is an instance of {@code ....validation.ConstraintDeclarationException}.
-     *
-     * @param object the object to be tested.
-     * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintDeclarationException};
-     * {@code false} otherwise.
-     */
     static boolean isNullOrInstanceOfConstraintDeclarationExceptionClass(final Object object) {
         if (object == null) {
             return true;
         }
-        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return getConstraintDeclarationExceptionClass().isInstance(object);
     }
 
-    /**
-     * Checks whether specified object is an instance of {@code ....validation.ConstraintDeclarationException}.
-     *
-     * @param object the object to be tested.
-     */
     static <T> T requireNullOrInstanceOfConstraintDeclarationExceptionClass(final T object) {
         if (object == null) {
             return null;
         }
-        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        if (!isNullOrInstanceOfConstraintDeclarationExceptionClass(object)) {
+            throw new IllegalArgumentException("not an instance of ConstraintViolationException: " + object);
+        }
+        return object;
     }
 
     private ConstraintDeclarationExceptionUtils() {

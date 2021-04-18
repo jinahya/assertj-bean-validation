@@ -36,7 +36,7 @@ final class GroupDefinitionExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyGroupDefinitionExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -59,7 +59,7 @@ final class GroupDefinitionExceptionUtils {
         if (object == null) {
             return true;
         }
-        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
@@ -71,7 +71,7 @@ final class GroupDefinitionExceptionUtils {
         if (object == null) {
             return null;
         }
-        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     private GroupDefinitionExceptionUtils() {

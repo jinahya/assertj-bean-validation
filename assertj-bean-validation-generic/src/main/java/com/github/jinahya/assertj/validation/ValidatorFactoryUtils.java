@@ -46,7 +46,7 @@ final class ValidatorFactoryUtils {
     private static final String SUFFIX = "ValidatorFactory";
 
     static <R> R applyValidatorFactoryClass(final Function<? super Class<?>, ? extends R> function) {
-        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     private static Class<?> validatorFactoryClass = null;
