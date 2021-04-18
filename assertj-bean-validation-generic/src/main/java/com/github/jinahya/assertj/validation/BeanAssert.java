@@ -42,7 +42,7 @@ public class BeanAssert<ACTUAL>
         super(actual, BeanAssert.class);
     }
 
-    // -------------------------------------------------------------------------------------------------------- validate
+    // ------------------------------------------------------------------------------------------------------- validator
     @Override
     Object getDefaultValidator() {
         return ValidationUtils.getValidator();

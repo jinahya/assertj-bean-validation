@@ -25,7 +25,7 @@
   <modules>
     <module>assertj-bean-validation-base</module>
     <module>assertj-bean-validation-generic</module>
-    <module>assertj-bean-validation-jakarta</module>
+    <!--    <module>assertj-bean-validation-jakarta</module>-->
     <module>assertj-bean-validation-javax</module>
   </modules>
 
@@ -77,6 +77,16 @@
         <artifactId>validation-api</artifactId>
         <version>${version.javax.validation-api}</version>
       </dependency>
+      <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>jakarta.el</artifactId>
+        <version>${version.jakarta.el}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate.validator</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>${version.org.hibernate.validator}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -95,13 +105,11 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.el</artifactId>
-      <version>${version.jakarta.el}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>${version.org.hibernate.validator}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -134,6 +142,63 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+          <configuration>
+            <compilerArgs>
+              <arg>-Xlint</arg>
+            </compilerArgs>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.0.0-M3</version>
+          <executions>
+            <execution>
+              <id>enforce</id>
+              <configuration>
+                <skip>true</skip>
+                <rules>
+                  <dependencyConvergence/>
+                </rules>
+              </configuration>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>enforce-require-java-version-to-[1.8.0,)</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <skip>false</skip>
+                <rules>
+                  <requireJavaVersion>
+                    <version>[1.8.0,)</version>
+                  </requireJavaVersion>
+                </rules>
+              </configuration>
+            </execution>
+            <execution>
+              <id>enforce-require-maven-version-to-[3.5.4,)</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <skip>false</skip>
+                <rules>
+                  <requireMavenVersion>
+                    <version>[3.5.4,)</version>
+                  </requireMavenVersion>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
@@ -173,6 +238,15 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${version.maven-surefire}</version>
+          <configuration>
+            <systemProperties>
+              <property>
+                <name>derby.stream.error.file</name>
+                <value>target/derby.log</value>
+              </property>
+            </systemProperties>
+            <trimStackTrace>false</trimStackTrace>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -191,13 +265,37 @@
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
+          <artifactId>animal-sniffer-maven-plugin</artifactId>
+          <version>${version.animal-sniffer}</version>
+          <executions>
+            <execution>
+              <id>check-against-java18</id>
+              <phase>test</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <signature>
+                  <groupId>org.codehaus.mojo.signature</groupId>
+                  <artifactId>java18</artifactId>
+                  <version>1.0</version>
+                </signature>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
-          <artifactId>versions-maven-plugin</artifactId>
-          <version>2.8.1</version>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>2.0.0</version>
+          <configuration>
+            <licenseName>apache_v2</licenseName>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -205,218 +303,71 @@
           <version>3.7.0.1746</version>
         </plugin>
         <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>2.8.1</version>
+        </plugin>
+        <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.6</version>
+          <executions>
+            <execution>
+              <id>default-prepare-agent</id>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>default-report</id>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <compilerArgs>
-            <arg>-Xlint</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.2</version>
-        <executions>
-          <execution>
-            <id>unpack-javadocs</id>
-            <phase>package</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.assertj</groupId>
-                  <artifactId>assertj-core</artifactId>
-                  <classifier>javadoc</classifier>
-                  <version>${version.assertj-core}</version>
-                  <overWrite>false</overWrite>
-                  <outputDirectory>${project.build.directory}/unpacked-javadoc/assertj-core/</outputDirectory>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>copy-element-list-to-package-list</id>
-            <phase>package</phase>
-            <configuration>
-              <!-- https://issues.apache.org/jira/browse/MJAVADOC-674 -->
-              <target>
-                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list"
-                      toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list"/>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M3</version>
-        <executions>
-          <execution>
-            <id>enforce</id>
-            <configuration>
-              <skip>true</skip>
-              <rules>
-                <dependencyConvergence/>
-              </rules>
-            </configuration>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>enforce-require-java-version-to-[1.8.0,)</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <skip>false</skip>
-              <rules>
-                <requireJavaVersion>
-                  <version>[1.8.0,)</version>
-                </requireJavaVersion>
-              </rules>
-            </configuration>
-          </execution>
-          <execution>
-            <id>enforce-require-maven-version-to-[3.5.4,)</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <skip>false</skip>
-              <rules>
-                <requireMavenVersion>
-                  <version>[3.5.4,)</version>
-                </requireMavenVersion>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemProperties>
-            <property>
-              <name>derby.stream.error.file</name>
-              <value>target/derby.log</value>
-            </property>
-          </systemProperties>
-          <trimStackTrace>false</trimStackTrace>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>${version.animal-sniffer}</version>
-        <executions>
-          <execution>
-            <id>check-against-java18</id>
-            <phase>test</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <signature>
-                <groupId>org.codehaus.mojo.signature</groupId>
-                <artifactId>java18</artifactId>
-                <version>1.0</version>
-              </signature>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-        <version>2.0.0</version>
-        <configuration>
-          <licenseName>apache_v2</licenseName>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-prepare-agent</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>default-report</id>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
 
-<!--  <reporting>-->
-<!--    <plugins>-->
-<!--      <plugin>-->
-<!--        <groupId>com.github.spotbugs</groupId>-->
-<!--        <artifactId>spotbugs-maven-plugin</artifactId>-->
-<!--        <version>3.1.12.2</version>-->
-<!--      </plugin>-->
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-jxr-plugin</artifactId>-->
-<!--        <version>3.0.0</version>-->
-<!--      </plugin>-->
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--      </plugin>-->
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-checkstyle-plugin</artifactId>-->
-<!--        <version>3.1.1</version>-->
-<!--      </plugin>-->
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-pmd-plugin</artifactId>-->
-<!--        <version>3.13.0</version>-->
-<!--      </plugin>-->
-<!--      <plugin>-->
-<!--        <groupId>org.jacoco</groupId>-->
-<!--        <artifactId>jacoco-maven-plugin</artifactId>-->
-<!--        <reportSets>-->
-<!--          <reportSet>-->
-<!--            <reports>-->
-<!--              <report>report</report>-->
-<!--            </reports>-->
-<!--          </reportSet>-->
-<!--        </reportSets>-->
-<!--      </plugin>-->
-<!--    </plugins>-->
-<!--  </reporting>-->
+  <!--  <reporting>-->
+  <!--    <plugins>-->
+  <!--      <plugin>-->
+  <!--        <groupId>com.github.spotbugs</groupId>-->
+  <!--        <artifactId>spotbugs-maven-plugin</artifactId>-->
+  <!--        <version>3.1.12.2</version>-->
+  <!--      </plugin>-->
+  <!--      <plugin>-->
+  <!--        <groupId>org.apache.maven.plugins</groupId>-->
+  <!--        <artifactId>maven-jxr-plugin</artifactId>-->
+  <!--        <version>3.0.0</version>-->
+  <!--      </plugin>-->
+  <!--      <plugin>-->
+  <!--        <groupId>org.apache.maven.plugins</groupId>-->
+  <!--        <artifactId>maven-javadoc-plugin</artifactId>-->
+  <!--      </plugin>-->
+  <!--      <plugin>-->
+  <!--        <groupId>org.apache.maven.plugins</groupId>-->
+  <!--        <artifactId>maven-checkstyle-plugin</artifactId>-->
+  <!--        <version>3.1.1</version>-->
+  <!--      </plugin>-->
+  <!--      <plugin>-->
+  <!--        <groupId>org.apache.maven.plugins</groupId>-->
+  <!--        <artifactId>maven-pmd-plugin</artifactId>-->
+  <!--        <version>3.13.0</version>-->
+  <!--      </plugin>-->
+  <!--      <plugin>-->
+  <!--        <groupId>org.jacoco</groupId>-->
+  <!--        <artifactId>jacoco-maven-plugin</artifactId>-->
+  <!--        <reportSets>-->
+  <!--          <reportSet>-->
+  <!--            <reports>-->
+  <!--              <report>report</report>-->
+  <!--            </reports>-->
+  <!--          </reportSet>-->
+  <!--        </reportSets>-->
+  <!--      </plugin>-->
+  <!--    </plugins>-->
+  <!--  </reporting>-->
 
 </project>
