@@ -61,7 +61,7 @@ final class ValidationUtils {
     static Object defaultValidatorFactory() {
         if (defaultValidatorFactory == null) {
             try {
-                defaultValidatorFactory = getValidationClass().getMethod("defaultValidatorFactory").invoke(null);
+                defaultValidatorFactory = getValidationClass().getMethod("buildDefaultValidatorFactory").invoke(null);
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
             }

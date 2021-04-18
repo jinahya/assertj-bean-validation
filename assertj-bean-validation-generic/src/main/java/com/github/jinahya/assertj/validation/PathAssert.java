@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SuppressWarnings({"java:S119", "java:S125"})
 public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
-        extends com.github.jinahya.assertj.validation.AbstractPathAssert<ACTUAL, NODE> {
+        extends AbstractPathAssert<ACTUAL, NODE> {
 
     // ------------------------------------------------------------------------------------------------------------ Node
     static class NodeAssertDelegateImpl

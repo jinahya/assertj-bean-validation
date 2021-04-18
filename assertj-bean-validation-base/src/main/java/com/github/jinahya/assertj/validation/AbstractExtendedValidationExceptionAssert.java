@@ -22,12 +22,12 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractThrowableAssert;
 
-abstract class AbstractExtendedValidationExceptionAssert<
+public abstract class AbstractExtendedValidationExceptionAssert<
         SELF extends AbstractExtendedValidationExceptionAssert<SELF, ACTUAL>,
         ACTUAL extends RuntimeException>
         extends AbstractThrowableAssert<SELF, ACTUAL> {
 
-    AbstractExtendedValidationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractExtendedValidationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 }

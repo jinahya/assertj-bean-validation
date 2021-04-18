@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-abstract class AbstractValueAssert<
+public abstract class AbstractValueAssert<
         SELF extends AbstractValueAssert<SELF, VALIDATOR, CONSTRAINTVIOLATION>,
         VALIDATOR,
         CONSTRAINTVIOLATION>
@@ -41,9 +41,10 @@ abstract class AbstractValueAssert<
     /**
      * Creates a new instance with specified actual value.
      *
-     * @param actual the actual value to verify.
+     * @param actual   the actual value to verify.
+     * @param selfType a self type.
      */
-    AbstractValueAssert(final Object actual, final Class<?> selfType) {
+    protected AbstractValueAssert(final Object actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
@@ -56,9 +57,10 @@ abstract class AbstractValueAssert<
      * @param actual       the {@link #actual} value.
      * @param beanType     the bean type.
      * @param propertyName the property name.
+     * @return a set of constraint violations.
      */
-    abstract <T> Set<? extends CONSTRAINTVIOLATION> validateValue(Object actual, Class<T> beanType,
-                                                                  String propertyName);
+    protected abstract <T> Set<? extends CONSTRAINTVIOLATION> validateValue(Object actual, Class<T> beanType,
+                                                                            String propertyName);
 
     /**
      * Verifies that the {@link #actual actual} would be valid for specified property of specified class.
@@ -106,6 +108,7 @@ abstract class AbstractValueAssert<
     /**
      * Verifies that {@link #actual actual} is not valid for a property of specified name of specified bean type.
      *
+     * @param <T>          bean type parameter
      * @param beanType     the bean type.
      * @param propertyName the name of the property.
      * @return {@link #myself self}.

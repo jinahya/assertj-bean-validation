@@ -21,12 +21,12 @@ package com.github.jinahya.assertj.validation;
  */
 
 @SuppressWarnings({"java:S119"})
-abstract class AbstractConstraintDefinitionExceptionAssert<
+public abstract class AbstractConstraintDefinitionExceptionAssert<
         SELF extends AbstractConstraintDefinitionExceptionAssert<SELF, ACTUAL>,
         ACTUAL extends RuntimeException>
         extends AbstractExtendedValidationExceptionAssert<SELF, ACTUAL> {
 
-    AbstractConstraintDefinitionExceptionAssert(final ACTUAL actual, final Class<?> selfClass) {
+    protected AbstractConstraintDefinitionExceptionAssert(final ACTUAL actual, final Class<?> selfClass) {
         super(actual, selfClass);
     }
 }

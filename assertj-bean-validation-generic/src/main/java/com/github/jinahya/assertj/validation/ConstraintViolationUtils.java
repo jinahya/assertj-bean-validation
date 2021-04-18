@@ -91,10 +91,10 @@ final class ConstraintViolationUtils {
 
     // ------------------------------------------------------------------------------------------------- getPropertyPath
     @SuppressWarnings({"unchecked"})
-    static <PATH extends Iterable<?>> PATH getPropertyPath(final Object actual) {
+    static <T> T getPropertyPath(final Object actual) {
         return applyConstraintViolationClass(c -> {
             try {
-                return (PATH) c.getMethod("getPropertyPath").invoke(actual);
+                return (T) c.getMethod("getPropertyPath").invoke(actual);
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
             }

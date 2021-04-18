@@ -20,12 +20,12 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-abstract class AbstractGroupDefinitionExceptionAssert<
+public abstract class AbstractGroupDefinitionExceptionAssert<
         SELF extends AbstractGroupDefinitionExceptionAssert<SELF, ACTUAL>,
         ACTUAL extends RuntimeException>
         extends AbstractExtendedValidationExceptionAssert<SELF, ACTUAL> {
 
-    AbstractGroupDefinitionExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractGroupDefinitionExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 }

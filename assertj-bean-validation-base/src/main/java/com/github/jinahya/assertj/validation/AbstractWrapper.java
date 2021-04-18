@@ -44,7 +44,7 @@ public abstract class AbstractWrapper<ACTUAL> {
      *
      * @return the actual value wrapped in this wrapper.
      */
-    ACTUAL getActual() {
+    public ACTUAL getActual() {
         return actual;
     }
 

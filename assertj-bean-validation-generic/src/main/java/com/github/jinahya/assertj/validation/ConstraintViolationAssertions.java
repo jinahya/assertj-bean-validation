@@ -35,10 +35,12 @@ public final class ConstraintViolationAssertions {
      *
      * @param actual   the constraint violation value to assert.
      * @param <ACTUAL> the type of actual {@code ....validation.ConstraintViolation}
+     * @param <PATH>   the actual type of {@code ....validation.Path}
      * @param <T>      the type of the root bean of {@code <ACTUAL>}
      * @return a new assertion instance.
      */
-    public static <ACTUAL, T> ConstraintViolationAssert<ACTUAL, T> assertConstraintViolation(final ACTUAL actual) {
+    public static <ACTUAL, PATH, T> ConstraintViolationAssert<ACTUAL, PATH, T> assertConstraintViolation(
+            final ACTUAL actual) {
         return new ConstraintViolationAssert<>(actual);
     }
 
@@ -47,10 +49,11 @@ public final class ConstraintViolationAssertions {
      *
      * @param wrapper  the wrapper wraps the constraint violation value.
      * @param <ACTUAL> the type of actual {@code ....validation.ConstraintViolation}
+     * @param <PATH>   the actual type of {@code ....validation.Path}
      * @param <T>      the type of the root bean of {@code <ACTUAL>}
      * @return a new assertion instance.
      */
-    public static <ACTUAL, T> ConstraintViolationAssert<ACTUAL, T> assertThat(
+    public static <ACTUAL, PATH, T> ConstraintViolationAssert<ACTUAL, PATH, T> assertThat(
             final ConstraintViolationWrapper<? extends ACTUAL> wrapper) {
         requireNonNull(wrapper, "wrapper is null");
         return assertConstraintViolation(wrapper.getActual());

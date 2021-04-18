@@ -53,6 +53,13 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>com.github.jinahya</groupId>
+      <artifactId>assertj-bean-validation-base</artifactId>
+      <classifier>tests</classifier>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
       <scope>test</scope>
@@ -65,13 +72,11 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.el</artifactId>
-      <version>${version.jakarta.el}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>${version.org.hibernate.validator}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -366,6 +371,20 @@
 
   <profiles>
     <profile>
+      <id>jakarta</id>
+      <properties>
+        <version.jakarta.el>4.0.1</version.jakarta.el>
+        <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator>
+      </properties>
+      <!--      <dependencies>-->
+      <!--        <dependency>-->
+      <!--          <groupId>jakarta.validation</groupId>-->
+      <!--          <artifactId>jakarta.validation-api</artifactId>-->
+      <!--          <scope>test</scope>-->
+      <!--        </dependency>-->
+      <!--      </dependencies>-->
+    </profile>
+    <profile>
       <id>javax</id>
       <activation>
         <activeByDefault>true</activeByDefault>
@@ -378,20 +397,6 @@
       <!--        <dependency>-->
       <!--          <groupId>javax.validation</groupId>-->
       <!--          <artifactId>validation-api</artifactId>-->
-      <!--          <scope>test</scope>-->
-      <!--        </dependency>-->
-      <!--      </dependencies>-->
-    </profile>
-    <profile>
-      <id>jakarta</id>
-      <properties>
-        <version.jakarta.el>4.0.1</version.jakarta.el>
-        <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator>
-      </properties>
-      <!--      <dependencies>-->
-      <!--        <dependency>-->
-      <!--          <groupId>jakarta.validation</groupId>-->
-      <!--          <artifactId>jakarta.validation-api</artifactId>-->
       <!--          <scope>test</scope>-->
       <!--        </dependency>-->
       <!--      </dependencies>-->

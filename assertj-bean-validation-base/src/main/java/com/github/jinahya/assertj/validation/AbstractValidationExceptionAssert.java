@@ -22,12 +22,12 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractThrowableAssert;
 
-abstract class AbstractValidationExceptionAssert<
+public abstract class AbstractValidationExceptionAssert<
         SELF extends AbstractValidationExceptionAssert<SELF, ACTUAL>,
         ACTUAL extends RuntimeException>
         extends AbstractThrowableAssert<SELF, ACTUAL> {
 
-    AbstractValidationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractValidationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
@@ -44,6 +44,7 @@ abstract class AbstractValidationExceptionAssert<
      * Verifies that the {@link #actual} is an instance of {@code ConstraintDeclarationException} and returns an assert
      * of {@code ConstraintViolationException} for subsequent verifications.
      *
+     * @param <T> self type parameter
      * @return {@link #myself self}.
      */
     public abstract <T extends AbstractConstraintDeclarationExceptionAssert<T, ?>> T asConstraintDeclarationException();

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
+public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         extends IterableAssert<NODE> {
 
     interface NodeBaseAssertDelegate<NODE, ELEMENT_KIND> {
@@ -34,14 +34,14 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         boolean isInIterable(NODE actual);
     }
 
-    abstract static class AbstractNodeBaseAssert<
+    public abstract static class AbstractNodeBaseAssert<
             SELF extends AbstractNodeBaseAssert<SELF, ACTUAL, ELEMENT_KIND, D>,
             ACTUAL,
             ELEMENT_KIND,
             D extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND>>
             extends AbstractAssert<SELF, ACTUAL> {
 
-        AbstractNodeBaseAssert(final ACTUAL actual, final Class<?> selfType, final D delegate) {
+        protected AbstractNodeBaseAssert(final ACTUAL actual, final Class<?> selfType, final D delegate) {
             super(actual, selfType);
             this.delegate = requireNonNull(delegate, "delegate is null");
         }
@@ -186,12 +186,12 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface AbstractNodeAssertDelegate<NODE, ELEMENT_KIND>
+    protected interface AbstractNodeAssertDelegate<NODE, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<NODE, ELEMENT_KIND> {
 
     }
 
-    abstract static class AbstractNodeAssert<
+    protected abstract static class AbstractNodeAssert<
             SELF extends AbstractNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -201,8 +201,8 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                           final AbstractNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                     final AbstractNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
 
@@ -213,7 +213,7 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
         Class<?> getContainerClass(ACTUAL actual);
@@ -221,7 +221,7 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         Integer getTypeArgumentIndex(ACTUAL actual);
     }
 
-    abstract static class AbstractBeanNodeAssert<
+    protected abstract static class AbstractBeanNodeAssert<
             SELF extends AbstractBeanNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -231,8 +231,8 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractBeanNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                               final BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractBeanNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                         final BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
 
@@ -258,13 +258,13 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // ------------------------------------------------------------------------------------------------- ConstructorNode
-    interface ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
         List<Class<?>> getParameterTypes(ACTUAL actual);
     }
 
-    abstract static class AbstractConstructorNodeAssert<
+    protected abstract static class AbstractConstructorNodeAssert<
             SELF extends AbstractConstructorNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -274,8 +274,8 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractConstructorNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                      final ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractConstructorNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                                final ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
 
@@ -292,7 +292,7 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
         Class<?> getContainerClass(ACTUAL actual);
@@ -300,7 +300,7 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         Integer getTypeArgumentIndex(ACTUAL actual);
     }
 
-    abstract static class AbstractContainerElementNodeAssert<
+    protected abstract static class AbstractContainerElementNodeAssert<
             SELF extends AbstractContainerElementNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -310,8 +310,9 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractContainerElementNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                           final ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractContainerElementNodeAssert(
+                final ACTUAL actual, final Class<?> selfType,
+                final ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
 
@@ -337,12 +338,12 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
     }
 
-    abstract static class AbstractCrossParameterNodeAssert<
+    protected abstract static class AbstractCrossParameterNodeAssert<
             SELF extends AbstractCrossParameterNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -352,20 +353,20 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractCrossParameterNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                         final CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractCrossParameterNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                                   final CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
         List<Class<?>> getParameterTypes(ACTUAL actual);
     }
 
-    abstract static class AbstractMethodNodeAssert<
+    protected abstract static class AbstractMethodNodeAssert<
             SELF extends AbstractMethodNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -375,8 +376,8 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractMethodNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                 final MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractMethodNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                           final MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
 
@@ -393,13 +394,13 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
         int getParameterIndex(ACTUAL actual);
     }
 
-    abstract static class AbstractParameterNodeAssert<
+    protected abstract static class AbstractParameterNodeAssert<
             SELF extends AbstractParameterNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -409,8 +410,8 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractParameterNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                    final ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractParameterNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                              final ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
 
@@ -426,7 +427,7 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
         Class<?> getContainerClass(ACTUAL actual);
@@ -434,7 +435,7 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         Integer getTypeArgumentIndex(ACTUAL actual);
     }
 
-    abstract static class AbstractPropertyNodeAssert<
+    protected abstract static class AbstractPropertyNodeAssert<
             SELF extends AbstractPropertyNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -444,8 +445,8 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractPropertyNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                   final PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractPropertyNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                             final PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
 
@@ -471,12 +472,12 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    interface ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
+    protected interface ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
             extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
 
     }
 
-    abstract static class AbstractReturnValueNodeAssert<
+    protected abstract static class AbstractReturnValueNodeAssert<
             SELF extends AbstractReturnValueNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
@@ -486,14 +487,14 @@ abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             ELEMENT_KIND,
             ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
 
-        AbstractReturnValueNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                      final ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+        protected AbstractReturnValueNodeAssert(final ACTUAL actual, final Class<?> selfType,
+                                                final ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    AbstractPathAssert(final ACTUAL actual) {
+    protected AbstractPathAssert(final ACTUAL actual) {
         super(actual);
     }
 }

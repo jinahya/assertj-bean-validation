@@ -28,7 +28,7 @@ package com.github.jinahya.assertj.validation;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-abstract class AbstractConstraintDeclarationExceptionAssert<
+public abstract class AbstractConstraintDeclarationExceptionAssert<
         SELF extends AbstractConstraintDeclarationExceptionAssert<SELF, ACTUAL>,
         ACTUAL extends RuntimeException>
         extends AbstractExtendedValidationExceptionAssert<SELF, ACTUAL> {
@@ -39,7 +39,7 @@ abstract class AbstractConstraintDeclarationExceptionAssert<
      * @param actual   the actual value to verify.
      * @param selfType a self type.
      */
-    AbstractConstraintDeclarationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractConstraintDeclarationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 }

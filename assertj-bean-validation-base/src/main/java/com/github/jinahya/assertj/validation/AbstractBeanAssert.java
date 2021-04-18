@@ -30,29 +30,29 @@ import static org.assertj.core.api.Assertions.assertThat;
  * An assertion class for validating a bean and its properties.
  *
  * @param <ACTUAL>              actual bean type parameter
- * @param <CONSTRAINTVIOLATION> the type of {@code ConstraintViolation}.
+ * @param <CONSTRAINT_VIOLATION> the type of {@code ConstraintViolation}.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-abstract class AbstractBeanAssert<
-        SELF extends AbstractBeanAssert<SELF, ACTUAL, VALIDATOR, CONSTRAINTVIOLATION>,
+public abstract class AbstractBeanAssert<
+        SELF extends AbstractBeanAssert<SELF, ACTUAL, VALIDATOR, CONSTRAINT_VIOLATION>,
         ACTUAL,
         VALIDATOR,
-        CONSTRAINTVIOLATION>
+        CONSTRAINT_VIOLATION>
         extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR> {
 
     /**
      * Creates a new instance with specified bean.
      *
-     * @param actual the actual bean to verify.
-     * @see #actual
+     * @param actual   the actual bean to verify.
+     * @param selfType a self type.
      */
-    AbstractBeanAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractBeanAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
     // -------------------------------------------------------------------------------------------------------- validate
-    abstract Set<CONSTRAINTVIOLATION> validate(ACTUAL actual);
+    protected abstract Set<CONSTRAINT_VIOLATION> validate(ACTUAL actual);
 
     /**
      * Verifies that the {@link #actual actual} is valid.
@@ -75,9 +75,9 @@ abstract class AbstractBeanAssert<
      * @return {@link #myself self}.
      * @see #isNotValid()
      */
-    public SELF isNotValid(final Consumer<? super Set<CONSTRAINTVIOLATION>> consumer) {
+    public SELF isNotValid(final Consumer<? super Set<CONSTRAINT_VIOLATION>> consumer) {
         return isNotNull().satisfies(a -> {
-            final Set<CONSTRAINTVIOLATION> constraintViolations = validate(a);
+            final Set<CONSTRAINT_VIOLATION> constraintViolations = validate(a);
             assertThat(constraintViolations).isNotEmpty();
             if (consumer != null) {
                 consumer.accept(constraintViolations);
@@ -96,7 +96,7 @@ abstract class AbstractBeanAssert<
     }
 
     // ------------------------------------------------------------------------------------------------ validateProperty
-    abstract Set<CONSTRAINTVIOLATION> validateProperty(final ACTUAL actual, final String propertyName);
+    protected abstract Set<CONSTRAINT_VIOLATION> validateProperty(final ACTUAL actual, final String propertyName);
 
     /**
      * Verifies that the {@link #actual actual}'s current property of specified name is valid.
@@ -107,7 +107,7 @@ abstract class AbstractBeanAssert<
     public SELF hasValidProperty(final String propertyName) {
         requireNonNull(propertyName, "propertyName is null");
         return isNotNull().satisfies(a -> {
-            final Set<CONSTRAINTVIOLATION> constraintViolations = validateProperty(a, propertyName);
+            final Set<CONSTRAINT_VIOLATION> constraintViolations = validateProperty(a, propertyName);
             assertThat(constraintViolations).isEmpty();
         });
     }
@@ -124,10 +124,10 @@ abstract class AbstractBeanAssert<
      * @see #doesNotHaveValidProperty(String)
      */
     public SELF doesNotHaveValidProperty(
-            final String propertyName, final Consumer<? super Set<CONSTRAINTVIOLATION>> consumer) {
+            final String propertyName, final Consumer<? super Set<CONSTRAINT_VIOLATION>> consumer) {
         requireNonNull(propertyName, "propertyName is null");
         return isNotNull().satisfies(a -> {
-            final Set<CONSTRAINTVIOLATION> constraintViolations = validateProperty(a, propertyName);
+            final Set<CONSTRAINT_VIOLATION> constraintViolations = validateProperty(a, propertyName);
             assertThat(constraintViolations).isNotEmpty();
             if (consumer != null) {
                 consumer.accept(constraintViolations);

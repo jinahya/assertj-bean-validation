@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @param <CONSTRAINTVIOLATION> the type of {@code ConstraintViolation}.
  */
 @SuppressWarnings({"java:S119"})
-abstract class AbstractConstraintViolationExceptionAssert<
+public abstract class AbstractConstraintViolationExceptionAssert<
         SELF extends AbstractConstraintViolationExceptionAssert<SELF, ACTUAL, CONSTRAINTVIOLATION>,
         ACTUAL extends RuntimeException,
         CONSTRAINTVIOLATION>
@@ -44,19 +44,22 @@ abstract class AbstractConstraintViolationExceptionAssert<
     /**
      * Creates a new instance with specified actual value.
      *
-     * @param actual the actual value to verify.
+     * @param actual   the actual value to verify.
+     * @param selfType a self type.
      */
-    AbstractConstraintViolationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractConstraintViolationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
-    abstract Set<? extends CONSTRAINTVIOLATION> getConstraintViolations();
+    // -----------------------------------------------------------------------------------------------------------------
+    protected abstract Set<? extends CONSTRAINTVIOLATION> getConstraintViolations();
 
     /**
      * Verifies that the {@code actual.getConstraintViolations()} satisfies specified requirements by being accepted to
      * specified consumer.
      *
-     * @param requirements the consumer accepts and verifies the set of {@link U} contained in {@code actual}.
+     * @param requirements the consumer accepts and verifies the set of constraint violations contained in {@code
+     *                     actual}.
      * @return {@link #myself self}.
      */
     public SELF hasConstraintViolationsSatisfying(

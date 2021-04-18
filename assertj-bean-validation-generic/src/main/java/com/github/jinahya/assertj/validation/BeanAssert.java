@@ -25,37 +25,35 @@ import java.util.Set;
 /**
  * An assertion class for validating a bean and/or its properties.
  *
- * @param <ACTUAL> actual bean type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public class BeanAssert<ACTUAL>
-        extends AbstractBeanAssert<BeanAssert<ACTUAL>, ACTUAL, Object, Object> {
+public class BeanAssert
+        extends AbstractBeanAssert<BeanAssert, Object, Object, Object> {
 
     /**
      * Creates a new instance with specified bean.
      *
      * @param actual the actual bean to verify.
-     * @see #actual
      */
-    public BeanAssert(final ACTUAL actual) {
+    public BeanAssert(final Object actual) {
         super(actual, BeanAssert.class);
     }
 
     // ------------------------------------------------------------------------------------------------------- validator
     @Override
-    Object getDefaultValidator() {
+    protected Object getDefaultValidator() {
         return ValidationUtils.getValidator();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
-    Set<Object> validate(final ACTUAL actual) {
+    protected Set<Object> validate(final Object actual) {
         return ValidatorUtils.validate(validator(), actual, groups());
     }
 
     @Override
-    Set<Object> validateProperty(final ACTUAL actual, String propertyName) {
+    protected Set<Object> validateProperty(final Object actual, String propertyName) {
         return ValidatorUtils.validateProperty(validator(), actual, propertyName, groups());
     }
 }

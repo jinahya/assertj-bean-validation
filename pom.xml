@@ -143,6 +143,16 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>3.1.12.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>3.1.1</version>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.1</version>
@@ -255,6 +265,16 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jxr-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>3.13.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
@@ -329,45 +349,5 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <!--  <reporting>-->
-  <!--    <plugins>-->
-  <!--      <plugin>-->
-  <!--        <groupId>com.github.spotbugs</groupId>-->
-  <!--        <artifactId>spotbugs-maven-plugin</artifactId>-->
-  <!--        <version>3.1.12.2</version>-->
-  <!--      </plugin>-->
-  <!--      <plugin>-->
-  <!--        <groupId>org.apache.maven.plugins</groupId>-->
-  <!--        <artifactId>maven-jxr-plugin</artifactId>-->
-  <!--        <version>3.0.0</version>-->
-  <!--      </plugin>-->
-  <!--      <plugin>-->
-  <!--        <groupId>org.apache.maven.plugins</groupId>-->
-  <!--        <artifactId>maven-javadoc-plugin</artifactId>-->
-  <!--      </plugin>-->
-  <!--      <plugin>-->
-  <!--        <groupId>org.apache.maven.plugins</groupId>-->
-  <!--        <artifactId>maven-checkstyle-plugin</artifactId>-->
-  <!--        <version>3.1.1</version>-->
-  <!--      </plugin>-->
-  <!--      <plugin>-->
-  <!--        <groupId>org.apache.maven.plugins</groupId>-->
-  <!--        <artifactId>maven-pmd-plugin</artifactId>-->
-  <!--        <version>3.13.0</version>-->
-  <!--      </plugin>-->
-  <!--      <plugin>-->
-  <!--        <groupId>org.jacoco</groupId>-->
-  <!--        <artifactId>jacoco-maven-plugin</artifactId>-->
-  <!--        <reportSets>-->
-  <!--          <reportSet>-->
-  <!--            <reports>-->
-  <!--              <report>report</report>-->
-  <!--            </reports>-->
-  <!--          </reportSet>-->
-  <!--        </reportSets>-->
-  <!--      </plugin>-->
-  <!--    </plugins>-->
-  <!--  </reporting>-->
 
 </project>

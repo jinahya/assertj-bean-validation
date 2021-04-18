@@ -25,29 +25,30 @@ import java.util.Set;
 /**
  * An assertion class for validating values against constraints defined on property of specified bean type.
  *
- * @param <ACTUAL> the value of actual property value.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public class ValueAssert<ACTUAL>
-        extends AbstractValueAssert<ValueAssert<ACTUAL>, Object, Object> {
+public class ValueAssert
+        extends AbstractValueAssert<ValueAssert, Object, Object> {
 
     /**
      * Creates a new instance with specified actual value.
      *
      * @param actual the actual value to verify.
      */
-    public ValueAssert(final ACTUAL actual) {
+    public ValueAssert(final Object actual) {
         super(actual, ValueAssert.class);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
-    Object getDefaultValidator() {
+    protected Object getDefaultValidator() {
         return ValidationUtils.getValidator();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     @Override
-    <T> Set<Object> validateValue(final Object actual, final Class<T> beanType, final String propertyName) {
+    protected <T> Set<Object> validateValue(final Object actual, final Class<T> beanType, final String propertyName) {
         return ValidatorUtils.validateValue(validator(), beanType, propertyName, actual, groups());
     }
 }

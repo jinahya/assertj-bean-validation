@@ -42,7 +42,7 @@ import org.assertj.core.api.AbstractAssert;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119", "java:S2160"})
-abstract class AbstractValidationAssert<
+public abstract class AbstractValidationAssert<
         SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
         ACTUAL,
         VALIDATOR>
@@ -54,7 +54,7 @@ abstract class AbstractValidationAssert<
      * @param actual   the actual value.
      * @param selfType the self type.
      */
-    AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
@@ -83,7 +83,7 @@ abstract class AbstractValidationAssert<
         return (SELF) this;
     }
 
-    abstract VALIDATOR getDefaultValidator();
+    protected abstract VALIDATOR getDefaultValidator();
 
     /**
      * Returns current validator instance being used.

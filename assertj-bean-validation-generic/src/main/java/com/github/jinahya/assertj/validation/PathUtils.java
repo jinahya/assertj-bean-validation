@@ -23,7 +23,6 @@ package com.github.jinahya.assertj.validation;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.github.jinahya.assertj.validation.ReflectionUtils.applyClassForSuffix;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings({"java:S125"})
@@ -359,7 +358,7 @@ final class PathUtils {
         private static final String SUFFIX = "Path$PropertyNode";
 
         static <R> R applyPropertyNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return applyClassForSuffix(SUFFIX, function);
+            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
         }
 
         static boolean isNullOrInstanceOfPropertyNodeClass(final Object object) {
