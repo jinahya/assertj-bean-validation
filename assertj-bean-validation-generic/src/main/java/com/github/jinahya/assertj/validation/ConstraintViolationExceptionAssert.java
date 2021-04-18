@@ -41,7 +41,7 @@ public class ConstraintViolationExceptionAssert<ACTUAL extends RuntimeException>
      * @param actual the actual value to verify.
      */
     public ConstraintViolationExceptionAssert(final ACTUAL actual) {
-        super(ConstraintViolationExceptionUtils.requireConstraintViolationExceptionInstance(actual),
+        super(ConstraintViolationExceptionUtils.requireNullOrInstanceOfConstraintViolationExceptionClass(actual),
               ConstraintViolationExceptionAssert.class);
     }
 

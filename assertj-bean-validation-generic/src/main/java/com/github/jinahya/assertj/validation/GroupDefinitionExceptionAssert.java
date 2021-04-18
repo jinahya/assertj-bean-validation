@@ -24,7 +24,7 @@ public class GroupDefinitionExceptionAssert<ACTUAL extends RuntimeException>
         extends AbstractExtendedValidationExceptionAssert<GroupDefinitionExceptionAssert<ACTUAL>, ACTUAL> {
 
     public GroupDefinitionExceptionAssert(final ACTUAL actual) {
-        super(GroupDefinitionExceptionUtils.requireGroupDefinitionExceptionInstance(actual),
+        super(GroupDefinitionExceptionUtils.requireNullOrInstanceOfGroupDefinitionExceptionClass(actual),
               GroupDefinitionExceptionAssert.class);
     }
 }

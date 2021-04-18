@@ -36,7 +36,7 @@ final class ConstraintDefinitionExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyConstraintDefinitionExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassForSuffix(SUFFIX, function);
+        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -48,42 +48,30 @@ final class ConstraintDefinitionExceptionUtils {
         return applyConstraintDefinitionExceptionClass(Function.identity());
     }
 
-    private static <R> R applyConstraintDefinitionExceptionClassFor(
-            final Object actual, final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassFor(SUFFIX, actual, function);
-    }
-
-    private static Class<?> getConstraintDefinitionExceptionClassFor(final Object actual) {
-        return applyConstraintDefinitionExceptionClassFor(actual, Function.identity());
-    }
-
     /**
      * Indicates whether specified object is an instance of {@code ....validation.ConstraintDefinitionException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintDefinitionException};
      * {@code false} otherwise.
      */
-    static boolean isConstraintDefinitionExceptionInstance(final Object actual) {
-        if (actual == null) {
+    static boolean isNullOrInstanceOfConstraintDefinitionExceptionClass(final Object object) {
+        if (object == null) {
             return true;
         }
-        return applyConstraintDefinitionExceptionClassFor(actual, c -> true);
+        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
      * Checks whether specified object is an instance of {@code ....validation.ConstraintDefinitionException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      */
-    static <T> T requireConstraintDefinitionExceptionInstance(final T actual) {
-        if (actual == null) {
+    static <T> T requireNullOrInstanceOfConstraintDefinitionExceptionClass(final T object) {
+        if (object == null) {
             return null;
         }
-        return applyConstraintDefinitionExceptionClassFor(
-                ValidationExceptionUtils.requireValidationExceptionInstance(actual),
-                c -> actual
-        );
+        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     private ConstraintDefinitionExceptionUtils() {

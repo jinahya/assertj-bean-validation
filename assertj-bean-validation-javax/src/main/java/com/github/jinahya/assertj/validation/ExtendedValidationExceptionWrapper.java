@@ -20,6 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import com.github.jinahya.assertj.validation.AbstractExtendedValidationExceptionWrapper;
+
 import javax.validation.ValidationException;
 
 abstract class ExtendedValidationExceptionWrapper<ACTUAL extends ValidationException>

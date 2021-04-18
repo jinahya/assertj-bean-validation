@@ -116,13 +116,13 @@ public class PathAssertions {
             return new PathAssert.MethodNodeAssert(actual);
         }
 
-        public static PathAssert.MethodNodeAssert assertMethodNodeNode(final Path.MethodNode actual) {
+        public static PathAssert.MethodNodeAssert assertMethodNode(final Path.MethodNode actual) {
             return assertThat(actual);
         }
 
         public static PathAssert.MethodNodeAssert assertThat(final AbstractWrapper<? extends Path.MethodNode> wrapper) {
             requireNonNull(wrapper, "wrapper is null");
-            return assertMethodNodeNode(wrapper.getActual());
+            return assertMethodNode(wrapper.getActual());
         }
 
         private MethodNodeAssertions() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -67,11 +68,6 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${version.logback-classic}</version>
-      </dependency>
-      <dependency>
         <groupId>jakarta.validation</groupId>
         <artifactId>jakarta.validation-api</artifactId>
         <version>${version.jakarta.validation-api}</version>
@@ -80,26 +76,6 @@
         <groupId>javax.validation</groupId>
         <artifactId>validation-api</artifactId>
         <version>${version.javax.validation-api}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${version.assertj-core}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-api</artifactId>
-        <version>${version.org.junit.jupiter}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>${version.org.junit.jupiter}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-params</artifactId>
-        <version>${version.org.junit.jupiter}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -283,7 +259,8 @@
             <configuration>
               <!-- https://issues.apache.org/jira/browse/MJAVADOC-674 -->
               <target>
-                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list" toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list"/>
+                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list"
+                      toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list"/>
               </target>
             </configuration>
             <goals>
@@ -442,37 +419,4 @@
     </plugins>
   </reporting>
 
-  <profiles>
-    <profile>
-      <id>javax</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <version.jakarta.el>3.0.3</version.jakarta.el>
-        <version.org.hibernate.validator>6.2.0.Final</version.org.hibernate.validator>
-      </properties>
-<!--      <dependencies>-->
-<!--        <dependency>-->
-<!--          <groupId>javax.validation</groupId>-->
-<!--          <artifactId>validation-api</artifactId>-->
-<!--          <scope>test</scope>-->
-<!--        </dependency>-->
-<!--      </dependencies>-->
-    </profile>
-    <profile>
-      <id>jakarta</id>
-      <properties>
-        <version.jakarta.el>4.0.1</version.jakarta.el>
-        <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator>
-      </properties>
-<!--      <dependencies>-->
-<!--        <dependency>-->
-<!--          <groupId>jakarta.validation</groupId>-->
-<!--          <artifactId>jakarta.validation-api</artifactId>-->
-<!--          <scope>test</scope>-->
-<!--        </dependency>-->
-<!--      </dependencies>-->
-    </profile>
-  </profiles>
 </project>

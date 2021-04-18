@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * An assertion class for validating a bean and its properties.
  *
- * @param <ACTUAL> actual type parameter
+ * @param <ACTUAL> the type of actual value.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})

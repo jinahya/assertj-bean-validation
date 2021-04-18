@@ -35,7 +35,7 @@ public class ConstraintDeclarationExceptionAssert<ACTUAL extends RuntimeExceptio
      * @param actual the actual value to verify.
      */
     public ConstraintDeclarationExceptionAssert(final ACTUAL actual) {
-        super(ConstraintDeclarationExceptionUtils.requireConstraintDeclarationExceptionInstance(actual),
+        super(ConstraintDeclarationExceptionUtils.requireNullOrInstanceOfConstraintDeclarationExceptionClass(actual),
               ConstraintDeclarationExceptionAssert.class);
     }
 }

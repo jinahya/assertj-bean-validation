@@ -32,7 +32,7 @@ public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
     @Override
     protected ValidationExceptionAssert<ACTUAL> isConstraintDeclarationException() {
         return isNotNull()
-                .satisfies(ConstraintDeclarationExceptionUtils::isConstraintDeclarationExceptionInstance);
+                .satisfies(ConstraintDeclarationExceptionUtils::isNullOrInstanceOfConstraintDeclarationExceptionClass);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
     @Override
     protected ValidationExceptionAssert<ACTUAL> isConstraintDefinitionException() {
         return isNotNull()
-                .satisfies(ConstraintDefinitionExceptionUtils::isConstraintDefinitionExceptionInstance);
+                .satisfies(ConstraintDefinitionExceptionUtils::isNullOrInstanceOfConstraintDefinitionExceptionClass);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
     @Override
     protected ValidationExceptionAssert<ACTUAL> isConstraintViolationException() {
         return isNotNull()
-                .satisfies(ConstraintViolationExceptionUtils::isConstraintViolationExceptionInstance);
+                .satisfies(ConstraintViolationExceptionUtils::isNullOrInstanceOfConstraintViolationExceptionClass);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
     @Override
     protected ValidationExceptionAssert<ACTUAL> isGroupDefinitionException() {
         return isNotNull()
-                .satisfies(GroupDefinitionExceptionUtils::isGroupDefinitionExceptionInstance);
+                .satisfies(GroupDefinitionExceptionUtils::isNullOrInstanceOfGroupDefinitionExceptionClass);
     }
 
     @Override

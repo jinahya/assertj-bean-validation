@@ -1,5 +1,7 @@
 package com.github.jinahya.assertj.validation;
 
+import com.github.jinahya.assertj.validation.NonInstantiatableAssertionError;
+
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 

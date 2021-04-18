@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         extends com.github.jinahya.assertj.validation.AbstractPathAssert<ACTUAL, NODE> {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------ Node
     static class NodeAssertDelegateImpl
             implements AbstractNodeAssertDelegate<Object, Object> {
 
@@ -87,7 +87,7 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------- BeanNode
     static class BeanNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements BeanNodeAssertDelegate<Object, Object> {
@@ -112,7 +112,7 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------- ConstructorNode
     static class ConstructorNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements ConstructorNodeAssertDelegate<Object, Object> {
@@ -127,12 +127,12 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractConstructorNodeAssert<ConstructorNodeAssert, Object, Object> {
 
         public ConstructorNodeAssert(final Object actual) {
-            super(PathUtils.ConstructorNodeUtils.requireNullOrInstanceOfConstructorNode(actual),
+            super(PathUtils.ConstructorNodeUtils.requireNullOrInstanceOfConstructorNodeClass(actual),
                   ConstructorNodeAssert.class, new ConstructorNodeAssertDelegateImpl());
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------- ContainerElementNode
     static class ContainerElementNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements ContainerElementNodeAssertDelegate<Object, Object> {
@@ -152,12 +152,12 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractContainerElementNodeAssert<ContainerElementNodeAssert, Object, Object> {
 
         public ContainerElementNodeAssert(final Object actual) {
-            super(PathUtils.ContainerElementNodeUtils.requireNullOrInstanceOfContainerElementNode(actual),
+            super(PathUtils.ContainerElementNodeUtils.requireNullOrInstanceOfContainerElementNodeClass(actual),
                   ContainerElementNodeAssert.class, new ContainerElementNodeAssertDelegateImpl());
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------- CrossParameterNode
     static class CrossParameterNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements CrossParameterNodeAssertDelegate<Object, Object> {
@@ -168,12 +168,12 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractCrossParameterNodeAssert<CrossParameterNodeAssert, Object, Object> {
 
         public CrossParameterNodeAssert(final Object actual) {
-            super(PathUtils.CrossParameterNodeUtils.requireNullOrInstanceOfCrossParameterNode(actual),
+            super(PathUtils.CrossParameterNodeUtils.requireNullOrInstanceOfCrossParameterNodeClass(actual),
                   CrossParameterNodeAssert.class, new CrossParameterNodeAssertDelegateImpl());
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------ MethodNode
     static class MethodNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements MethodNodeAssertDelegate<Object, Object> {
@@ -188,12 +188,12 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractMethodNodeAssert<MethodNodeAssert, Object, Object> {
 
         public MethodNodeAssert(final Object actual) {
-            super(PathUtils.MethodNodeUtils.requireNullOrInstanceOfMethodNode(actual), MethodNodeAssert.class,
+            super(PathUtils.MethodNodeUtils.requireNullOrInstanceOfMethodNodeClass(actual), MethodNodeAssert.class,
                   new MethodNodeAssertDelegateImpl());
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------- ParameterNode
     static class ParameterNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements ParameterNodeAssertDelegate<Object, Object> {
@@ -208,12 +208,12 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractParameterNodeAssert<ParameterNodeAssert, Object, Object> {
 
         public ParameterNodeAssert(final Object actual) {
-            super(PathUtils.ParameterNodeUtils.requireNullOrInstanceOfParameterNode(actual), ParameterNodeAssert.class,
-                  new ParameterNodeAssertDelegateImpl());
+            super(PathUtils.ParameterNodeUtils.requireNullOrInstanceOfParameterNodeClass(actual),
+                  ParameterNodeAssert.class, new ParameterNodeAssertDelegateImpl());
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------- PropertyNode
     static class PropertyNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements PropertyNodeAssertDelegate<Object, Object> {
@@ -237,7 +237,7 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------- ReturnValueNode
     static class ReturnValueNodeAssertDelegateImpl
             extends NodeAssertDelegateImpl
             implements ReturnValueNodeAssertDelegate<Object, Object> {
@@ -248,7 +248,7 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractReturnValueNodeAssert<ReturnValueNodeAssert, Object, Object> {
 
         public ReturnValueNodeAssert(final Object actual) {
-            super(PathUtils.ReturnValueNodeUtils.requireNullOrInstanceOfReturnValueNode(actual),
+            super(PathUtils.ReturnValueNodeUtils.requireNullOrInstanceOfReturnValueNodeClass(actual),
                   ReturnValueNodeAssert.class, new ReturnValueNodeAssertDelegateImpl());
         }
     }
@@ -261,6 +261,6 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
      * @param actual the value to verify.
      */
     public PathAssert(final ACTUAL actual) {
-        super(actual);
+        super(PathUtils.requireNullOrInstanceOfPathClass(actual));
     }
 }

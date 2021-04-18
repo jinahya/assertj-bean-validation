@@ -45,17 +45,17 @@ public class BeanAssert<ACTUAL>
     // -------------------------------------------------------------------------------------------------------- validate
     @Override
     Object getDefaultValidator() {
-        return BeanUtils.validator();
+        return ValidationUtils.getValidator();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Override
     Set<Object> validate(final ACTUAL actual) {
-        return BeanUtils.validate(validator(), actual, groups());
+        return ValidatorUtils.validate(validator(), actual, groups());
     }
 
     @Override
     Set<Object> validateProperty(final ACTUAL actual, String propertyName) {
-        return BeanUtils.validateProperty(validator(), actual, propertyName, groups());
+        return ValidatorUtils.validateProperty(validator(), actual, propertyName, groups());
     }
 }

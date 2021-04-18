@@ -37,7 +37,7 @@ final class ConstraintViolationExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyConstraintViolationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassForSuffix(SUFFIX, function);
+        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -49,46 +49,34 @@ final class ConstraintViolationExceptionUtils {
         return applyConstraintViolationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyConstraintViolationExceptionClassFor(final Object actual,
-                                                                   final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassFor(SUFFIX, actual, function);
-    }
-
-    private static Class<?> getConstraintViolationExceptionClassFor(final Object actual) {
-        return applyConstraintViolationExceptionClassFor(actual, Function.identity());
-    }
-
     /**
      * Indicates whether specified object is an instance of {@code ....validation.ConstraintViolationException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintViolationException};
      * {@code false} otherwise.
      */
-    static boolean isConstraintViolationExceptionInstance(final Object actual) {
-        if (actual == null) {
+    static boolean isNullOrInstanceOfConstraintViolationExceptionClass(final Object object) {
+        if (object == null) {
             return true;
         }
-        return applyConstraintViolationExceptionClassFor(actual, c -> true);
+        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
      * Checks whether specified object is an instance of {@code ....validation.ConstraintViolationException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      */
-    static <T> T requireConstraintViolationExceptionInstance(final T actual) {
-        if (actual == null) {
+    static <T> T requireNullOrInstanceOfConstraintViolationExceptionClass(final T object) {
+        if (object == null) {
             return null;
         }
-        return applyConstraintViolationExceptionClassFor(
-                ValidationExceptionUtils.requireValidationExceptionInstance(actual),
-                c -> actual
-        );
+        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     static <T> Set<T> getConstraintViolations(final Object actual) {
-        return applyConstraintViolationExceptionClassFor(actual, c -> {
+        return applyConstraintViolationExceptionClass(c -> {
             try {
                 @SuppressWarnings({"unchecked"})
                 final Set<T> constraintViolations = (Set<T>) c.getMethod("getConstraintViolations").invoke(actual);

@@ -36,7 +36,7 @@ final class ValidationSpiUtils {
         return Optional.empty();
     }
 
-    static boolean isProvidedByJakarta() {
+    private static boolean isProvidedByJakarta() {
         return loadValidationProviderJakarta().isPresent();
     }
 
@@ -50,23 +50,31 @@ final class ValidationSpiUtils {
         return Optional.empty();
     }
 
-    static boolean isProvidedByJavax() {
+    private static boolean isProvidedByJavax() {
         return loadValidationProviderJavax().isPresent();
     }
 
-    static Object loadValidationProvider() {
-        Object validationProviderJakarta = loadValidationProviderJakarta().orElse(null);
-        Object validationProviderJavax = loadValidationProviderJavax().orElse(null);
-        if (validationProviderJakarta == null && validationProviderJavax == null) {
-            throw new RuntimeException("service provider not loaded for either jakarta nor javax");
+//    private static Object loadValidationProvider() {
+//        Object validationProviderJakarta = loadValidationProviderJakarta().orElse(null);
+//        Object validationProviderJavax = loadValidationProviderJavax().orElse(null);
+//        if (validationProviderJakarta == null && validationProviderJavax == null) {
+//            throw new RuntimeException("service provider not loaded for either jakarta nor javax");
+//        }
+//        if (validationProviderJakarta != null && validationProviderJavax != null) {
+//            throw new RuntimeException("service provider loaded for both jakarta and javax");
+//        }
+//        if (validationProviderJakarta != null) {
+//            return validationProviderJakarta;
+//        }
+//        return validationProviderJavax;
+//    }
+
+    static String getPrefix() {
+        if (isProvidedByJakarta()) {
+            return "jakarta.validation.";
         }
-        if (validationProviderJakarta != null && validationProviderJavax != null) {
-            throw new RuntimeException("service provider loaded for both jakarta and javax");
-        }
-        if (validationProviderJakarta != null) {
-            return validationProviderJakarta;
-        }
-        return validationProviderJavax;
+        assert isProvidedByJavax();
+        return "javax.validation.";
     }
 
     private ValidationSpiUtils() {

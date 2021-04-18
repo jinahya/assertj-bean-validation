@@ -35,7 +35,7 @@ final class ValidationExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyValidationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassForSuffix(SUFFIX, function);
+        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -47,39 +47,30 @@ final class ValidationExceptionUtils {
         return applyValidationExceptionClass(Function.identity());
     }
 
-    private static <R> R applyValidationExceptionClassFor(final Object actual,
-                                                          final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassFor(SUFFIX, actual, function);
-    }
-
-    private static Class<?> getValidationExceptionClassFor(final Object actual) {
-        return applyValidationExceptionClassFor(actual, Function.identity());
-    }
-
     /**
      * Indicates whether specified object is an instance of {@code ....validation.ViolationException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.ViolationException}; {@code false}
      * otherwise.
      */
-    static boolean isValidationExceptionInstance(final Object actual) {
-        if (actual == null) {
+    static boolean isNullOrInstanceOfValidationExceptionClass(final Object object) {
+        if (object == null) {
             return true;
         }
-        return applyValidationExceptionClassFor(actual, c -> true);
+        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
      * Checks whether specified object is an instance of {@code ....validation.ViolationException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      */
-    static <T> T requireValidationExceptionInstance(final T actual) {
-        if (actual == null) {
+    static <T> T requireValidationExceptionInstance(final T object) {
+        if (object == null) {
             return null;
         }
-        return applyValidationExceptionClassFor(actual, c -> actual);
+        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     private ValidationExceptionUtils() {

@@ -28,7 +28,7 @@ package com.github.jinahya.assertj.validation;
  */
 @SuppressWarnings({"java:S119"})
 public class ConstraintViolationWrapper<ACTUAL>
-        extends Wrapper<ACTUAL> {
+        extends AbstractWrapper<ACTUAL> {
 
     /**
      * Creates a new instance wraps specified constraint violation.

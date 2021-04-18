@@ -43,11 +43,11 @@ public class ValueAssert<ACTUAL>
 
     @Override
     Object getDefaultValidator() {
-        return ValidationUtils.validator();
+        return ValidationUtils.getValidator();
     }
 
     @Override
-    <T> Set<Object> validateValue(Object actual, Class<T> beanType, String propertyName) {
-        return BeanUtils.validateValue(validator(), beanType, propertyName, actual, groups());
+    <T> Set<Object> validateValue(final Object actual, final Class<T> beanType, final String propertyName) {
+        return ValidatorUtils.validateValue(validator(), beanType, propertyName, actual, groups());
     }
 }

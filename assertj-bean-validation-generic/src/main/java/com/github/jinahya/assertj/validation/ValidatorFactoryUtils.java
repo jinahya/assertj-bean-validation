@@ -34,51 +34,42 @@ package com.github.jinahya.assertj.validation;
 
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * A utility class for Bean-Validation.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-final class ValidationUtils {
+final class ValidatorFactoryUtils {
 
-    private static final String SUFFIX = "Validation";
+    private static final String SUFFIX = "ValidatorFactory";
 
-    static <R> R applyValidationClass(final Function<? super Class<?>, ? extends R> function) {
+    static <R> R applyValidatorFactoryClass(final Function<? super Class<?>, ? extends R> function) {
         return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
-    private static Class<?> validationClass = null;
+    private static Class<?> validatorFactoryClass = null;
 
-    static Class<?> getValidationClass() {
-        if (validationClass == null) {
-            validationClass = applyValidationClass(Function.identity());
+    static Class<?> getValidatorFactoryClass() {
+        if (validatorFactoryClass == null) {
+            validatorFactoryClass = applyValidatorFactoryClass(Function.identity());
         }
-        return validationClass;
+        return validatorFactoryClass;
     }
 
-    private static Object defaultValidatorFactory = null;
-
-    static Object defaultValidatorFactory() {
-        if (defaultValidatorFactory == null) {
-            try {
-                defaultValidatorFactory = getValidationClass().getMethod("defaultValidatorFactory").invoke(null);
-            } catch (final ReflectiveOperationException roe) {
-                throw new RuntimeException(roe);
-            }
+    @SuppressWarnings({"unchecked"})
+    static <VALIDATOR> VALIDATOR getValidator(final Object validatorFactory) {
+        requireNonNull(validatorFactory, "validatorFactory is null");
+        try {
+            return (VALIDATOR) getValidatorFactoryClass().getMethod("getValidator").invoke(validatorFactory);
+        } catch (final ReflectiveOperationException roe) {
+            throw new RuntimeException(roe);
         }
-        return defaultValidatorFactory;
     }
 
-    /**
-     * Returns an instance of {@code ....validation.Validator}.
-     *
-     * @return an instance of {@code ....validation.Validator}.
-     */
-    static Object getValidator() {
-        return ValidatorFactoryUtils.getValidator(defaultValidatorFactory());
-    }
-
-    private ValidationUtils() {
+    // -----------------------------------------------------------------------------------------------------------------
+    private ValidatorFactoryUtils() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

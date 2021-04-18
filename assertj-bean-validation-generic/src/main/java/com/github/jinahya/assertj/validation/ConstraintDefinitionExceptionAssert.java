@@ -24,7 +24,7 @@ public class ConstraintDefinitionExceptionAssert<ACTUAL extends RuntimeException
         extends AbstractExtendedValidationExceptionAssert<ConstraintDefinitionExceptionAssert<ACTUAL>, ACTUAL> {
 
     public ConstraintDefinitionExceptionAssert(final ACTUAL actual) {
-        super(ConstraintDefinitionExceptionUtils.requireConstraintDefinitionExceptionInstance(actual),
+        super(ConstraintDefinitionExceptionUtils.requireNullOrInstanceOfConstraintDefinitionExceptionClass(actual),
               ConstraintDefinitionExceptionAssert.class);
     }
 }

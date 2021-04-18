@@ -29,7 +29,7 @@ package com.github.jinahya.assertj.validation;
  */
 @SuppressWarnings({"java:S119"})
 public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
-        extends Wrapper<ACTUAL> {
+        extends AbstractWrapper<ACTUAL> {
 
     abstract static class AbstractNodeWrapper
             extends AbstractWrapper<Object> {

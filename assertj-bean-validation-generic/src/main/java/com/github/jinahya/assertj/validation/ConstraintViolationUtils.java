@@ -24,19 +24,10 @@ import java.util.function.Function;
 
 final class ConstraintViolationUtils {
 
-    // -----------------------------------------------------------------------------------------------------------------
+    private static final String SUFFIX = "ConstraintViolation";
+
     static <R> R applyConstraintViolationClass(final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassForSuffix("ConstraintViolation", function);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    static <R> R applyConstraintViolationClassFor(final Object instance,
-                                                  final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassFor("ConstraintViolation", instance, function);
-    }
-
-    private static Class<?> getConstraintViolationClassFor(final Object instance) {
-        return applyConstraintViolationClassFor(instance, Function.identity());
+        return ValidationReflectionUtils.applyClassForSuffix("ConstraintViolation", function);
     }
 
     /**
@@ -46,77 +37,92 @@ final class ConstraintViolationUtils {
      * @param object the object to be tested.
      * @return {@code true} if {@code object} is an instance of {@code ConstraintViolation}; {@code false} otherwise.
      */
-    static boolean isConstraintViolationInstance(final Object object) {
-        return applyConstraintViolationClassFor(object, c -> true);
+    static boolean isNullOrInstanceOfConstraintViolationClass(final Object object) {
+        if (object == null) {
+            return true;
+        }
+        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
      * Checks whether specified object is an instance of {@code ....validation.ConstraintViolation}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      */
-    static <ACTUAL> ACTUAL requireConstraintViolationInstance(final ACTUAL actual) {
-        if (actual == null) {
-            return actual;
+    static <ACTUAL> ACTUAL requireNullOrInstanceOfConstraintViolationClass(final ACTUAL object) {
+        if (object == null) {
+            return null;
         }
-        return applyConstraintViolationClassFor(actual, c -> actual);
+        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     // ------------------------------------------------------------------------------------------------- getInvalidValue
     static Object getInvalidValue(final Object actual) {
-        try {
-            return getConstraintViolationClassFor(actual).getMethod("getInvalidValue").invoke(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
+        return applyConstraintViolationClass(c -> {
+            try {
+                return c.getMethod("getInvalidValue").invoke(actual);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        });
     }
 
     // ----------------------------------------------------------------------------------------------------- getLeafBean
     static Object getLeafBean(final Object actual) {
-        try {
-            return getConstraintViolationClassFor(actual).getMethod("getLeafBean").invoke(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
+        return applyConstraintViolationClass(c -> {
+            try {
+                return c.getMethod("getLeafBean").invoke(actual);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        });
     }
 
     // ------------------------------------------------------------------------------------------------------ getMessage
     static String getMessage(final Object actual) {
-        try {
-            return (String) getConstraintViolationClassFor(actual).getMethod("getMessage").invoke(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
+        return applyConstraintViolationClass(c -> {
+            try {
+                return (String) c.getMethod("getMessage").invoke(actual);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        });
     }
 
     // ------------------------------------------------------------------------------------------------- getPropertyPath
     @SuppressWarnings({"unchecked"})
     static <PATH extends Iterable<?>> PATH getPropertyPath(final Object actual) {
-        try {
-            return (PATH) getConstraintViolationClassFor(actual).getMethod("getPropertyPath").invoke(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
+        return applyConstraintViolationClass(c -> {
+            try {
+                return (PATH) c.getMethod("getPropertyPath").invoke(actual);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        });
     }
 
     // ----------------------------------------------------------------------------------------------------- getRootBean
     @SuppressWarnings({"unchecked"})
     static <T> T getRootBean(final Object actual) {
-        try {
-            return (T) getConstraintViolationClassFor(actual).getMethod("getRootBean").invoke(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
+        return applyConstraintViolationClass(c -> {
+            try {
+                return (T) c.getMethod("getRootBean").invoke(actual);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        });
     }
 
     // ------------------------------------------------------------------------------------------------ getRootBeanClass
     @SuppressWarnings({"unchecked"})
     static <T> Class<T> getRootBeanClass(final Object actual) {
-        try {
-            return (Class<T>) getConstraintViolationClassFor(actual).getMethod("getRootBeanClass").invoke(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
+        return applyConstraintViolationClass(c -> {
+            try {
+                return (Class<T>) c.getMethod("getRootBeanClass").invoke(actual);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------------------

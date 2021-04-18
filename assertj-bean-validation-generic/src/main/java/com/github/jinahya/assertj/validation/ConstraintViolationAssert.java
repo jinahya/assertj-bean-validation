@@ -22,12 +22,10 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractIterableAssert;
+import org.assertj.core.api.Assertions;
 
 import java.util.function.Consumer;
 
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getInvalidValue;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getLeafBean;
-import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.getMessage;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,7 +47,7 @@ public class ConstraintViolationAssert<ACTUAL, T>
      * @see #actual
      */
     public ConstraintViolationAssert(final ACTUAL actual) {
-        super(ConstraintViolationUtils.requireConstraintViolationInstance(actual), ConstraintViolationAssert.class);
+        super(ConstraintViolationUtils.requireNullOrInstanceOfConstraintViolationClass(actual), ConstraintViolationAssert.class);
     }
 
     /**
@@ -60,7 +58,7 @@ public class ConstraintViolationAssert<ACTUAL, T>
      */
     public ConstraintViolationAssert<ACTUAL, T> hasInvalidValueSatisfying(final Consumer<Object> requirements) {
         return isNotNull().satisfies(a -> {
-            assertThat(getInvalidValue(a)).satisfies(requirements);
+            Assertions.assertThat(ConstraintViolationUtils.getInvalidValue(a)).satisfies(requirements);
         });
     }
 
@@ -83,7 +81,7 @@ public class ConstraintViolationAssert<ACTUAL, T>
      */
     public ConstraintViolationAssert<ACTUAL, T> hasLeafBeanSatisfying(final Consumer<Object> requirements) {
         return isNotNull().satisfies(a -> {
-            assertThat(getLeafBean(a)).satisfies(requirements);
+            Assertions.assertThat(ConstraintViolationUtils.getLeafBean(a)).satisfies(requirements);
         });
     }
 
@@ -106,7 +104,7 @@ public class ConstraintViolationAssert<ACTUAL, T>
     public ConstraintViolationAssert<ACTUAL, T> hasMessageSatisfying(final Consumer<? super String> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(getMessage(a)).satisfies(requirements::accept);
+            Assertions.assertThat(ConstraintViolationUtils.getMessage(a)).satisfies(requirements::accept);
         });
     }
 

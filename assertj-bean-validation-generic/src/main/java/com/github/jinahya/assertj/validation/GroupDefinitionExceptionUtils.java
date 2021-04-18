@@ -36,7 +36,7 @@ final class GroupDefinitionExceptionUtils {
      * @return the result of the {@code function}.
      */
     static <R> R applyGroupDefinitionExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassForSuffix(SUFFIX, function);
+        return ValidationReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
 
     /**
@@ -48,42 +48,30 @@ final class GroupDefinitionExceptionUtils {
         return applyGroupDefinitionExceptionClass(Function.identity());
     }
 
-    private static <R> R applyGroupDefinitionExceptionClassFor(
-            final Object actual, final Function<? super Class<?>, ? extends R> function) {
-        return Utils.applyClassFor(SUFFIX, actual, function);
-    }
-
-    private static Class<?> getGroupDefinitionExceptionClassFor(final Object actual) {
-        return applyGroupDefinitionExceptionClassFor(actual, Function.identity());
-    }
-
     /**
      * Indicates whether specified object is an instance of {@code ....validation.GroupDefinitionException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      * @return {@code true} if {@code actual} is an instance of {@code ....validation.GroupDefinitionException}; {@code
      * false} otherwise.
      */
-    static boolean isGroupDefinitionExceptionInstance(final Object actual) {
-        if (actual == null) {
+    static boolean isNullOrInstanceOfGroupDefinitionExceptionClass(final Object object) {
+        if (object == null) {
             return true;
         }
-        return applyGroupDefinitionExceptionClassFor(actual, c -> true);
+        return ValidationReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     /**
      * Checks whether specified object is an instance of {@code ....validation.GroupDefinitionException}.
      *
-     * @param actual the object to be tested.
+     * @param object the object to be tested.
      */
-    static <T> T requireGroupDefinitionExceptionInstance(final T actual) {
-        if (actual == null) {
+    static <T> T requireNullOrInstanceOfGroupDefinitionExceptionClass(final T object) {
+        if (object == null) {
             return null;
         }
-        return applyGroupDefinitionExceptionClassFor(
-                ValidationExceptionUtils.requireValidationExceptionInstance(actual),
-                c -> actual
-        );
+        return ValidationReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
     }
 
     private GroupDefinitionExceptionUtils() {
