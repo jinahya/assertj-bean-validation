@@ -23,6 +23,7 @@ package com.github.jinahya.assertj.validation.user;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,49 +31,56 @@ import java.util.Objects;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
 
-@Setter
+@Setter(AccessLevel.PACKAGE)
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder(access = AccessLevel.PACKAGE, toBuilder = true)
 public class User {
 
     public static User newValidInstance() {
-        final User instance = new User();
-        instance.setName(Long.toString(System.nanoTime()));
-        instance.setAge(current().nextInt() & Integer.MAX_VALUE);
-        return instance;
+        final String name = Long.toString(System.nanoTime());
+        final int age = current().nextInt() & Integer.MAX_VALUE;
+        return builder()
+                .name(name)
+                .age(age)
+                .valid(true)
+                .build();
     }
 
     private static User setInvalidName(final User instance) {
-        instance.setName(current().nextBoolean() ? "" : current().nextBoolean() ? " " : null);
-        return instance;
+        final String invalidName = current().nextBoolean() ? "" : current().nextBoolean() ? " " : null;
+        return instance.toBuilder()
+                .name(invalidName)
+                .valid(false)
+                .build();
     }
 
     private static User setInvalidAge(final User instance) {
-        instance.setAge(current().nextInt() | Integer.MIN_VALUE);
-        return instance;
+        final int invalidAge = current().nextInt() | Integer.MIN_VALUE;
+        return instance.toBuilder()
+                .age(invalidAge)
+                .valid(false)
+                .build();
     }
 
-    static User newInvalidInstance() {
-        final User instance = newValidInstance();
-        if (current().nextBoolean()) {
-            setInvalidName(instance);
-        } else {
-            setInvalidAge(instance);
-        }
-        return instance;
-    }
-
-    static User newInstanceWithInvalidName() {
+    public static User newInstanceWithInvalidName() {
         return setInvalidName(newValidInstance());
     }
 
-    static User newInstanceWithInvalidAge() {
+    public static User newInstanceWithInvalidAge() {
         return setInvalidAge(newValidInstance());
     }
 
-    public User() {
-        super();
+    public static User newInvalidInstance() {
+        if (current().nextBoolean()) {
+            return newInstanceWithInvalidName();
+        } else {
+            return newInstanceWithInvalidAge();
+        }
+    }
+
+    private User() {
+        throw new NonInstantiatableAssertionError();
     }
 
     @Override
@@ -80,6 +88,7 @@ public class User {
         return super.toString() + '{'
                + "name=" + name
                + ",age=" + age
+               + ",valid=" + valid
                + '}';
     }
 
@@ -103,4 +112,7 @@ public class User {
     @jakarta.validation.constraints.PositiveOrZero
     @javax.validation.constraints.PositiveOrZero
     private int age;
+
+    @EqualsAndHashCode.Exclude
+    private boolean valid;
 }

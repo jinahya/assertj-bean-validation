@@ -1,5 +1,6 @@
 package com.github.jinahya.assertj.validation.javax;
 
+import com.github.jinahya.assertj.validation.AbstractPathWrapper;
 import com.github.jinahya.assertj.validation.AbstractWrapper;
 
 import javax.validation.Path;
@@ -7,16 +8,8 @@ import javax.validation.Path;
 public final class PathWrapper
         extends AbstractWrapper<Path> {
 
-    abstract static class AbstractNodeWrapper<T extends Path.Node>
-            extends AbstractWrapper<T> {
-
-        protected AbstractNodeWrapper(final T actual) {
-            super(actual);
-        }
-    }
-
     public static class NodeWrapper
-            extends AbstractNodeWrapper<Path.Node> {
+            extends AbstractPathWrapper.AbstractNodeWrapper<Path.Node> {
 
         public static NodeWrapper node(final Path.Node actual) {
             return new NodeWrapper(actual);
@@ -28,7 +21,7 @@ public final class PathWrapper
     }
 
     public static class BeanNodeWrapper
-            extends AbstractNodeWrapper<Path.BeanNode> {
+            extends AbstractPathWrapper.AbstractBeanNodeWrapper<Path.BeanNode> {
 
         public static BeanNodeWrapper beanNode(final Path.BeanNode actual) {
             return new BeanNodeWrapper(actual);
@@ -40,7 +33,7 @@ public final class PathWrapper
     }
 
     public static class ConstructorNodeWrapper
-            extends AbstractNodeWrapper<Path.ConstructorNode> {
+            extends AbstractPathWrapper.AbstractConstructorNodeWrapper<Path.ConstructorNode> {
 
         public static ConstructorNodeWrapper constructorNode(final Path.ConstructorNode actual) {
             return new ConstructorNodeWrapper(actual);
@@ -52,7 +45,7 @@ public final class PathWrapper
     }
 
     public static class ContainerElementNodeWrapper
-            extends AbstractNodeWrapper<Path.ContainerElementNode> {
+            extends AbstractPathWrapper.AbstractContainerElementNodeWrapper<Path.ContainerElementNode> {
 
         public static ContainerElementNodeWrapper containerElementNode(final Path.ContainerElementNode actual) {
             return new ContainerElementNodeWrapper(actual);
@@ -64,7 +57,7 @@ public final class PathWrapper
     }
 
     public static class CrossParameterNodeWrapper
-            extends AbstractNodeWrapper<Path.CrossParameterNode> {
+            extends AbstractPathWrapper.AbstractCrossParameterNodeWrapper<Path.CrossParameterNode> {
 
         public static CrossParameterNodeWrapper crossParameterNode(final Path.CrossParameterNode actual) {
             return new CrossParameterNodeWrapper(actual);
@@ -76,7 +69,7 @@ public final class PathWrapper
     }
 
     public static class MethodNodeWrapper
-            extends AbstractNodeWrapper<Path.MethodNode> {
+            extends AbstractPathWrapper.AbstractMethodNodeWrapper<Path.MethodNode> {
 
         public static MethodNodeWrapper methodNode(final Path.MethodNode actual) {
             return new MethodNodeWrapper(actual);
@@ -88,7 +81,7 @@ public final class PathWrapper
     }
 
     public static class ParameterNodeWrapper
-            extends AbstractNodeWrapper<Path.ParameterNode> {
+            extends AbstractPathWrapper.AbstractNodeWrapper<Path.ParameterNode> {
 
         public static ParameterNodeWrapper parameterNode(final Path.ParameterNode actual) {
             return new ParameterNodeWrapper(actual);
@@ -100,7 +93,7 @@ public final class PathWrapper
     }
 
     public static class PropertyNodeWrapper
-            extends AbstractNodeWrapper<Path.PropertyNode> {
+            extends AbstractPathWrapper.AbstractPropertyNodeWrapper<Path.PropertyNode> {
 
         public static PropertyNodeWrapper propertyNode(final Path.PropertyNode actual) {
             return new PropertyNodeWrapper(actual);
@@ -112,7 +105,7 @@ public final class PathWrapper
     }
 
     public static class ReturnValueNodeWrapper
-            extends AbstractNodeWrapper<Path.ReturnValueNode> {
+            extends AbstractPathWrapper.AbstractReturnValueNodeWrapper<Path.ReturnValueNode> {
 
         public static ReturnValueNodeWrapper returnValueNode(final Path.ReturnValueNode actual) {
             return new ReturnValueNodeWrapper(actual);

@@ -21,93 +21,75 @@ package com.github.jinahya.assertj.validation;
  */
 
 import java.util.List;
-import java.util.function.Function;
 
-import static java.util.Objects.requireNonNull;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.applyClassForSuffix;
+import static java.util.function.Function.identity;
 
 @SuppressWarnings({"java:S125"})
 final class PathUtils {
 
     static final class NodeUtils {
 
-        private static final String SUFFIX = "Path$Node";
+        private static final Class<?> NODE_CLASS = applyClassForSuffix("Path$Node", identity());
 
-        static <R> R applyNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(NODE_CLASS, object);
         }
 
-        static boolean isNullOrNodeInstance(final Object actual) {
-            if (actual == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
+        private static <T> T requireInstanceOfNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(NODE_CLASS, object);
         }
 
-        static <T> T requireNullOrNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfNodeClass(final T object) {
+            if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
+            return requireInstanceOfNodeClass(object);
         }
 
-        // ------------------------------------------------------------------------------- getIndex()Ljava.lang.Integer;
-        static Integer getIndex(final Object actual) {
-            requireNonNull(actual, "actual is null");
-            return applyNodeClass(c -> {
-                try {
-                    return (Integer) c.getMethod("getIndex").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Integer getIndex(final Object object) {
+            requireInstanceOfNodeClass(object);
+            try {
+                return (Integer) NODE_CLASS.getMethod("getIndex").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
-        // ---------------------------------------------------------------------------------- getKey()Ljava.lang.Object;
-        static Object getKey(final Object actual) {
-            requireNonNull(actual, "actual is null");
-            return applyNodeClass(c -> {
-                try {
-                    return c.getMethod("getKey").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Object getKey(final Object object) {
+            requireInstanceOfNodeClass(object);
+            try {
+                return NODE_CLASS.getMethod("getKey").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
-        // ----------------------------------------------------------------------- getKind()L....validation.ElementKind;
-        static Object getKind(final Object actual) {
-            requireNonNull(actual, "actual is null");
-            return applyNodeClass(c -> {
-                try {
-                    return c.getMethod("getKind").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Object getKind(final Object object) {
+            requireInstanceOfNodeClass(object);
+            try {
+                return NODE_CLASS.getMethod("getKind").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
-        // --------------------------------------------------------------------------------- getName()Ljava.lang.String;
-        static String getName(final Object actual) {
-            requireNonNull(actual, "actual is null");
-            return applyNodeClass(c -> {
-                try {
-                    return (String) c.getMethod("getName").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static String getName(final Object object) {
+            requireInstanceOfNodeClass(object);
+            try {
+                return (String) NODE_CLASS.getMethod("getName").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
-        // --------------------------------------------------------------------------------------------- isInIterable()Z
-        static boolean isInIterable(final Object actual) {
-            requireNonNull(actual, "actual is null");
-            return applyNodeClass(c -> {
-                try {
-                    return (boolean) c.getMethod("isInIterable").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static boolean isInIterable(final Object object) {
+            requireInstanceOfNodeClass(object);
+            try {
+                return (boolean) NODE_CLASS.getMethod("isInIterable").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
         private NodeUtils() {
@@ -118,46 +100,39 @@ final class PathUtils {
     // -----------------------------------------------------------------------------------------------------------------
     static final class BeanNodeUtils {
 
-        private static final String SUFFIX = "Path$BeanNode";
+        static final Class<?> BEAN_NODE_CLASS = applyClassForSuffix("Path$BeanNode", identity());
 
-        static <R> R applyBeanNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfBeanNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(BEAN_NODE_CLASS, object);
         }
 
-        static boolean isNullOrBeanNodeInstance(final Object actual) {
-            if (actual == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
+        private static <T> T requireInstanceOfBeanNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(BEAN_NODE_CLASS, object);
         }
 
-        static <T> T requireNullOrBeanNodeInstance(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfBeanNodeClass(final T object) {
+            if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
+            return requireInstanceOfBeanNodeClass(object);
         }
 
-        static Class<?> getContainerClass(final Object actual) {
-            requireNonNull(actual, "actual is null");
-            return applyBeanNodeClass(c -> {
-                try {
-                    return (Class<?>) c.getMethod("getContainerClass").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Class<?> getContainerClass(final Object object) {
+            requireInstanceOfBeanNodeClass(object);
+            try {
+                return (Class<?>) BEAN_NODE_CLASS.getMethod("getContainerClass").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
-        static Integer getTypeArgumentIndex(final Object actual) {
-            requireNonNull(actual, "actual is null");
-            return applyBeanNodeClass(c -> {
-                try {
-                    return (Integer) c.getMethod("getTypeArgumentIndex").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Integer getTypeArgumentIndex(final Object object) {
+            requireInstanceOfBeanNodeClass(object);
+            try {
+                return (Integer) BEAN_NODE_CLASS.getMethod("getTypeArgumentIndex").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
         private BeanNodeUtils() {
@@ -167,233 +142,208 @@ final class PathUtils {
 
     static final class ConstructorNodeUtils {
 
-        private static final String SUFFIX = "Path$ConstructorNode";
+        static final Class<?> CONSTRUCTOR_NODE_CLASS = applyClassForSuffix("Path$ConstructorNode", identity());
 
-        private static <R> R applyConstructorNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfConstructorNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(CONSTRUCTOR_NODE_CLASS, object);
         }
 
-        static boolean isNullOrInstanceOfConstructorNodeClass(final Object actual) {
-            if (actual == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, actual);
+        private static <T> T requireInstanceOfConstructorNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(CONSTRUCTOR_NODE_CLASS, object);
         }
 
-        static <T> T requireNullOrInstanceOfConstructorNodeClass(final T actual) {
-            if (actual == null) {
+        static <T> T requireNullOrInstanceOfConstructorNodeClass(final T object) {
+            if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, actual);
+            return requireInstanceOfConstructorNodeClass(object);
         }
 
         @SuppressWarnings({"unchecked"})
-        static List<Class<?>> getParameterTypes(final Object actual) {
-            return applyConstructorNodeClass(c -> {
-                try {
-                    return (List<Class<?>>) c.getMethod("getParameterTypes").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static List<Class<?>> getParameterTypes(final Object object) {
+            requireInstanceOfConstructorNodeClass(object);
+            try {
+                return (List<Class<?>>) CONSTRUCTOR_NODE_CLASS.getMethod("getParameterTypes").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
         private ConstructorNodeUtils() {
-            throw new AssertionError("instantiation is not allowed");
+            throw new NonInstantiatableAssertionError();
         }
     }
 
     static final class ContainerElementNodeUtils {
 
-        private static final String SUFFIX = "Path$ContainerElementNode";
+        private static final Class<?> CONTAINER_ELEMENT_NODE_CLASS
+                = applyClassForSuffix("Path$ContainerElementNode", identity());
 
-        private static <R> R applyContainerElementNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfContainerElementNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(CONTAINER_ELEMENT_NODE_CLASS, object);
         }
 
-        static boolean isNullOrInstanceOfContainerElementNodeClass(final Object object) {
-            if (object == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        private static <T> T requireInstanceOfContainerElementNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(CONTAINER_ELEMENT_NODE_CLASS, object);
         }
 
         static <T> T requireNullOrInstanceOfContainerElementNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return requireInstanceOfContainerElementNodeClass(object);
         }
 
-        static Class<?> getContainerClass(final Object actual) {
-            return applyContainerElementNodeClass(c -> {
-                try {
-                    return (Class<?>) c.getMethod("getContainerClass").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Class<?> getContainerClass(final Object object) {
+            requireInstanceOfContainerElementNodeClass(object);
+            try {
+                return (Class<?>) CONTAINER_ELEMENT_NODE_CLASS.getMethod("getContainerClass").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
-        static Integer getTypeArgumentIndex(final Object actual) {
-            return applyContainerElementNodeClass(c -> {
-                try {
-                    return (Integer) c.getMethod("getTypeArgumentIndex").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Integer getTypeArgumentIndex(final Object object) {
+            requireInstanceOfContainerElementNodeClass(object);
+            try {
+                return (Integer) CONTAINER_ELEMENT_NODE_CLASS.getMethod("getTypeArgumentIndex").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
         private ContainerElementNodeUtils() {
-            throw new AssertionError("instantiation is not allowed");
+            throw new NonInstantiatableAssertionError();
         }
     }
 
     static final class CrossParameterNodeUtils {
 
-        private static final String SUFFIX = "Path$CrossParameterNode";
+        static final Class<?> CROSS_PARAMETER_NODE_CLASS
+                = applyClassForSuffix("Path$CrossParameterNode", identity());
 
-        private static <R> R applyCrossParameterNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfCrossParameterNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(CROSS_PARAMETER_NODE_CLASS, object);
         }
 
-        static boolean isNullOrInstanceOfCrossParameterNodeClass(final Object object) {
-            if (object == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        private static <T> T requireInstanceOfCrossParameterNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(CROSS_PARAMETER_NODE_CLASS, object);
         }
 
         static <T> T requireNullOrInstanceOfCrossParameterNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return requireInstanceOfCrossParameterNodeClass(object);
         }
 
         private CrossParameterNodeUtils() {
-            throw new AssertionError("instantiation is not allowed");
+            throw new NonInstantiatableAssertionError();
         }
     }
 
     static final class MethodNodeUtils {
 
-        private static final String SUFFIX = "Path$MethodNode";
+        static final Class<?> METHOD_NODE_CLASS = applyClassForSuffix("Path$MethodNode", identity());
 
-        private static <R> R applyMethodNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfMethodNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(METHOD_NODE_CLASS, object);
         }
 
-        static boolean isNullOrInstanceOfMethodNodeClass(final Object object) {
-            if (object == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        private static <T> T requireInstanceOfMethodNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(METHOD_NODE_CLASS, object);
         }
 
         static <T> T requireNullOrInstanceOfMethodNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return requireInstanceOfMethodNodeClass(object);
         }
 
         @SuppressWarnings({"unchecked"})
         static List<Class<?>> getParameterTypes(final Object actual) {
-            return applyMethodNodeClass(c -> {
-                try {
-                    return (List<Class<?>>) c.getMethod("getParameterTypes").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+            requireInstanceOfMethodNodeClass(actual);
+            try {
+                return (List<Class<?>>) METHOD_NODE_CLASS.getMethod("getParameterTypes").invoke(actual);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
         private MethodNodeUtils() {
-            throw new AssertionError("instantiation is not allowed");
+            throw new NonInstantiatableAssertionError();
         }
     }
 
     static final class ParameterNodeUtils {
 
-        private static final String SUFFIX = "Path$ParameterNode";
+        static final Class<?> PARAMETER_NODE_CLASS = applyClassForSuffix("Path$ParameterNode", identity());
 
-        private static <R> R applyParameterNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfParameterNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(PARAMETER_NODE_CLASS, object);
         }
 
-        static boolean isNullOrInstanceOfParameterNodeClass(final Object object) {
-            if (object == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        private static <T> T requireInstanceOfParameterNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(PARAMETER_NODE_CLASS, object);
         }
 
         static <T> T requireNullOrInstanceOfParameterNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return requireInstanceOfParameterNodeClass(object);
         }
 
-        // getParameterIndex()I
-        static int getParameterIndex(final Object actual) {
-            return applyParameterNodeClass(c -> {
-                try {
-                    return (int) c.getMethod("getParameterIndex").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static int getParameterIndex(final Object object) {
+            requireInstanceOfParameterNodeClass(object);
+            try {
+                return (int) PARAMETER_NODE_CLASS.getMethod("getParameterIndex").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
         private ParameterNodeUtils() {
-            throw new AssertionError("instantiation is not allowed");
+            throw new NonInstantiatableAssertionError();
         }
     }
 
     static final class PropertyNodeUtils {
 
-        private static final String SUFFIX = "Path$PropertyNode";
+        static final Class<?> PROPERTY_NODE_CLASS = applyClassForSuffix("Path$PropertyNode", identity());
 
-        static <R> R applyPropertyNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfPropertyNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(PROPERTY_NODE_CLASS, object);
         }
 
-        static boolean isNullOrInstanceOfPropertyNodeClass(final Object object) {
-            if (object == null) {
-                return true;
-            }
-            return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        private static <T> T requireInstanceOfPropertyNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(PROPERTY_NODE_CLASS, object);
         }
 
         static <T> T requireNullOrInstanceOfPropertyNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+            return requireInstanceOfPropertyNodeClass(object);
         }
 
-        static Class<?> getContainerClass(final Object actual) {
-            return applyPropertyNodeClass(c -> {
-                try {
-                    return (Class<?>) c.getMethod("getContainerClass").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Class<?> getContainerClass(final Object object) {
+            requireNullOrInstanceOfPropertyNodeClass(object);
+            try {
+                return (Class<?>) PROPERTY_NODE_CLASS.getMethod("getContainerClass").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
-        // ------------------------------------------------------------------- getTypeArgumentIndex()Ljava.lang.Integer;
-        static Integer getTypeArgumentIndex(final Object actual) {
-            return applyPropertyNodeClass(c -> {
-                try {
-                    return (Integer) c.getMethod("getTypeArgumentIndex").invoke(actual);
-                } catch (final ReflectiveOperationException roe) {
-                    throw new RuntimeException(roe);
-                }
-            });
+        static Integer getTypeArgumentIndex(final Object object) {
+            requireNullOrInstanceOfPropertyNodeClass(object);
+            try {
+                return (Integer) PROPERTY_NODE_CLASS.getMethod("getTypeArgumentIndex").invoke(object);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
         }
 
         private PropertyNodeUtils() {
@@ -403,79 +353,47 @@ final class PathUtils {
 
     static final class ReturnValueNodeUtils {
 
-        private static final String SUFFIX = "Path$ReturnValueNode";
+        static final Class<?> RETURN_VALUE_NODE_CLASS = applyClassForSuffix("Path$ReturnValueNode", identity());
 
-        static <R> R applyReturnValueNodeClass(final Function<? super Class<?>, ? extends R> function) {
-            return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+        static boolean isInstanceOfReturnValueNodeClass(final Object object) {
+            return LangUtils.isInstanceOf(RETURN_VALUE_NODE_CLASS, object);
         }
 
-        private static Class<?> returnValueNodeClass = null;
-
-        static Class<?> getReturnValueNodeClass() {
-            if (returnValueNodeClass == null) {
-                returnValueNodeClass = applyReturnValueNodeClass(Function.identity());
-            }
-            return returnValueNodeClass;
-        }
-
-        static boolean isNullOrInstanceOfReturnValueNodeClass(final Object object) {
-            if (object == null) {
-                return true;
-            }
-            return getReturnValueNodeClass().isInstance(object);
+        private static <T> T requireInstanceOfReturnValueNodeClass(final T object) {
+            return LangUtils.requireInstanceOf(RETURN_VALUE_NODE_CLASS, object);
         }
 
         static <T> T requireNullOrInstanceOfReturnValueNodeClass(final T object) {
             if (object == null) {
                 return null;
             }
-            final Class<?> returnValueNodeClass = getReturnValueNodeClass();
-            if (returnValueNodeClass.isInstance(object)) {
-                throw new IllegalArgumentException(object + " is not an instance of " + returnValueNodeClass);
-            }
-            return object;
+            return requireInstanceOfReturnValueNodeClass(object);
         }
 
         private ReturnValueNodeUtils() {
-            throw new AssertionError("instantiation is not allowed");
+            throw new NonInstantiatableAssertionError();
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final String SUFFIX = "Path";
+    private static final Class<?> PATH_CLASS = applyClassForSuffix("Path", identity());
 
-    static <R> R applyPathClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+    static boolean isInstanceOfPathClass(final Object object) {
+        return LangUtils.isInstanceOf(PATH_CLASS, object);
     }
 
-    private static Class<?> pathClass = null;
-
-    static Class<?> getPathClass() {
-        if (pathClass == null) {
-            pathClass = applyPathClass(Function.identity());
-        }
-        return pathClass;
-    }
-
-    static boolean isNullOrInstanceOfPathClass(final Object object) {
-        if (object == null) {
-            return true;
-        }
-        return getPathClass().isInstance(object);
+    static <T> T requireInstanceOfPathClass(final T object) {
+        return LangUtils.requireInstanceOf(PATH_CLASS, object);
     }
 
     static <T> T requireNullOrInstanceOfPathClass(final T object) {
         if (object == null) {
             return null;
         }
-        final Class<?> pathClass = getPathClass();
-        if (pathClass.isInstance(object)) {
-            throw new IllegalArgumentException(object + " is not an instance of " + pathClass);
-        }
-        return object;
+        return requireInstanceOfPathClass(object);
     }
 
     private PathUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

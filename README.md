@@ -12,7 +12,15 @@
 
 An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
 
-This module works for both `javax.validation.*` and `jakarta.validation.*` without directly (nor transitively) depending on any of these APIs.
+## Compatibility
+
+There are, due to the [Transition from Java EE to Jakarta EE](https://blogs.oracle.com/javamagazine/transition-from-java-ee-to-jakarta-ee), currently two packages for Bean-Validation. One is `javax.validation.*` and the other is `jakarta.validation.*`. This project, hence, defines three artifacts applicable for both/each environment(s).
+
+|artifact                         |`jakrta.*`|`javax.*`|notes|
+|---------------------------------|----------|---------|-----|
+|`assertj-bean-validation-generic`|&check;   |&check;  |     |
+|`assertj-bean-validation-jakrta` |&check;   |&cross;  |[`jakarta.valiation:jakarta.validation-api:[3.0.0,)`][jakarta.validation:jakarta.validation-api]|
+|`assertj-bean-validation-javax`  |&cross;   |&check;  |[`javax.validation:validation-api`][javax.validation:validation-api], `jakrta.validation:jakarta.validation-api:(,2.0.2]`|
 
 ## Usages
 
@@ -20,7 +28,7 @@ This module works for both `javax.validation.*` and `jakarta.validation.*` witho
 
 #### `isValid()`
 
-Verifies that the `actual` value is valid using the [`Validator#validate`][validate] method.
+Verifies that the `actual` bean is valid.
 
 ```java
 class User {
@@ -36,30 +44,29 @@ assertThat(bean(user)).isValid(); // equivalent
 
 #### `isNotValid()`, `isNotValid(Consumer)`
 
-Verifies that the `actual` value is not valid and, optionally, accepts a non-empty set of `ConstraintViolation`s to specified consumer.
+Verifies that the `actual` bean is not valid and, optionally, accepts a non-empty set of constraint violations to specified consumer.
 
 ```java
+User user = new User();
+
 user.setName(null);
 
 assertThat(bean(user)).isNotValid(); // succeeds
 
-asserBean(user).isNotValid(s -> { // Set<....validation.ConstraintViolation>
+asserBean(user).isNotValid(s -> {
     assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1);
-    assertThat(s).allSatisfy(v -> { // ....validation.ConstraintViolation
+    assertThat(s).allSatisfy(v -> {
         assertThat(constraintViolation(v))
             .hasInvalidValueEqualTo(user.getName())
             .hasLeafBeanSameAs(user)
             .hasMessageEqualTo("must not be blank")
-            .hasPropertyPathSatisfying(p -> {  // ....validation.Path
+            .hasPropertyPathSatisfying(p -> {
                 assertThat(path(p)).doesNotContainNull().hasSize(1);
-                assertThat(path(p)).allSatisfy(n -> { // ....validation.Path.Node
+                assertThat(path(p)).allSatisfy(n -> {
                      assertThat(node(n))
                           .hasIndexEqualTo(null)
                           .hasKeyEqualTo(null)
-                          .hasKindSatisfying(k -> { // ....validation.ElementKind
-                               assertThat(elementKind(k))
-                                   .hasNameEqualTo("PROPERTY");
-                          })
+                          .hasKindSameAs(ElementKind.PROPERTY)
                           .hasNameEqualTo("name")
                           .isNotInIterable();
                 });
@@ -91,33 +98,9 @@ assertBean(user).doesNotHaveValidProperty("age");       // fails
 user.setAge(-1);
 
 assertThat(bean(user)).doesNotHaveValidProperty("age"); // succeeds
-
-assertBean(user).doesNotHaveValidProperty("age", s -> { // succeeds
-    assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1).allSatisfy(v -> {
-        assertThat(constraintViolation(v))
-            .hasInvalidValueEqualTo(user.getAge())
-            .hasLeafBeanSameAs(user)
-            .hasMessageEqualTo("must be greater than or equal to 0")
-            .hasPropertyPathSatisfying(p -> {
-                assertThat(path(p)).doesNotContainNull().hasSize(1).allSatisfy(n -> {
-                     assertThat(node(n))
-                         .hasIndexEqualTo(null)
-                         .hasKeyEqualTo(null)
-                         .hasKindSatisfying(k -> {
-                             assertThat(elementKind(k))
-                                 .hasNameEqualTo("PROPERTY");
-                         })
-                         .hasNameEqualTo("age")
-                         .isNotInIterable();
-                });
-            })
-            .hasRootBeanSameAs(user);
-            .hasRootBeanClassSameAs(User.class)
-    });
-}));
 ```
 
-### Verifying a value for a specific property of a bean type
+### Verifying a value for a property of a bean type
 
 #### `isValidFor(Class<?>, String)`
 
@@ -137,16 +120,15 @@ Verifies that the `actual` value is not valid for a property of specified name o
 
 ```java
 assertBeanProperty("John").isNotValidFor(User.class, "name");            // fails
-String invalidName = current().nextBoolean()
-                     ? null : current().nextBoolean() ? "" : " ";
+        
+String invalidName = getInvalidName();
 assertThat(beanProperty(invalidName)).isNotValidFor(User.class, "name"); // succeeds
 assertBeanProperty(invalidName).isNotValidFor(User.class, "name", s -> { // succeeds
-    assertThat(s).isNotNull().doesNotContainNull().isNotNull();
-    // ...
 });
 
 assertBeanProperty(1).isNotValidFor(User.class, "age");                 // fails
-int invalidAge = current().nextInt() | Integer.MIN_VALUE;
+        
+int invalidAge = getInvalidAge();
 assertThat(beanProperty(invalidAge)).isNotValidFor(User.class, "name"); // succeeds
 assertBeanProperty(invalidAge).isNotValidFor(User.class, "name", s -> { // succeeds
     assertThat(s).isNotNull().doesNotContainNull().isNotNull();
@@ -170,4 +152,7 @@ assert...(...)
 [validateProperty]: https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateProperty-T-java.lang.String-java.lang.Class...-
 
 [validateValue]: https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateValue-java.lang.Class-java.lang.String-java.lang.Object-java.lang.Class...-
+
+[jakarta.validation:jakarta.validation-api]: https://search.maven.org/artifact/jakarta.validation/jakarta.validation-api
+[javax.validation:validation-api]: https://search.maven.org/artifact/javax.validation/validation-api
 

@@ -23,7 +23,7 @@ package com.github.jinahya.assertj.validation;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A utility class for fluently creating instances of {@link BeanAssert}.
+ * A class for fluently creating instances of {@link BeanAssert} class.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see BeanAssert
@@ -31,10 +31,10 @@ import static java.util.Objects.requireNonNull;
 public final class BeanAssertions {
 
     /**
-     * Creates a new assertion instance for specified bean object reference.
+     * Creates a new assertion instance for specified bean object.
      *
-     * @param actual the bean object to be verified.
-     * @return a new assertion instance for {@code object}.
+     * @param actual the bean object to verify.
+     * @return a new assertion instance for {@code actual}.
      * @see #assertThat(BeanWrapper)
      */
     public static BeanAssert assertBean(final Object actual) {
@@ -42,10 +42,10 @@ public final class BeanAssertions {
     }
 
     /**
-     * Creates a new assertion instance for the bean object reference wrapped in specified wrapper.
+     * Creates a new assertion instance for the bean object wrapped in specified wrapper.
      *
      * @param wrapper the wrapper wraps the actual bean value; must not be {@code null}.
-     * @return a assertion instance for {@link BeanWrapper#getActual()} wrapper.wrapped}.
+     * @return a assertion instance for {@link BeanWrapper#getActual()} wrapper.actual}.
      * @see BeanWrapper#bean(Object)
      * @see #assertBean(Object)
      */
@@ -54,10 +54,7 @@ public final class BeanAssertions {
         return assertBean(wrapper.getActual());
     }
 
-    /**
-     * Creates a new instance.
-     */
     private BeanAssertions() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

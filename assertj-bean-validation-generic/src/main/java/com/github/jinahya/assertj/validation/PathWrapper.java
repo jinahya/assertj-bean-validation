@@ -21,50 +21,40 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping {@code ....validation.Path}.
+ * A class for wrapping {@code ja....validation.Path}.
  *
- * @param <ACTUAL> the type of {@code ....validation.Path}.
- * @param <NODE>   the type of {@code ....validation.Path.Node}
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
-        extends AbstractWrapper<ACTUAL> {
-
-    abstract static class AbstractNodeWrapper
-            extends AbstractWrapper<Object> {
-
-        protected AbstractNodeWrapper(final Object actual) {
-            super(actual);
-        }
-    }
+public class PathWrapper
+        extends AbstractPathWrapper<Object> {
 
     public static class NodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractNodeWrapper<Object> {
 
         public static NodeWrapper node(final Object actual) {
             return new NodeWrapper(actual);
         }
 
-        private NodeWrapper(final Object actual) {
-            super(actual);
+        private NodeWrapper(final Object wrapped) {
+            super(wrapped);
         }
     }
 
     public static class BeanNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractBeanNodeWrapper<Object> {
 
         public static BeanNodeWrapper beanNode(final Object actual) {
             return new BeanNodeWrapper(actual);
         }
 
-        private BeanNodeWrapper(final Object actual) {
-            super(actual);
+        private BeanNodeWrapper(final Object wrapped) {
+            super(wrapped);
         }
     }
 
     public static class ConstructorNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractConstructorNodeWrapper<Object> {
 
         public static ConstructorNodeWrapper constructorNode(final Object actual) {
             return new ConstructorNodeWrapper(actual);
@@ -76,7 +66,7 @@ public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     public static class ContainerElementNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractContainerElementNodeWrapper<Object> {
 
         public static ContainerElementNodeWrapper containerElementNode(final Object actual) {
             return new ContainerElementNodeWrapper(actual);
@@ -88,7 +78,7 @@ public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     public static class CrossParameterNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractCrossParameterNodeWrapper<Object> {
 
         public static CrossParameterNodeWrapper crossParameterNode(final Object actual) {
             return new CrossParameterNodeWrapper(actual);
@@ -100,7 +90,7 @@ public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     public static class MethodNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractMethodNodeWrapper<Object> {
 
         public static MethodNodeWrapper methodNode(final Object actual) {
             return new MethodNodeWrapper(actual);
@@ -112,7 +102,7 @@ public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     public static class ParameterNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractNodeWrapper<Object> {
 
         public static ParameterNodeWrapper parameterNode(final Object actual) {
             return new ParameterNodeWrapper(actual);
@@ -124,7 +114,7 @@ public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     public static class PropertyNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractPropertyNodeWrapper<Object> {
 
         public static PropertyNodeWrapper propertyNode(final Object actual) {
             return new PropertyNodeWrapper(actual);
@@ -136,7 +126,7 @@ public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     public static class ReturnValueNodeWrapper
-            extends AbstractNodeWrapper {
+            extends AbstractPathWrapper.AbstractReturnValueNodeWrapper<Object> {
 
         public static ReturnValueNodeWrapper returnValueNode(final Object actual) {
             return new ReturnValueNodeWrapper(actual);
@@ -148,11 +138,11 @@ public final class PathWrapper<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public static <ACTUAL extends Iterable<NODE>, NODE> PathWrapper<ACTUAL, NODE> path(final ACTUAL actual) {
-        return new PathWrapper<>(actual);
+    public static PathWrapper path(final Object actual) {
+        return new PathWrapper(actual);
     }
 
-    private PathWrapper(final ACTUAL actual) {
+    private PathWrapper(final Object actual) {
         super(actual);
     }
 }

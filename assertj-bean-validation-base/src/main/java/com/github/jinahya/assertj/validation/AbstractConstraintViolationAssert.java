@@ -56,7 +56,7 @@ public abstract class AbstractConstraintViolationAssert<
         super(actual, selfType);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------- invalidValue
 
     /**
      * Gets the invalid value of specified actual value.
@@ -89,7 +89,7 @@ public abstract class AbstractConstraintViolationAssert<
         return hasInvalidValueSatisfying(v -> assertThat(v).isEqualTo(expected));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------- leafBean
 
     /**
      * Gets the leaf bean from specified actual value.
@@ -121,7 +121,7 @@ public abstract class AbstractConstraintViolationAssert<
         return hasLeafBeanSatisfying(v -> assertThat(v).isSameAs(expected));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------- message
 
     /**
      * Gets the message from specified actual value.
@@ -154,7 +154,14 @@ public abstract class AbstractConstraintViolationAssert<
         return hasMessageSatisfying(v -> assertThat(v).isEqualTo(expected));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------- propertyPath
+
+    /**
+     * Returns the value of {@code getPropertyPath()} of the {@link #actual} constraint violation.
+     *
+     * @param actual the {@link #actual} constraint violation.
+     * @return the value of {@code actual.getPropertyPath()}.
+     */
     protected abstract PATH getPropertyPath(ACTUAL actual);
 
     /**
@@ -181,13 +188,13 @@ public abstract class AbstractConstraintViolationAssert<
         return hasPropertyPathSatisfying(v -> assertThat(v).isEqualTo(expected));
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------- rootBean
 
     /**
-     * Gets the root bean from specified actual value.
+     * Returns the value of {@code getRootBean()} of the {@link #actual} constraint violation.
      *
-     * @param actual the actual value.
-     * @return the root bean value.
+     * @param actual the {@link #actual} constraint violation
+     * @return the value of {@code actual.getRootBean()}.
      */
     protected abstract ROOT_BEAN getRootBean(ACTUAL actual);
 

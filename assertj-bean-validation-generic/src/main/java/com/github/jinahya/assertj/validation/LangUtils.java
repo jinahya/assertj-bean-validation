@@ -20,10 +20,23 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-class NonInstantiatableAssertionError
-        extends AssertionError {
+import static java.util.Objects.requireNonNull;
 
-    NonInstantiatableAssertionError() {
-        super("instantiation is not allowed");
+final class LangUtils {
+
+    static boolean isInstanceOf(final Class<?> clazz, final Object object) {
+        return requireNonNull(clazz, "clazz is null")
+                .isInstance(requireNonNull(object, "object is null"));
+    }
+
+    static <T> T requireInstanceOf(final Class<?> clazz, final T object) {
+        if (!isInstanceOf(clazz, object)) {
+            throw new IllegalArgumentException("not an instance of " + clazz + ": " + object);
+        }
+        return object;
+    }
+
+    private LangUtils() {
+        throw new NonInstantiatableAssertionError();
     }
 }

@@ -19,8 +19,7 @@ public class PathAssertions {
         }
 
         public static PathAssert.NodeAssert assertThat(final AbstractWrapper<? extends Path.BeanNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertNode(wrapper.getActual());
+            return assertNode(requireNonNull(wrapper).getActual());
         }
 
         private NodeAssertions() {
@@ -39,8 +38,7 @@ public class PathAssertions {
         }
 
         public static PathAssert.BeanNodeAssert assertThat(final AbstractWrapper<? extends Path.BeanNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertBeanNode(wrapper.getActual());
+            return assertBeanNode(requireNonNull(wrapper).getActual());
         }
 
         private BeanNodeAssertions() {
@@ -60,8 +58,7 @@ public class PathAssertions {
 
         public static PathAssert.ConstructorNodeAssert assertThat(
                 final AbstractWrapper<? extends Path.ConstructorNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertConstructorNode(wrapper.getActual());
+            return assertConstructorNode(requireNonNull(wrapper).getActual());
         }
 
         private ConstructorNodeAssertions() {
@@ -103,8 +100,7 @@ public class PathAssertions {
 
         public static PathAssert.CrossParameterNodeAssert assertThat(
                 final AbstractWrapper<? extends Path.CrossParameterNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertCrossParameterNode(wrapper.getActual());
+            return assertCrossParameterNode(requireNonNull(wrapper).getActual());
         }
 
         private CrossParameterNodeAssertions() {
@@ -123,8 +119,7 @@ public class PathAssertions {
         }
 
         public static PathAssert.MethodNodeAssert assertThat(final AbstractWrapper<? extends Path.MethodNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertMethodNode(wrapper.getActual());
+            return assertMethodNode(requireNonNull(wrapper).getActual());
         }
 
         private MethodNodeAssertions() {
@@ -144,8 +139,7 @@ public class PathAssertions {
 
         public static PathAssert.ParameterNodeAssert assertThat(
                 final AbstractWrapper<? extends Path.ParameterNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertParameterNode(wrapper.getActual());
+            return assertParameterNode(requireNonNull(wrapper).getActual());
         }
 
         private ParameterNodeAssertions() {
@@ -165,8 +159,7 @@ public class PathAssertions {
 
         public static PathAssert.PropertyNodeAssert assertThat(
                 final AbstractWrapper<? extends Path.PropertyNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertPropertyNode(wrapper.getActual());
+            return assertPropertyNode(requireNonNull(wrapper).getActual());
         }
 
         private PropertyNodeAssertions() {
@@ -186,8 +179,7 @@ public class PathAssertions {
 
         public static PathAssert.ReturnValueNodeAssert assertThat(
                 final AbstractWrapper<? extends Path.ReturnValueNode> wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertReturnValueNode(wrapper.getActual());
+            return assertReturnValueNode(requireNonNull(wrapper).getActual());
         }
 
         private ReturnValueNodeAssertions() {
@@ -195,8 +187,12 @@ public class PathAssertions {
         }
     }
 
-    public static PathAssert assertPath(final Path actual) {
+    public static PathAssert assertThat(final Path actual) {
         return new PathAssert(actual);
+    }
+
+    public static PathAssert assertPath(final Path actual) {
+        return assertThat(actual);
     }
 
     public static PathAssert assertThat(final AbstractWrapper<? extends Path> wrapper) {

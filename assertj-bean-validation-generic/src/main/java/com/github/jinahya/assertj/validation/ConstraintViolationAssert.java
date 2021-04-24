@@ -20,6 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.requireNullOrInstanceOfConstraintViolationClass;
+
 /**
  * An assertion class for verifying instances of {@code ....validation.ConstraintViolation}.
  *
@@ -38,8 +40,7 @@ public class ConstraintViolationAssert<ACTUAL, PATH, T>
      *               javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintViolation}.
      */
     public ConstraintViolationAssert(final ACTUAL actual) {
-        super(ConstraintViolationUtils.requireNullOrInstanceOfConstraintViolationClass(actual),
-              ConstraintViolationAssert.class);
+        super(requireNullOrInstanceOfConstraintViolationClass(actual), ConstraintViolationAssert.class);
     }
 
     @Override

@@ -20,24 +20,26 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.InstanceOfAssertFactory;
+
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.requireNullOrInstanceOfNodeClass;
+import static com.github.jinahya.assertj.validation.PathUtils.PropertyNodeUtils.requireNullOrInstanceOfPropertyNodeClass;
+import static com.github.jinahya.assertj.validation.PathUtils.requireNullOrInstanceOfPathClass;
 
 /**
  * An assertion class for verifying instances of {@code ....validation.Path}.
  *
- * @param <ACTUAL> the type of {@code ....validation.Path}.
- * @param <NODE>   the type of {@code ....validation.Path.Node}.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119", "java:S125"})
-public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
-        extends AbstractPathAssert<ACTUAL, NODE> {
+public class PathAssert
+        extends AbstractPathAssert<PathAssert, Object, Object> {
 
     // ------------------------------------------------------------------------------------------------------------ Node
     static class NodeAssertDelegateImpl
-            implements AbstractNodeAssertDelegate<Object, Object> {
+            implements AbstractPathAssert.AbstractNodeAssertDelegate<Object, Object> {
 
         @Override
         public Integer getIndex(final Object actual) {
@@ -69,21 +71,84 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractNodeAssert<NodeAssert, Object, Object> {
 
         public NodeAssert(final Object actual) {
-            super(PathUtils.NodeUtils.requireNullOrNodeInstance(actual), NodeAssert.class, new NodeAssertDelegateImpl());
+            super(requireNullOrInstanceOfNodeClass(actual), NodeAssert.class, new NodeAssertDelegateImpl());
         }
 
-        // ---------------------------------------------------------------------------------------------------- BeanNode
         @Override
         public NodeAssert isBeanNode() {
-            return isNotNull().satisfies(a -> {
-                assertThat(PathUtils.BeanNodeUtils.isNullOrBeanNodeInstance(a)).isTrue();
-            });
+            return isNotNull().isInstanceOf(PathUtils.BeanNodeUtils.BEAN_NODE_CLASS);
         }
 
         @SuppressWarnings({"unchecked"})
         @Override
         public BeanNodeAssert asBeanNode() {
             return new BeanNodeAssert(actual);
+        }
+
+        @Override
+        public NodeAssert isConstructorNode() {
+            return isNotNull().isInstanceOf(PathUtils.ConstructorNodeUtils.CONSTRUCTOR_NODE_CLASS);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public ConstructorNodeAssert asConstructorNode() {
+            return new ConstructorNodeAssert(actual);
+        }
+
+        @Override
+        public NodeAssert isCrossParameterNode() {
+            return isNotNull().isInstanceOf(PathUtils.CrossParameterNodeUtils.CROSS_PARAMETER_NODE_CLASS);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public CrossParameterNodeAssert asCrossParameterNode() {
+            return new CrossParameterNodeAssert(actual);
+        }
+
+        @Override
+        public NodeAssert isMethodNode() {
+            return isNotNull().isInstanceOf(PathUtils.MethodNodeUtils.METHOD_NODE_CLASS);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public MethodNodeAssert asMethodNode() {
+            return new MethodNodeAssert(actual);
+        }
+
+        @Override
+        public NodeAssert isParameterNode() {
+            return isNotNull().isInstanceOf(PathUtils.ParameterNodeUtils.PARAMETER_NODE_CLASS);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public ParameterNodeAssert asParameterNode() {
+            return new ParameterNodeAssert(actual);
+        }
+
+        @Override
+        public NodeAssert isPropertyNode() {
+            return isNotNull().isInstanceOf(PathUtils.PropertyNodeUtils.PROPERTY_NODE_CLASS);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public PropertyNodeAssert asPropertyNode() {
+            return new PropertyNodeAssert(actual);
+        }
+
+        @Override
+        public NodeAssert isReturnValueNode() {
+            return isNotNull().isInstanceOf(PathUtils.ReturnValueNodeUtils.RETURN_VALUE_NODE_CLASS);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public ReturnValueNodeAssert asReturnValueNode() {
+            return new ReturnValueNodeAssert(actual);
         }
     }
 
@@ -107,7 +172,7 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractBeanNodeAssert<BeanNodeAssert, Object, Object> {
 
         public BeanNodeAssert(Object actual) {
-            super(PathUtils.BeanNodeUtils.requireNullOrBeanNodeInstance(actual), BeanNodeAssert.class,
+            super(PathUtils.BeanNodeUtils.requireNullOrInstanceOfBeanNodeClass(actual), BeanNodeAssert.class,
                   new BeanNodeAssertDelegateImpl());
         }
     }
@@ -233,7 +298,8 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
             extends AbstractPropertyNodeAssert<PropertyNodeAssert, Object, Object> {
 
         public PropertyNodeAssert(Object actual) {
-            super(actual, PropertyNodeAssert.class, new PropertyNodeAssertDelegateImpl());
+            super(requireNullOrInstanceOfPropertyNodeClass(actual), PropertyNodeAssert.class,
+                  new PropertyNodeAssertDelegateImpl());
         }
     }
 
@@ -254,13 +320,32 @@ public class PathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    public static class NodeAssertFactory
+            implements AbstractNodeAssertFactory<Object, NodeAssert> {
+
+        @Override
+        public NodeAssert createAssert(final Object actual) {
+            PathUtils.NodeUtils.requireNullOrInstanceOfNodeClass(actual);
+            return new NodeAssert(actual);
+        }
+    }
+
+    public static class InstanceOfNodeAssertFactory
+            extends InstanceOfAssertFactory<Object, NodeAssert> {
+
+        public InstanceOfNodeAssertFactory() {
+            super(Object.class, new NodeAssertFactory());
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance with specified value.
      *
      * @param actual the value to verify.
      */
-    public PathAssert(final ACTUAL actual) {
-        super(PathUtils.requireNullOrInstanceOfPathClass(actual));
+    public PathAssert(final Object actual) {
+        super(requireNullOrInstanceOfPathClass(actual), PathAssert.class);
     }
 }

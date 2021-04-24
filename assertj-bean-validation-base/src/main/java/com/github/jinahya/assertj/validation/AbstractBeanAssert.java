@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * An assertion class for validating a bean and its properties.
  *
- * @param <ACTUAL>              actual bean type parameter
+ * @param <ACTUAL>               actual bean type parameter
  * @param <CONSTRAINT_VIOLATION> the type of {@code ConstraintViolation}.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -52,12 +53,21 @@ public abstract class AbstractBeanAssert<
     }
 
     // -------------------------------------------------------------------------------------------------------- validate
+
+    /**
+     * Validates specified {@link #actual} bean object and returns a set of constraint violations.
+     *
+     * @param actual the {@code actual} bean object to validate.
+     * @return a set of constraint violations.
+     */
     protected abstract Set<CONSTRAINT_VIOLATION> validate(ACTUAL actual);
 
     /**
-     * Verifies that the {@link #actual actual} is valid.
+     * Verifies that the {@link #actual} bean object is valid. This method invokes {@link #validate(Object)} with {@link
+     * #actual} and verifies that the result set is {@link Collection#isEmpty() empty}.
      *
      * @return {@link #myself self}.
+     * @see #validate(Object)
      * @see #isNotValid(Consumer)
      * @see #isNotValid()
      */
@@ -68,12 +78,13 @@ public abstract class AbstractBeanAssert<
     }
 
     /**
-     * Verifies that the {@link #actual} is not valid and accepts a non-empty set of constraint violations to specified
-     * consumer.
+     * Verifies that the {@link #actual} bean object is not valid and accepts a non-empty set of constraint violations
+     * to specified consumer.
      *
-     * @param consumer the consumer accepts and verifies the set of constraint violations.
+     * @param consumer the consumer accepts and verifies a non-empty set of constraint violations.
      * @return {@link #myself self}.
      * @see #isNotValid()
+     * @see #isValid()
      */
     public SELF isNotValid(final Consumer<? super Set<CONSTRAINT_VIOLATION>> consumer) {
         return isNotNull().satisfies(a -> {
@@ -86,23 +97,36 @@ public abstract class AbstractBeanAssert<
     }
 
     /**
-     * Verifies that the {@link #actual} is not valid.
+     * Verifies that the {@link #actual} bean object is not valid.
      *
      * @return {@link #myself self}.
      * @see #isNotValid(Consumer)
+     * @see #isValid()
      */
     public SELF isNotValid() {
         return isNotValid(null);
     }
 
     // ------------------------------------------------------------------------------------------------ validateProperty
+
+    /**
+     * Validates a property of {@link #actual} bean object and returns a set of constraint violations.
+     *
+     * @param actual       the {@link #actual} bean object whose property is verified.
+     * @param propertyName the name of the property to validate.
+     * @return a set of constraint violations.
+     */
     protected abstract Set<CONSTRAINT_VIOLATION> validateProperty(final ACTUAL actual, final String propertyName);
 
     /**
-     * Verifies that the {@link #actual actual}'s current property of specified name is valid.
+     * Verifies that the {@link #actual}'s current property of specified name is valid. This method invokes {@link
+     * #validateProperty(Object, String)} method with {@link #actual} and specified property name and verifies that the
+     * result set is empty.
      *
      * @param propertyName the name of the property to validate.
      * @return {@link #myself self}
+     * @see #doesNotHaveValidProperty(String, Consumer)
+     * @see #doesNotHaveValidProperty(String)
      */
     public SELF hasValidProperty(final String propertyName) {
         requireNonNull(propertyName, "propertyName is null");
@@ -113,15 +137,14 @@ public abstract class AbstractBeanAssert<
     }
 
     /**
-     * Verifies that the {@link #actual actual}'s current property of specified name is not valid and accepts a
-     * non-empty set of constraint violations to specified consumer.
+     * Verifies that the {@link #actual}'s current property of specified name is not valid and accepts a non-empty set
+     * of constraint violations to specified consumer.
      *
-     * @param propertyName the name of the property whose value is validated.
-     * @param consumer     the consumer accepts a non-empty set of constraint violations whose elements are all
-     *                     instances of {@code T<ACTUAL>}.
+     * @param propertyName the name of the property to validate.
+     * @param consumer     the consumer accepts and verifies a non-empty set of constraint violations.
      * @return {@link #myself self}.
-     * @see #hasValidProperty(String)
      * @see #doesNotHaveValidProperty(String)
+     * @see #hasValidProperty(String)
      */
     public SELF doesNotHaveValidProperty(
             final String propertyName, final Consumer<? super Set<CONSTRAINT_VIOLATION>> consumer) {
@@ -140,6 +163,8 @@ public abstract class AbstractBeanAssert<
      *
      * @param propertyName the name of the property to validate.
      * @return {@link #myself self}.
+     * @see #doesNotHaveValidProperty(String, Consumer)
+     * @see #hasValidProperty(String)
      */
     public SELF doesNotHaveValidProperty(final String propertyName) {
         return doesNotHaveValidProperty(propertyName, null);

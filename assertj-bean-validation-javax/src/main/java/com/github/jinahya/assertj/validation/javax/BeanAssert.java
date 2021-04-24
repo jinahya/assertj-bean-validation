@@ -37,26 +37,22 @@ public class BeanAssert<T>
         extends AbstractBeanAssert<BeanAssert<T>, T, Validator, ConstraintViolation<T>> {
 
     /**
-     * Creates a new instance with specified actual bean.
+     * Creates a new instance with specified bean object.
      *
-     * @param actual the actual bean to verify.
+     * @param actual the bean object verify.
      */
     public BeanAssert(final T actual) {
         super(actual, BeanAssert.class);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     protected Validator getDefaultValidator() {
         return ValidatorFactories.getValidatorFactory().getValidator();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     protected Set<ConstraintViolation<T>> validate(final T actual) {
-        final Validator validator = validator();
-        final Class<?>[] groups = groups();
-        return validator.validate(actual, groups);
+        return validator().validate(actual, groups());
     }
 
     @Override

@@ -34,8 +34,8 @@ public class BeanWrapper<ACTUAL>
      * Creates a new instance wraps specified bean object.
      *
      * @param <ACTUAL> actual type parameter
-     * @param actual   the bean object to wrap; must not be {@code null}.
-     * @return a new instance wraps {@code object}.
+     * @param actual   the bean object to wrap.
+     * @return a new instance wraps {@code actual}.
      */
     public static <ACTUAL> BeanWrapper<ACTUAL> bean(final ACTUAL actual) {
         return new BeanWrapper<>(actual);

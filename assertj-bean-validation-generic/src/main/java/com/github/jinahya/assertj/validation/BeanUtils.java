@@ -32,11 +32,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-/**
- * A utility class for Bean-Validation.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
 final class BeanUtils {
 
     private BeanUtils() {

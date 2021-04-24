@@ -13,7 +13,7 @@ import java.util.List;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 public class PathAssert
-        extends AbstractPathAssert<Path, Node> {
+        extends AbstractPathAssert<PathAssert, Path, Node> {
 
     // -----------------------------------------------------------------------------------------------------------------
     static class NodeAssertDelegateImpl<NODE extends Node>
@@ -57,7 +57,6 @@ public class PathAssert
             super(actual, NodeAssert.class, new NodeAssertDelegateImpl());
         }
 
-        // -------------------------------------------------------------------------------------------------------------
         @Override
         public NodeAssert isBeanNode() {
             return isInstanceOf(Path.BeanNode.class);
@@ -68,6 +67,78 @@ public class PathAssert
         public BeanNodeAssert asBeanNode() {
             isBeanNode();
             return new BeanNodeAssert((Path.BeanNode) actual);
+        }
+
+        @Override
+        public NodeAssert isConstructorNode() {
+            return isInstanceOf(Path.ConstructorNode.class);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public ConstructorNodeAssert asConstructorNode() {
+            isConstructorNode();
+            return new ConstructorNodeAssert((Path.ConstructorNode) actual);
+        }
+
+        @Override
+        public NodeAssert isCrossParameterNode() {
+            return isInstanceOf(Path.CrossParameterNode.class);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public CrossParameterNodeAssert asCrossParameterNode() {
+            isCrossParameterNode();
+            return new CrossParameterNodeAssert((Path.CrossParameterNode) actual);
+        }
+
+        @Override
+        public NodeAssert isMethodNode() {
+            return isInstanceOf(Path.MethodNode.class);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public MethodNodeAssert asMethodNode() {
+            isMethodNode();
+            return new MethodNodeAssert((Path.MethodNode) actual);
+        }
+
+        @Override
+        public NodeAssert isParameterNode() {
+            return isInstanceOf(Path.ParameterNode.class);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public ParameterNodeAssert asParameterNode() {
+            isParameterNode();
+            return new ParameterNodeAssert((Path.ParameterNode) actual);
+        }
+
+        @Override
+        public NodeAssert isPropertyNode() {
+            return isInstanceOf(Path.PropertyNode.class);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public PropertyNodeAssert asPropertyNode() {
+            isPropertyNode();
+            return new PropertyNodeAssert((Path.PropertyNode) actual);
+        }
+
+        @Override
+        public NodeAssert isReturnValueNode() {
+            return isInstanceOf(Path.ReturnValueNode.class);
+        }
+
+        @SuppressWarnings({"unchecked"})
+        @Override
+        public ReturnValueNodeAssert asReturnValueNode() {
+            isReturnValueNode();
+            return new ReturnValueNodeAssert((Path.ReturnValueNode) actual);
         }
     }
 
@@ -235,6 +306,6 @@ public class PathAssert
 
     // -----------------------------------------------------------------------------------------------------------------
     public PathAssert(final Path actual) {
-        super(actual);
+        super(actual, PathAssert.class);
     }
 }

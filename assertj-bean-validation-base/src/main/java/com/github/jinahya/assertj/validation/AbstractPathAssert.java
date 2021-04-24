@@ -1,6 +1,7 @@
 package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.BooleanAssert;
 import org.assertj.core.api.IterableAssert;
 
@@ -13,13 +14,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * An abstract assertion class for verifying instances of {@code Path} which is an iterable of {@code Node}s.
  *
+ * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
- * @param <NODE>   the type of {@code Node}
+ * @param <NODE>   the type of {@code ja....validation.Path.Node}
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
-        extends IterableAssert<NODE> {
+public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, ACTUAL, NODE>, ACTUAL, NODE>
+        extends AbstractAssert<SELF, ACTUAL> {
 
     interface NodeBaseAssertDelegate<NODE, ELEMENT_KIND> {
 
@@ -34,19 +36,17 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         boolean isInIterable(NODE actual);
     }
 
-    public abstract static class AbstractNodeBaseAssert<
-            SELF extends AbstractNodeBaseAssert<SELF, ACTUAL, ELEMENT_KIND, D>,
+    abstract static class NodeBaseAssert<
+            SELF extends NodeBaseAssert<SELF, ACTUAL, ELEMENT_KIND, DELEGATE>,
             ACTUAL,
             ELEMENT_KIND,
-            D extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND>>
+            DELEGATE extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND>>
             extends AbstractAssert<SELF, ACTUAL> {
 
-        protected AbstractNodeBaseAssert(final ACTUAL actual, final Class<?> selfType, final D delegate) {
+        NodeBaseAssert(final ACTUAL actual, final Class<?> selfType, final DELEGATE delegate) {
             super(actual, selfType);
             this.delegate = requireNonNull(delegate, "delegate is null");
         }
-
-        // -------------------------------------------------------------------------------------------------- getIndex()
 
         /**
          * Verifies that the {@code actual.getIndex()} satisfies the requirements by being accepted to specified
@@ -72,8 +72,6 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             return hasIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
         }
 
-        // ---------------------------------------------------------------------------------------------------- getKey()
-
         /**
          * Verifies that the {@code actual.getKey()} satisfies the requirements by being accepted to specified
          * consumer.
@@ -97,8 +95,6 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         public SELF hasKeyEqualTo(final Object expected) {
             return hasKeySatisfying(v -> assertThat(v).isEqualTo(expected));
         }
-
-        // --------------------------------------------------------------------------------------------------- getKind()
 
         /**
          * Verifies that the {@code actual.getKind()} satisfies the requirements by being accepted to specified
@@ -124,8 +120,6 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             return hasKindSatisfying(v -> assertThat(v).isSameAs(expected));
         }
 
-        // --------------------------------------------------------------------------------------------------- getName()
-
         /**
          * Verifies that the {@code actual.getName()} satisfies the requirements by being accepted to specified
          * consumer.
@@ -148,8 +142,6 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
         public SELF hasNameEqualTo(final Object expected) {
             return hasNameSatisfying(v -> assertThat(v).isEqualTo(expected));
         }
-
-        // ---------------------------------------------------------------------------------------------- isInIterable()
 
         /**
          * Verifies that the value of {@code actual.isInIterable()} satisfies the requirements by being accepted to
@@ -182,7 +174,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             return hasInIterableSatisfying(v -> assertThat(v).isFalse());
         }
 
-        protected final D delegate;
+        protected final DELEGATE delegate;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -195,7 +187,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -206,10 +198,33 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             super(actual, selfType, delegate);
         }
 
-        // ---------------------------------------------------------------------------------------------------- BeanNode
         public abstract SELF isBeanNode();
 
         public abstract <T extends AbstractBeanNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asBeanNode();
+
+        public abstract SELF isConstructorNode();
+
+        public abstract <T extends AbstractConstructorNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asConstructorNode();
+
+        public abstract SELF isCrossParameterNode();
+
+        public abstract <T extends AbstractCrossParameterNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asCrossParameterNode();
+
+        public abstract SELF isMethodNode();
+
+        public abstract <T extends AbstractMethodNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asMethodNode();
+
+        public abstract SELF isParameterNode();
+
+        public abstract <T extends AbstractParameterNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asParameterNode();
+
+        public abstract SELF isPropertyNode();
+
+        public abstract <T extends AbstractPropertyNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asPropertyNode();
+
+        public abstract SELF isReturnValueNode();
+
+        public abstract <T extends AbstractReturnValueNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asReturnValueNode();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -225,7 +240,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractBeanNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -268,7 +283,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractConstructorNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -304,7 +319,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractContainerElementNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -347,7 +362,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractCrossParameterNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -370,7 +385,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractMethodNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -404,7 +419,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractParameterNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -439,7 +454,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractPropertyNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -481,7 +496,7 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
             SELF extends AbstractReturnValueNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
             ELEMENT_KIND>
-            extends AbstractNodeBaseAssert<
+            extends NodeBaseAssert<
             SELF,
             ACTUAL,
             ELEMENT_KIND,
@@ -494,7 +509,44 @@ public abstract class AbstractPathAssert<ACTUAL extends Iterable<NODE>, NODE>
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected AbstractPathAssert(final ACTUAL actual) {
-        super(actual);
+    protected interface AbstractNodeAssertFactory<T, ASSERT extends AbstractNodeAssert<ASSERT, T, ?>>
+            extends AssertFactory<T, ASSERT> {
+
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    protected AbstractPathAssert(final ACTUAL actual, final Class<?> selfType) {
+        super(actual, selfType);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public IterableAssert<NODE> toIterableAssert() {
+        return new IterableAssert<>((Iterable<? extends NODE>) actual);
+    }
+//
+//    /**
+//     * Returns nodes of {@link #actual}.
+//     *
+//     * @return an iterable of nodes of {@link #actual}.
+//     */
+//    public abstract Iterable<NODE> nodes();
+//
+//    /**
+//     * Returns the node at specified index.
+//     *
+//     * @param index the index of the node.
+//     * @return the node at specified index.
+//     */
+//    public NODE nodeAt(final int index) {
+//        return nodeList().get(index);
+//    }
+//
+//    protected List<NODE> nodeList() {
+//        if (nodeList == null) {
+//            nodeList = StreamSupport.stream(nodes().spliterator(), false).collect(Collectors.toList());
+//        }
+//        return new ArrayList<>(nodeList);
+//    }
+//
+//    private List<NODE> nodeList;
 }

@@ -12,31 +12,31 @@ import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class BeanAssert_IsValid_User_Test {
+class BeanAssert_IsNotValid_User_Test {
 
     private static Stream<User> validUsers() {
-        return IntStream.rangeClosed(1, 1).mapToObj(i -> User.newValidInstance());
+        return IntStream.range(0, 16).mapToObj(i -> User.newValidInstance());
     }
 
     private static Stream<User> invalidUsers() {
-        return IntStream.range(1, 16).mapToObj(i -> User.newInvalidInstance());
+        return IntStream.range(0, 1).mapToObj(i -> User.newInvalidInstance());
     }
 
-    @DisplayName("assertBean(valid).isValid() does not throw any exception")
+    @DisplayName("assertBean(valid).isNotValid() throws an AssertionError")
     @ParameterizedTest
     @MethodSource({"validUsers"})
-    void isValid_Succeed_Valid(final User user) {
+    void isNotValid_Fail_Valid(final User user) {
         final BeanAssert<User> beanAssert = BeanAssertions.assertThat(bean(user));
-        assertThatCode(beanAssert::isValid)
-                .doesNotThrowAnyException();
+        assertThatThrownBy(beanAssert::isNotValid)
+                .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("assertBean(invalid).isValid() throws an AssertionError")
+    @DisplayName("assertBean(invalid).isNotValid() does not throw any exception")
     @ParameterizedTest
     @MethodSource({"invalidUsers"})
-    void isValid_Fail_Invalid(final User user) {
+    void isNotValid_Succeed_Invalid(final User user) {
         final BeanAssert<User> beanAssert = BeanAssertions.assertThat(bean(user));
-        assertThatThrownBy(beanAssert::isValid)
-                .isInstanceOf(AssertionError.class);
+        assertThatCode(beanAssert::isNotValid)
+                .doesNotThrowAnyException();
     }
 }

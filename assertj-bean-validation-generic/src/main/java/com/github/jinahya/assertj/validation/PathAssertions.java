@@ -22,6 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
+@SuppressWarnings({"java:S119"})
 public class PathAssertions {
 
     public static class NodeAssertions {
@@ -30,7 +31,7 @@ public class PathAssertions {
             return new PathAssert.NodeAssert(actual);
         }
 
-        public static PathAssert.NodeAssert assertThat(final PathWrapper.NodeWrapper wrapper) {
+        public static PathAssert.NodeAssert assertThat(final AbstractPathWrapper.AbstractNodeWrapper<?> wrapper) {
             return assertNode(requireNonNull(wrapper).getActual());
         }
 
@@ -45,9 +46,9 @@ public class PathAssertions {
             return new PathAssert.BeanNodeAssert(actual);
         }
 
-        public static PathAssert.BeanNodeAssert assertThat(final PathWrapper.BeanNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertBeanNode(wrapper.getActual());
+        public static PathAssert.BeanNodeAssert assertThat(
+                final AbstractPathWrapper.AbstractBeanNodeWrapper<?> wrapper) {
+            return assertBeanNode(requireNonNull(wrapper).getActual());
         }
 
         private BeanNodeAssertions() {
@@ -61,9 +62,9 @@ public class PathAssertions {
             return new PathAssert.ConstructorNodeAssert(actual);
         }
 
-        public static PathAssert.ConstructorNodeAssert assertThat(final PathWrapper.ConstructorNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertConstructorNode(wrapper.getActual());
+        public static PathAssert.ConstructorNodeAssert assertThat(
+                final AbstractPathWrapper.AbstractConstructorNodeWrapper<?> wrapper) {
+            return assertConstructorNode(requireNonNull(wrapper).getActual());
         }
 
         private ConstructorNodeAssertions() {
@@ -78,9 +79,8 @@ public class PathAssertions {
         }
 
         public static PathAssert.ContainerElementNodeAssert assertThat(
-                final PathWrapper.ContainerElementNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertContainerElementNode(wrapper.getActual());
+                final AbstractPathWrapper.AbstractContainerElementNodeWrapper<?> wrapper) {
+            return assertContainerElementNode(requireNonNull(wrapper).getActual());
         }
 
         private ContainerElementNodeAssertions() {
@@ -95,9 +95,8 @@ public class PathAssertions {
         }
 
         public static PathAssert.CrossParameterNodeAssert assertThat(
-                final PathWrapper.CrossParameterNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertCrossParameterNode(wrapper.getActual());
+                final AbstractPathWrapper.AbstractCrossParameterNodeWrapper<?> wrapper) {
+            return assertCrossParameterNode(requireNonNull(wrapper).getActual());
         }
 
         private CrossParameterNodeAssertions() {
@@ -111,9 +110,9 @@ public class PathAssertions {
             return new PathAssert.MethodNodeAssert(actual);
         }
 
-        public static PathAssert.MethodNodeAssert assertThat(final PathWrapper.MethodNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertMethodNode(wrapper.getActual());
+        public static PathAssert.MethodNodeAssert assertThat(
+                final AbstractPathWrapper.AbstractMethodNodeWrapper<?> wrapper) {
+            return assertMethodNode(requireNonNull(wrapper).getActual());
         }
 
         private MethodNodeAssertions() {
@@ -127,9 +126,9 @@ public class PathAssertions {
             return new PathAssert.ParameterNodeAssert(actual);
         }
 
-        public static PathAssert.ParameterNodeAssert assertThat(final PathWrapper.ParameterNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertParameterNode(wrapper.getActual());
+        public static PathAssert.ParameterNodeAssert assertThat(
+                final AbstractPathWrapper.AbstractParameterNodeWrapper<?> wrapper) {
+            return assertParameterNode(requireNonNull(wrapper).getActual());
         }
 
         private ParameterNodeAssertions() {
@@ -143,13 +142,13 @@ public class PathAssertions {
             return new PathAssert.PropertyNodeAssert(actual);
         }
 
-        public static PathAssert.PropertyNodeAssert assertThat(final PathWrapper.PropertyNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertPropertyNode(wrapper.getActual());
+        public static PathAssert.PropertyNodeAssert assertThat(
+                final AbstractPathWrapper.AbstractPropertyNodeWrapper<?> wrapper) {
+            return assertPropertyNode(requireNonNull(wrapper).getActual());
         }
 
         private PropertyNodeAssertions() {
-            super();
+            throw new NonInstantiatableAssertionError();
         }
     }
 
@@ -159,13 +158,13 @@ public class PathAssertions {
             return new PathAssert.ReturnValueNodeAssert(actual);
         }
 
-        public static PathAssert.ReturnValueNodeAssert assertThat(final PathWrapper.ReturnValueNodeWrapper wrapper) {
-            requireNonNull(wrapper, "wrapper is null");
-            return assertReturnValueNode(wrapper.getActual());
+        public static PathAssert.ReturnValueNodeAssert assertThat(
+                final AbstractPathWrapper.AbstractReturnValueNodeWrapper<?> wrapper) {
+            return assertReturnValueNode(requireNonNull(wrapper).getActual());
         }
 
         private ReturnValueNodeAssertions() {
-            super();
+            throw new NonInstantiatableAssertionError();
         }
     }
 
@@ -174,29 +173,24 @@ public class PathAssertions {
     /**
      * Creates a new instance for specified {@code ....validation.Path} value.
      *
-     * @param <ACTUAL> actual type parameter
-     * @param <NODE>   node type parameter
-     * @param actual   the value of {@code .....validation.Path} to assert.
+     * @param actual the value of {@code .....validation.Path} to assert.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL extends Iterable<NODE>, NODE> PathAssert<ACTUAL, NODE> assertPath(final ACTUAL actual) {
-        return new PathAssert<>(actual);
+    public static PathAssert assertPath(final Object actual) {
+        return new PathAssert(actual);
     }
 
     /**
      * Creates a new assertion for the actual value wrapped in specified wrapper.
      *
-     * @param <ACTUAL> the type of {@code ....validation.Path}
-     * @param <NODE>   the type of {@code ....validation.Path.Node}
-     * @param wrapper  the wrapper wraps the actual value.
+     * @param wrapper the wrapper wraps the actual value; must not be {@code null}.
      * @return a new assertion instance for {@code wrapper.actual}.
      */
-    public static <ACTUAL extends Iterable<NODE>, NODE> PathAssert<ACTUAL, NODE> assertThat(
-            final PathWrapper<? extends ACTUAL, NODE> wrapper) {
+    public static PathAssert assertThat(final PathWrapper wrapper) {
         return assertPath(requireNonNull(wrapper).getActual());
     }
 
     private PathAssertions() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }
