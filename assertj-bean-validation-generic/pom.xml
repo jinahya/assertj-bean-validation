@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>com.github.jinahya</groupId>
     <artifactId>assertj-bean-validation</artifactId>
-    <version>0.0.7-SNAPSHOT</version>
+    <version>0.0.7</version>
   </parent>
 
   <artifactId>assertj-bean-validation-generic</artifactId>
-  <version>0.0.7-SNAPSHOT</version>
+  <version>0.0.7</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
@@ -209,8 +208,7 @@
             <configuration>
               <!-- https://issues.apache.org/jira/browse/MJAVADOC-674 -->
               <target>
-                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list"
-                      toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list"/>
+                <copy file="${project.build.directory}/unpacked-javadoc/assertj-core/element-list" toFile="${project.build.directory}/unpacked-javadoc/assertj-core/package-list" />
               </target>
             </configuration>
             <goals>
@@ -229,7 +227,7 @@
             <configuration>
               <skip>true</skip>
               <rules>
-                <dependencyConvergence/>
+                <dependencyConvergence />
               </rules>
             </configuration>
             <goals>
