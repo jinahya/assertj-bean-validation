@@ -22,7 +22,90 @@ There are, due to the [Transition from Java EE to Jakarta EE](https://blogs.orac
 |`assertj-bean-validation-jakrta` |&check;   |&cross;  |[`jakarta.valiation:jakarta.validation-api:[3.0.0,)`][jakarta.validation:jakarta.validation-api]|
 |`assertj-bean-validation-javax`  |&cross;   |&check;  |[`javax.validation:validation-api`][javax.validation:validation-api], `jakrta.validation:jakarta.validation-api:(,2.0.2]`|
 
-## Usages
+## Idioms
+
+### for `actual` values of `java.lang.Object`
+
+```java
+Object b = bean();
+BeanAssert a;
+
+a = BeanAssertions.assertBean(b);
+a = BeanAssertions.assertThat(BeanWrapper.bean(b));
+
+// with static imports
+a = assertBean(b);
+a = assertThat(bean(b));
+
+a.isValid();
+```
+```java
+Object v = value();
+ValueAssert a;
+        
+a = ValueAssertions.assertValue(v);
+a = ValueAssertions.assertThat(ValueWrapper.value(v));
+
+// with static imports
+a = assertValue(b);
+a = assertThat(value(b));
+
+a.isValidFor(SomeBean.class, "someProperty");
+```
+
+### for `actual` values of `(jakarta|javax).validation.<Type>`
+
+For given `<Type>` defined within Bean-Validation API, you can create assertions using either one of following idioms.
+
+#### `<Type>Assertions.assert<Type>(actual)`
+
+```java
+<Type> actual;
+<Type>Assert a;
+a = <Type>Assertions.assert<Type>(actual);
+
+ConstraintViolation<?> actual;
+ConstrintViolationAssertions.assertConstraintViolation(actual);
+
+// with static imports
+assertConstraintViolation(actual).hasInvalidValueEqualTo(expected);
+
+// see next heading for
+// assertThat(constraintViolation(actual))
+```
+
+#### `<Type>Assertions.assertThat(<Type>Wrapper.<type>(actual))`
+
+```java
+<Type> actual;
+<Type>Assert a;
+a = <Type>Assertions.assertThat(<Type>Wrapper.<type>(actual));
+
+// e.g.
+Path actual;
+PathAssert a = PathAssertions.assertThat(PathWrapper.path(actual));
+
+// with static imports
+assertThat(path(actual)).node(0).hasIndexEqualTo(null);
+
+// see previous heading for
+// assertPath(actual)
+```
+
+#### `<Type>Assertions.assertThat(<Type> actual)` (only for `-jakarta` and `-javax`)
+
+With `assertj-bean-validation-jakarta` or `assertj-bean-validation-javax`, you can create assertions just like AssertJ.
+
+```java
+ConstructorNode actual;
+ConstructorNodeAssert a = ConstructorNodeAssertion.asserThat(actual);
+
+// of course, idioms previouls exaplained are also available
+assertConstructorNode(actual);        
+assertThat(constructorNode(actual));
+```
+
+## APIs
 
 ### Verifying a bean and/or its properties.
 
@@ -54,26 +137,24 @@ user.setName(null);
 assertThat(bean(user)).isNotValid(); // succeeds
 
 asserBean(user).isNotValid(s -> {
-    assertThat(s).isNotEmpty().doesNotContainNull().hasSize(1);
-    assertThat(s).allSatisfy(v -> {
-        assertThat(constraintViolation(v))
-            .hasInvalidValueEqualTo(user.getName())
-            .hasLeafBeanSameAs(user)
-            .hasMessageEqualTo("must not be blank")
-            .hasPropertyPathSatisfying(p -> {
-                assertThat(path(p)).doesNotContainNull().hasSize(1);
-                assertThat(path(p)).allSatisfy(n -> {
-                     assertThat(node(n))
-                          .hasIndexEqualTo(null)
-                          .hasKeyEqualTo(null)
-                          .hasKindSameAs(ElementKind.PROPERTY)
-                          .hasNameEqualTo("name")
-                          .isNotInIterable();
-                });
-             })
-            .hasRootBeanClassSameAs(User.class)
-            .hasRootBeanSameAs(user);
-    });
+    assertThat(s).hasSize(1).element(0, as(CONSTRAINT_VIOLATION))
+        .hasInvalidValueEqualTo(user.getAge())
+        .hasLeafBeanSameAs(user)
+        .hasMessageSatisfying(m -> {
+            assertThat(m).isNotBlank();
+        })
+        .hasPropertyPathSatisfying(p -> {
+            assertPath(p).isNotNull();
+            assertPath(p).asIterable().hasSize(1);
+            assertPath(p).node(0).hasIndexEqualTo(null);
+            assertPath(p).node(0).hasKeyEqualTo(null);
+            assertPath(p).node(0).hasNameEqualTo("age");
+            assertPath(p).propertyNode(0).hasContainerClassSameAs(null);
+            assertPath(p).propertyNode(0).hasTypeArgumentIndexEqualTo(null);
+        })
+        .hasRootBeanSameAs(user)
+        .hasRootBeanClassSameAs(User.class)
+        ;
 });
 ```
 

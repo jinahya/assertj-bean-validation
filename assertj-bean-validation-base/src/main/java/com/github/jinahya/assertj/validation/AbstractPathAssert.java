@@ -1,9 +1,9 @@
 package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.BooleanAssert;
-import org.assertj.core.api.IterableAssert;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -515,38 +515,80 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected AbstractPathAssert(final ACTUAL actual, final Class<?> selfType) {
-        super(actual, selfType);
+    private static <T> T requireNullOrInstanceOfIterable(final T actual) {
+        if (actual == null) {
+            return null;
+        }
+        if (!(actual instanceof Iterable)) {
+            throw new IllegalArgumentException("not an Iterable: " + actual);
+        }
+        return actual;
     }
 
-    @SuppressWarnings({"unchecked"})
-    public IterableAssert<NODE> toIterableAssert() {
-        return new IterableAssert<>((Iterable<? extends NODE>) actual);
+    protected AbstractPathAssert(final ACTUAL actual, final Class<?> selfType) {
+        super(requireNullOrInstanceOfIterable(actual), selfType);
     }
-//
-//    /**
-//     * Returns nodes of {@link #actual}.
-//     *
-//     * @return an iterable of nodes of {@link #actual}.
-//     */
-//    public abstract Iterable<NODE> nodes();
-//
-//    /**
-//     * Returns the node at specified index.
-//     *
-//     * @param index the index of the node.
-//     * @return the node at specified index.
-//     */
-//    public NODE nodeAt(final int index) {
-//        return nodeList().get(index);
-//    }
-//
-//    protected List<NODE> nodeList() {
-//        if (nodeList == null) {
-//            nodeList = StreamSupport.stream(nodes().spliterator(), false).collect(Collectors.toList());
-//        }
-//        return new ArrayList<>(nodeList);
-//    }
-//
-//    private List<NODE> nodeList;
+
+    /**
+     * Converts this assertion as an assertion of an iterable of {@link NODE}.
+     *
+     * @return an iterable assertion of {@link NODE}.
+     */
+    public abstract AbstractIterableAssert<?, ? extends Iterable<NODE>, NODE, ? extends AbstractNodeAssert<?, NODE, ?>> asIterable();
+
+    /**
+     * Returns an assertion instance for the {@code Path.Node} at specified index of {@link #actual}.
+     *
+     * @param index the node index.
+     * @return an assertion instance.
+     */
+    public AbstractNodeAssert<?, ? extends NODE, ?> node(final int index) {
+        isNotNull();
+        return asIterable().element(index);
+    }
+
+    /**
+     * Returns an assertion instance for the {@code Path.BeanNode} at specified index of {@link #actual}.
+     *
+     * @param index the node index.
+     * @return an assertion instance.
+     */
+    public AbstractBeanNodeAssert<?, ? extends NODE, ?> beanNode(final int index) {
+        isNotNull();
+        return node(index).asBeanNode();
+    }
+
+    /**
+     * Returns an assertion instance for the {@code Path.ConstructorNode} at specified index of {@link #actual}.
+     *
+     * @param index the node index.
+     * @return an assertion instance.
+     */
+    public AbstractConstructorNodeAssert<?, ? extends NODE, ?> constructorNode(final int index) {
+        isNotNull();
+        return node(index).asConstructorNode();
+    }
+
+    public AbstractCrossParameterNodeAssert<?, ? extends NODE, ?> crossParameterNode(final int index) {
+        isNotNull();
+        return node(index).asCrossParameterNode();
+    }
+
+    public AbstractMethodNodeAssert<?, ? extends NODE, ?> methodNode(final int index) {
+        isNotNull();
+        return node(index).asMethodNode();
+    }
+
+    public AbstractParameterNodeAssert<?, ? extends NODE, ?> parameterNode(final int index) {
+        isNotNull();
+        return node(index).asParameterNode();
+    }
+
+    public AbstractPropertyNodeAssert<?, ? extends NODE, ?> propertyNode(final int index) {
+        return node(index).asPropertyNode();
+    }
+
+    public AbstractReturnValueNodeAssert<?, ? extends NODE, ?> returnValueNode(final int index) {
+        return node(index).asReturnValueNode();
+    }
 }

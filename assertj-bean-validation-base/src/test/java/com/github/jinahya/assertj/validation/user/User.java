@@ -37,48 +37,81 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
 public class User {
 
+    public static int newValidAge() {
+        return current().nextInt() & Integer.MAX_VALUE;
+    }
+
+    public static String newValidName() {
+        return Long.toString(System.nanoTime());
+    }
+
     public static User newValidInstance() {
         final String name = Long.toString(System.nanoTime());
         final int age = current().nextInt() & Integer.MAX_VALUE;
         return builder()
-                .name(name)
-                .age(age)
+                .age(newValidAge())
+                .name(newValidName())
                 .valid(true)
                 .build();
     }
 
-    private static User setInvalidName(final User instance) {
-        final String invalidName = current().nextBoolean() ? "" : current().nextBoolean() ? " " : null;
-        return instance.toBuilder()
-                .name(invalidName)
-                .valid(false)
-                .build();
+    // -----------------------------------------------------------------------------------------------------------------
+    public static int newInvalidAge() {
+        return current().nextInt() | Integer.MIN_VALUE;
     }
 
-    private static User setInvalidAge(final User instance) {
-        final int invalidAge = current().nextInt() | Integer.MIN_VALUE;
-        return instance.toBuilder()
-                .age(invalidAge)
-                .valid(false)
-                .build();
+    private static UserBuilder withInvalidAge(final UserBuilder builder) {
+        return builder
+                .age(newInvalidAge())
+                .valid(false);
     }
 
+    private static User withInvalidAge(final User instance) {
+        return withInvalidAge(instance.toBuilder()).build();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public static String newInvalidName() {
+        return current().nextBoolean() ? "" : current().nextBoolean() ? " " : null;
+    }
+
+    private static UserBuilder withInvalidName(final UserBuilder builder) {
+        return builder
+                .name(newInvalidName())
+                .valid(false);
+    }
+
+    private static User withInvalidName(final User instance) {
+        return withInvalidName(instance.toBuilder()).build();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     public static User newInstanceWithInvalidName() {
-        return setInvalidName(newValidInstance());
+        return withInvalidName(newValidInstance());
     }
 
     public static User newInstanceWithInvalidAge() {
-        return setInvalidAge(newValidInstance());
+        return withInvalidAge(newValidInstance());
     }
 
     public static User newInvalidInstance() {
-        if (current().nextBoolean()) {
-            return newInstanceWithInvalidName();
-        } else {
-            return newInstanceWithInvalidAge();
+        final UserBuilder builder = newValidInstance().toBuilder();
+        switch (current().nextInt(3)) {
+            case 0:
+                withInvalidAge(builder);
+                break;
+            case 1:
+                withInvalidName(builder);
+                break;
+            default:
+                withInvalidAge(builder);
+                withInvalidName(builder);
+                break;
         }
+        return builder.build();
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private User() {
         throw new NonInstantiatableAssertionError();
     }

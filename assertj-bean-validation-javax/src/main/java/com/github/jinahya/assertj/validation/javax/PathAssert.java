@@ -1,6 +1,7 @@
 package com.github.jinahya.assertj.validation.javax;
 
 import com.github.jinahya.assertj.validation.AbstractPathAssert;
+import org.assertj.core.api.FactoryBasedNavigableIterableAssert;
 
 import javax.validation.ElementKind;
 import javax.validation.Path;
@@ -305,7 +306,63 @@ public class PathAssert
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    // should be public for accessing methods defined AbstractIterableAssert
+    // say, asIterable().hasSize(1)
+    public static class PathAsIterableNodeAssert
+            extends FactoryBasedNavigableIterableAssert<PathAsIterableNodeAssert, Path, Node, NodeAssert> {
+
+        PathAsIterableNodeAssert(final Path path) {
+            super(path, PathAsIterableNodeAssert.class, NodeAssert::new);
+        }
+    }
+
     public PathAssert(final Path actual) {
         super(actual, PathAssert.class);
+    }
+
+    @Override
+    public PathAsIterableNodeAssert asIterable() {
+        isNotNull();
+        return new PathAsIterableNodeAssert(actual);
+    }
+
+    @Override
+    public NodeAssert node(final int index) {
+        return (NodeAssert) super.node(index);
+    }
+
+    @Override
+    public BeanNodeAssert beanNode(final int index) {
+        return (BeanNodeAssert) super.beanNode(index);
+    }
+
+    @Override
+    public ConstructorNodeAssert constructorNode(final int index) {
+        return (ConstructorNodeAssert) super.constructorNode(index);
+    }
+
+    @Override
+    public CrossParameterNodeAssert crossParameterNode(final int index) {
+        return (CrossParameterNodeAssert) super.crossParameterNode(index);
+    }
+
+    @Override
+    public MethodNodeAssert methodNode(int index) {
+        return (MethodNodeAssert) super.methodNode(index);
+    }
+
+    @Override
+    public ParameterNodeAssert parameterNode(int index) {
+        return (ParameterNodeAssert) super.parameterNode(index);
+    }
+
+    @Override
+    public PropertyNodeAssert propertyNode(int index) {
+        return (PropertyNodeAssert) super.propertyNode(index);
+    }
+
+    @Override
+    public ReturnValueNodeAssert returnValueNode(int index) {
+        return (ReturnValueNodeAssert) super.returnValueNode(index);
     }
 }

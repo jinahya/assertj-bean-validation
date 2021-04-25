@@ -11,10 +11,10 @@ import java.util.stream.Stream;
 
 import static com.github.jinahya.assertj.validation.BeanAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.BeanWrapper.bean;
-import static com.github.jinahya.assertj.validation.ConstraintViolationAssertions.assertThat;
-import static com.github.jinahya.assertj.validation.ConstraintViolationWrapper.constraintViolation;
+import static com.github.jinahya.assertj.validation.InstanceOfValidationAssertFactories.CONSTRAINT_VIOLATION;
 import static com.github.jinahya.assertj.validation.PathAssertions.assertThat;
 import static com.github.jinahya.assertj.validation.PathWrapper.path;
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -68,22 +68,7 @@ class BeanAssert_IsNotValid_User_Test {
         final BeanAssert beanAssert = assertThat(bean(user));
         // then
         beanAssert.isNotValid(s -> {
-            assertThat(s).isNotEmpty().allSatisfy(v -> {
-                assertThat(constraintViolation(v))
-                        .hasInvalidValueSatisfying(i -> {
-                            assertThat(i).isNotNull();
-                        })
-                        .hasLeafBeanSameAs(user)
-                        .hasMessageSatisfying(m -> {
-                            assertThat(m).isNotBlank();
-                        })
-                        .hasPropertyPathSatisfying(p -> {
-                            assertThat(path(p)).isNotNull()
-                            ;
-                        })
-                        .hasRootBeanClassSameAs(User.class)
-                ;
-            });
+            assertThat(s).hasSizeBetween(1, 2); // age, name, or both
         });
     }
 
@@ -95,20 +80,73 @@ class BeanAssert_IsNotValid_User_Test {
         final BeanAssert beanAssert = assertThat(bean(user));
         // then
         beanAssert.isNotValid(s -> {
-            assertThat(s).isNotEmpty().allSatisfy(v -> {
-                assertThat(constraintViolation(v))
-                        .hasInvalidValueEqualTo(user.getAge())
-                        .hasLeafBeanSameAs(user)
-                        .hasMessageSatisfying(m -> {
-                            assertThat(m).isNotBlank();
-                        })
-                        .hasPropertyPathSatisfying(p -> {
-                            assertThat(path(p)).isNotNull();
-                            assertThat(p).isNotNull();
-                        })
-                        .hasRootBeanClassSameAs(User.class)
-                ;
-            });
+            assertThat(s).hasSize(1).element(0, as(CONSTRAINT_VIOLATION))
+                    .hasInvalidValueEqualTo(user.getAge())
+                    .hasLeafBeanSameAs(user)
+                    .hasMessageSatisfying(m -> {
+                        assertThat(m).isNotBlank();
+                        log.debug("message: {}", m);
+                    })
+                    .hasPropertyPathSatisfying(p -> {
+                        assertThat(path(p)).isNotNull();
+                        assertThat(path(p)).asIterable().hasSize(1);
+                        assertThat(path(p)).asIterable().element(0).satisfies(v -> {
+                            log.debug("index: {}", PathUtils.NodeUtils.getIndex(v));
+                            log.debug("key: {}", PathUtils.NodeUtils.getKey(v));
+                            log.debug("kind: {}", PathUtils.NodeUtils.getKey(v));
+                            log.debug("name: {}", PathUtils.NodeUtils.getName(v));
+                            log.debug("inIterable: {}", PathUtils.NodeUtils.isInIterable(v));
+                            log.debug("containerClass: {}", PathUtils.PropertyNodeUtils.getContainerClass(v));
+                            log.debug("typeArgumentIndex: {}", PathUtils.PropertyNodeUtils.getTypeArgumentIndex(v));
+                        });
+                        assertThat(path(p)).node(0).hasIndexEqualTo(null);
+                        assertThat(path(p)).node(0).hasKeyEqualTo(null);
+                        assertThat(path(p)).node(0).hasNameEqualTo("age");
+                        assertThat(path(p)).propertyNode(0).hasContainerClassSameAs(null);
+                        assertThat(path(p)).propertyNode(0).hasTypeArgumentIndexEqualTo(null);
+                    })
+                    .hasRootBeanSameAs(user)
+                    .hasRootBeanClassSameAs(User.class)
+            ;
+        });
+    }
+
+    @DisplayName("assertBean(invalid).isNotValid(consumer) accepts non-empty constraint violations")
+    @ParameterizedTest
+    @MethodSource({"usersWithInvalidName"})
+    void isNotValid_NonEmptyConstraintViolations_InvalidName(final User user) {
+        // given, when
+        final BeanAssert beanAssert = assertThat(bean(user));
+        // then
+        beanAssert.isNotValid(s -> {
+            assertThat(s).hasSize(1).element(0, as(CONSTRAINT_VIOLATION))
+                    .hasInvalidValueEqualTo(user.getName())
+                    .hasLeafBeanSameAs(user)
+                    .hasMessageSatisfying(m -> {
+                        assertThat(m).isNotBlank();
+                        log.debug("message: {}", m);
+                    })
+                    .hasPropertyPathSatisfying(p -> {
+                        assertThat(path(p)).isNotNull();
+                        assertThat(path(p)).asIterable().hasSize(1);
+                        assertThat(path(p)).asIterable().element(0).satisfies(v -> {
+                            log.debug("index: {}", PathUtils.NodeUtils.getIndex(v));
+                            log.debug("key: {}", PathUtils.NodeUtils.getKey(v));
+                            log.debug("kind: {}", PathUtils.NodeUtils.getKey(v));
+                            log.debug("name: {}", PathUtils.NodeUtils.getName(v));
+                            log.debug("inIterable: {}", PathUtils.NodeUtils.isInIterable(v));
+                            log.debug("containerClass: {}", PathUtils.PropertyNodeUtils.getContainerClass(v));
+                            log.debug("typeArgumentIndex: {}", PathUtils.PropertyNodeUtils.getTypeArgumentIndex(v));
+                        });
+                        assertThat(path(p)).node(0).hasIndexEqualTo(null);
+                        assertThat(path(p)).node(0).hasKeyEqualTo(null);
+                        assertThat(path(p)).node(0).hasNameEqualTo("name");
+                        assertThat(path(p)).propertyNode(0).hasContainerClassSameAs(null);
+                        assertThat(path(p)).propertyNode(0).hasTypeArgumentIndexEqualTo(null);
+                    })
+                    .hasRootBeanSameAs(user)
+                    .hasRootBeanClassSameAs(User.class)
+            ;
         });
     }
 }
