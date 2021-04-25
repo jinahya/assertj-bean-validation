@@ -27,7 +27,6 @@ import java.util.Set;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
 public class ValueAssert
         extends AbstractValueAssert<ValueAssert, Object, Object> {
 
@@ -40,13 +39,11 @@ public class ValueAssert
         super(actual, ValueAssert.class);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     protected Object getDefaultValidator() {
         return ValidationUtils.getValidator();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     protected <T> Set<Object> validateValue(final Object actual, final Class<T> beanType, final String propertyName) {
         return ValidatorUtils.validateValue(validator(), beanType, propertyName, actual, groups());

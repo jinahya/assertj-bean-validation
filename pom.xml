@@ -295,6 +295,9 @@
                 <goal>check</goal>
               </goals>
               <configuration>
+                <ignores>
+                  <ignore>java.lang.invoke.MethodHandle</ignore> <!-- https://github.com/mojohaus/animal-sniffer/issues/18 -->
+                </ignores>
                 <signature>
                   <groupId>org.codehaus.mojo.signature</groupId>
                   <artifactId>java18</artifactId>

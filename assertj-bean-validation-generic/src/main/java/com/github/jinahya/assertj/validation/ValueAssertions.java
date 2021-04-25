@@ -50,8 +50,7 @@ public final class ValueAssertions {
      */
     @SuppressWarnings({"java:S119"})
     public static ValueAssert assertThat(final ValueWrapper<?> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertValue(wrapper.getActual());
+        return assertValue(requireNonNull(wrapper).getActual());
     }
 
     /**

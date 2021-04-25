@@ -32,9 +32,13 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.function.Function;
 
+import static com.github.jinahya.assertj.validation.ReflectionUtils.applyClassForSuffix;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,97 +46,161 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
+@SuppressWarnings({"java:S119"})
 final class ValidatorUtils {
 
-    private static final String SUFFIX = "Validator";
+    private static final Class<?> VALIDATOR_CLASS = applyClassForSuffix("Validator", Function.identity());
 
-    static <R> R applyValidatorClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
+    static boolean isInstanceOfValidatorClass(final Object object) {
+        return VALIDATOR_CLASS.isInstance(requireNonNull(object, "object is null"));
     }
 
-    static Class<?> getValidatorClass() {
-        return applyValidatorClass(Function.identity());
-    }
-
-    static boolean isNullOrInstanceOfValidatorClass(final Object object) {
-        if (object == null) {
-            return true;
+    static <T> T requireInstanceOfValidatorClass(final T object) {
+        if (!isInstanceOfValidatorClass(object)) {
+            throw new IllegalArgumentException("not an instance of " + VALIDATOR_CLASS + ": " + object);
         }
-        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return object;
     }
 
     static <T> T requireNullOrInstanceOfValidatorClass(final T object) {
         if (object == null) {
             return null;
         }
-        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return requireInstanceOfValidatorClass(object);
     }
 
-    @SuppressWarnings({"unchecked"})
-    static <ACTUAL, CONSTRAINT_VIOLATION> Set<CONSTRAINT_VIOLATION> validate(
-            final Object validator, final ACTUAL object, final Class<?>... groups) {
-        requireNonNull(validator, "validator is null");
-        requireNonNull(object, "object is null");
-        requireNonNull(groups, "groups is null");
-        return applyValidatorClass(c -> {
+    // -------------------------------------------------------------------------------------------------------- validate
+    private static Method validateMethod = null;
+
+    private static Method validateMethod() {
+        Method m = validateMethod;
+        if (m == null) {
             try {
-                return (Set<CONSTRAINT_VIOLATION>) c.getMethod("validate", Object.class, Class[].class)
-                        .invoke(validator, object, groups);
+                validateMethod = m = VALIDATOR_CLASS.getMethod("validate", Object.class, Class[].class);
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
             }
-        });
+        }
+        return m;
     }
 
-    /**
-     * Invokes {@code Validator#validateProperty(T, String, Class...)} method on specified validator with given
-     * arguments and returns the result.
-     *
-     * @param validator    the validator on which the {@code validateProperty(...)} method is invokes.
-     * @param object       a value for {@code object} parameter.
-     * @param propertyName a value for {@code propertyName} parameter.
-     * @param groups       a value for {@code groups} parameter.
-     * @param <ACTUAL>     {@code object} type parameter
-     * @return the result of the invocation which is a set of {@code ConstraintViolation}s
-     */
-    @SuppressWarnings({"unchecked"})
-    static <ACTUAL, CONSTRAINT_VIOLATION> Set<CONSTRAINT_VIOLATION> validateProperty(
-            final Object validator, final ACTUAL object, final String propertyName, final Class<?>... groups) {
-        requireNonNull(validator, "validator is null");
-        requireNonNull(object, "object is null");
-        requireNonNull(groups, "groups is null");
-        return applyValidatorClass(c -> {
+    private static MethodHandle validateMethodHandle = null;
+
+    private static MethodHandle validateMethodHandle() {
+        MethodHandle h = validateMethodHandle;
+        if (h == null) {
             try {
-                return (Set<CONSTRAINT_VIOLATION>) c.getMethod(
-                        "validateProperty", Object.class, String.class, Class[].class)
-                        .invoke(validator, object, propertyName, groups);
+                validateMethodHandle = h = lookup().unreflect(validateMethod());
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
             }
-        });
+        }
+        return h;
+    }
+
+    @SuppressWarnings({"unchecked"})
+    static <CONSTRAINT_VIOLATION> Set<CONSTRAINT_VIOLATION> validate(
+            final Object validator, final Object object, final Class<?>... groups) {
+        requireInstanceOfValidatorClass(validator);
+        requireNonNull(object, "object is null");
+        requireNonNull(groups, "groups is null");
+        try {
+            return (Set<CONSTRAINT_VIOLATION>) validateMethodHandle().invoke(validator, object, groups);
+        } catch (final Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------ validateProperty
+    private static Method validatePropertyMethod = null;
+
+    private static Method validatePropertyMethod() {
+        Method m = validatePropertyMethod;
+        if (m == null) {
+            try {
+                validatePropertyMethod = m = VALIDATOR_CLASS.getMethod(
+                        "validateProperty", Object.class, String.class, Class[].class);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        }
+        return m;
+    }
+
+    private static MethodHandle validatePropertyMethodHandle = null;
+
+    private static MethodHandle validatePropertyMethodHandle() {
+        MethodHandle h = validatePropertyMethodHandle;
+        if (h == null) {
+            try {
+                validatePropertyMethodHandle = h = lookup().unreflect(validatePropertyMethod());
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        }
+        return h;
+    }
+
+    @SuppressWarnings({"unchecked"})
+    static <CONSTRAINT_VIOLATION> Set<CONSTRAINT_VIOLATION> validateProperty(
+            final Object validator, final Object object, final String propertyName, final Class<?>... groups) {
+        requireInstanceOfValidatorClass(validator);
+        requireNonNull(object, "object is null");
+        requireNonNull(groups, "groups is null");
+        try {
+            return (Set<CONSTRAINT_VIOLATION>) validateMethodHandle().invoke(validator, object, propertyName, groups);
+        } catch (final Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------- validateValue
+    private static Method VALIDATE_VALUE_METHOD = null;
+
+    private static Method validateValueMethod() {
+        Method m = VALIDATE_VALUE_METHOD;
+        if (m == null) {
+            try {
+                VALIDATE_VALUE_METHOD = m = VALIDATOR_CLASS.getMethod(
+                        "validateValue", Class.class, String.class, Object.class, Class[].class);
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        }
+        return m;
+    }
+
+    private static MethodHandle VALIDATE_VALUE_METHOD_HANDLE = null;
+
+    private static MethodHandle validateValueMethodHandle() {
+        MethodHandle h = VALIDATE_VALUE_METHOD_HANDLE;
+        if (h == null) {
+            try {
+                VALIDATE_VALUE_METHOD_HANDLE = h = lookup().unreflect(validateValueMethod());
+            } catch (final ReflectiveOperationException roe) {
+                throw new RuntimeException(roe);
+            }
+        }
+        return h;
     }
 
     @SuppressWarnings({"unchecked"})
     static <T, CONSTRAINT_VIOLATION> Set<CONSTRAINT_VIOLATION> validateValue(
             final Object validator, final Class<T> beanType, final String propertyName, final Object value,
             final Class<?>... groups) {
-        requireNonNull(validator, "validator is null");
+        requireInstanceOfValidatorClass(validator);
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         requireNonNull(groups, "groups is null");
-        return applyValidatorClass(c -> {
-            try {
-                return (Set<CONSTRAINT_VIOLATION>) c.getMethod(
-                        "validateValue", Class.class, String.class, Object.class, Class[].class)
-                        .invoke(validator, beanType, propertyName, value, groups);
-            } catch (final ReflectiveOperationException roe) {
-                throw new RuntimeException(roe);
-            }
-        });
+        try {
+            return (Set<CONSTRAINT_VIOLATION>) validateValueMethodHandle()
+                    .invoke(validator, beanType, propertyName, value, groups);
+        } catch (final Throwable t) {
+            throw new RuntimeException(t);
+        }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     private ValidatorUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }
