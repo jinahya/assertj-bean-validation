@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.jakarta;
 
 import com.github.jinahya.assertj.validation.user.User;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class ValueAssert_IsValidFor_User_Test {
         return IntStream.range(0, 16).mapToObj(i -> User.newInvalidName());
     }
 
-    @DisplayName("assertValue(validAge).isValidFor(User.class, \"age\") does not throw any exception")
+    @DisplayName("assertValue(validAge).isValueFor(User.class, \"age\") does not throw any exception")
     @ParameterizedTest
     @MethodSource({"validAges"})
     void isValidFor_Succeed_ValidAge(final int validAge) {
@@ -39,7 +39,7 @@ class ValueAssert_IsValidFor_User_Test {
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("assertValue(validName).isValidFor(User.class, \"name\") does not throw any exception")
+    @DisplayName("assertValue(validName).isValueFor(User.class, \"name\") does not throw any exception")
     @ParameterizedTest
     @MethodSource({"validNames"})
     void isValidFor_Succeed_ValidName(final String validName) {
@@ -48,7 +48,7 @@ class ValueAssert_IsValidFor_User_Test {
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("assertValue(invalidAge).isValidFor(User.class, \"age\") throws an AssertionError")
+    @DisplayName("assertValue(invalidAge).isValueFor(User.class, \"age\") throws an AssertionError")
     @ParameterizedTest
     @MethodSource({"invalidAges"})
     void isValidFor_Fail_InvalidAge(final int invalidAge) {
@@ -57,7 +57,7 @@ class ValueAssert_IsValidFor_User_Test {
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("assertValue(invalidName).isValidFor(User.class, \"name\") throws an AssertionError")
+    @DisplayName("assertValue(invalidName).isValueFor(User.class, \"name\") throws an AssertionError")
     @ParameterizedTest
     @MethodSource({"invalidNames"})
     void isValidFor_Fail_InvalidName(final String invalidName) {
