@@ -23,19 +23,23 @@ package com.github.jinahya.assertj.validation;
 import java.util.Set;
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 @SuppressWarnings({"java:S125"})
 final class ConstraintViolationExceptionUtils {
 
     private static final String SUFFIX = "ConstraintViolationException";
 
-    /**
-     * Applies the class of {@code ....validation.ConstraintViolationException} to specified function and returns the
-     * result.
-     *
-     * @param function the function to applied with the class of {@code ....validation.ConstraintViolationException}.
-     * @param <R>      result type parameter
-     * @return the result of the {@code function}.
-     */
+    private static Class<?> constraintViolationClass;
+
+    private static Class<?> constraintViolationClass() {
+        Class<?> c = constraintViolationClass;
+        if (c == null) {
+            constraintViolationClass = c = ReflectionUtils.getClassForSuffix("ConstraintViolationException");
+        }
+        return c;
+    }
+
     static <R> R applyConstraintViolationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
         return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
     }
@@ -49,42 +53,32 @@ final class ConstraintViolationExceptionUtils {
         return applyConstraintViolationExceptionClass(Function.identity());
     }
 
-    /**
-     * Indicates whether specified object is an instance of {@code ....validation.ConstraintViolationException}.
-     *
-     * @param object the object to be tested.
-     * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintViolationException};
-     * {@code false} otherwise.
-     */
-    static boolean isNullOrInstanceOfConstraintViolationExceptionClass(final Object object) {
-        if (object == null) {
-            return true;
-        }
-        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+    static boolean isInstanceOfConstraintViolationExceptionClass(final Object object) {
+        return constraintViolationClass().isInstance(requireNonNull(object, "object is null"));
     }
 
-    /**
-     * Checks whether specified object is an instance of {@code ....validation.ConstraintViolationException}.
-     *
-     * @param object the object to be tested.
-     */
+    static <T> T requireInstanceOfConstraintViolationExceptionClass(final T object) {
+        if (!isInstanceOfConstraintViolationExceptionClass(object)) {
+            throw new IllegalArgumentException("not an instance of " + constraintViolationClass() + ": " + object);
+        }
+        return object;
+    }
+
     static <T> T requireNullOrInstanceOfConstraintViolationExceptionClass(final T object) {
         if (object == null) {
             return null;
         }
-        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return requireInstanceOfConstraintViolationExceptionClass(object);
     }
 
     static <T> Set<T> getConstraintViolations(final Object actual) {
-        return applyConstraintViolationExceptionClass(c -> {
-            try {
-                @SuppressWarnings({"unchecked"})
-                final Set<T> constraintViolations = (Set<T>) c.getMethod("getConstraintViolations").invoke(actual);
-                return constraintViolations;
-            } catch (final ReflectiveOperationException roe) {
-                throw new RuntimeException(roe);
-            }
-        });
+        try {
+            @SuppressWarnings({"unchecked"})
+            final Set<T> constraintViolations = (Set<T>) constraintViolationClass().getMethod("getConstraintViolations").invoke(actual);
+            return constraintViolations;
+        } catch (final ReflectiveOperationException roe) {
+            throw new RuntimeException(roe);
+        }
     }
 
     private ConstraintViolationExceptionUtils() {

@@ -54,7 +54,7 @@ public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
     @Override
     protected ValidationExceptionAssert<ACTUAL> isConstraintViolationException() {
         return isNotNull()
-                .satisfies(ConstraintViolationExceptionUtils::isNullOrInstanceOfConstraintViolationExceptionClass);
+                .satisfies(ConstraintViolationExceptionUtils::requireInstanceOfConstraintViolationExceptionClass);
     }
 
     @Override

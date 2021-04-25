@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static com.github.jinahya.assertj.validation.ReflectionUtils.applyClassForSuffix;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Objects.requireNonNull;
 
@@ -49,15 +50,23 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings({"java:S119"})
 final class ValidatorUtils {
 
-    private static final Class<?> VALIDATOR_CLASS = applyClassForSuffix("Validator", Function.identity());
+    private static Class<?> validatorClass;
+
+    private static Class<?> validatorClass() {
+        Class<?> c = validatorClass;
+        if (c == null) {
+            validatorClass = c = getClassForSuffix("Validator");
+        }
+        return c;
+    }
 
     static boolean isInstanceOfValidatorClass(final Object object) {
-        return VALIDATOR_CLASS.isInstance(requireNonNull(object, "object is null"));
+        return validatorClass().isInstance(requireNonNull(object, "object is null"));
     }
 
     static <T> T requireInstanceOfValidatorClass(final T object) {
         if (!isInstanceOfValidatorClass(object)) {
-            throw new IllegalArgumentException("not an instance of " + VALIDATOR_CLASS + ": " + object);
+            throw new IllegalArgumentException("not an instance of " + validatorClass() + ": " + object);
         }
         return object;
     }
@@ -76,7 +85,7 @@ final class ValidatorUtils {
         Method m = validateMethod;
         if (m == null) {
             try {
-                validateMethod = m = VALIDATOR_CLASS.getMethod("validate", Object.class, Class[].class);
+                validateMethod = m = validatorClass.getMethod("validate", Object.class, Class[].class);
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
             }
@@ -118,7 +127,7 @@ final class ValidatorUtils {
         Method m = validatePropertyMethod;
         if (m == null) {
             try {
-                validatePropertyMethod = m = VALIDATOR_CLASS.getMethod(
+                validatePropertyMethod = m = validatorClass.getMethod(
                         "validateProperty", Object.class, String.class, Class[].class);
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
@@ -161,7 +170,7 @@ final class ValidatorUtils {
         Method m = VALIDATE_VALUE_METHOD;
         if (m == null) {
             try {
-                VALIDATE_VALUE_METHOD = m = VALIDATOR_CLASS.getMethod(
+                VALIDATE_VALUE_METHOD = m = validatorClass.getMethod(
                         "validateValue", Class.class, String.class, Object.class, Class[].class);
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
