@@ -29,11 +29,11 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * An assertion class for verifying instances of {@code ConstraintViolation}.
+ * An abstract assertion class for verifying instances of {@code ConstraintViolation}.
  *
  * @param <SELF>      self type parameter
- * @param <ACTUAL>    the actual type of {@code ....validation.ConstraintViolation}
- * @param <PATH>      the actual type of {@code ....validation.Path}
+ * @param <ACTUAL>    the actual type of {@code ConstraintViolation}
+ * @param <PATH>      the actual type of {@code Path}
  * @param <ROOT_BEAN> the type of the root bean of {@link ACTUAL}
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -46,25 +46,80 @@ public abstract class AbstractConstraintViolationAssert<
         extends AbstractAssert<SELF, ACTUAL> {
 
     /**
+     * An interface for accessing values from an actual value of constraint violation.
+     *
+     * @param <ACTUAL>    actual constraint violation type
+     * @param <PATH>      the actual type of {@code Path}
+     * @param <ROOT_BEAN> the type of root bean of {@link ACTUAL}
+     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+     */
+    protected interface Accessor<ACTUAL, PATH, ROOT_BEAN> {
+
+        /**
+         * Returns the value of {@code getInvalidValue()} from specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.invalidValue}.
+         */
+        Object getInvalidValue(ACTUAL actual);
+
+        /**
+         * Returns the value of {@code getLeafBean()} from specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.leafBean}.
+         */
+        Object getLeafBean(ACTUAL actual);
+
+        /**
+         * Gets the value of {@code getMessage()} from specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.message}.
+         */
+        String getMessage(ACTUAL actual);
+
+        /**
+         * Returns the value of {@code getPropertyPath()} from specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getPropertyPath()}.
+         */
+        PATH getPropertyPath(ACTUAL actual);
+
+        /**
+         * Returns the value of {@code getRootBean()} froms specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getRootBean()}.
+         */
+        ROOT_BEAN getRootBean(ACTUAL actual);
+
+        /**
+         * Returns the value of {@code getRootBeanClass()} from specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.rootBean}.
+         */
+        Class<ROOT_BEAN> getRootBeanClass(ACTUAL actual);
+    }
+
+    // ---------------------------------------------------------------------------------------------------- constructors
+
+    /**
      * Creates a new instance for specified actual value.
      *
-     * @param actual   the actual value to verify; must not be {@code null} and must be an instance of either {@code
-     *                 javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintViolation}.
+     * @param actual   the actual value to verify.
      * @param selfType a self type.
+     * @param accessor an accessor for getting values from {@code actual}.
      */
-    protected AbstractConstraintViolationAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractConstraintViolationAssert(final ACTUAL actual, final Class<?> selfType,
+                                                final Accessor<ACTUAL, PATH, ROOT_BEAN> accessor) {
         super(actual, selfType);
+        this.accessor = requireNonNull(accessor, "accessor is null");
     }
 
     // ---------------------------------------------------------------------------------------------------- invalidValue
-
-    /**
-     * Gets the invalid value of specified actual value.
-     *
-     * @param a the actual value on which the {@code getInvalidValue()} method is invoked.
-     * @return the invalid value of {@code actual}.
-     */
-    protected abstract Object getInvalidValue(ACTUAL a);
 
     /**
      * Verifies that the {@code actual.invalidValue} satisfies given requirements expressed as a {@link Consumer}.
@@ -72,9 +127,9 @@ public abstract class AbstractConstraintViolationAssert<
      * @param requirements the consumer accepts {@code actual.invalidValue}.
      * @return {@link #myself self}
      */
-    public SELF hasInvalidValueSatisfying(final Consumer<Object> requirements) {
+    public SELF hasInvalidValueSatisfying(final Consumer<? super Object> requirements) {
         return isNotNull().satisfies(a -> {
-            assertThat(getInvalidValue(a)).satisfies(requirements);
+            assertThat(accessor.getInvalidValue(a)).satisfies(requirements);
         });
     }
 
@@ -92,14 +147,6 @@ public abstract class AbstractConstraintViolationAssert<
     // -------------------------------------------------------------------------------------------------------- leafBean
 
     /**
-     * Gets the leaf bean from specified actual value.
-     *
-     * @param actual the actual value whose leaf bean is returned.
-     * @return the leaf bean of {@code actual}.
-     */
-    protected abstract Object getLeafBean(ACTUAL actual);
-
-    /**
      * Verifies that the {@code actual.leafBean} satisfies given requirements expresses as a {@link Consumer}.
      *
      * @param requirements the consumer accepts and verifies the {@code actual.leafBean}.
@@ -107,7 +154,7 @@ public abstract class AbstractConstraintViolationAssert<
      */
     public SELF hasLeafBeanSatisfying(final Consumer<Object> requirements) {
         return isNotNull().satisfies(a -> {
-            assertThat(getLeafBean(a)).satisfies(requirements);
+            assertThat(accessor.getLeafBean(a)).satisfies(requirements);
         });
     }
 
@@ -124,14 +171,6 @@ public abstract class AbstractConstraintViolationAssert<
     // --------------------------------------------------------------------------------------------------------- message
 
     /**
-     * Gets the message from specified actual value.
-     *
-     * @param actual the actual value.
-     * @return the message of {@code actual}.
-     */
-    protected abstract String getMessage(ACTUAL actual);
-
-    /**
      * Verifies that the {@code actual.message} satisfies given requirements expresses as a {@link Consumer}.
      *
      * @param requirements the consumer accepts and verifies the {@code actual.message}.
@@ -140,7 +179,7 @@ public abstract class AbstractConstraintViolationAssert<
     public SELF hasMessageSatisfying(final Consumer<? super String> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(getMessage(a)).satisfies(requirements::accept);
+            assertThat(accessor.getMessage(a)).satisfies(requirements::accept);
         });
     }
 
@@ -157,14 +196,6 @@ public abstract class AbstractConstraintViolationAssert<
     // ---------------------------------------------------------------------------------------------------- propertyPath
 
     /**
-     * Returns the value of {@code getPropertyPath()} of the {@link #actual} constraint violation.
-     *
-     * @param actual the {@link #actual} constraint violation.
-     * @return the value of {@code actual.getPropertyPath()}.
-     */
-    protected abstract PATH getPropertyPath(ACTUAL actual);
-
-    /**
      * Verifies that the {@code actual.propertyPath} satisfies given requirements expresses as a {@link Consumer}.
      *
      * @param requirements the consumer accepts and verifies the {@code actual.propertyPath}.
@@ -173,7 +204,7 @@ public abstract class AbstractConstraintViolationAssert<
     public SELF hasPropertyPathSatisfying(final Consumer<? super PATH> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(getPropertyPath(a)).satisfies(requirements::accept);
+            assertThat(accessor.getPropertyPath(a)).satisfies(requirements::accept);
         });
     }
 
@@ -191,14 +222,6 @@ public abstract class AbstractConstraintViolationAssert<
     // -------------------------------------------------------------------------------------------------------- rootBean
 
     /**
-     * Returns the value of {@code getRootBean()} of the {@link #actual} constraint violation.
-     *
-     * @param actual the {@link #actual} constraint violation
-     * @return the value of {@code actual.getRootBean()}.
-     */
-    protected abstract ROOT_BEAN getRootBean(ACTUAL actual);
-
-    /**
      * Verifies that the {@code actual.rootBean} satisfies given requirements expresses as a {@link Consumer}.
      *
      * @param requirements the consumer accepts and verifies the {@code actual.rootBean}.
@@ -207,7 +230,7 @@ public abstract class AbstractConstraintViolationAssert<
     public SELF hasRootBeanSatisfying(final Consumer<? super ROOT_BEAN> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(getRootBean(a)).satisfies(requirements::accept);
+            assertThat(accessor.getRootBean(a)).satisfies(requirements::accept);
         });
     }
 
@@ -225,8 +248,6 @@ public abstract class AbstractConstraintViolationAssert<
 
     // ------------------------------------------------------------------------------------------------ getRootBeanClass
 
-    protected abstract Class<ROOT_BEAN> getRootBeanClass(ACTUAL a);
-
     /**
      * Verifies that the {@code actual.rootBeanClass} satisfies given requirements expresses as a {@link Consumer}.
      *
@@ -237,7 +258,7 @@ public abstract class AbstractConstraintViolationAssert<
     public SELF hasRootBeanClassSatisfying(final Consumer<? super Class<ROOT_BEAN>> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(getRootBeanClass(a)).satisfies(v -> requirements.accept((Class<ROOT_BEAN>) v));
+            assertThat(accessor.getRootBeanClass(a)).satisfies(v -> requirements.accept((Class<ROOT_BEAN>) v));
         });
     }
 
@@ -253,4 +274,9 @@ public abstract class AbstractConstraintViolationAssert<
             assertThat(v).isSameAs(expected);
         });
     }
+
+    /**
+     * The accessor for getting values from {@link #actual}.
+     */
+    protected final Accessor<ACTUAL, PATH, ROOT_BEAN> accessor;
 }

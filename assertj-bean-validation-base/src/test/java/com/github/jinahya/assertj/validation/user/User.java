@@ -37,6 +37,16 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
 public class User {
 
+    // partial
+    protected static class UserBuilder {
+
+    }
+
+    // partial
+    protected static UserBuilder builder() {
+        return new UserBuilder();
+    }
+
     public static int newValidAge() {
         return current().nextInt() & Integer.MAX_VALUE;
     }

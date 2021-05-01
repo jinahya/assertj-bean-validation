@@ -116,6 +116,13 @@ public final class PathWrapper
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new instance wraps specified actual value.
+     *
+     * @param actual the actual value to wrap.
+     * @return a new instance wraps {@code actual}.
+     */
     public static PathWrapper path(final Path actual) {
         return new PathWrapper(actual);
     }

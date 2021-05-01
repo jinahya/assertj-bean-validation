@@ -28,38 +28,43 @@ import static java.util.Objects.requireNonNull;
  * A class for fluently creating instances of {@link ValueAssert}.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see ValueAssert
  */
 public final class ValueAssertions {
 
     /**
-     * Creates a new assertion instance with specified property value.
+     * Creates a new assertion instance for specified actual value.
      *
-     * @param value the property value.
-     * @return an assertion for {@code value}.
+     * @param actual the actual value for a property.
+     * @return an assertion for {@code actual}.
      */
-    @SuppressWarnings({"java:S119"})
-    public static ValueAssert assertValue(final Object value) {
-        return new ValueAssert(value);
+    public static ValueAssert assertThat(final Object actual) {
+        return new ValueAssert(actual);
     }
 
     /**
-     * Creates a new assertion instance for the property value wrapped in specified wrapper.
+     * Creates a new assertion instance for the actual value wrapped in specified wrapper.
      *
-     * @param wrapper the wrapper wraps an actual value to verify; must not be {@code null}.
+     * @param wrapper the wrapper wraps the actual value to verify; must not be {@code null}.
      * @return an assertion for {@link ValueWrapper#getActual()} wrapper.actual}.
-     * @see ValueWrapper#value(Object)
-     * @see #assertValue(Object)
      */
-    @SuppressWarnings({"java:S119"})
     public static ValueAssert assertThat(final ValueWrapper wrapper) {
-        return assertValue(requireNonNull(wrapper).getActual());
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    /**
+     * Creates a new assertion instance for verifying specified actual value.
+     *
+     * @param actual the actual value.
+     * @return an assertion for {@code value}.
+     */
+    public static ValueAssert assertValue(final Object actual) {
+        return assertThat(actual);
     }
 
     /**
      * Creates a new instance.
      */
     private ValueAssertions() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

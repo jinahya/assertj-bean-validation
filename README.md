@@ -14,64 +14,88 @@ An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Va
 
 ## Compatibility
 
-There are, due to the [Transition from Java EE to Jakarta EE](https://blogs.oracle.com/javamagazine/transition-from-java-ee-to-jakarta-ee), currently two packages for Bean-Validation. One is `javax.validation.*` and the other is `jakarta.validation.*`. This project, hence, defines three artifacts applicable for both/each environment(s).
+There are, due to the [Transition from Java EE to Jakarta EE](https://blogs.oracle.com/javamagazine/transition-from-java-ee-to-jakarta-ee), currently two packages for Bean-Validation. One is `javax.validation.*` and the other is `jakarta.validation.*`. This project, hence, defines three artifacts which each is applicable for both/each environment(s).
 
 |artifact                         |`jakrta.*`|`javax.*`|notes|
 |---------------------------------|----------|---------|-----|
 |`assertj-bean-validation-generic`|&check;   |&check;  |     |
-|`assertj-bean-validation-jakrta` |&check;   |&cross;  |[`jakarta.valiation:jakarta.validation-api:[3.0.0,)`][jakarta.validation:jakarta.validation-api]|
-|`assertj-bean-validation-javax`  |&cross;   |&check;  |[`javax.validation:validation-api`][javax.validation:validation-api], `jakrta.validation:jakarta.validation-api:(,2.0.2]`|
+|`assertj-bean-validation-jakrta` |&check;   |&cross;  |     |
+|`assertj-bean-validation-javax`  |&cross;   |&check;  |     |
+
+### assertj-bean-validation-generic
+
+Works for both `jakarta.validation:jakarta.validation-api` and `javax.validation:validation-api` using reflections.
+
+### assertj-bean-validation-jakarta
+
+Works for `jakarta.validation:jakarta.validation-api:[3.0.0,)`.
+
+### assertj-bean-validation-javax
+
+Works for `javax.validation:validation-api` and `jakarta.validation:jakarta.validation-api:(,2.0.2]`
 
 ## Idioms
 
-### for `actual` values of `java.lang.Object`
+### for an `actual` value of `java.lang.Object`
+
+Special idioms are provided for each assertion to avoid confusion with AssertJ's `assertThat` idiom.
 
 ```java
-Object b = bean();
+Object b = getBean();
 BeanAssert a;
 
-a = BeanAssertions.assertBean(b);
+a = BeanAssertions.assertThat(b);
 a = BeanAssertions.assertThat(BeanWrapper.bean(b));
+a = BeanAssertions.assertBean(b);
 
 // with static imports
-a = assertBean(b);
+a = assertThat(b); // mind the import static ...BeanAssertions.assertThat;
 a = assertThat(bean(b));
+a = assertBean(b);
 
-a.isValid();
+assertThat(a).isValid();
+assertThat(bean(a)).isNotValid();
+assertBean(a).isNotValid(s -> {});
 ```
 ```java
-Object v = value();
+Object v = getValue();
 ValueAssert a;
-        
-a = ValueAssertions.assertValue(v);
+
+a = ValueAssertions.assertThat(v);
 a = ValueAssertions.assertThat(ValueWrapper.value(v));
+a = ValueAssertions.assertValue(v);
 
 // with static imports
-a = assertValue(b);
-a = assertThat(value(b));
+a = assertThat(v); // mind the import static ...ValueAssertions.assertThat;
+a = assertThat(value(v));
+a = assertValue(v);
 
-a.isValidFor(SomeBean.class, "someProperty");
+assertThat(v).isValidFor(SomeBean.class, "someProperty");
+assertThat(value(v)).isNotValidFor(SomeBean.class, "someProeprty");
+assertValue(v).isNotValidFor(SomeBean.class, "someProperty", s -> {});
 ```
 
-### for `actual` values of `(jakarta|javax).validation.<Type>`
+### for an `actual` value of `(jakarta|javax).validation.<Type>`
 
-For given `<Type>` defined within Bean-Validation API, you can create assertions using either one of following idioms.
+For an actual of `<Type>` defined within Bean-Validation API, you can create assertions using either one of following idioms.
 
-#### `<Type>Assertions.assert<Type>(actual)`
+#### `<Type>Assertions.assertThat((Object|<Type>) actual)`
+
+Same as AssertJ does.
+
+#### `<Type>Assertions.assert<Type>(Object actual)`
 
 ```java
 <Type> actual;
 <Type>Assert a;
 a = <Type>Assertions.assert<Type>(actual);
 
+// e.g.
 ConstraintViolation<?> actual;
 ConstrintViolationAssertions.assertConstraintViolation(actual);
 
 // with static imports
 assertConstraintViolation(actual).hasInvalidValueEqualTo(expected);
-
-// see next heading for
-// assertThat(constraintViolation(actual))
 ```
 
 #### `<Type>Assertions.assertThat(<Type>Wrapper.<type>(actual))`
@@ -87,9 +111,6 @@ PathAssert a = PathAssertions.assertThat(PathWrapper.path(actual));
 
 // with static imports
 assertThat(path(actual)).node(0).hasIndexEqualTo(null);
-
-// see previous heading for
-// assertPath(actual)
 ```
 
 #### `<Type>Assertions.assertThat(<Type> actual)` (only for `-jakarta` and `-javax`)
@@ -100,9 +121,7 @@ With `assertj-bean-validation-jakarta` or `assertj-bean-validation-javax`, you c
 ConstructorNode actual;
 ConstructorNodeAssert a = ConstructorNodeAssertion.asserThat(actual);
 
-// of course, idioms previouls exaplained are also available
-assertConstructorNode(actual);        
-assertThat(constructorNode(actual));
+assertThat(actual).hasParameterTypeEqualTo(expected);
 ```
 
 ## APIs
@@ -132,16 +151,18 @@ Verifies that the `actual` bean is not valid and, optionally, accepts a non-empt
 ```java
 User user = new User();
 
+assertThat(bean(user)).isNotValid(); // fails
+
 user.setName(null);
 
 assertThat(bean(user)).isNotValid(); // succeeds
 
-asserBean(user).isNotValid(s -> {
+asserBean(user).isNotValid(s -> {    // succeeds
     assertThat(s).hasSize(1).element(0, as(CONSTRAINT_VIOLATION))
         .hasInvalidValueEqualTo(user.getAge())
         .hasLeafBeanSameAs(user)
         .hasMessageSatisfying(m -> {
-            assertThat(m).isNotBlank();
+            assertThat(m).isNotBlank(); // "must not be blank"
         })
         .hasPropertyPathSatisfying(p -> {
             assertPath(p).isNotNull();
@@ -160,18 +181,18 @@ asserBean(user).isNotValid(s -> {
 
 #### `hasValidProperty(String)`
 
-Verifies that the current value of the property of specified name is valid.
+Verifies that the current value of a property of the actual bean is valid.
 
 ```java
 User user = new User();
 
-assertBean(user).hasValidProprty("name");
-assertThat(bean(user)).hasValidProperty("age");
+assertBean(user).hasValidProprty("name");       // succeeds
+assertThat(bean(user)).hasValidProperty("age"); // succeeds
 ```
 
 #### `doesNotHaveValidProperty(String)`, `doesNotHaveValidProperty(String, Consumer)`
 
-Verifies that the current value of the property of specified name is not valid.
+Verifies that the current value of a property of the actual bean is not valid.
 
 ```java
 assertBean(user).doesNotHaveValidProperty("age");       // fails
@@ -181,39 +202,37 @@ user.setAge(-1);
 assertThat(bean(user)).doesNotHaveValidProperty("age"); // succeeds
 ```
 
-### Verifying a value for a property of a bean type
+### Verifying a value against a property of a bean type
 
 #### `isValidFor(Class<?>, String)`
 
 Verifies that the `actual` value would be valid for a property of a bean type.
 
 ```java
-assertThat(beanProperty("Jane")).isValidFor(User.class, "name"); // succeeds
-assertBeanProperty(null).isValidFor(User.class, "name");         // fails
+assertThat(value("Jane")).isValidFor(User.class, "name"); // succeeds
+assertValue(null).isValidFor(User.class, "name");         // fails
 
-assertThat(beanProperty(0)).isValidFor(User.class, "age"); // succeeds
-assertBeanProperty(-1).isValidFor(User.class, "age");      // fails
+assertThat(vaue(0)).isValidFor(User.class, "age");        // succeeds
+assertValue(-1).isValidFor(User.class, "age");            // fails
 ```
 
 #### `isValidFor(Class<?>, String)`, `isNotValidFor(Class<?>, String, Consumer)`
 
-Verifies that the `actual` value is not valid for a property of specified name of specified class and, optionally, accepts a non-empty set of `ConstraintViolation`s to specified consumer. 
+Verifies that the `actual` value is not valid for a property specified class and, optionally, accepts a non-empty set of `ConstraintViolation`s to specified consumer. 
 
 ```java
-assertBeanProperty("John").isNotValidFor(User.class, "name");            // fails
+assertValue("John").isNotValidFor(User.class, "name");            // fails
         
 String invalidName = getInvalidName();
-assertThat(beanProperty(invalidName)).isNotValidFor(User.class, "name"); // succeeds
-assertBeanProperty(invalidName).isNotValidFor(User.class, "name", s -> { // succeeds
+assertThat(value(invalidName)).isNotValidFor(User.class, "name"); // succeeds
+assertValue(invalidName).isNotValidFor(User.class, "name", s -> { // succeeds
 });
 
-assertBeanProperty(1).isNotValidFor(User.class, "age");                 // fails
+assertValue(1).isNotValidFor(User.class, "age");                  // fails
         
 int invalidAge = getInvalidAge();
-assertThat(beanProperty(invalidAge)).isNotValidFor(User.class, "name"); // succeeds
-assertBeanProperty(invalidAge).isNotValidFor(User.class, "name", s -> { // succeeds
-    assertThat(s).isNotNull().doesNotContainNull().isNotNull();
-    // ...
+assertThat(value(invalidAge)).isNotValidFor(User.class, "name");  // succeeds
+assertValue(invalidAge).isNotValidFor(User.class, "name", s -> {  // succeeds
 });
 ```
 

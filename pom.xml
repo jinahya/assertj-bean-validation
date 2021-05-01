@@ -58,7 +58,7 @@
     <version.jakarta.validation-api>3.0.0</version.jakarta.validation-api> <!-- latest -->
     <version.javax.validation-api>2.0.1.Final</version.javax.validation-api>
     <version.logback-classic>1.2.3</version.logback-classic>
-    <version.lombok>1.18.18</version.lombok>
+    <version.lombok>1.18.20</version.lombok>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-surefire>3.0.0-M4</version.maven-surefire>
     <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator> <!-- latest -->

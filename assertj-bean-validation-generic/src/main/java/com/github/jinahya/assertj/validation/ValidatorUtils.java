@@ -35,9 +35,7 @@ package com.github.jinahya.assertj.validation;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 import java.util.Set;
-import java.util.function.Function;
 
-import static com.github.jinahya.assertj.validation.ReflectionUtils.applyClassForSuffix;
 import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Objects.requireNonNull;

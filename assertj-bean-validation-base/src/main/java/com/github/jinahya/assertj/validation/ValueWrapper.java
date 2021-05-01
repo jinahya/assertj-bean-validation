@@ -21,24 +21,21 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping a property value.
+ * A class for wrapping a value.
  *
- * @param <ACTUAL> property type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
-public class ValueWrapper<ACTUAL>
-        extends AbstractWrapper<ACTUAL> {
+public class ValueWrapper
+        extends AbstractWrapper<Object> {
 
     /**
      * Creates a new instance wraps specified property value.
      *
-     * @param <T>    type parameter
      * @param actual the value to wrap; may be {@code null}.
      * @return a new instance wraps {@code actual}.
      */
-    public static <T> ValueWrapper<T> value(final T actual) {
-        return new ValueWrapper<>(actual);
+    public static ValueWrapper value(final Object actual) {
+        return new ValueWrapper(actual);
     }
 
     /**
@@ -46,7 +43,7 @@ public class ValueWrapper<ACTUAL>
      *
      * @param actual the property value to wrap.
      */
-    private ValueWrapper(final ACTUAL actual) {
+    private ValueWrapper(final Object actual) {
         super(actual);
     }
 }

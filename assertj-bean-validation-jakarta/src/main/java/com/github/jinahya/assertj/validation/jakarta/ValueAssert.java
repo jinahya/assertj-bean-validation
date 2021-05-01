@@ -31,7 +31,6 @@ import java.util.Set;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
 public class ValueAssert
         extends AbstractValueAssert<ValueAssert, Validator, ConstraintViolation<?>> {
 
@@ -44,13 +43,11 @@ public class ValueAssert
         super(actual, ValueAssert.class);
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     protected Validator getDefaultValidator() {
         return ValidatorFactories.getValidatorFactory().getValidator();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     @Override
     protected <T> Set<ConstraintViolation<T>> validateValue(final Object actual, final Class<T> beanType,
                                                             final String propertyName) {

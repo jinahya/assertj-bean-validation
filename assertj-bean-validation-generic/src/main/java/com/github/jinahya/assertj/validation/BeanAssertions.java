@@ -35,9 +35,8 @@ public final class BeanAssertions {
      *
      * @param actual the bean object to verify.
      * @return a new assertion instance for {@code actual}.
-     * @see #assertThat(BeanWrapper)
      */
-    public static BeanAssert assertBean(final Object actual) {
+    public static BeanAssert assertThat(final Object actual) {
         return new BeanAssert(actual);
     }
 
@@ -46,12 +45,19 @@ public final class BeanAssertions {
      *
      * @param wrapper the wrapper wraps the actual bean value; must not be {@code null}.
      * @return a assertion instance for {@link BeanWrapper#getActual()} wrapper.actual}.
-     * @see BeanWrapper#bean(Object)
-     * @see #assertBean(Object)
      */
     public static BeanAssert assertThat(final BeanWrapper<?> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertBean(wrapper.getActual());
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    /**
+     * Creates a new assertion instance for specified bean object.
+     *
+     * @param actual the bean object to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
+    public static BeanAssert assertBean(final Object actual) {
+        return assertThat(actual);
     }
 
     private BeanAssertions() {

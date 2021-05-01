@@ -31,6 +31,40 @@ import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.req
 public class ConstraintViolationAssert<T>
         extends AbstractConstraintViolationAssert<ConstraintViolationAssert<T>, Object, Object, T> {
 
+    protected static class AccessorImpl<T>
+            implements Accessor<Object, Object, T> {
+
+        @Override
+        public Object getInvalidValue(final Object actual) {
+            return ConstraintViolationUtils.getInvalidValue(actual);
+        }
+
+        @Override
+        public Object getLeafBean(final Object actual) {
+            return ConstraintViolationUtils.getLeafBean(actual);
+        }
+
+        @Override
+        public String getMessage(final Object actual) {
+            return ConstraintViolationUtils.getMessage(actual);
+        }
+
+        @Override
+        public Object getPropertyPath(final Object actual) {
+            return ConstraintViolationUtils.getPropertyPath(actual);
+        }
+
+        @Override
+        public T getRootBean(final Object actual) {
+            return ConstraintViolationUtils.getRootBean(actual);
+        }
+
+        @Override
+        public Class<T> getRootBeanClass(Object actual) {
+            return ConstraintViolationUtils.getRootBeanClass(actual);
+        }
+    }
+
     /**
      * Creates a new instance for specified actual value.
      *
@@ -38,36 +72,7 @@ public class ConstraintViolationAssert<T>
      *               javax.validation.ConstraintViolation} or {@code jakarta.validation.ConstraintViolation}.
      */
     public ConstraintViolationAssert(final Object actual) {
-        super(requireNullOrInstanceOfConstraintViolationClass(actual), ConstraintViolationAssert.class);
-    }
-
-    @Override
-    protected Object getInvalidValue(final Object actual) {
-        return ConstraintViolationUtils.getInvalidValue(actual);
-    }
-
-    @Override
-    protected Object getLeafBean(final Object actual) {
-        return ConstraintViolationUtils.getLeafBean(actual);
-    }
-
-    @Override
-    protected String getMessage(final Object actual) {
-        return ConstraintViolationUtils.getMessage(actual);
-    }
-
-    @Override
-    protected Object getPropertyPath(final Object actual) {
-        return ConstraintViolationUtils.getPropertyPath(actual);
-    }
-
-    @Override
-    protected T getRootBean(final Object actual) {
-        return ConstraintViolationUtils.getRootBean(actual);
-    }
-
-    @Override
-    protected Class<T> getRootBeanClass(Object actual) {
-        return ConstraintViolationUtils.getRootBeanClass(actual);
+        super(requireNullOrInstanceOfConstraintViolationClass(actual), ConstraintViolationAssert.class,
+              new AccessorImpl<>());
     }
 }

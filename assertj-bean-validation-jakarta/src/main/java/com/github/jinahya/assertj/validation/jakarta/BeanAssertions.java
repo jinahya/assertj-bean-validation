@@ -33,14 +33,13 @@ import static java.util.Objects.requireNonNull;
 public final class BeanAssertions {
 
     /**
-     * Creates a new assertion instance for specified bean object.
+     * Creates a new assertion instance for specified bean.
      *
-     * @param <ACTUAL> actual value type parameter
-     * @param actual   the bean object to verify.
-     * @return a new assertion instance for {@code object}.
-     * @see #assertThat(BeanWrapper)
+     * @param actual   the bean to verify.
+     * @param <ACTUAL> bean type parameter
+     * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL> BeanAssert<ACTUAL> assertBean(final ACTUAL actual) {
+    public static <ACTUAL> BeanAssert<ACTUAL> assertThat(final ACTUAL actual) {
         return new BeanAssert<>(actual);
     }
 
@@ -54,8 +53,19 @@ public final class BeanAssertions {
      * @see #assertBean(Object)
      */
     public static <ACTUAL> BeanAssert<ACTUAL> assertThat(final BeanWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertBean(wrapper.getActual());
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    /**
+     * Creates a new assertion instance for specified bean object.
+     *
+     * @param <ACTUAL> actual value type parameter
+     * @param actual   the bean object to verify.
+     * @return a new assertion instance for {@code object}.
+     * @see #assertThat(BeanWrapper)
+     */
+    public static <ACTUAL> BeanAssert<ACTUAL> assertBean(final ACTUAL actual) {
+        return assertThat(actual);
     }
 
     private BeanAssertions() {

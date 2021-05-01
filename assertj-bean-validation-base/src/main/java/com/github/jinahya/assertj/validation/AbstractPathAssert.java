@@ -2,8 +2,12 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractIterableAssert;
-import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.BooleanAssert;
+import org.assertj.core.api.ClassAssert;
+import org.assertj.core.api.IntegerAssert;
+import org.assertj.core.api.ListAssert;
+import org.assertj.core.api.ObjectAssert;
+import org.assertj.core.api.StringAssert;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -16,14 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
- * @param <NODE>   the type of {@code ja....validation.Path.Node}
+ * @param <NODE>   the type of {@code Path.Node}
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
 public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, ACTUAL, NODE>, ACTUAL, NODE>
         extends AbstractAssert<SELF, ACTUAL> {
 
-    interface NodeBaseAssertDelegate<NODE, ELEMENT_KIND> {
+    interface NodeBaseAccessor<NODE, ELEMENT_KIND> {
 
         Integer getIndex(NODE actual);
 
@@ -37,63 +41,107 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     abstract static class NodeBaseAssert<
-            SELF extends NodeBaseAssert<SELF, ACTUAL, ELEMENT_KIND, DELEGATE>,
+            SELF extends NodeBaseAssert<SELF, ACTUAL, ELEMENT_KIND, ACCESSOR>,
             ACTUAL,
             ELEMENT_KIND,
-            DELEGATE extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND>>
+            ACCESSOR extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND>>
             extends AbstractAssert<SELF, ACTUAL> {
 
-        NodeBaseAssert(final ACTUAL actual, final Class<?> selfType, final DELEGATE delegate) {
+        NodeBaseAssert(final ACTUAL actual, final Class<?> selfType, final ACCESSOR accessor) {
             super(actual, selfType);
-            this.delegate = requireNonNull(delegate, "delegate is null");
+            this.accessor = requireNonNull(accessor, "accessor is null");
+        }
+
+        // -------------------------------------------------------------------------------------------------- getIndex()
+
+        /**
+         * Returns an assertion for the value of {@code actual.getIndex()}.
+         *
+         * @return an assertion for the value of {@code actual.getIndex()}.
+         */
+        public IntegerAssert index() {
+            isNotNull();
+            return (IntegerAssert) assertThat(accessor.getIndex(actual));
         }
 
         /**
-         * Verifies that the {@code actual.getIndex()} satisfies the requirements by being accepted to specified
-         * consumer.
+         * Verifies that the value of {@code actual.getIndex()} satisfies the requirements by being accepted to
+         * specified consumer.
          *
          * @param requirements the consumer accepts and verifies {@code actual.index}.
          * @return {@link #myself myself}.
          */
         public SELF hasIndexSatisfying(final Consumer<? super Integer> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getIndex(a)).satisfies(requirements::accept);
+                final Integer index = accessor.getIndex(a);
+                assertThat(index).satisfies(requirements::accept);
             });
         }
 
         /**
-         * Verifies that the {@code actual.getIndex()} is {@link AbstractAssert#isEqualTo(Object) equal} to specified
-         * value.
+         * Verifies that the value of {@code actual.getIndex()} is {@link AbstractAssert#isEqualTo(Object) equal} to
+         * specified value.
          *
          * @param expected the value expected to be equal to {@code actual.index}.
          * @return {@link #myself myself}.
          */
         public SELF hasIndexEqualTo(final Object expected) {
-            return hasIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
+        }
+
+        // ---------------------------------------------------------------------------------------------------- getKey()
+
+        /**
+         * Returns an assertion for the value of {@code actual.getKey()}.
+         *
+         * @return an assertion for the value of {@code actual.getKey()}.
+         */
+        public ObjectAssert<Object> key() {
+            isNotNull();
+            final Object key = accessor.getKey(actual);
+            return assertThat(key);
         }
 
         /**
-         * Verifies that the {@code actual.getKey()} satisfies the requirements by being accepted to specified
+         * Verifies that the value of {@code actual.getKey()} satisfies the requirements by being accepted to specified
          * consumer.
          *
          * @param requirements the consumer accepts and verifies {@code actual.key}.
          * @return {@link #myself myself}.
          */
-        public SELF hasKeySatisfying(final Consumer<Object> requirements) {
+        public SELF hasKeySatisfying(final Consumer<? super Object> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getKey(a)).satisfies(requirements);
+                final Object key = accessor.getKey(a);
+                assertThat(key).satisfies(requirements);
             });
         }
 
         /**
-         * Verifies that the {@code actual.getKey()} is {@link AbstractAssert#isEqualTo(Object) equal} to specified
-         * value.
+         * Verifies that the value of {@code actual.getKey()} is {@link AbstractAssert#isEqualTo(Object) equal} to
+         * specified value.
          *
          * @param expected the value expected to be equal to {@code actual.key}.
          * @return {@link #myself myself}.
          */
         public SELF hasKeyEqualTo(final Object expected) {
-            return hasKeySatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasKeySatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
+        }
+
+        // --------------------------------------------------------------------------------------------------- getKind()
+
+        /**
+         * Returns an assertion for value of {@code actual.getKind()}.
+         *
+         * @return an assertion for value of {@code actual.getKind()}.
+         */
+        public ObjectAssert<ELEMENT_KIND> kind() {
+            isNotNull();
+            final ELEMENT_KIND kind = accessor.getKind(actual);
+            return assertThat(kind);
         }
 
         /**
@@ -105,7 +153,8 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          */
         public SELF hasKindSatisfying(final Consumer<? super ELEMENT_KIND> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getKind(a)).satisfies(requirements::accept);
+                final ELEMENT_KIND kind = accessor.getKind(a);
+                assertThat(kind).satisfies(requirements::accept);
             });
         }
 
@@ -117,7 +166,22 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          * @return {@link #myself myself}.
          */
         public SELF hasKindSameAs(final Object expected) {
-            return hasKindSatisfying(v -> assertThat(v).isSameAs(expected));
+            return hasKindSatisfying(v -> {
+                assertThat(v).isSameAs(expected);
+            });
+        }
+
+        // --------------------------------------------------------------------------------------------------- getName()
+
+        /**
+         * Returns an assertion for the value of {@code actual.getName()}.
+         *
+         * @return an assertion for the value of {@code actual.getName()}.
+         */
+        public StringAssert name() {
+            isNotNull();
+            final String name = accessor.getName(actual);
+            return (StringAssert) assertThat(name);
         }
 
         /**
@@ -129,7 +193,8 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          */
         public SELF hasNameSatisfying(final Consumer<? super String> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getName(a)).satisfies(requirements::accept);
+                final String name = accessor.getName(a);
+                assertThat(name).satisfies(requirements::accept);
             });
         }
 
@@ -140,7 +205,22 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          * @return {@link #myself self}.
          */
         public SELF hasNameEqualTo(final Object expected) {
-            return hasNameSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasNameSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
+        }
+
+        // ---------------------------------------------------------------------------------------------- isInIterable()
+
+        /**
+         * Returns an assertion for the value of {@code actual.isInIterable()}.
+         *
+         * @return an assertion for the value of {@code actual.isInIterable()}.
+         */
+        public BooleanAssert inIterable() {
+            isNotNull();
+            final boolean inIterable = accessor.isInIterable(actual);
+            return (BooleanAssert) assertThat(inIterable);
         }
 
         /**
@@ -152,37 +232,59 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          */
         public SELF hasInIterableSatisfying(final Consumer<? super Boolean> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.isInIterable(a)).satisfies(requirements::accept);
+                final boolean inIterable = accessor.isInIterable(a);
+                assertThat(inIterable).satisfies(requirements::accept);
             });
         }
 
         /**
-         * Verifies that the value of {@code actual.isInIterable()} is {@link BooleanAssert#isTrue() true}.
+         * Verifies that the value of {@code actual.isInIterable()} {@link BooleanAssert#isTrue() is true}.
          *
          * @return {@link #myself self}.
          */
         public SELF isInIterable() {
-            return hasInIterableSatisfying(v -> assertThat(v).isTrue());
+            return hasInIterableSatisfying(v -> {
+                assertThat(v).isTrue();
+            });
         }
 
         /**
-         * Verifies that the value of {@code actual.isInIterable()} is {@link BooleanAssert#isFalse() false}.
+         * Verifies that the value of {@code actual.isInIterable()} {@link BooleanAssert#isFalse() is false}.
          *
          * @return {@link #myself self}.
          */
         public SELF isNotInIterable() {
-            return hasInIterableSatisfying(v -> assertThat(v).isFalse());
+            return hasInIterableSatisfying(v -> {
+                assertThat(v).isFalse();
+            });
         }
 
-        protected final DELEGATE delegate;
+        /**
+         * The accessor for getting values from {@link #actual}.
+         */
+        protected final ACCESSOR accessor;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    protected interface AbstractNodeAssertDelegate<NODE, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<NODE, ELEMENT_KIND> {
+    // ------------------------------------------------------------------------------------------------------------ Node
+
+    /**
+     * An interface for accessors getting values from an instance of {@code Node}.
+     *
+     * @param <NODE>         the type of {@code Node}
+     * @param <ELEMENT_KIND> the type of {@code ElementKind}
+     */
+    protected interface AbstractNodeAccessor<NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<NODE, ELEMENT_KIND> {
 
     }
 
+    /**
+     * An abstract assertion class for {@code Node}.
+     *
+     * @param <SELF>         self type parameter
+     * @param <ACTUAL>       actual type parameter
+     * @param <ELEMENT_KIND> the type of {@code ElementKind}
+     */
     protected abstract static class AbstractNodeAssert<
             SELF extends AbstractNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
@@ -191,15 +293,33 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            NodeBaseAccessor<ACTUAL, ELEMENT_KIND>> {
 
+        /**
+         * Creates a new instance for specified actual value.
+         *
+         * @param actual   the actual value to verify.
+         * @param selfType the class of self.
+         * @param accessor an object for getting values from {@code actual}.
+         */
         protected AbstractNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                     final AbstractNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                     final AbstractNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
         }
 
+        /**
+         * Verifies that the {@link #actual} is an instance of {@code BeanNode}.
+         *
+         * @return {@link #myself self}.
+         */
         public abstract SELF isBeanNode();
 
+        /**
+         * Returns a new assertion for verifying {@link #actual} as an instance of {@code BeanNode}.
+         *
+         * @param <T> assertion type parameter
+         * @return a new assertion for verifying {@link #actual} as an instance of {@code BeanNode}.
+         */
         public abstract <T extends AbstractBeanNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asBeanNode();
 
         public abstract SELF isConstructorNode();
@@ -227,15 +347,41 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
         public abstract <T extends AbstractReturnValueNodeAssert<T, ACTUAL, ELEMENT_KIND>> T asReturnValueNode();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    protected interface BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    // -------------------------------------------------------------------------------------------------------- BeanNode
 
+    /**
+     * An interface for getting values from an instance of {@code BeanNode}.
+     *
+     * @param <ACTUAL>       type of {@code BeanNode}
+     * @param <ELEMENT_KIND> type of {@code ElementKind}.
+     */
+    protected interface BeanNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
+
+        /**
+         * Returns the value of {@code getContainerClass()} from specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getContainerClass()}.
+         */
         Class<?> getContainerClass(ACTUAL actual);
 
+        /**
+         * Returns the value of {@code getTypeArgumentIndex()} from specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getTypeArgumentIndex()}.
+         */
         Integer getTypeArgumentIndex(ACTUAL actual);
     }
 
+    /**
+     * An abstract assert class for verifying instances of {@code BeanNode}.
+     *
+     * @param <SELF>         self type parameter
+     * @param <ACTUAL>       type of {@code BeanNode}
+     * @param <ELEMENT_KIND> type of {@code ElementKind}
+     */
     protected abstract static class AbstractBeanNodeAssert<
             SELF extends AbstractBeanNodeAssert<SELF, ACTUAL, ELEMENT_KIND>,
             ACTUAL,
@@ -244,16 +390,31 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            BeanNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
+        /**
+         * Creates a new instance with specified actual value.
+         *
+         * @param actual   the actual value to verify.
+         * @param selfType a self class.
+         * @param accessor an accessor for getting values from {@code actual}.
+         */
         protected AbstractBeanNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                         final BeanNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                         final BeanNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
+        }
+
+        // ----------------------------------------------------------------------------------------- getContainerClass()
+        public ClassAssert containerClass() {
+            isNotNull();
+            final Class<?> containerClass = accessor.getContainerClass(actual);
+            return assertThat(containerClass);
         }
 
         public SELF hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getContainerClass(a)).satisfies(requirements::accept);
+                final Class<?> containerClass = accessor.getContainerClass(a);
+                assertThat(containerClass).satisfies(requirements::accept);
             });
         }
 
@@ -261,20 +422,30 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
         }
 
+        // -------------------------------------------------------------------------------------- getTypeArgumentIndex()
+        public IntegerAssert typeArgumentIndex() {
+            isNotNull();
+            final Integer typeArgumentIndex = accessor.getTypeArgumentIndex(actual);
+            return (IntegerAssert) assertThat(typeArgumentIndex);
+        }
+
         public SELF hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getTypeArgumentIndex(a)).satisfies(requirements::accept);
+                final Integer typeArgumentIndex = accessor.getTypeArgumentIndex(a);
+                assertThat(typeArgumentIndex).satisfies(requirements::accept);
             });
         }
 
         public SELF hasTypeArgumentIndexEqualTo(final Object expected) {
-            return hasTypeArgumentIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasTypeArgumentIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
     // ------------------------------------------------------------------------------------------------- ConstructorNode
-    protected interface ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    protected interface ConstructorNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
 
         List<Class<?>> getParameterTypes(ACTUAL actual);
     }
@@ -287,28 +458,37 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            ConstructorNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractConstructorNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                                final ConstructorNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                                final ConstructorNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
         }
 
-        public SELF hasParameterTypesSatisfying(
-                final Consumer<? super List<? extends Class<?>>> requirements) {
+        // ----------------------------------------------------------------------------------------- getParameterTypes()
+        public ListAssert<Class<?>> parameterTypes() {
+            isNotNull();
+            final List<Class<?>> parameterTypes = accessor.getParameterTypes(actual);
+            return assertThat(parameterTypes);
+        }
+
+        public SELF hasParameterTypesSatisfying(final Consumer<? super List<? extends Class<?>>> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getParameterTypes(a)).satisfies(requirements::accept);
+                final List<Class<?>> parameterTypes = accessor.getParameterTypes(a);
+                assertThat(parameterTypes).satisfies(requirements::accept);
             });
         }
 
         public SELF hasParameterTypesEqualTo(final Object expected) {
-            return hasParameterTypesSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasParameterTypesSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    protected interface ContainerElementNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
 
         Class<?> getContainerClass(ACTUAL actual);
 
@@ -323,17 +503,24 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            ContainerElementNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractContainerElementNodeAssert(
                 final ACTUAL actual, final Class<?> selfType,
-                final ContainerElementNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                final ContainerElementNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
+        }
+
+        // ----------------------------------------------------------------------------------------- getContainerClass()
+        public ClassAssert containerClass() {
+            isNotNull();
+            final Class<?> containerClass = accessor.getContainerClass(actual);
+            return assertThat(containerClass);
         }
 
         public SELF hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getContainerClass(a)).satisfies(requirements::accept);
+                assertThat(accessor.getContainerClass(a)).satisfies(requirements::accept);
             });
         }
 
@@ -341,9 +528,16 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
         }
 
+        // -------------------------------------------------------------------------------------- getTypeArgumentIndex()
+        public IntegerAssert typeArgumentIndex() {
+            isNotNull();
+            final Integer typeArgumentIndex = accessor.getTypeArgumentIndex(actual);
+            return (IntegerAssert) assertThat(typeArgumentIndex);
+        }
+
         public SELF hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getTypeArgumentIndex(a)).satisfies(requirements::accept);
+                assertThat(accessor.getTypeArgumentIndex(a)).satisfies(requirements::accept);
             });
         }
 
@@ -353,8 +547,8 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    protected interface CrossParameterNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
 
     }
 
@@ -366,17 +560,17 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            CrossParameterNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractCrossParameterNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                                   final CrossParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                                   final CrossParameterNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    protected interface MethodNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
 
         List<Class<?>> getParameterTypes(ACTUAL actual);
     }
@@ -389,17 +583,24 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            MethodNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractMethodNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                           final MethodNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                           final MethodNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
+        }
+
+        public ListAssert<Class<?>> parameterTypes() {
+            isNotNull();
+            final List<Class<?>> parameterTypes = accessor.getParameterTypes(actual);
+            return assertThat(parameterTypes);
         }
 
         public SELF hasParameterTypesSatisfying(
                 final Consumer<? super List<? extends Class<?>>> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getParameterTypes(a)).satisfies(requirements::accept);
+                final List<Class<?>> parameterTypes = accessor.getParameterTypes(a);
+                assertThat(parameterTypes).satisfies(requirements::accept);
             });
         }
 
@@ -409,8 +610,8 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    protected interface ParameterNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
 
         int getParameterIndex(ACTUAL actual);
     }
@@ -423,27 +624,36 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            ParameterNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractParameterNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                              final ParameterNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
+                                              final ParameterNodeAccessor<ACTUAL, ELEMENT_KIND> delegate) {
             super(actual, selfType, delegate);
+        }
+
+        public IntegerAssert parameterIndex() {
+            isNotNull();
+            final int parameterIndex = accessor.getParameterIndex(actual);
+            return (IntegerAssert) assertThat(parameterIndex);
         }
 
         public SELF hasParameterIndexSatisfying(final Consumer<? super Integer> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getParameterIndex(a)).satisfies(requirements::accept);
+                final int parameterIndex = accessor.getParameterIndex(a);
+                assertThat(parameterIndex).satisfies(requirements::accept);
             });
         }
 
         public SELF hasParameterIndexEqualTo(final Object expected) {
-            return hasParameterIndexSatisfying((Integer v) -> assertThat(v).isSameAs(expected));
+            return hasParameterIndexSatisfying((Integer v) -> {
+                assertThat(v).isSameAs(expected);
+            });
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    protected interface PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    // ---------------------------------------------------------------------------------------------------- PropertyNode
+    protected interface PropertyNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
 
         Class<?> getContainerClass(ACTUAL actual);
 
@@ -458,16 +668,24 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            PropertyNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractPropertyNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                             final PropertyNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                             final PropertyNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
+        }
+
+        // ----------------------------------------------------------------------------------------- getContainerClass()
+        public ClassAssert containerClass() {
+            isNotNull();
+            final Class<?> containerClass = accessor.getContainerClass(actual);
+            return assertThat(containerClass);
         }
 
         public SELF hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getContainerClass(a)).satisfies(requirements::accept);
+                final Class<?> containerClass = accessor.getContainerClass(a);
+                assertThat(containerClass).satisfies(requirements::accept);
             });
         }
 
@@ -475,20 +693,29 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
         }
 
+        public IntegerAssert typeArgumentIndex() {
+            isNotNull();
+            final Integer typeArgumentIndex = accessor.getTypeArgumentIndex(actual);
+            return (IntegerAssert) assertThat(typeArgumentIndex);
+        }
+
         public SELF hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
             return isNotNull().satisfies(a -> {
-                assertThat(delegate.getTypeArgumentIndex(a)).satisfies(requirements::accept);
+                final Integer typeArgumentIndex = accessor.getTypeArgumentIndex(a);
+                assertThat(typeArgumentIndex).satisfies(requirements::accept);
             });
         }
 
         public SELF hasTypeArgumentIndexEqualTo(final Object expected) {
-            return hasTypeArgumentIndexSatisfying(v -> assertThat(v).isEqualTo(expected));
+            return hasTypeArgumentIndexSatisfying(v -> {
+                assertThat(v).isEqualTo(expected);
+            });
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAssertDelegate<ACTUAL, ELEMENT_KIND> {
+    protected interface ReturnValueNodeAccessor<ACTUAL, ELEMENT_KIND>
+            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
 
     }
 
@@ -500,18 +727,12 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             SELF,
             ACTUAL,
             ELEMENT_KIND,
-            ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND>> {
+            ReturnValueNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractReturnValueNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                                final ReturnValueNodeAssertDelegate<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                                final ReturnValueNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
         }
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    protected interface AbstractNodeAssertFactory<T, ASSERT extends AbstractNodeAssert<ASSERT, T, ?>>
-            extends AssertFactory<T, ASSERT> {
-
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -537,14 +758,13 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     public abstract AbstractIterableAssert<?, ? extends Iterable<NODE>, NODE, ? extends AbstractNodeAssert<?, NODE, ?>> asIterable();
 
     /**
-     * Returns an assertion instance for the {@code Path.Node} at specified index of {@link #actual}.
+     * Returns an assertion for the {@code Path.Node} at specified index of {@link #actual}.
      *
      * @param index the node index.
      * @return an assertion instance.
      */
     public AbstractNodeAssert<?, ? extends NODE, ?> node(final int index) {
-        isNotNull();
-        return asIterable().element(index);
+        return isNotNull().asIterable().element(index);
     }
 
     /**
@@ -554,7 +774,6 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
      * @return an assertion instance.
      */
     public AbstractBeanNodeAssert<?, ? extends NODE, ?> beanNode(final int index) {
-        isNotNull();
         return node(index).asBeanNode();
     }
 
@@ -565,22 +784,18 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
      * @return an assertion instance.
      */
     public AbstractConstructorNodeAssert<?, ? extends NODE, ?> constructorNode(final int index) {
-        isNotNull();
         return node(index).asConstructorNode();
     }
 
     public AbstractCrossParameterNodeAssert<?, ? extends NODE, ?> crossParameterNode(final int index) {
-        isNotNull();
         return node(index).asCrossParameterNode();
     }
 
     public AbstractMethodNodeAssert<?, ? extends NODE, ?> methodNode(final int index) {
-        isNotNull();
         return node(index).asMethodNode();
     }
 
     public AbstractParameterNodeAssert<?, ? extends NODE, ?> parameterNode(final int index) {
-        isNotNull();
         return node(index).asParameterNode();
     }
 

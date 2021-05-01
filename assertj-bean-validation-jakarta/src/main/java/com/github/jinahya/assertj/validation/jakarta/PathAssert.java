@@ -17,8 +17,8 @@ public class PathAssert
         extends AbstractPathAssert<PathAssert, Path, Node> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class NodeAssertDelegateImpl<NODE extends Node>
-            implements AbstractNodeAssertDelegate<NODE, ElementKind> {
+    static class NodeAssertAccessorImpl<NODE extends Node>
+            implements AbstractNodeAccessor<NODE, ElementKind> {
 
         @Override
         public Integer getIndex(final NODE actual) {
@@ -55,7 +55,7 @@ public class PathAssert
             extends AbstractNodeAssert<NodeAssert, Node, ElementKind> {
 
         public NodeAssert(final Node actual) {
-            super(actual, NodeAssert.class, new NodeAssertDelegateImpl());
+            super(actual, NodeAssert.class, new NodeAssertAccessorImpl<>());
         }
 
         @Override
@@ -144,9 +144,9 @@ public class PathAssert
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class BeanNodeDelegateImpl
-            extends NodeAssertDelegateImpl<Path.BeanNode>
-            implements BeanNodeAssertDelegate<Path.BeanNode, ElementKind> {
+    static class BeanNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.BeanNode>
+            implements BeanNodeAccessor<Path.BeanNode, ElementKind> {
 
         @Override
         public Class<?> getContainerClass(final Path.BeanNode beanNode) {
@@ -163,14 +163,14 @@ public class PathAssert
             extends AbstractBeanNodeAssert<BeanNodeAssert, Path.BeanNode, ElementKind> {
 
         public BeanNodeAssert(final Path.BeanNode actual) {
-            super(actual, BeanNodeAssert.class, new BeanNodeDelegateImpl());
+            super(actual, BeanNodeAssert.class, new BeanNodeAccessorImpl());
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class ConstructorNodeDelegateImpl
-            extends NodeAssertDelegateImpl<Path.ConstructorNode>
-            implements ConstructorNodeAssertDelegate<Path.ConstructorNode, ElementKind> {
+    static class ConstructorNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.ConstructorNode>
+            implements ConstructorNodeAccessor<Path.ConstructorNode, ElementKind> {
 
         @Override
         public List<Class<?>> getParameterTypes(final Path.ConstructorNode constructorNode) {
@@ -182,14 +182,14 @@ public class PathAssert
             extends AbstractConstructorNodeAssert<ConstructorNodeAssert, Path.ConstructorNode, ElementKind> {
 
         public ConstructorNodeAssert(final Path.ConstructorNode actual) {
-            super(actual, ConstructorNodeAssert.class, new ConstructorNodeDelegateImpl());
+            super(actual, ConstructorNodeAssert.class, new ConstructorNodeAccessorImpl());
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class ContainerElementNodeAssertDelegateImpl
-            extends NodeAssertDelegateImpl<Path.ContainerElementNode>
-            implements ContainerElementNodeAssertDelegate<Path.ContainerElementNode, ElementKind> {
+    static class ContainerElementNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.ContainerElementNode>
+            implements ContainerElementNodeAccessor<Path.ContainerElementNode, ElementKind> {
 
         @Override
         public Class<?> getContainerClass(final Path.ContainerElementNode actual) {
@@ -209,14 +209,14 @@ public class PathAssert
             ElementKind> {
 
         public ContainerElementNodeAssert(final Path.ContainerElementNode actual) {
-            super(actual, ContainerElementNodeAssert.class, new ContainerElementNodeAssertDelegateImpl());
+            super(actual, ContainerElementNodeAssert.class, new ContainerElementNodeAccessorImpl());
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class CrossParameterNodeAssertDelegateImpl
-            extends NodeAssertDelegateImpl<Path.CrossParameterNode>
-            implements CrossParameterNodeAssertDelegate<Path.CrossParameterNode, ElementKind> {
+    static class CrossParameterNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.CrossParameterNode>
+            implements CrossParameterNodeAccessor<Path.CrossParameterNode, ElementKind> {
 
     }
 
@@ -224,14 +224,14 @@ public class PathAssert
             extends AbstractCrossParameterNodeAssert<CrossParameterNodeAssert, Path.CrossParameterNode, ElementKind> {
 
         public CrossParameterNodeAssert(final Path.CrossParameterNode actual) {
-            super(actual, CrossParameterNodeAssert.class, new CrossParameterNodeAssertDelegateImpl());
+            super(actual, CrossParameterNodeAssert.class, new CrossParameterNodeAccessorImpl());
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class MethodNodeAssertDelegateImpl
-            extends NodeAssertDelegateImpl<Path.MethodNode>
-            implements MethodNodeAssertDelegate<Path.MethodNode, ElementKind> {
+    static class MethodNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.MethodNode>
+            implements MethodNodeAccessor<Path.MethodNode, ElementKind> {
 
         @Override
         public List<Class<?>> getParameterTypes(final Path.MethodNode actual) {
@@ -243,14 +243,14 @@ public class PathAssert
             extends AbstractMethodNodeAssert<MethodNodeAssert, Path.MethodNode, ElementKind> {
 
         public MethodNodeAssert(final Path.MethodNode actual) {
-            super(actual, MethodNodeAssert.class, new MethodNodeAssertDelegateImpl());
+            super(actual, MethodNodeAssert.class, new MethodNodeAccessorImpl());
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class ParameterNodeAssertDelegateImpl
-            extends NodeAssertDelegateImpl<Path.ParameterNode>
-            implements ParameterNodeAssertDelegate<Path.ParameterNode, ElementKind> {
+    static class ParameterNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.ParameterNode>
+            implements ParameterNodeAccessor<Path.ParameterNode, ElementKind> {
 
         @Override
         public int getParameterIndex(final Path.ParameterNode actual) {
@@ -262,14 +262,14 @@ public class PathAssert
             extends AbstractParameterNodeAssert<ParameterNodeAssert, Path.ParameterNode, ElementKind> {
 
         public ParameterNodeAssert(final Path.ParameterNode actual) {
-            super(actual, ParameterNodeAssert.class, new ParameterNodeAssertDelegateImpl());
+            super(actual, ParameterNodeAssert.class, new ParameterNodeAccessorImpl());
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class PropertyNodeDelegateImpl
-            extends NodeAssertDelegateImpl<Path.PropertyNode>
-            implements PropertyNodeAssertDelegate<Path.PropertyNode, ElementKind> {
+    static class PropertyNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.PropertyNode>
+            implements PropertyNodeAccessor<Path.PropertyNode, ElementKind> {
 
         @Override
         public Class<?> getContainerClass(final Path.PropertyNode propertyNode) {
@@ -286,14 +286,14 @@ public class PathAssert
             extends AbstractPropertyNodeAssert<PropertyNodeAssert, Path.PropertyNode, ElementKind> {
 
         public PropertyNodeAssert(final Path.PropertyNode actual) {
-            super(actual, PropertyNodeAssert.class, new PropertyNodeDelegateImpl());
+            super(actual, PropertyNodeAssert.class, new PropertyNodeAccessorImpl());
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class ReturnValueNodeAssertDelegateImpl
-            extends NodeAssertDelegateImpl<Path.ReturnValueNode>
-            implements ReturnValueNodeAssertDelegate<Path.ReturnValueNode, ElementKind> {
+    static class ReturnValueNodeAccessorImpl
+            extends NodeAssertAccessorImpl<Path.ReturnValueNode>
+            implements ReturnValueNodeAccessor<Path.ReturnValueNode, ElementKind> {
 
     }
 
@@ -301,7 +301,7 @@ public class PathAssert
             extends AbstractReturnValueNodeAssert<ReturnValueNodeAssert, Path.ReturnValueNode, ElementKind> {
 
         public ReturnValueNodeAssert(final Path.ReturnValueNode actual) {
-            super(actual, ReturnValueNodeAssert.class, new ReturnValueNodeAssertDelegateImpl());
+            super(actual, ReturnValueNodeAssert.class, new ReturnValueNodeAccessorImpl());
         }
     }
 

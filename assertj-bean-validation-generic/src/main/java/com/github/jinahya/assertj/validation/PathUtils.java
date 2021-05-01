@@ -22,19 +22,15 @@ package com.github.jinahya.assertj.validation;
 
 import java.util.List;
 
-import static com.github.jinahya.assertj.validation.ReflectionUtils.applyClassForSuffix;
-import static java.util.function.Function.identity;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
 
-@SuppressWarnings({"java:S125"})
+//@SuppressWarnings({"java:S125"})
+@SuppressWarnings({"java:S112"}) // throw new RuntimeException(roe)
 final class PathUtils {
 
     static final class NodeUtils {
 
-        private static final Class<?> NODE_CLASS = applyClassForSuffix("Path$Node", identity());
-
-        static boolean isInstanceOfNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(NODE_CLASS, object);
-        }
+        private static final Class<?> NODE_CLASS = getClassForSuffix("Path$Node");
 
         private static <T> T requireInstanceOfNodeClass(final T object) {
             return LangUtils.requireInstanceOf(NODE_CLASS, object);
@@ -97,14 +93,9 @@ final class PathUtils {
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
     static final class BeanNodeUtils {
 
-        static final Class<?> BEAN_NODE_CLASS = applyClassForSuffix("Path$BeanNode", identity());
-
-        static boolean isInstanceOfBeanNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(BEAN_NODE_CLASS, object);
-        }
+        static final Class<?> BEAN_NODE_CLASS = getClassForSuffix("Path$BeanNode");
 
         private static <T> T requireInstanceOfBeanNodeClass(final T object) {
             return LangUtils.requireInstanceOf(BEAN_NODE_CLASS, object);
@@ -142,11 +133,7 @@ final class PathUtils {
 
     static final class ConstructorNodeUtils {
 
-        static final Class<?> CONSTRUCTOR_NODE_CLASS = applyClassForSuffix("Path$ConstructorNode", identity());
-
-        static boolean isInstanceOfConstructorNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(CONSTRUCTOR_NODE_CLASS, object);
-        }
+        static final Class<?> CONSTRUCTOR_NODE_CLASS = getClassForSuffix("Path$ConstructorNode");
 
         private static <T> T requireInstanceOfConstructorNodeClass(final T object) {
             return LangUtils.requireInstanceOf(CONSTRUCTOR_NODE_CLASS, object);
@@ -176,12 +163,7 @@ final class PathUtils {
 
     static final class ContainerElementNodeUtils {
 
-        private static final Class<?> CONTAINER_ELEMENT_NODE_CLASS
-                = applyClassForSuffix("Path$ContainerElementNode", identity());
-
-        static boolean isInstanceOfContainerElementNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(CONTAINER_ELEMENT_NODE_CLASS, object);
-        }
+        private static final Class<?> CONTAINER_ELEMENT_NODE_CLASS = getClassForSuffix("Path$ContainerElementNode");
 
         private static <T> T requireInstanceOfContainerElementNodeClass(final T object) {
             return LangUtils.requireInstanceOf(CONTAINER_ELEMENT_NODE_CLASS, object);
@@ -219,12 +201,7 @@ final class PathUtils {
 
     static final class CrossParameterNodeUtils {
 
-        static final Class<?> CROSS_PARAMETER_NODE_CLASS
-                = applyClassForSuffix("Path$CrossParameterNode", identity());
-
-        static boolean isInstanceOfCrossParameterNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(CROSS_PARAMETER_NODE_CLASS, object);
-        }
+        static final Class<?> CROSS_PARAMETER_NODE_CLASS = getClassForSuffix("Path$CrossParameterNode");
 
         private static <T> T requireInstanceOfCrossParameterNodeClass(final T object) {
             return LangUtils.requireInstanceOf(CROSS_PARAMETER_NODE_CLASS, object);
@@ -244,11 +221,7 @@ final class PathUtils {
 
     static final class MethodNodeUtils {
 
-        static final Class<?> METHOD_NODE_CLASS = applyClassForSuffix("Path$MethodNode", identity());
-
-        static boolean isInstanceOfMethodNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(METHOD_NODE_CLASS, object);
-        }
+        static final Class<?> METHOD_NODE_CLASS = getClassForSuffix("Path$MethodNode");
 
         private static <T> T requireInstanceOfMethodNodeClass(final T object) {
             return LangUtils.requireInstanceOf(METHOD_NODE_CLASS, object);
@@ -278,11 +251,7 @@ final class PathUtils {
 
     static final class ParameterNodeUtils {
 
-        static final Class<?> PARAMETER_NODE_CLASS = applyClassForSuffix("Path$ParameterNode", identity());
-
-        static boolean isInstanceOfParameterNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(PARAMETER_NODE_CLASS, object);
-        }
+        static final Class<?> PARAMETER_NODE_CLASS = getClassForSuffix("Path$ParameterNode");
 
         private static <T> T requireInstanceOfParameterNodeClass(final T object) {
             return LangUtils.requireInstanceOf(PARAMETER_NODE_CLASS, object);
@@ -311,11 +280,7 @@ final class PathUtils {
 
     static final class PropertyNodeUtils {
 
-        static final Class<?> PROPERTY_NODE_CLASS = applyClassForSuffix("Path$PropertyNode", identity());
-
-        static boolean isInstanceOfPropertyNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(PROPERTY_NODE_CLASS, object);
-        }
+        static final Class<?> PROPERTY_NODE_CLASS = getClassForSuffix("Path$PropertyNode");
 
         private static <T> T requireInstanceOfPropertyNodeClass(final T object) {
             return LangUtils.requireInstanceOf(PROPERTY_NODE_CLASS, object);
@@ -353,11 +318,7 @@ final class PathUtils {
 
     static final class ReturnValueNodeUtils {
 
-        static final Class<?> RETURN_VALUE_NODE_CLASS = applyClassForSuffix("Path$ReturnValueNode", identity());
-
-        static boolean isInstanceOfReturnValueNodeClass(final Object object) {
-            return LangUtils.isInstanceOf(RETURN_VALUE_NODE_CLASS, object);
-        }
+        static final Class<?> RETURN_VALUE_NODE_CLASS = getClassForSuffix("Path$ReturnValueNode");
 
         private static <T> T requireInstanceOfReturnValueNodeClass(final T object) {
             return LangUtils.requireInstanceOf(RETURN_VALUE_NODE_CLASS, object);
@@ -376,13 +337,9 @@ final class PathUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final Class<?> PATH_CLASS = applyClassForSuffix("Path", identity());
+    private static final Class<?> PATH_CLASS = getClassForSuffix("Path");
 
-    static boolean isInstanceOfPathClass(final Object object) {
-        return LangUtils.isInstanceOf(PATH_CLASS, object);
-    }
-
-    static <T> T requireInstanceOfPathClass(final T object) {
+    private static <T> T requireInstanceOfPathClass(final T object) {
         return LangUtils.requireInstanceOf(PATH_CLASS, object);
     }
 

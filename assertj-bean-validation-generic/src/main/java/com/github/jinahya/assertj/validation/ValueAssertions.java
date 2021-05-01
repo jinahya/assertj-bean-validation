@@ -34,10 +34,8 @@ public final class ValueAssertions {
      *
      * @param actual the property value.
      * @return an assertion instance for {@code actual}.
-     * @see #assertThat(ValueWrapper)
      */
-    @SuppressWarnings({"java:S119"})
-    public static ValueAssert assertValue(final Object actual) {
+    public static ValueAssert assertThat(final Object actual) {
         return new ValueAssert(actual);
     }
 
@@ -46,11 +44,19 @@ public final class ValueAssertions {
      *
      * @param wrapper the wrapper wraps the property value; must not be {@code null}.
      * @return an assertion instance for {@link ValueWrapper#getActual() wrapper.actual}.
-     * @see #assertValue(Object)
      */
-    @SuppressWarnings({"java:S119"})
-    public static ValueAssert assertThat(final ValueWrapper<?> wrapper) {
-        return assertValue(requireNonNull(wrapper).getActual());
+    public static ValueAssert assertThat(final ValueWrapper wrapper) {
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    /**
+     * Creates a new assertion instance for specified property value.
+     *
+     * @param actual the property value.
+     * @return an assertion instance for {@code actual}.
+     */
+    public static ValueAssert assertValue(final Object actual) {
+        return assertThat(actual);
     }
 
     /**

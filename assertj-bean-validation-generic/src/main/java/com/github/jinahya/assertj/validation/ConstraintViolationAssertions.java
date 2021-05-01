@@ -30,28 +30,39 @@ import static java.util.Objects.requireNonNull;
 public final class ConstraintViolationAssertions {
 
     /**
-     * Creates a new assertion instance for specified constraint violation value.
+     * Creates a new assertion instance for specified actual constraint violation value.
+     *
+     * @param actual the actual constraint violation value to verify.
+     * @param <T>    the type of the root bean of {@code actual}
+     * @return a new assertion instance.
+     */
+    public static <T> ConstraintViolationAssert<T> assertThat(final Object actual) {
+        return new ConstraintViolationAssert<>(actual);
+    }
+
+    /**
+     * Creates a new assertion instance for an actual constraint violation value wrapped in specified wrapper.
+     *
+     * @param wrapper the wrapper wraps the actual constraint violation value; must not be {@code null}.
+     * @param <T>     the type of the root bean of {@code actual}
+     * @return a new assertion instance.
+     */
+    public static <T> ConstraintViolationAssert<T> assertThat(final ConstraintViolationWrapper<T> wrapper) {
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    /**
+     * Creates a new assertion instance for specified actual constraint violation value.
      *
      * @param actual the constraint violation value to assert.
      * @param <T>    the type of the root bean of {@code <ACTUAL>}
      * @return a new assertion instance.
      */
     public static <T> ConstraintViolationAssert<T> assertConstraintViolation(final Object actual) {
-        return new ConstraintViolationAssert<>(actual);
-    }
-
-    /**
-     * Creates a new assertion instance for the constraint violation value wrapped in specified wrapper.
-     *
-     * @param wrapper the wrapper wraps the constraint violation value.
-     * @param <T>     the type of the root bean of {@code <ACTUAL>}
-     * @return a new assertion instance.
-     */
-    public static <T> ConstraintViolationAssert<T> assertThat(final ConstraintViolationWrapper<T> wrapper) {
-        return assertConstraintViolation(requireNonNull(wrapper).getActual());
+        return assertThat(actual);
     }
 
     private ConstraintViolationAssertions() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

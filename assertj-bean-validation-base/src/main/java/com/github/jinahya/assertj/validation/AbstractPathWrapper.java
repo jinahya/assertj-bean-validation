@@ -21,9 +21,9 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A abstract class for wrapping actual values of {@code ja....validation.Path}.
+ * A abstract class for wrapping actual values of {@code Path}.
  *
- * @param <ACTUAL> the type of {@code ja....validation.Path}.
+ * @param <ACTUAL> the type of {@code Path}.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
@@ -38,17 +38,39 @@ public abstract class AbstractPathWrapper<ACTUAL>
         }
     }
 
+    /**
+     * An abstract class for wrapping actual values of {@code Node}.
+     *
+     * @param <ACTUAL> actual type parameter
+     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+     */
     public abstract static class AbstractNodeWrapper<ACTUAL>
             extends NodeBaseWrapper<ACTUAL> {
 
+        /**
+         * Creates a new instance wrapping specified actual value.
+         *
+         * @param actual the actual value to wrap.
+         */
         protected AbstractNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
     }
 
+    /**
+     * An abstract class for wrapping actual values of {@code BeanNode}.
+     *
+     * @param <ACTUAL> actual type parameter
+     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+     */
     public abstract static class AbstractBeanNodeWrapper<ACTUAL>
             extends NodeBaseWrapper<ACTUAL> {
 
+        /**
+         * Creates a new instance wrapping specified actual value.
+         *
+         * @param actual the actual value to wrap.
+         */
         protected AbstractBeanNodeWrapper(final ACTUAL actual) {
             super(actual);
         }
