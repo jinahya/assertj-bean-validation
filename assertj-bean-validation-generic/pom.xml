@@ -5,11 +5,11 @@
   <parent>
     <groupId>com.github.jinahya</groupId>
     <artifactId>assertj-bean-validation</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.9</version>
   </parent>
 
   <artifactId>assertj-bean-validation-generic</artifactId>
-  <version>0.0.9-SNAPSHOT</version>
+  <version>0.0.9</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
