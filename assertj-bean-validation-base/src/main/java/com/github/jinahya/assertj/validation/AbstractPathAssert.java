@@ -372,7 +372,7 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     /**
      * An interface for getting values from an instance of {@code BeanNode}.
      *
-     * @param <BEAN_NODE>       type of {@code BeanNode}
+     * @param <BEAN_NODE>    type of {@code BeanNode}
      * @param <ELEMENT_KIND> type of {@code ElementKind}.
      */
     protected interface BeanNodeAccessor<BEAN_NODE, ELEMENT_KIND>
