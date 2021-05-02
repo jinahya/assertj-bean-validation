@@ -27,15 +27,18 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * An assertion class for validating values against constraints defined on a property of specified bean type.
+ * An abstract assertion class for validating a value against constraints defined on a property of a bean type.
  *
+ * @param <SELF>                self type parameter
+ * @param <VALIDATOR>           the type of {@code Validator}
+ * @param <CONSTRAINT_VIOLATION> the type of {@code ConstraintViolation}
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
 public abstract class AbstractValueAssert<
-        SELF extends AbstractValueAssert<SELF, VALIDATOR, CONSTRAINTVIOLATION>,
+        SELF extends AbstractValueAssert<SELF, VALIDATOR, CONSTRAINT_VIOLATION>,
         VALIDATOR,
-        CONSTRAINTVIOLATION>
+        CONSTRAINT_VIOLATION>
         extends AbstractValidationAssert<SELF, Object, VALIDATOR> {
 
     /**
@@ -58,8 +61,8 @@ public abstract class AbstractValueAssert<
      * @return a set of constraint violations.
      */
     @SuppressWarnings({"java:S1452"})
-    protected abstract <T> Set<? extends CONSTRAINTVIOLATION> validateValue(Object actual, Class<T> beanType,
-                                                                            String propertyName);
+    protected abstract <T> Set<? extends CONSTRAINT_VIOLATION> validateValue(Object actual, Class<T> beanType,
+                                                                             String propertyName);
 
     /**
      * Verifies that the {@link #actual actual value} would be valid for a property of specified class.
@@ -73,7 +76,7 @@ public abstract class AbstractValueAssert<
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         return satisfies(a -> {
-            final Set<? extends CONSTRAINTVIOLATION> constraintViolations = validateValue(a, beanType, propertyName);
+            final Set<? extends CONSTRAINT_VIOLATION> constraintViolations = validateValue(a, beanType, propertyName);
             assertThat(constraintViolations).isEmpty();
         });
     }
@@ -90,11 +93,11 @@ public abstract class AbstractValueAssert<
      * @return {@link #myself self}.
      */
     public <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName,
-                                  final Consumer<? super Set<? extends CONSTRAINTVIOLATION>> consumer) {
+                                  final Consumer<? super Set<? extends CONSTRAINT_VIOLATION>> consumer) {
         requireNonNull(beanType, "beanType is null");
         requireNonNull(propertyName, "propertyName is null");
         return satisfies(a -> {
-            final Set<? extends CONSTRAINTVIOLATION> constraintViolations = validateValue(a, beanType, propertyName);
+            final Set<? extends CONSTRAINT_VIOLATION> constraintViolations = validateValue(a, beanType, propertyName);
             assertThat(constraintViolations).isNotEmpty();
             if (consumer != null) {
                 consumer.accept(constraintViolations);

@@ -20,10 +20,10 @@ package com.github.jinahya.assertj.validation.jakarta;
  * #L%
  */
 
-class NonInstantiatableAssertionError
+final class NonInstantiatableAssertionError
         extends AssertionError {
 
-    public NonInstantiatableAssertionError() {
+    NonInstantiatableAssertionError() {
         super("instantiation is not allowed");
     }
 }

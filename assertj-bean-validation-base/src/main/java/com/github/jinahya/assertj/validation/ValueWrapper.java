@@ -21,7 +21,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping a value.
+ * A class for wrapping a value object reference.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */

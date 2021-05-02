@@ -21,7 +21,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping a bean object.
+ * A class for wrapping a bean object reference.
  *
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;

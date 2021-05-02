@@ -20,7 +20,7 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-class NonInstantiatableAssertionError
+final class NonInstantiatableAssertionError
         extends AssertionError {
 
     NonInstantiatableAssertionError() {

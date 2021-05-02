@@ -49,10 +49,10 @@ public abstract class AbstractWrapper<ACTUAL> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final AbstractWrapper<?> that = (AbstractWrapper<?>) o;
+    public boolean equals(final Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        final AbstractWrapper<?> that = (AbstractWrapper<?>) obj;
         return Objects.equals(actual, that.actual);
     }
 
@@ -70,5 +70,8 @@ public abstract class AbstractWrapper<ACTUAL> {
         return actual;
     }
 
-    private final ACTUAL actual;
+    /**
+     * The actual value wrapped in this wrapper.
+     */
+    protected final ACTUAL actual;
 }
