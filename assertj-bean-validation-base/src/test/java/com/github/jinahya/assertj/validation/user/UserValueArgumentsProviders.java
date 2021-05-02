@@ -66,6 +66,6 @@ public final class UserValueArgumentsProviders {
     }
 
     private UserValueArgumentsProviders() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

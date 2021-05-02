@@ -63,6 +63,6 @@ public final class ValueAssertions {
      * Creates a new instance.
      */
     private ValueAssertions() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

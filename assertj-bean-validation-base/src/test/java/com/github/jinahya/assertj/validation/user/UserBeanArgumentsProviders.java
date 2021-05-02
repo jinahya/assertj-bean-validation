@@ -66,6 +66,6 @@ public final class UserBeanArgumentsProviders {
     }
 
     private UserBeanArgumentsProviders() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

@@ -54,6 +54,6 @@ final class ReflectionUtils {
     }
 
     private ReflectionUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

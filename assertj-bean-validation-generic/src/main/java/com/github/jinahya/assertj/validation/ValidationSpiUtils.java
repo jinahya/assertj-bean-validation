@@ -78,6 +78,6 @@ final class ValidationSpiUtils {
     }
 
     private ValidationSpiUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }
