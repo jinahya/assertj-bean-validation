@@ -48,12 +48,12 @@ public abstract class AbstractConstraintViolationAssert<
     /**
      * An interface for accessing values from an actual value of constraint violation.
      *
-     * @param <ACTUAL>    actual constraint violation type
-     * @param <PATH>      the actual type of {@code Path}
-     * @param <ROOT_BEAN> the type of root bean of {@link ACTUAL}
+     * @param <CONSTRAINT_VIOLATION> actual constraint violation type
+     * @param <PATH>                 the actual type of {@code Path}
+     * @param <ROOT_BEAN>            the type of root bean of {@link CONSTRAINT_VIOLATION}
      * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
      */
-    protected interface Accessor<ACTUAL, PATH, ROOT_BEAN> {
+    protected interface Accessor<CONSTRAINT_VIOLATION, PATH, ROOT_BEAN> {
 
         /**
          * Returns the value of {@code getInvalidValue()} from specified actual value.
@@ -61,7 +61,7 @@ public abstract class AbstractConstraintViolationAssert<
          * @param actual the actual value.
          * @return the value of {@code actual.invalidValue}.
          */
-        Object getInvalidValue(ACTUAL actual);
+        Object getInvalidValue(CONSTRAINT_VIOLATION actual);
 
         /**
          * Returns the value of {@code getLeafBean()} from specified actual value.
@@ -69,7 +69,7 @@ public abstract class AbstractConstraintViolationAssert<
          * @param actual the actual value.
          * @return the value of {@code actual.leafBean}.
          */
-        Object getLeafBean(ACTUAL actual);
+        Object getLeafBean(CONSTRAINT_VIOLATION actual);
 
         /**
          * Gets the value of {@code getMessage()} from specified actual value.
@@ -77,7 +77,7 @@ public abstract class AbstractConstraintViolationAssert<
          * @param actual the actual value.
          * @return the value of {@code actual.message}.
          */
-        String getMessage(ACTUAL actual);
+        String getMessage(CONSTRAINT_VIOLATION actual);
 
         /**
          * Returns the value of {@code getPropertyPath()} from specified actual value.
@@ -85,7 +85,7 @@ public abstract class AbstractConstraintViolationAssert<
          * @param actual the actual value.
          * @return the value of {@code actual.getPropertyPath()}.
          */
-        PATH getPropertyPath(ACTUAL actual);
+        PATH getPropertyPath(CONSTRAINT_VIOLATION actual);
 
         /**
          * Returns the value of {@code getRootBean()} froms specified actual value.
@@ -93,7 +93,7 @@ public abstract class AbstractConstraintViolationAssert<
          * @param actual the actual value.
          * @return the value of {@code actual.getRootBean()}.
          */
-        ROOT_BEAN getRootBean(ACTUAL actual);
+        ROOT_BEAN getRootBean(CONSTRAINT_VIOLATION actual);
 
         /**
          * Returns the value of {@code getRootBeanClass()} from specified actual value.
@@ -101,7 +101,7 @@ public abstract class AbstractConstraintViolationAssert<
          * @param actual the actual value.
          * @return the value of {@code actual.rootBean}.
          */
-        Class<ROOT_BEAN> getRootBeanClass(ACTUAL actual);
+        Class<ROOT_BEAN> getRootBeanClass(CONSTRAINT_VIOLATION actual);
     }
 
     // ---------------------------------------------------------------------------------------------------- constructors

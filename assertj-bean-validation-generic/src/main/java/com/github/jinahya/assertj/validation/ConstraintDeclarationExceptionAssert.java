@@ -20,22 +20,31 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import static com.github.jinahya.assertj.validation.ConstraintDeclarationExceptionUtils.requireInstanceOfConstraintDeclarationExceptionClass;
+
 /**
- * An assertion class for {@code ConstraintDeclarationException}.
+ * An assertion class for verifying values of {@code ConstraintDeclarationException} class.
  *
- * @param <ACTUAL> the type of {@code ConstraintViolationException}.
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class ConstraintDeclarationExceptionAssert<ACTUAL extends RuntimeException>
-        extends AbstractConstraintDeclarationExceptionAssert<ConstraintDeclarationExceptionAssert<ACTUAL>, ACTUAL> {
+public class ConstraintDeclarationExceptionAssert
+        extends AbstractConstraintDeclarationExceptionAssert<ConstraintDeclarationExceptionAssert, RuntimeException> {
+
+    /**
+     * An accessor class for getting values from an actual value of {@code ConstraintDeclarationException} class.
+     */
+    protected static class AccessorImpl
+            implements Accessor<RuntimeException> {
+
+    }
 
     /**
      * Creates a new instance with specified actual value.
      *
      * @param actual the actual value to verify.
      */
-    public ConstraintDeclarationExceptionAssert(final ACTUAL actual) {
-        super(ConstraintDeclarationExceptionUtils.requireNullOrInstanceOfConstraintDeclarationExceptionClass(actual),
-              ConstraintDeclarationExceptionAssert.class);
+    public ConstraintDeclarationExceptionAssert(final RuntimeException actual) {
+        super(requireInstanceOfConstraintDeclarationExceptionClass(actual, true),
+              ConstraintDeclarationExceptionAssert.class, new AccessorImpl());
     }
 }

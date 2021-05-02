@@ -20,56 +20,74 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import static com.github.jinahya.assertj.validation.ConstraintDeclarationExceptionUtils.requireInstanceOfConstraintDeclarationExceptionClass;
+import static com.github.jinahya.assertj.validation.ConstraintDefinitionExceptionUtils.requireInstanceOfConstraintDefinitionExceptionClass;
+import static com.github.jinahya.assertj.validation.ConstraintViolationExceptionUtils.requireInstanceOfConstraintViolationExceptionClass;
+import static com.github.jinahya.assertj.validation.ValidationExceptionUtils.requireValidationExceptionInstance;
+
 @SuppressWarnings({"java:S119"})
-public class ValidationExceptionAssert<ACTUAL extends RuntimeException>
-        extends AbstractValidationExceptionAssert<ValidationExceptionAssert<ACTUAL>, ACTUAL> {
+public class ValidationExceptionAssert
+        extends AbstractValidationExceptionAssert<ValidationExceptionAssert, RuntimeException> {
 
-    public ValidationExceptionAssert(final ACTUAL actual) {
-        super(ValidationExceptionUtils.requireValidationExceptionInstance(actual),
-              ValidationExceptionAssert.class);
+    public ValidationExceptionAssert(final RuntimeException actual) {
+        super(requireValidationExceptionInstance(actual), ValidationExceptionAssert.class);
+    }
+
+    // ---------------------------------------------------------------------------------- ConstraintDeclarationException
+    @Override
+    protected ValidationExceptionAssert isConstraintDeclarationException() {
+        return satisfies(a -> {
+            requireInstanceOfConstraintDeclarationExceptionClass(a, true);
+        });
     }
 
     @Override
-    protected ValidationExceptionAssert<ACTUAL> isConstraintDeclarationException() {
-        return isNotNull()
-                .satisfies(ConstraintDeclarationExceptionUtils::isNullOrInstanceOfConstraintDeclarationExceptionClass);
+    @SuppressWarnings({"unchecked"})
+    public ConstraintDeclarationExceptionAssert asConstraintDeclarationException() {
+        isConstraintDeclarationException();
+        return new ConstraintDeclarationExceptionAssert(actual);
+    }
+
+    // ----------------------------------------------------------------------------------- ConstraintDefinitionException
+    @Override
+    protected ValidationExceptionAssert isConstraintDefinitionException() {
+        return satisfies(a -> {
+            requireInstanceOfConstraintDefinitionExceptionClass(a, true);
+        });
     }
 
     @Override
-    public <T extends AbstractConstraintDeclarationExceptionAssert<T, ?>> T asConstraintDeclarationException() {
-        return null;
+    @SuppressWarnings({"unchecked"})
+    public ConstraintDefinitionExceptionAssert asConstraintDefinitionException() {
+        isConstraintDefinitionException();
+        return new ConstraintDefinitionExceptionAssert(actual);
+    }
+
+    // ------------------------------------------------------------------------------------ ConstraintViolationException
+    @Override
+    protected ValidationExceptionAssert isConstraintViolationException() {
+        return satisfies(a -> {
+            requireInstanceOfConstraintViolationExceptionClass(a, true);
+        });
     }
 
     @Override
-    protected ValidationExceptionAssert<ACTUAL> isConstraintDefinitionException() {
-        return isNotNull()
-                .satisfies(ConstraintDefinitionExceptionUtils::isNullOrInstanceOfConstraintDefinitionExceptionClass);
+    public ConstraintViolationExceptionAssert asConstraintViolationException() {
+        isConstraintViolationException();
+        return new ConstraintViolationExceptionAssert(actual);
+    }
+
+    // ---------------------------------------------------------------------------------------- GroupDefinitionException
+    @Override
+    protected ValidationExceptionAssert isGroupDefinitionException() {
+        return satisfies(a -> {
+            GroupDefinitionExceptionUtils.requireGroupDefinitionException(a, true);
+        });
     }
 
     @Override
-    public <T extends AbstractConstraintDefinitionExceptionAssert<T, ?>> T asConstraintDefinitionException() {
-        return null;
-    }
-
-    @Override
-    protected ValidationExceptionAssert<ACTUAL> isConstraintViolationException() {
-        return isNotNull()
-                .satisfies(ConstraintViolationExceptionUtils::requireInstanceOfConstraintViolationExceptionClass);
-    }
-
-    @Override
-    public <T extends AbstractConstraintViolationExceptionAssert<T, ?, ?>> T asConstraintViolationException() {
-        return null;
-    }
-
-    @Override
-    protected ValidationExceptionAssert<ACTUAL> isGroupDefinitionException() {
-        return isNotNull()
-                .satisfies(GroupDefinitionExceptionUtils::isNullOrInstanceOfGroupDefinitionExceptionClass);
-    }
-
-    @Override
-    public <T extends AbstractGroupDefinitionExceptionAssert<T, ?>> T asGroupDefinitionException() {
-        return null;
+    public GroupDefinitionExceptionAssert asGroupDefinitionException() {
+        isGroupDefinitionException();
+        return new GroupDefinitionExceptionAssert(actual);
     }
 }

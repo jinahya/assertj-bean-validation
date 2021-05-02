@@ -24,15 +24,18 @@ import static java.util.Objects.requireNonNull;
 
 public final class ConstraintDeclarationExceptionAssertions {
 
-    public static <ACTUAL extends RuntimeException> ConstraintDeclarationExceptionAssert<ACTUAL>
-    assertConstraintDeclarationException(final ACTUAL actual) {
-        return new ConstraintDeclarationExceptionAssert<>(actual);
+    public static ConstraintDeclarationExceptionAssert assertThat(final RuntimeException actual) {
+        return new ConstraintDeclarationExceptionAssert(actual);
     }
 
-    public static <ACTUAL extends RuntimeException> ConstraintDeclarationExceptionAssert<ACTUAL> assertThat(
-            final ConstraintDeclarationExceptionWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertConstraintDeclarationException(wrapper.getActual());
+    public static ConstraintDeclarationExceptionAssert assertThat(
+            final AbstractWrapper<? extends RuntimeException> wrapper) {
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    public static ConstraintDeclarationExceptionAssert assertConstraintDeclarationException(
+            final RuntimeException actual) {
+        return assertThat(actual);
     }
 
     private ConstraintDeclarationExceptionAssertions() {

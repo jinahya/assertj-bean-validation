@@ -43,6 +43,17 @@ public final class ConstraintDefinitionExceptionAssertions {
     }
 
     /**
+     * Creates a new assertion instance for verifying the actual value wrapped in specified wrapper.
+     *
+     * @param wrapper the wrapper wraps the actual value to verify.
+     * @return a new assertion instance.
+     */
+    public static ConstraintDefinitionExceptionAssert assertThat(
+            final AbstractWrapper<? extends ConstraintDefinitionException> wrapper) {
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    /**
      * Creates a new assertion instance for verifying specified actual value.
      *
      * @param actual the actual value to verify.
@@ -51,18 +62,6 @@ public final class ConstraintDefinitionExceptionAssertions {
     public static ConstraintDefinitionExceptionAssert assertConstraintDefinitionException(
             final ConstraintDefinitionException actual) {
         return assertThat(actual);
-    }
-
-    /**
-     * Creates a new assertion instance for verifying the actual value wrapped in specified wrapper.
-     *
-     * @param wrapper the wrapper wraps the actual value to verify.
-     * @return a new assertion instance.
-     * @see ConstraintDefinitionExceptionWrapper#constraintDefinitionException(ConstraintDefinitionException)
-     */
-    public static ConstraintDefinitionExceptionAssert assertThat(
-            final AbstractWrapper<? extends ConstraintDefinitionException> wrapper) {
-        return assertConstraintDefinitionException(requireNonNull(wrapper).getActual());
     }
 
     private ConstraintDefinitionExceptionAssertions() {

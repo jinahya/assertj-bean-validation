@@ -33,12 +33,17 @@ public class ConstraintDefinitionExceptionAssert
         extends AbstractConstraintDefinitionExceptionAssert
                         <ConstraintDefinitionExceptionAssert, ConstraintDefinitionException> {
 
+    private static class AccessorImpl
+            implements Accessor<ConstraintDefinitionException> {
+        // empty
+    }
+
     /**
      * Creates a new instance for verifying specified actual value.
      *
      * @param actual the actual value to verify.
      */
     public ConstraintDefinitionExceptionAssert(final ConstraintDefinitionException actual) {
-        super(actual, ConstraintDefinitionExceptionAssert.class);
+        super(actual, ConstraintDefinitionExceptionAssert.class, new AccessorImpl());
     }
 }

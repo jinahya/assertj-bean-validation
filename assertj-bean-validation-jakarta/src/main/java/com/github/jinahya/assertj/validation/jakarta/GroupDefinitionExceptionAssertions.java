@@ -43,6 +43,19 @@ public final class GroupDefinitionExceptionAssertions {
     }
 
     /**
+     * Creates a new assertion for verifying the actual value wrapped in specified wrapper.
+     *
+     * @param wrapper the wrapper wraps the actual value to verify.
+     * @return a new assertion for {@code wrapper.actual}.
+     * @see GroupDefinitionExceptionWrapper#groupDefinitionException(GroupDefinitionException)
+     * @see #assertThat(GroupDefinitionException)
+     */
+    public static GroupDefinitionExceptionAssert assertThat(
+            final AbstractWrapper<? extends GroupDefinitionException> wrapper) {
+        return assertThat(requireNonNull(wrapper).getActual());
+    }
+
+    /**
      * Creates a new assertion for verifying specified actual value.
      *
      * @param actual the actual value to verify.
@@ -51,19 +64,6 @@ public final class GroupDefinitionExceptionAssertions {
      */
     public static GroupDefinitionExceptionAssert assertGroupDefinitionException(final GroupDefinitionException actual) {
         return new GroupDefinitionExceptionAssert(actual);
-    }
-
-    /**
-     * Creates a new assertion for verifying the actual value wrapped in specified wrapper.
-     *
-     * @param wrapper the wrapper wraps the actual value to verify.
-     * @return a new assertion for {@code wrapper.actual}.
-     * @see #assertThat(GroupDefinitionException)
-     * @see GroupDefinitionExceptionWrapper#groupDefinitionException(GroupDefinitionException)
-     */
-    public static GroupDefinitionExceptionAssert assertThat(
-            final AbstractWrapper<? extends GroupDefinitionException> wrapper) {
-        return assertThat(requireNonNull(wrapper).getActual());
     }
 
     private GroupDefinitionExceptionAssertions() {

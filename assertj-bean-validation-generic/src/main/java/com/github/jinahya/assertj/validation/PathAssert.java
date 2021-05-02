@@ -158,13 +158,13 @@ public class PathAssert
             implements BeanNodeAccessor<Object, Object> {
 
         @Override
-        public Class<?> getContainerClass(final Object actual) {
-            return PathUtils.BeanNodeUtils.getContainerClass(actual);
+        public Class<?> getContainerClass(final Object a) {
+            return PathUtils.BeanNodeUtils.getContainerClass(a);
         }
 
         @Override
-        public Integer getTypeArgumentIndex(Object actual) {
-            return PathUtils.BeanNodeUtils.getTypeArgumentIndex(actual);
+        public Integer getTypeArgumentIndex(Object a) {
+            return PathUtils.BeanNodeUtils.getTypeArgumentIndex(a);
         }
     }
 
@@ -183,8 +183,8 @@ public class PathAssert
             implements ConstructorNodeAccessor<Object, Object> {
 
         @Override
-        public List<Class<?>> getParameterTypes(final Object actual) {
-            return PathUtils.ConstructorNodeUtils.getParameterTypes(actual);
+        public List<Class<?>> getParameterTypes(final Object a) {
+            return PathUtils.ConstructorNodeUtils.getParameterTypes(a);
         }
     }
 
@@ -203,13 +203,13 @@ public class PathAssert
             implements ContainerElementNodeAccessor<Object, Object> {
 
         @Override
-        public Class<?> getContainerClass(Object actual) {
-            return PathUtils.ContainerElementNodeUtils.getContainerClass(actual);
+        public Class<?> getContainerClass(Object a) {
+            return PathUtils.ContainerElementNodeUtils.getContainerClass(a);
         }
 
         @Override
-        public Integer getTypeArgumentIndex(Object actual) {
-            return PathUtils.ContainerElementNodeUtils.getTypeArgumentIndex(actual);
+        public Integer getTypeArgumentIndex(Object a) {
+            return PathUtils.ContainerElementNodeUtils.getTypeArgumentIndex(a);
         }
     }
 
@@ -244,8 +244,8 @@ public class PathAssert
             implements MethodNodeAccessor<Object, Object> {
 
         @Override
-        public List<Class<?>> getParameterTypes(final Object actual) {
-            return PathUtils.MethodNodeUtils.getParameterTypes(actual);
+        public List<Class<?>> getParameterTypes(final Object a) {
+            return PathUtils.MethodNodeUtils.getParameterTypes(a);
         }
     }
 
@@ -264,8 +264,8 @@ public class PathAssert
             implements ParameterNodeAccessor<Object, Object> {
 
         @Override
-        public int getParameterIndex(Object actual) {
-            return PathUtils.ParameterNodeUtils.getParameterIndex(actual);
+        public int getParameterIndex(Object a) {
+            return PathUtils.ParameterNodeUtils.getParameterIndex(a);
         }
     }
 
@@ -284,13 +284,13 @@ public class PathAssert
             implements PropertyNodeAccessor<Object, Object> {
 
         @Override
-        public Class<?> getContainerClass(final Object actual) {
-            return PathUtils.PropertyNodeUtils.getContainerClass(actual);
+        public Class<?> getContainerClass(final Object a) {
+            return PathUtils.PropertyNodeUtils.getContainerClass(a);
         }
 
         @Override
-        public Integer getTypeArgumentIndex(Object actual) {
-            return PathUtils.PropertyNodeUtils.getTypeArgumentIndex(actual);
+        public Integer getTypeArgumentIndex(Object a) {
+            return PathUtils.PropertyNodeUtils.getTypeArgumentIndex(a);
         }
     }
 

@@ -32,12 +32,17 @@ import javax.validation.GroupDefinitionException;
 public class GroupDefinitionExceptionAssert
         extends AbstractGroupDefinitionExceptionAssert<GroupDefinitionExceptionAssert, GroupDefinitionException> {
 
+    private static class AccessorImpl
+            implements Accessor<GroupDefinitionException> {
+        // empty
+    }
+
     /**
      * Creates a new instance for verifying specified actual value.
      *
      * @param actual the actual value to verify.
      */
     public GroupDefinitionExceptionAssert(final GroupDefinitionException actual) {
-        super(actual, GroupDefinitionExceptionAssert.class);
+        super(actual, GroupDefinitionExceptionAssert.class, new AccessorImpl());
     }
 }

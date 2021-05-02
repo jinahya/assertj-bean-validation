@@ -20,58 +20,27 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.function.Function;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
+import static java.util.Objects.requireNonNull;
 
-@SuppressWarnings({"java:S125"})
 final class ConstraintDefinitionExceptionUtils {
 
-    private static final String SUFFIX = "ConstraintDefinitionException";
+    private static final Class<?> CONSTRAINT_DEFINITION_EXCEPTION_CLASS
+            = getClassForSuffix("ConstraintDefinitionException");
 
-    /**
-     * Applies the class of {@code ....validation.ConstraintDefinitionException} to specified function and returns the
-     * result.
-     *
-     * @param function the function to applied with the class of {@code ....validation.ConstraintDefinitionException}.
-     * @param <R>      result type parameter
-     * @return the result of the {@code function}.
-     */
-    static <R> R applyConstraintDefinitionExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
-    }
-
-    /**
-     * Returns the class of {@code ....validation.Path.PropertyNode}.
-     *
-     * @return the class of {@code ....validation.Path.PropertyNode}.
-     */
-    static Class<?> getConstraintDefinitionExceptionClass() {
-        return applyConstraintDefinitionExceptionClass(Function.identity());
-    }
-
-    /**
-     * Indicates whether specified object is an instance of {@code ....validation.ConstraintDefinitionException}.
-     *
-     * @param object the object to be tested.
-     * @return {@code true} if {@code actual} is an instance of {@code ....validation.ConstraintDefinitionException};
-     * {@code false} otherwise.
-     */
-    static boolean isNullOrInstanceOfConstraintDefinitionExceptionClass(final Object object) {
-        if (object == null) {
+    static boolean isInstanceOfConstraintDefinitionExceptionClass(final Object object, final boolean nullable) {
+        if (nullable && object == null) {
             return true;
         }
-        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return CONSTRAINT_DEFINITION_EXCEPTION_CLASS.isInstance(requireNonNull(object, "object is null"));
     }
 
-    /**
-     * Checks whether specified object is an instance of {@code ....validation.ConstraintDefinitionException}.
-     *
-     * @param object the object to be tested.
-     */
-    static <T> T requireNullOrInstanceOfConstraintDefinitionExceptionClass(final T object) {
-        if (object == null) {
-            return null;
+    static <T> T requireInstanceOfConstraintDefinitionExceptionClass(final T object, final boolean nullable) {
+        if (!isInstanceOfConstraintDefinitionExceptionClass(object, nullable)) {
+            throw new IllegalArgumentException(
+                    "not an instance of " + CONSTRAINT_DEFINITION_EXCEPTION_CLASS + ": " + object);
         }
-        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return object;
     }
 
     private ConstraintDefinitionExceptionUtils() {

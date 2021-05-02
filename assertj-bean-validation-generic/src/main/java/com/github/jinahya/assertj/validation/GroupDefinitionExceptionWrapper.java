@@ -21,23 +21,21 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping actual values of {@code ...validation.GroupDefinitionException}.
+ * A class for wrapping actual values of {@code GroupDefinitionException} class.
  *
- * @param <ACTUAL> actual value type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class GroupDefinitionExceptionWrapper<ACTUAL extends RuntimeException>
-        extends AbstractExtendedValidationExceptionWrapper<ACTUAL> {
+public class GroupDefinitionExceptionWrapper
+        extends AbstractExtendedValidationExceptionWrapper<RuntimeException> {
 
     /**
      * Creates a new instance wraps specified actual value.
      *
-     * @param actual   the actual value to wrap.
-     * @param <ACTUAL> actual value type parameter
+     * @param actual the actual value to wrap.
      * @return a new instance wraps {@code actual}.
      */
-    public static <ACTUAL extends RuntimeException> GroupDefinitionExceptionWrapper<ACTUAL>
-    groupDefinitionException(final ACTUAL actual) {
-        return new GroupDefinitionExceptionWrapper<>(actual);
+    public static GroupDefinitionExceptionWrapper groupDefinitionException(final RuntimeException actual) {
+        return new GroupDefinitionExceptionWrapper(actual);
     }
 
     /**
@@ -45,7 +43,7 @@ public class GroupDefinitionExceptionWrapper<ACTUAL extends RuntimeException>
      *
      * @param actual the actual value to wrap.
      */
-    private GroupDefinitionExceptionWrapper(final ACTUAL actual) {
+    private GroupDefinitionExceptionWrapper(final RuntimeException actual) {
         super(actual);
     }
 }

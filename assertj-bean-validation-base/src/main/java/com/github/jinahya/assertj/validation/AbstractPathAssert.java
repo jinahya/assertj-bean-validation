@@ -1,5 +1,25 @@
 package com.github.jinahya.assertj.validation;
 
+/*-
+ * #%L
+ * assertj-bean-validation-base
+ * %%
+ * Copyright (C) 2021 Jinahya, Inc.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.api.BooleanAssert;
@@ -352,27 +372,27 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     /**
      * An interface for getting values from an instance of {@code BeanNode}.
      *
-     * @param <ACTUAL>       type of {@code BeanNode}
+     * @param <BEAN_NODE>       type of {@code BeanNode}
      * @param <ELEMENT_KIND> type of {@code ElementKind}.
      */
-    protected interface BeanNodeAccessor<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
+    protected interface BeanNodeAccessor<BEAN_NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<BEAN_NODE, ELEMENT_KIND> {
 
         /**
          * Returns the value of {@code getContainerClass()} from specified actual value.
          *
-         * @param actual the actual value.
+         * @param a the actual value.
          * @return the value of {@code actual.getContainerClass()}.
          */
-        Class<?> getContainerClass(ACTUAL actual);
+        Class<?> getContainerClass(BEAN_NODE a);
 
         /**
          * Returns the value of {@code getTypeArgumentIndex()} from specified actual value.
          *
-         * @param actual the actual value.
+         * @param a the actual value.
          * @return the value of {@code actual.getTypeArgumentIndex()}.
          */
-        Integer getTypeArgumentIndex(ACTUAL actual);
+        Integer getTypeArgumentIndex(BEAN_NODE a);
     }
 
     /**
@@ -444,10 +464,10 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // ------------------------------------------------------------------------------------------------- ConstructorNode
-    protected interface ConstructorNodeAccessor<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
+    protected interface ConstructorNodeAccessor<CONSTRUCTOR_NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<CONSTRUCTOR_NODE, ELEMENT_KIND> {
 
-        List<Class<?>> getParameterTypes(ACTUAL actual);
+        List<Class<?>> getParameterTypes(CONSTRUCTOR_NODE a);
     }
 
     protected abstract static class AbstractConstructorNodeAssert<
@@ -487,12 +507,12 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface ContainerElementNodeAccessor<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
+    protected interface ContainerElementNodeAccessor<CONTAINER_ELEMENT_NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<CONTAINER_ELEMENT_NODE, ELEMENT_KIND> {
 
-        Class<?> getContainerClass(ACTUAL actual);
+        Class<?> getContainerClass(CONTAINER_ELEMENT_NODE a);
 
-        Integer getTypeArgumentIndex(ACTUAL actual);
+        Integer getTypeArgumentIndex(CONTAINER_ELEMENT_NODE a);
     }
 
     protected abstract static class AbstractContainerElementNodeAssert<
@@ -547,9 +567,9 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface CrossParameterNodeAccessor<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
-
+    protected interface CrossParameterNodeAccessor<CROSS_PARAMETER_NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<CROSS_PARAMETER_NODE, ELEMENT_KIND> {
+        // empty
     }
 
     protected abstract static class AbstractCrossParameterNodeAssert<
@@ -569,10 +589,10 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface MethodNodeAccessor<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
+    protected interface MethodNodeAccessor<METHOD_NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<METHOD_NODE, ELEMENT_KIND> {
 
-        List<Class<?>> getParameterTypes(ACTUAL actual);
+        List<Class<?>> getParameterTypes(METHOD_NODE a);
     }
 
     protected abstract static class AbstractMethodNodeAssert<
@@ -610,10 +630,10 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    protected interface ParameterNodeAccessor<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
+    protected interface ParameterNodeAccessor<PARAMETER_NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<PARAMETER_NODE, ELEMENT_KIND> {
 
-        int getParameterIndex(ACTUAL actual);
+        int getParameterIndex(PARAMETER_NODE a);
     }
 
     protected abstract static class AbstractParameterNodeAssert<
@@ -627,8 +647,8 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
             ParameterNodeAccessor<ACTUAL, ELEMENT_KIND>> {
 
         protected AbstractParameterNodeAssert(final ACTUAL actual, final Class<?> selfType,
-                                              final ParameterNodeAccessor<ACTUAL, ELEMENT_KIND> delegate) {
-            super(actual, selfType, delegate);
+                                              final ParameterNodeAccessor<ACTUAL, ELEMENT_KIND> accessor) {
+            super(actual, selfType, accessor);
         }
 
         public IntegerAssert parameterIndex() {
@@ -652,12 +672,12 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
     }
 
     // ---------------------------------------------------------------------------------------------------- PropertyNode
-    protected interface PropertyNodeAccessor<ACTUAL, ELEMENT_KIND>
-            extends NodeBaseAccessor<ACTUAL, ELEMENT_KIND> {
+    protected interface PropertyNodeAccessor<PROPERTY_NODE, ELEMENT_KIND>
+            extends NodeBaseAccessor<PROPERTY_NODE, ELEMENT_KIND> {
 
-        Class<?> getContainerClass(ACTUAL actual);
+        Class<?> getContainerClass(PROPERTY_NODE a);
 
-        Integer getTypeArgumentIndex(ACTUAL actual);
+        Integer getTypeArgumentIndex(PROPERTY_NODE a);
     }
 
     protected abstract static class AbstractPropertyNodeAssert<
@@ -676,6 +696,12 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
         }
 
         // ----------------------------------------------------------------------------------------- getContainerClass()
+
+        /**
+         * Returns an assertion for the value of {@code actual.getContainerClass()}.
+         *
+         * @return an assertion for the value of {@code actual.getContainerClass()}.
+         */
         public ClassAssert containerClass() {
             isNotNull();
             final Class<?> containerClass = accessor.getContainerClass(actual);
@@ -683,16 +709,21 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
         }
 
         public SELF hasContainerClassSatisfying(final Consumer<? super Class<?>> requirements) {
-            return isNotNull().satisfies(a -> {
-                final Class<?> containerClass = accessor.getContainerClass(a);
-                assertThat(containerClass).satisfies(requirements::accept);
-            });
+            containerClass().satisfies(requirements::accept);
+            return myself;
         }
 
         public SELF hasContainerClassSameAs(final Object expected) {
             return hasContainerClassSatisfying(v -> assertThat(v).isSameAs(expected));
         }
 
+        // -------------------------------------------------------------------------------------- getTypeArgumentIndex()
+
+        /**
+         * Returns an assertion for the value of {@code actual.getTypeArgumentIndex()}.
+         *
+         * @return an assertion for the value of {@code actual.getTypeArgumentIndex()}.
+         */
         public IntegerAssert typeArgumentIndex() {
             isNotNull();
             final Integer typeArgumentIndex = accessor.getTypeArgumentIndex(actual);
@@ -700,10 +731,8 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
         }
 
         public SELF hasTypeArgumentIndexSatisfying(final Consumer<? super Integer> requirements) {
-            return isNotNull().satisfies(a -> {
-                final Integer typeArgumentIndex = accessor.getTypeArgumentIndex(a);
-                assertThat(typeArgumentIndex).satisfies(requirements::accept);
-            });
+            typeArgumentIndex().satisfies(requirements::accept);
+            return myself;
         }
 
         public SELF hasTypeArgumentIndexEqualTo(final Object expected) {

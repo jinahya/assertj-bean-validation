@@ -20,39 +20,25 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.function.Function;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
+import static java.util.Objects.requireNonNull;
 
-@SuppressWarnings({"java:S125"})
 final class ConstraintDeclarationExceptionUtils {
 
-    private static final String SUFFIX = "ConstraintDeclarationException";
+    private static final Class<?> CONSTRAINT_DECLARATION_EXCEPTION_CLASS
+            = getClassForSuffix("ConstraintDeclarationException");
 
-    static <R> R applyConstraintDeclarationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
-    }
-
-    private static Class<?> constraintViolationExceptionClass = null;
-
-    static Class<?> getConstraintDeclarationExceptionClass() {
-        if (constraintViolationExceptionClass == null) {
-            constraintViolationExceptionClass = applyConstraintDeclarationExceptionClass(Function.identity());
-        }
-        return constraintViolationExceptionClass;
-    }
-
-    static boolean isNullOrInstanceOfConstraintDeclarationExceptionClass(final Object object) {
-        if (object == null) {
+    static boolean isInstanceOfConstraintDeclarationException(final Object object, final boolean nullable) {
+        if (nullable && object == null) {
             return true;
         }
-        return getConstraintDeclarationExceptionClass().isInstance(object);
+        return CONSTRAINT_DECLARATION_EXCEPTION_CLASS.isInstance(requireNonNull(object, "object is null"));
     }
 
-    static <T> T requireNullOrInstanceOfConstraintDeclarationExceptionClass(final T object) {
-        if (object == null) {
-            return null;
-        }
-        if (!isNullOrInstanceOfConstraintDeclarationExceptionClass(object)) {
-            throw new IllegalArgumentException("not an instance of ConstraintViolationException: " + object);
+    static <T> T requireInstanceOfConstraintDeclarationExceptionClass(final T object, final boolean nullable) {
+        if (!isInstanceOfConstraintDeclarationException(object, nullable)) {
+            throw new IllegalArgumentException(
+                    "not an instance of " + CONSTRAINT_DECLARATION_EXCEPTION_CLASS + ": " + object);
         }
         return object;
     }

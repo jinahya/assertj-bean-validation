@@ -43,6 +43,17 @@ public final class ConstraintDeclarationExceptionAssertions {
     }
 
     /**
+     * Creates a new assertion instance for the value wrapped in specified wrapper.
+     *
+     * @param wrapper the wrapper wraps the actual value; must not be {@code null}.
+     * @return a new assertion instance for {@code wrapper.actual}.
+     */
+    public static ConstraintDeclarationExceptionAssert assertThat(
+            final AbstractWrapper<? extends ConstraintDeclarationException> wrapper) {
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    /**
      * Creates a new assertion instance for specified actual value.
      *
      * @param actual the actual value to verify.
@@ -51,19 +62,6 @@ public final class ConstraintDeclarationExceptionAssertions {
     public static ConstraintDeclarationExceptionAssert assertConstraintDeclarationException(
             final ConstraintDeclarationException actual) {
         return assertThat(actual);
-    }
-
-    /**
-     * Creates a new assertion instance for the value wrapped int specified wrapper.
-     *
-     * @param wrapper the wrapper wraps the actual value; must not be {@code null}.
-     * @return a new assertion instance for {@code wrapper.actual}.
-     * @see ConstraintDeclarationExceptionWrapper#constraintDeclarationException(ConstraintDeclarationException)
-     */
-    public static ConstraintDeclarationExceptionAssert assertThat(
-            final AbstractWrapper<? extends ConstraintDeclarationException> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertConstraintDeclarationException(wrapper.getActual());
     }
 
     private ConstraintDeclarationExceptionAssertions() {

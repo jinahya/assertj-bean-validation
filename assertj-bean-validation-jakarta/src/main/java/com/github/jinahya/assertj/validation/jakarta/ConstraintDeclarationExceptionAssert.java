@@ -24,7 +24,7 @@ import com.github.jinahya.assertj.validation.AbstractConstraintDeclarationExcept
 import jakarta.validation.ConstraintDeclarationException;
 
 /**
- * An assertion class for {@link ConstraintDeclarationException}.
+ * An assertion class for verifying actual values of {@link ConstraintDeclarationException} class.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -32,12 +32,17 @@ public class ConstraintDeclarationExceptionAssert
         extends AbstractConstraintDeclarationExceptionAssert
                         <ConstraintDeclarationExceptionAssert, ConstraintDeclarationException> {
 
+    private static class AccessorImpl
+            implements Accessor<ConstraintDeclarationException> {
+        // empty
+    }
+
     /**
      * Creates a new instance with specified actual value.
      *
      * @param actual the actual value to verify.
      */
     public ConstraintDeclarationExceptionAssert(final ConstraintDeclarationException actual) {
-        super(actual, ConstraintDeclarationExceptionAssert.class);
+        super(actual, ConstraintDeclarationExceptionAssert.class, new AccessorImpl());
     }
 }

@@ -20,12 +20,40 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import static java.util.Objects.requireNonNull;
+
+@SuppressWarnings({"java:S119"})
 public abstract class AbstractGroupDefinitionExceptionAssert<
         SELF extends AbstractGroupDefinitionExceptionAssert<SELF, ACTUAL>,
         ACTUAL extends RuntimeException>
         extends AbstractExtendedValidationExceptionAssert<SELF, ACTUAL> {
 
-    protected AbstractGroupDefinitionExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
-        super(actual, selfType);
+    /**
+     * An interface for getting values from an actual value of {@code GroupDefinitionException}.
+     *
+     * @param <GROUP_DEFINITION_EXCEPTION> the actual type of {@code GroupDefinitionException}
+     */
+    protected interface Accessor<GROUP_DEFINITION_EXCEPTION> {
+
     }
+
+    /**
+     * Creates a new instance for specified actual value.
+     *
+     * @param actual   the actual value to verify.
+     * @param selfType a self type.
+     * @param accessor an accessor for getting values from {@code actual}.
+     * @see #actual
+     * @see #accessor
+     */
+    protected AbstractGroupDefinitionExceptionAssert(final ACTUAL actual, final Class<?> selfType,
+                                                     final Accessor<ACTUAL> accessor) {
+        super(actual, selfType);
+        this.accessor = requireNonNull(accessor, "accessor is null");
+    }
+
+    /**
+     * The accessor for getting values from {@link #actual}.
+     */
+    protected final Accessor<ACTUAL> accessor;
 }

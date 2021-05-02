@@ -35,17 +35,22 @@ public class ConstraintViolationExceptionAssert
         extends AbstractConstraintViolationExceptionAssert
                         <ConstraintViolationExceptionAssert, ConstraintViolationException, ConstraintViolation<?>> {
 
+    private static class AccessorImpl
+            implements Accessor<ConstraintViolationException, ConstraintViolation<?>> {
+
+        @Override
+        public Set<? extends ConstraintViolation<?>> getConstraintViolations(
+                final ConstraintViolationException actual) {
+            return actual.getConstraintViolations();
+        }
+    }
+
     /**
      * Creates a new instance with specified actual value.
      *
      * @param actual the actual value to verify.
      */
     public ConstraintViolationExceptionAssert(final ConstraintViolationException actual) {
-        super(actual, ConstraintViolationExceptionAssert.class);
-    }
-
-    @Override
-    protected Set<? extends ConstraintViolation<?>> getConstraintViolations() {
-        return null;
+        super(actual, ConstraintViolationExceptionAssert.class, new AccessorImpl());
     }
 }

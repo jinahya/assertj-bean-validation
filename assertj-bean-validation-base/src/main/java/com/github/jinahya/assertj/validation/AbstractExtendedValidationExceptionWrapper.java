@@ -21,11 +21,11 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping actual values of {@code ...validation.ConstraintDeclarationException}.
+ * A class for wrapping actual values of a subclass of {@code ValidationException}.
  *
  * @param <ACTUAL> actual value type parameter
  */
-public class AbstractExtendedValidationExceptionWrapper<ACTUAL extends RuntimeException>
+public abstract class AbstractExtendedValidationExceptionWrapper<ACTUAL extends RuntimeException>
         extends AbstractWrapper<ACTUAL> {
 
     /**

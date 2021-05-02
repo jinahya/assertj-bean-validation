@@ -24,15 +24,16 @@ import static java.util.Objects.requireNonNull;
 
 public class ValidationExceptionAssertions {
 
-    public static <ACTUAL extends RuntimeException> ValidationExceptionAssert<ACTUAL> assertValidationException(
-            final ACTUAL actual) {
-        return new ValidationExceptionAssert<>(actual);
+    public static ValidationExceptionAssert assertThat(final RuntimeException actual) {
+        return new ValidationExceptionAssert(actual);
     }
 
-    public static <ACTUAL extends RuntimeException> ValidationExceptionAssert<ACTUAL> assertThat(
-            final ConstraintViolationExceptionWrapper<? extends ACTUAL> wrapper) {
-        requireNonNull(wrapper, "wrapper is null");
-        return assertValidationException(wrapper.getActual());
+    public static ValidationExceptionAssert assertThat(final ValidationExceptionWrapper wrapper) {
+        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+    }
+
+    public static ValidationExceptionAssert assertValidationException(final RuntimeException actual) {
+        return assertThat(actual);
     }
 
     private ValidationExceptionAssertions() {

@@ -1,5 +1,25 @@
 package com.github.jinahya.assertj.validation.javax;
 
+/*-
+ * #%L
+ * assertj-bean-validation-javax
+ * %%
+ * Copyright (C) 2021 Jinahya, Inc.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import com.github.jinahya.assertj.validation.AbstractPathAssert;
 import org.assertj.core.api.FactoryBasedNavigableIterableAssert;
 
@@ -16,7 +36,7 @@ public class PathAssert
         extends AbstractPathAssert<PathAssert, Path, Path.Node> {
 
     // -----------------------------------------------------------------------------------------------------------------
-    static class NodeAssertAccessorImpl<NODE extends Path.Node>
+    private static class NodeAssertAccessorImpl<NODE extends Path.Node>
             implements AbstractNodeAccessor<NODE, ElementKind> {
 
         @Override
@@ -142,19 +162,19 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static class BeanNodeAccessorImpl
+    // -------------------------------------------------------------------------------------------------------- BeanNode
+    private static class BeanNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.BeanNode>
             implements BeanNodeAccessor<Path.BeanNode, ElementKind> {
 
         @Override
-        public Class<?> getContainerClass(final Path.BeanNode beanNode) {
-            return beanNode.getContainerClass();
+        public Class<?> getContainerClass(final Path.BeanNode a) {
+            return a.getContainerClass();
         }
 
         @Override
-        public Integer getTypeArgumentIndex(final Path.BeanNode beanNode) {
-            return beanNode.getTypeArgumentIndex();
+        public Integer getTypeArgumentIndex(final Path.BeanNode a) {
+            return a.getTypeArgumentIndex();
         }
     }
 
@@ -166,14 +186,14 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static class ConstructorNodeAccessorImpl
+    // ------------------------------------------------------------------------------------------------- ConstructorNode
+    private static class ConstructorNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.ConstructorNode>
             implements ConstructorNodeAccessor<Path.ConstructorNode, ElementKind> {
 
         @Override
-        public List<Class<?>> getParameterTypes(final Path.ConstructorNode constructorNode) {
-            return constructorNode.getParameterTypes();
+        public List<Class<?>> getParameterTypes(final Path.ConstructorNode a) {
+            return a.getParameterTypes();
         }
     }
 
@@ -185,19 +205,19 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------- ContainerElementNodeAccessorImpl
     static class ContainerElementNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.ContainerElementNode>
             implements ContainerElementNodeAccessor<Path.ContainerElementNode, ElementKind> {
 
         @Override
-        public Class<?> getContainerClass(final Path.ContainerElementNode actual) {
-            return actual.getContainerClass();
+        public Class<?> getContainerClass(final Path.ContainerElementNode a) {
+            return a.getContainerClass();
         }
 
         @Override
-        public Integer getTypeArgumentIndex(final Path.ContainerElementNode actual) {
-            return actual.getTypeArgumentIndex();
+        public Integer getTypeArgumentIndex(final Path.ContainerElementNode a) {
+            return a.getTypeArgumentIndex();
         }
     }
 
@@ -212,11 +232,11 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static class CrossParameterNodeAccessorImpl
+    // ---------------------------------------------------------------------------------------------- CrossParameterNode
+    private static class CrossParameterNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.CrossParameterNode>
             implements CrossParameterNodeAccessor<Path.CrossParameterNode, ElementKind> {
-
+        // empty
     }
 
     public static class CrossParameterNodeAssert
@@ -227,14 +247,14 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static class MethodNodeAccessorImpl
+    // ------------------------------------------------------------------------------------------------------ MethodNode
+    private static class MethodNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.MethodNode>
             implements MethodNodeAccessor<Path.MethodNode, ElementKind> {
 
         @Override
-        public List<Class<?>> getParameterTypes(final Path.MethodNode actual) {
-            return actual.getParameterTypes();
+        public List<Class<?>> getParameterTypes(final Path.MethodNode a) {
+            return a.getParameterTypes();
         }
     }
 
@@ -246,14 +266,14 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static class ParameterNodeAccessorImpl
+    // --------------------------------------------------------------------------------------------------- ParameterNode
+    private static class ParameterNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.ParameterNode>
             implements ParameterNodeAccessor<Path.ParameterNode, ElementKind> {
 
         @Override
-        public int getParameterIndex(final Path.ParameterNode actual) {
-            return actual.getParameterIndex();
+        public int getParameterIndex(final Path.ParameterNode a) {
+            return a.getParameterIndex();
         }
     }
 
@@ -265,19 +285,19 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    static class PropertyNodeAccessorImpl
+    // ---------------------------------------------------------------------------------------------------- PropertyNode
+    private static class PropertyNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.PropertyNode>
             implements PropertyNodeAccessor<Path.PropertyNode, ElementKind> {
 
         @Override
-        public Class<?> getContainerClass(final Path.PropertyNode propertyNode) {
-            return propertyNode.getContainerClass();
+        public Class<?> getContainerClass(final Path.PropertyNode a) {
+            return a.getContainerClass();
         }
 
         @Override
-        public Integer getTypeArgumentIndex(final Path.PropertyNode propertyNode) {
-            return propertyNode.getTypeArgumentIndex();
+        public Integer getTypeArgumentIndex(final Path.PropertyNode a) {
+            return a.getTypeArgumentIndex();
         }
     }
 
@@ -289,7 +309,7 @@ public class PathAssert
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------- ReturnValueNode
     static class ReturnValueNodeAccessorImpl
             extends NodeAssertAccessorImpl<Path.ReturnValueNode>
             implements ReturnValueNodeAccessor<Path.ReturnValueNode, ElementKind> {
@@ -315,11 +335,6 @@ public class PathAssert
         }
     }
 
-    /**
-     * Creates a new instance with specified actual value.
-     *
-     * @param actual the actual value to verify.
-     */
     public PathAssert(final Path actual) {
         super(actual, PathAssert.class);
     }

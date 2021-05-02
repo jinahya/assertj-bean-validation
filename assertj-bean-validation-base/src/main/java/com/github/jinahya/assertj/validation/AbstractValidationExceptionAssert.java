@@ -22,11 +22,25 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractThrowableAssert;
 
+/**
+ * An abstract assertion class for subclasses of {@code ValidationException}.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ */
 public abstract class AbstractValidationExceptionAssert<
         SELF extends AbstractValidationExceptionAssert<SELF, ACTUAL>,
         ACTUAL extends RuntimeException>
         extends AbstractThrowableAssert<SELF, ACTUAL> {
 
+    // ---------------------------------------------------------------------------------------------------- constructors
+
+    /**
+     * Creates a new instance with specified actual value and self type.
+     *
+     * @param actual   the actual value to verify.
+     * @param selfType the self type.
+     */
     protected AbstractValidationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
@@ -37,21 +51,36 @@ public abstract class AbstractValidationExceptionAssert<
      * Verifies that the {@link #actual} is an instance of {@code ConstraintDeclarationException}.
      *
      * @return {@link #myself self}.
+     * @see #asConstraintDeclarationException()
      */
     protected abstract SELF isConstraintDeclarationException();
 
     /**
      * Verifies that the {@link #actual} is an instance of {@code ConstraintDeclarationException} and returns an assert
-     * of {@code ConstraintViolationException} for subsequent verifications.
+     * of {@code ConstraintDeclarationException} for subsequent verifications.
      *
      * @param <T> self type parameter
      * @return {@link #myself self}.
+     * @see #isConstraintDefinitionException()
      */
     public abstract <T extends AbstractConstraintDeclarationExceptionAssert<T, ?>> T asConstraintDeclarationException();
 
     // ----------------------------------------------------------------------------------- ConstraintDefinitionException
+
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code ConstraintDefinitionException}.
+     *
+     * @return {@link #myself self}.
+     */
     protected abstract SELF isConstraintDefinitionException();
 
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code ConstraintDefinisionException} and returns an assert
+     * of {@code ConstraintDefinitionException} for subsequent verifications.
+     *
+     * @param <T> self type parameter
+     * @return {@link #myself self}.
+     */
     public abstract <T extends AbstractConstraintDefinitionExceptionAssert<T, ?>> T asConstraintDefinitionException();
 
     // ------------------------------------------------------------------------------------ ConstraintViolationException

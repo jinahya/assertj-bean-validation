@@ -20,58 +20,27 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.function.Function;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
+import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings({"java:S125"})
 final class GroupDefinitionExceptionUtils {
 
-    private static final String SUFFIX = "GroupDefinitionException";
+    private static final Class<?> GROUP_DEFINITION_EXCEPTION_CLASS = getClassForSuffix("GroupDefinitionException");
 
-    /**
-     * Applies the class of {@code ....validation.GroupDefinitionException} to specified function and returns the
-     * result.
-     *
-     * @param function the function to applied with the class of {@code ....validation.GroupDefinitionException}.
-     * @param <R>      result type parameter
-     * @return the result of the {@code function}.
-     */
-    static <R> R applyGroupDefinitionExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
-    }
-
-    /**
-     * Returns the class of {@code ....validation.Path.PropertyNode}.
-     *
-     * @return the class of {@code ....validation.Path.PropertyNode}.
-     */
-    static Class<?> getGroupDefinitionExceptionClass() {
-        return applyGroupDefinitionExceptionClass(Function.identity());
-    }
-
-    /**
-     * Indicates whether specified object is an instance of {@code ....validation.GroupDefinitionException}.
-     *
-     * @param object the object to be tested.
-     * @return {@code true} if {@code actual} is an instance of {@code ....validation.GroupDefinitionException}; {@code
-     * false} otherwise.
-     */
-    static boolean isNullOrInstanceOfGroupDefinitionExceptionClass(final Object object) {
-        if (object == null) {
+    static boolean isGroupDefinitionException(final Object object, final boolean nullable) {
+        if (nullable && object == null) {
             return true;
         }
-        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return GROUP_DEFINITION_EXCEPTION_CLASS.isInstance(requireNonNull(object, "object is null"));
     }
 
-    /**
-     * Checks whether specified object is an instance of {@code ....validation.GroupDefinitionException}.
-     *
-     * @param object the object to be tested.
-     */
-    static <T> T requireNullOrInstanceOfGroupDefinitionExceptionClass(final T object) {
-        if (object == null) {
-            return null;
+    static <T> T requireGroupDefinitionException(final T object, final boolean nullable) {
+        if (!isGroupDefinitionException(object, nullable)) {
+            throw new IllegalArgumentException(
+                    "not an instance of " + GROUP_DEFINITION_EXCEPTION_CLASS + ": " + object);
         }
-        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return object;
     }
 
     private GroupDefinitionExceptionUtils() {

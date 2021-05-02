@@ -20,68 +20,56 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.lang.reflect.Method;
 import java.util.Set;
-import java.util.function.Function;
 
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
 import static java.util.Objects.requireNonNull;
 
-@SuppressWarnings({"java:S125"})
+@SuppressWarnings({"java:S119", "java:S125"})
 final class ConstraintViolationExceptionUtils {
 
-    private static final String SUFFIX = "ConstraintViolationException";
+    private static final Class<?> CONSTRAINT_VIOLATION_EXCEPTION_CLASS
+            = getClassForSuffix("ConstraintViolationException");
 
-    private static Class<?> constraintViolationClass;
-
-    private static Class<?> constraintViolationClass() {
-        Class<?> c = constraintViolationClass;
-        if (c == null) {
-            constraintViolationClass = c = ReflectionUtils.getClassForSuffix("ConstraintViolationException");
+    private static boolean isInstanceOfConstraintViolationExceptionClass(final Object object, final boolean nullable) {
+        if (nullable && object == null) {
+            return true;
         }
-        return c;
+        return CONSTRAINT_VIOLATION_EXCEPTION_CLASS.isInstance(requireNonNull(object, "object is null"));
     }
 
-    static <R> R applyConstraintViolationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
-    }
-
-    /**
-     * Returns the class of {@code ....validation.Path.PropertyNode}.
-     *
-     * @return the class of {@code ....validation.Path.PropertyNode}.
-     */
-    static Class<?> getConstraintViolationExceptionClass() {
-        return applyConstraintViolationExceptionClass(Function.identity());
-    }
-
-    static boolean isInstanceOfConstraintViolationExceptionClass(final Object object) {
-        return constraintViolationClass().isInstance(requireNonNull(object, "object is null"));
-    }
-
-    static <T> T requireInstanceOfConstraintViolationExceptionClass(final T object) {
-        if (!isInstanceOfConstraintViolationExceptionClass(object)) {
-            throw new IllegalArgumentException("not an instance of " + constraintViolationClass() + ": " + object);
+    static <T> T requireInstanceOfConstraintViolationExceptionClass(final T object, final boolean nullable) {
+        if (!isInstanceOfConstraintViolationExceptionClass(object, nullable)) {
+            throw new IllegalArgumentException(
+                    "not an instance of " + CONSTRAINT_VIOLATION_EXCEPTION_CLASS + ": " + object);
         }
         return object;
     }
 
-    static <T> T requireNullOrInstanceOfConstraintViolationExceptionClass(final T object) {
-        if (object == null) {
-            return null;
+    // --------------------------------------------------------------------------------------- getConstraintViolations()
+    private static final Method GET_CONSTRAINT_VIOLATIONS_METHOD;
+
+    static {
+        try {
+            GET_CONSTRAINT_VIOLATIONS_METHOD
+                    = CONSTRAINT_VIOLATION_EXCEPTION_CLASS.getMethod("getConstraintViolations");
+        } catch (final NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
         }
-        return requireInstanceOfConstraintViolationExceptionClass(object);
     }
 
-    static <T> Set<T> getConstraintViolations(final Object actual) {
+    @SuppressWarnings({"unchecked"})
+    static <CONSTRAINT_VIOLATION> Set<CONSTRAINT_VIOLATION> getConstraintViolations(final Object actual) {
         try {
-            @SuppressWarnings({"unchecked"})
-            final Set<T> constraintViolations = (Set<T>) constraintViolationClass().getMethod("getConstraintViolations").invoke(actual);
-            return constraintViolations;
+            return (Set<CONSTRAINT_VIOLATION>) GET_CONSTRAINT_VIOLATIONS_METHOD.invoke(actual);
         } catch (final ReflectiveOperationException roe) {
             throw new RuntimeException(roe);
         }
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     private ConstraintViolationExceptionUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }
