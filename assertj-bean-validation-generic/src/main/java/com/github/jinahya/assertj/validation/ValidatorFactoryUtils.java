@@ -32,8 +32,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.function.Function;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
 
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrError;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -43,33 +46,35 @@ import static java.util.Objects.requireNonNull;
  */
 final class ValidatorFactoryUtils {
 
-    private static final String SUFFIX = "ValidatorFactory";
+    private static final Class<?> VALIDATOR_FACTORY_CLASS
+            = getClassForSuffixOrError("ValidatorFactory", ExceptionInInitializerError::new);
 
-    static <R> R applyValidatorFactoryClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
-    }
+    // -------------------------------------------------------------------------------------------------- getValidator()
+    private static final Method GET_VALIDATOR_METHOD;
 
-    private static Class<?> validatorFactoryClass = null;
+    private static final MethodHandle GET_VALIDATOR_METHOD_HANDLE;
 
-    static Class<?> getValidatorFactoryClass() {
-        if (validatorFactoryClass == null) {
-            validatorFactoryClass = applyValidatorFactoryClass(Function.identity());
+    static {
+        try {
+            GET_VALIDATOR_METHOD = VALIDATOR_FACTORY_CLASS.getMethod("getValidator");
+            GET_VALIDATOR_METHOD_HANDLE = MethodHandles.lookup().unreflect(GET_VALIDATOR_METHOD);
+        } catch (final Exception e) {
+            throw new ExceptionInInitializerError(e);
         }
-        return validatorFactoryClass;
     }
 
     @SuppressWarnings({"unchecked"})
     static <VALIDATOR> VALIDATOR getValidator(final Object validatorFactory) {
         requireNonNull(validatorFactory, "validatorFactory is null");
         try {
-            return (VALIDATOR) getValidatorFactoryClass().getMethod("getValidator").invoke(validatorFactory);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
+            return (VALIDATOR) GET_VALIDATOR_METHOD_HANDLE.invoke(validatorFactory);
+        } catch (final Throwable t) {
+            throw new RuntimeException(t);
         }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     private ValidatorFactoryUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }

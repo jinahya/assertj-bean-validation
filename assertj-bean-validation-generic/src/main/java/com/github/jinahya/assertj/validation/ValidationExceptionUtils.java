@@ -20,57 +20,25 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.function.Function;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrExceptionInInitializerError;
 
-@SuppressWarnings({"java:S125"})
 final class ValidationExceptionUtils {
 
-    private static final String SUFFIX = "ValidationException";
+    private static final Class<?> VALIDATION_EXCEPTION_CLASS
+            = getClassForSuffixOrExceptionInInitializerError("ValidationException");
 
-    /**
-     * Applies the class of {@code ....validation.ViolationException} to specified function and returns the result.
-     *
-     * @param function the function to applied with the class of {@code ....validation.ViolationException}.
-     * @param <R>      result type parameter
-     * @return the result of the {@code function}.
-     */
-    static <R> R applyValidationExceptionClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
-    }
-
-    /**
-     * Returns the class of {@code ....validation.Path.PropertyNode}.
-     *
-     * @return the class of {@code ....validation.Path.PropertyNode}.
-     */
-    static Class<?> getValidationExceptionClass() {
-        return applyValidationExceptionClass(Function.identity());
-    }
-
-    /**
-     * Indicates whether specified object is an instance of {@code ....validation.ViolationException}.
-     *
-     * @param object the object to be tested.
-     * @return {@code true} if {@code actual} is an instance of {@code ....validation.ViolationException}; {@code false}
-     * otherwise.
-     */
-    static boolean isNullOrInstanceOfValidationExceptionClass(final Object object) {
-        if (object == null) {
+    static boolean isValidationException(final Object object, final boolean nullable) {
+        if (nullable && object == null) {
             return true;
         }
-        return ReflectionUtils.isInstanceOfClassForSuffix(SUFFIX, object);
+        return VALIDATION_EXCEPTION_CLASS.isInstance(object);
     }
 
-    /**
-     * Checks whether specified object is an instance of {@code ....validation.ViolationException}.
-     *
-     * @param object the object to be tested.
-     */
-    static <T> T requireValidationExceptionInstance(final T object) {
-        if (object == null) {
-            return null;
+    static <T> T requireValidationException(final T object, final boolean nullable) {
+        if (!isValidationException(object, nullable)) {
+            throw new IllegalArgumentException("not an instance of " + VALIDATION_EXCEPTION_CLASS + ": " + object);
         }
-        return ReflectionUtils.requireInstanceOfClassForSuffix(SUFFIX, object);
+        return object;
     }
 
     private ValidationExceptionUtils() {

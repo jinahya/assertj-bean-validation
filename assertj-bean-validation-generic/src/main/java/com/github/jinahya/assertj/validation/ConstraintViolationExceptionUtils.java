@@ -20,27 +20,29 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrError;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings({"java:S119", "java:S125"})
 final class ConstraintViolationExceptionUtils {
 
     private static final Class<?> CONSTRAINT_VIOLATION_EXCEPTION_CLASS
-            = getClassForSuffix("ConstraintViolationException");
+            = getClassForSuffixOrError("ConstraintViolationException", ExceptionInInitializerError::new);
 
-    private static boolean isInstanceOfConstraintViolationExceptionClass(final Object object, final boolean nullable) {
+    private static boolean isConstraintViolationException(final Object object, final boolean nullable) {
         if (nullable && object == null) {
             return true;
         }
         return CONSTRAINT_VIOLATION_EXCEPTION_CLASS.isInstance(requireNonNull(object, "object is null"));
     }
 
-    static <T> T requireInstanceOfConstraintViolationExceptionClass(final T object, final boolean nullable) {
-        if (!isInstanceOfConstraintViolationExceptionClass(object, nullable)) {
+    static <T> T requireConstraintViolationException(final T object, final boolean nullable) {
+        if (!isConstraintViolationException(object, nullable)) {
             throw new IllegalArgumentException(
                     "not an instance of " + CONSTRAINT_VIOLATION_EXCEPTION_CLASS + ": " + object);
         }
@@ -50,21 +52,24 @@ final class ConstraintViolationExceptionUtils {
     // --------------------------------------------------------------------------------------- getConstraintViolations()
     private static final Method GET_CONSTRAINT_VIOLATIONS_METHOD;
 
+    private static final MethodHandle GET_CONSTRAINT_VIOLATIONS_METHOD_HANDLE;
+
     static {
         try {
             GET_CONSTRAINT_VIOLATIONS_METHOD
                     = CONSTRAINT_VIOLATION_EXCEPTION_CLASS.getMethod("getConstraintViolations");
-        } catch (final NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
+            GET_CONSTRAINT_VIOLATIONS_METHOD_HANDLE = lookup().unreflect(GET_CONSTRAINT_VIOLATIONS_METHOD);
+        } catch (final Exception e) {
+            throw new ExceptionInInitializerError(e);
         }
     }
 
     @SuppressWarnings({"unchecked"})
     static <CONSTRAINT_VIOLATION> Set<CONSTRAINT_VIOLATION> getConstraintViolations(final Object actual) {
         try {
-            return (Set<CONSTRAINT_VIOLATION>) GET_CONSTRAINT_VIOLATIONS_METHOD.invoke(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
+            return (Set<CONSTRAINT_VIOLATION>) GET_CONSTRAINT_VIOLATIONS_METHOD_HANDLE.invoke(actual);
+        } catch (final Throwable t) {
+            throw new RuntimeException(t);
         }
     }
 

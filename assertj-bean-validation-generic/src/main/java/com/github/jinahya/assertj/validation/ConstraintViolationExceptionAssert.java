@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import java.util.Set;
 
-import static com.github.jinahya.assertj.validation.ConstraintViolationExceptionUtils.requireInstanceOfConstraintViolationExceptionClass;
+import static com.github.jinahya.assertj.validation.ConstraintViolationExceptionUtils.requireConstraintViolationException;
 
 /**
  * An assertion class for verifying an actual value of {@code ConstraintViolationException} class.
@@ -47,7 +47,7 @@ public class ConstraintViolationExceptionAssert
      * @param actual the actual value to verify.
      */
     public ConstraintViolationExceptionAssert(final RuntimeException actual) {
-        super(requireInstanceOfConstraintViolationExceptionClass(actual, true),
+        super(requireConstraintViolationException(actual, true),
               ConstraintViolationExceptionAssert.class, new AccessorImpl());
     }
 }

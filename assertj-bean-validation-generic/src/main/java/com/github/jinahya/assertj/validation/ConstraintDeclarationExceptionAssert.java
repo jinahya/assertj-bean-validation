@@ -20,7 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import static com.github.jinahya.assertj.validation.ConstraintDeclarationExceptionUtils.requireInstanceOfConstraintDeclarationExceptionClass;
+import static com.github.jinahya.assertj.validation.ConstraintDeclarationExceptionUtils.requireConstraintDeclarationException;
 
 /**
  * An assertion class for verifying values of {@code ConstraintDeclarationException} class.
@@ -44,7 +44,7 @@ public class ConstraintDeclarationExceptionAssert
      * @param actual the actual value to verify.
      */
     public ConstraintDeclarationExceptionAssert(final RuntimeException actual) {
-        super(requireInstanceOfConstraintDeclarationExceptionClass(actual, true),
+        super(requireConstraintDeclarationException(actual, true),
               ConstraintDeclarationExceptionAssert.class, new AccessorImpl());
     }
 }

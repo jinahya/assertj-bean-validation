@@ -20,13 +20,14 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrExceptionInInitializerError;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings({"java:S125"})
 final class GroupDefinitionExceptionUtils {
 
-    private static final Class<?> GROUP_DEFINITION_EXCEPTION_CLASS = getClassForSuffix("GroupDefinitionException");
+    private static final Class<?> GROUP_DEFINITION_EXCEPTION_CLASS
+            = getClassForSuffixOrExceptionInInitializerError("GroupDefinitionException");
 
     static boolean isGroupDefinitionException(final Object object, final boolean nullable) {
         if (nullable && object == null) {

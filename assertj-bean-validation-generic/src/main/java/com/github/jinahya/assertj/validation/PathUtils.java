@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import java.util.List;
 
-import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrExceptionInInitializerError;
 
 //@SuppressWarnings({"java:S125"})
 @SuppressWarnings({"java:S112"}) // throw new RuntimeException(roe)
@@ -30,7 +30,7 @@ final class PathUtils {
 
     static final class NodeUtils {
 
-        private static final Class<?> NODE_CLASS = getClassForSuffix("Path$Node");
+        private static final Class<?> NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$Node");
 
         private static <T> T requireInstanceOfNodeClass(final T object) {
             return LangUtils.requireInstanceOf(NODE_CLASS, object);
@@ -95,7 +95,7 @@ final class PathUtils {
 
     static final class BeanNodeUtils {
 
-        static final Class<?> BEAN_NODE_CLASS = getClassForSuffix("Path$BeanNode");
+        static final Class<?> BEAN_NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$BeanNode");
 
         private static <T> T requireInstanceOfBeanNodeClass(final T object) {
             return LangUtils.requireInstanceOf(BEAN_NODE_CLASS, object);
@@ -133,7 +133,8 @@ final class PathUtils {
 
     static final class ConstructorNodeUtils {
 
-        static final Class<?> CONSTRUCTOR_NODE_CLASS = getClassForSuffix("Path$ConstructorNode");
+        static final Class<?> CONSTRUCTOR_NODE_CLASS
+                = getClassForSuffixOrExceptionInInitializerError("Path$ConstructorNode");
 
         private static <T> T requireInstanceOfConstructorNodeClass(final T object) {
             return LangUtils.requireInstanceOf(CONSTRUCTOR_NODE_CLASS, object);
@@ -163,7 +164,8 @@ final class PathUtils {
 
     static final class ContainerElementNodeUtils {
 
-        private static final Class<?> CONTAINER_ELEMENT_NODE_CLASS = getClassForSuffix("Path$ContainerElementNode");
+        private static final Class<?> CONTAINER_ELEMENT_NODE_CLASS
+                = getClassForSuffixOrExceptionInInitializerError("Path$ContainerElementNode");
 
         private static <T> T requireInstanceOfContainerElementNodeClass(final T object) {
             return LangUtils.requireInstanceOf(CONTAINER_ELEMENT_NODE_CLASS, object);
@@ -201,7 +203,8 @@ final class PathUtils {
 
     static final class CrossParameterNodeUtils {
 
-        static final Class<?> CROSS_PARAMETER_NODE_CLASS = getClassForSuffix("Path$CrossParameterNode");
+        static final Class<?> CROSS_PARAMETER_NODE_CLASS
+                = getClassForSuffixOrExceptionInInitializerError("Path$CrossParameterNode");
 
         private static <T> T requireInstanceOfCrossParameterNodeClass(final T object) {
             return LangUtils.requireInstanceOf(CROSS_PARAMETER_NODE_CLASS, object);
@@ -221,7 +224,7 @@ final class PathUtils {
 
     static final class MethodNodeUtils {
 
-        static final Class<?> METHOD_NODE_CLASS = getClassForSuffix("Path$MethodNode");
+        static final Class<?> METHOD_NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$MethodNode");
 
         private static <T> T requireInstanceOfMethodNodeClass(final T object) {
             return LangUtils.requireInstanceOf(METHOD_NODE_CLASS, object);
@@ -251,7 +254,7 @@ final class PathUtils {
 
     static final class ParameterNodeUtils {
 
-        static final Class<?> PARAMETER_NODE_CLASS = getClassForSuffix("Path$ParameterNode");
+        static final Class<?> PARAMETER_NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$ParameterNode");
 
         private static <T> T requireInstanceOfParameterNodeClass(final T object) {
             return LangUtils.requireInstanceOf(PARAMETER_NODE_CLASS, object);
@@ -280,7 +283,7 @@ final class PathUtils {
 
     static final class PropertyNodeUtils {
 
-        static final Class<?> PROPERTY_NODE_CLASS = getClassForSuffix("Path$PropertyNode");
+        static final Class<?> PROPERTY_NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$PropertyNode");
 
         private static <T> T requireInstanceOfPropertyNodeClass(final T object) {
             return LangUtils.requireInstanceOf(PROPERTY_NODE_CLASS, object);
@@ -318,7 +321,7 @@ final class PathUtils {
 
     static final class ReturnValueNodeUtils {
 
-        static final Class<?> RETURN_VALUE_NODE_CLASS = getClassForSuffix("Path$ReturnValueNode");
+        static final Class<?> RETURN_VALUE_NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$ReturnValueNode");
 
         private static <T> T requireInstanceOfReturnValueNodeClass(final T object) {
             return LangUtils.requireInstanceOf(RETURN_VALUE_NODE_CLASS, object);
@@ -337,7 +340,7 @@ final class PathUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final Class<?> PATH_CLASS = getClassForSuffix("Path");
+    private static final Class<?> PATH_CLASS = getClassForSuffixOrExceptionInInitializerError("Path");
 
     private static <T> T requireInstanceOfPathClass(final T object) {
         return LangUtils.requireInstanceOf(PATH_CLASS, object);

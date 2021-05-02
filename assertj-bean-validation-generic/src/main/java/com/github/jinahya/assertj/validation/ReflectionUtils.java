@@ -26,29 +26,31 @@ import static java.util.Objects.requireNonNull;
 
 final class ReflectionUtils {
 
-    static <R> R applyClassForSuffix(final String suffix, final Function<? super Class<?>, ? extends R> function) {
+    static Class<?> getClassForSuffixOrError(
+            final String suffix, final Function<? super ClassNotFoundException, ? extends Error> function) {
         requireNonNull(suffix, "suffix is null");
         requireNonNull(function, "function is null");
         try {
-            return function.apply(Class.forName(ValidationSpiUtils.getPrefix() + suffix));
+            return Class.forName(ValidationSpiUtils.getPrefix() + suffix);
         } catch (final ClassNotFoundException cnfe) {
-            throw new RuntimeException(cnfe);
+            throw function.apply(cnfe);
         }
     }
 
-    static Class<?> getClassForSuffix(final String suffix) {
-        return applyClassForSuffix(suffix, Function.identity());
+    static Class<?> getClassForSuffixOrExceptionInInitializerError(final String suffix) {
+        return getClassForSuffixOrError(suffix, ExceptionInInitializerError::new);
     }
 
-    static boolean isInstanceOfClassForSuffix(final String suffix, final Object object) {
-        return applyClassForSuffix(suffix, c -> c.isInstance(object));
-    }
-
-    static <T> T requireInstanceOfClassForSuffix(final String suffix, final T object) {
-        if (!isInstanceOfClassForSuffix(suffix, object)) {
-            throw new IllegalArgumentException(object + " is not an instance of the class for suffix(" + suffix + ")");
+    static Class<?> getClassForSuffixOrException(
+            final String suffix,
+            final Function<? super ClassNotFoundException, ? extends RuntimeException> function) {
+        requireNonNull(suffix, "suffix is null");
+        requireNonNull(function, "function is null");
+        try {
+            return Class.forName(ValidationSpiUtils.getPrefix() + suffix);
+        } catch (final ClassNotFoundException cnfe) {
+            throw function.apply(cnfe);
         }
-        return object;
     }
 
     private ReflectionUtils() {

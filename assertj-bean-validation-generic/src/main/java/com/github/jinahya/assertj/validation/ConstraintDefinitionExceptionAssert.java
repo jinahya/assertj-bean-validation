@@ -20,7 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import static com.github.jinahya.assertj.validation.ConstraintDefinitionExceptionUtils.requireInstanceOfConstraintDefinitionExceptionClass;
+import static com.github.jinahya.assertj.validation.ConstraintDefinitionExceptionUtils.requireConstraintDefinitionException;
 
 public class ConstraintDefinitionExceptionAssert
         extends AbstractConstraintDefinitionExceptionAssert<ConstraintDefinitionExceptionAssert, RuntimeException> {
@@ -31,7 +31,7 @@ public class ConstraintDefinitionExceptionAssert
     }
 
     public ConstraintDefinitionExceptionAssert(final RuntimeException actual) {
-        super(requireInstanceOfConstraintDefinitionExceptionClass(actual, true),
+        super(requireConstraintDefinitionException(actual, true),
               ConstraintDefinitionExceptionAssert.class, new AccessorImpl());
     }
 }

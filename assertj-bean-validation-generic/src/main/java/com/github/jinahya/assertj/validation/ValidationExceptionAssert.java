@@ -20,24 +20,25 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import static com.github.jinahya.assertj.validation.ConstraintDeclarationExceptionUtils.requireInstanceOfConstraintDeclarationExceptionClass;
-import static com.github.jinahya.assertj.validation.ConstraintDefinitionExceptionUtils.requireInstanceOfConstraintDefinitionExceptionClass;
-import static com.github.jinahya.assertj.validation.ConstraintViolationExceptionUtils.requireInstanceOfConstraintViolationExceptionClass;
-import static com.github.jinahya.assertj.validation.ValidationExceptionUtils.requireValidationExceptionInstance;
+import static com.github.jinahya.assertj.validation.ConstraintDeclarationExceptionUtils.requireConstraintDeclarationException;
+import static com.github.jinahya.assertj.validation.ConstraintDefinitionExceptionUtils.requireConstraintDefinitionException;
+import static com.github.jinahya.assertj.validation.ConstraintViolationExceptionUtils.requireConstraintViolationException;
+import static com.github.jinahya.assertj.validation.GroupDefinitionExceptionUtils.requireGroupDefinitionException;
+import static com.github.jinahya.assertj.validation.ValidationExceptionUtils.requireValidationException;
 
 @SuppressWarnings({"java:S119"})
 public class ValidationExceptionAssert
         extends AbstractValidationExceptionAssert<ValidationExceptionAssert, RuntimeException> {
 
     public ValidationExceptionAssert(final RuntimeException actual) {
-        super(requireValidationExceptionInstance(actual), ValidationExceptionAssert.class);
+        super(requireValidationException(actual, true), ValidationExceptionAssert.class);
     }
 
     // ---------------------------------------------------------------------------------- ConstraintDeclarationException
     @Override
     protected ValidationExceptionAssert isConstraintDeclarationException() {
         return satisfies(a -> {
-            requireInstanceOfConstraintDeclarationExceptionClass(a, true);
+            requireConstraintDeclarationException(a, true);
         });
     }
 
@@ -52,7 +53,7 @@ public class ValidationExceptionAssert
     @Override
     protected ValidationExceptionAssert isConstraintDefinitionException() {
         return satisfies(a -> {
-            requireInstanceOfConstraintDefinitionExceptionClass(a, true);
+            requireConstraintDefinitionException(a, true);
         });
     }
 
@@ -67,11 +68,12 @@ public class ValidationExceptionAssert
     @Override
     protected ValidationExceptionAssert isConstraintViolationException() {
         return satisfies(a -> {
-            requireInstanceOfConstraintViolationExceptionClass(a, true);
+            requireConstraintViolationException(a, true);
         });
     }
 
     @Override
+    @SuppressWarnings({"unchecked"})
     public ConstraintViolationExceptionAssert asConstraintViolationException() {
         isConstraintViolationException();
         return new ConstraintViolationExceptionAssert(actual);
@@ -81,11 +83,12 @@ public class ValidationExceptionAssert
     @Override
     protected ValidationExceptionAssert isGroupDefinitionException() {
         return satisfies(a -> {
-            GroupDefinitionExceptionUtils.requireGroupDefinitionException(a, true);
+            requireGroupDefinitionException(a, true);
         });
     }
 
     @Override
+    @SuppressWarnings({"unchecked"})
     public GroupDefinitionExceptionAssert asGroupDefinitionException() {
         isGroupDefinitionException();
         return new GroupDefinitionExceptionAssert(actual);

@@ -20,23 +20,23 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffix;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrError;
 import static java.util.Objects.requireNonNull;
 
 final class ConstraintDeclarationExceptionUtils {
 
     private static final Class<?> CONSTRAINT_DECLARATION_EXCEPTION_CLASS
-            = getClassForSuffix("ConstraintDeclarationException");
+            = getClassForSuffixOrError("ConstraintDeclarationException", ExceptionInInitializerError::new);
 
-    static boolean isInstanceOfConstraintDeclarationException(final Object object, final boolean nullable) {
+    static boolean isConstraintDeclarationException(final Object object, final boolean nullable) {
         if (nullable && object == null) {
             return true;
         }
         return CONSTRAINT_DECLARATION_EXCEPTION_CLASS.isInstance(requireNonNull(object, "object is null"));
     }
 
-    static <T> T requireInstanceOfConstraintDeclarationExceptionClass(final T object, final boolean nullable) {
-        if (!isInstanceOfConstraintDeclarationException(object, nullable)) {
+    static <T> T requireConstraintDeclarationException(final T object, final boolean nullable) {
+        if (!isConstraintDeclarationException(object, nullable)) {
             throw new IllegalArgumentException(
                     "not an instance of " + CONSTRAINT_DECLARATION_EXCEPTION_CLASS + ": " + object);
         }

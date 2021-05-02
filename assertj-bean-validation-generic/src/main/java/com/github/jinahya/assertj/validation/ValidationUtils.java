@@ -32,7 +32,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.function.Function;
+import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrError;
 
 /**
  * A utility class for Bean-Validation.
@@ -41,44 +41,25 @@ import java.util.function.Function;
  */
 final class ValidationUtils {
 
-    private static final String SUFFIX = "Validation";
+    private static final Class<?> VALIDATION_CLASS
+            = getClassForSuffixOrError("Validation", ExceptionInInitializerError::new);
 
-    static <R> R applyValidationClass(final Function<? super Class<?>, ? extends R> function) {
-        return ReflectionUtils.applyClassForSuffix(SUFFIX, function);
-    }
+    private static final Object DEFAULT_VALIDATOR_FACTORY_INSTANCE;
 
-    private static Class<?> validationClass = null;
-
-    static Class<?> getValidationClass() {
-        if (validationClass == null) {
-            validationClass = applyValidationClass(Function.identity());
+    static {
+        try {
+            DEFAULT_VALIDATOR_FACTORY_INSTANCE
+                    = VALIDATION_CLASS.getMethod("buildDefaultValidatorFactory").invoke(null);
+        } catch (final ReflectiveOperationException roe) {
+            throw new ExceptionInInitializerError(roe);
         }
-        return validationClass;
     }
 
-    private static Object defaultValidatorFactory = null;
-
-    static Object defaultValidatorFactory() {
-        if (defaultValidatorFactory == null) {
-            try {
-                defaultValidatorFactory = getValidationClass().getMethod("buildDefaultValidatorFactory").invoke(null);
-            } catch (final ReflectiveOperationException roe) {
-                throw new RuntimeException(roe);
-            }
-        }
-        return defaultValidatorFactory;
-    }
-
-    /**
-     * Returns an instance of {@code ....validation.Validator}.
-     *
-     * @return an instance of {@code ....validation.Validator}.
-     */
     static Object getValidator() {
-        return ValidatorFactoryUtils.getValidator(defaultValidatorFactory());
+        return ValidatorFactoryUtils.getValidator(DEFAULT_VALIDATOR_FACTORY_INSTANCE);
     }
 
     private ValidationUtils() {
-        throw new AssertionError("instantiation is not allowed");
+        throw new NonInstantiatableAssertionError();
     }
 }
