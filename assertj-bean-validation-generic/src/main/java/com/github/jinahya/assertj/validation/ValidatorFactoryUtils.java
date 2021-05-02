@@ -33,10 +33,10 @@ package com.github.jinahya.assertj.validation;
  */
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 
 import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForSuffixOrError;
+import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -57,7 +57,7 @@ final class ValidatorFactoryUtils {
     static {
         try {
             GET_VALIDATOR_METHOD = VALIDATOR_FACTORY_CLASS.getMethod("getValidator");
-            GET_VALIDATOR_METHOD_HANDLE = MethodHandles.lookup().unreflect(GET_VALIDATOR_METHOD);
+            GET_VALIDATOR_METHOD_HANDLE = lookup().unreflect(GET_VALIDATOR_METHOD);
         } catch (final Exception e) {
             throw new ExceptionInInitializerError(e);
         }
