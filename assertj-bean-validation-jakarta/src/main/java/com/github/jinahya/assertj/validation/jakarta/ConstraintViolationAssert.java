@@ -33,7 +33,7 @@ import jakarta.validation.Path;
 public class ConstraintViolationAssert<T>
         extends AbstractConstraintViolationAssert<ConstraintViolationAssert<T>, ConstraintViolation<T>, Path, T> {
 
-    protected static class AccessorImpl<T>
+    private static class AccessorImpl<T>
             implements Accessor<ConstraintViolation<T>, Path, T> {
 
         @Override
