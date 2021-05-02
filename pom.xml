@@ -52,6 +52,7 @@
     <sonar.projectKey>jinahya_assertj-bean-validation</sonar.projectKey>
     <sonar.organization>jinahya-github</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
     <version.animal-sniffer>1.20</version.animal-sniffer>
     <version.assertj-core>3.19.0</version.assertj-core>
     <version.jakarta.el>4.0.1</version.jakarta.el> <!-- latest -->
