@@ -115,6 +115,17 @@ class BeanAssert_IsNotValid_User_Test {
                     .hasRootBeanSameAs(withInvalidAge)
                     .hasRootBeanClassSameAs(User.class)
             ;
+            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).invalidValue().isEqualTo(withInvalidAge.getAge());
+            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).hasInvalidValueEqualTo(withInvalidAge.getAge());
+            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).leafBean().isSameAs(withInvalidAge);
+            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).hasLeafBeanSameAs(withInvalidAge);
+//            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).message();
+//            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).hasMessageEqualTo();
+//            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).propertyPath();
+//            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).propertyPath().isEqualTo();
+            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).hasRootBeanSameAs(withInvalidAge);
+            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).rootBeanClass().isSameAs(User.class);
+            assertThat(s).element(0, as(CONSTRAINT_VIOLATION)).hasRootBeanClassSameAs(User.class);
         });
     }
 
