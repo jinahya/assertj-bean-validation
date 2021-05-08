@@ -21,19 +21,27 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractIterableAssert;
+import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ObjectAssert;
+import org.assertj.core.api.StringAssert;
 
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.CLASS;
+import static org.assertj.core.api.InstanceOfAssertFactories.STRING;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 
 /**
- * An abstract assertion class for verifying instances of {@code ConstraintViolation}.
+ * An abstract assertion class for verifying instances of {@code ConstraintViolation} class.
  *
  * @param <SELF>      self type parameter
- * @param <ACTUAL>    the actual type of {@code ConstraintViolation}
- * @param <PATH>      the actual type of {@code Path}
+ * @param <ACTUAL>    the type of {@code ConstraintViolation} class
+ * @param <PATH>      the type of {@code Path} class
  * @param <ROOT_BEAN> the type of the root bean of {@link ACTUAL}
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -46,11 +54,11 @@ public abstract class AbstractConstraintViolationAssert<
         extends AbstractAssert<SELF, ACTUAL> {
 
     /**
-     * An interface for accessing values from an actual value of constraint violation.
+     * An interface for accessing values from an actual value of {@code ConstraintViolation} class.
      *
-     * @param <CONSTRAINT_VIOLATION> actual constraint violation type
-     * @param <PATH>                 the actual type of {@code Path}
-     * @param <ROOT_BEAN>            the type of root bean of {@link CONSTRAINT_VIOLATION}
+     * @param <CONSTRAINT_VIOLATION> the type of {@code ConstraintViolation} class
+     * @param <PATH>                 the type of {@code Path} class
+     * @param <ROOT_BEAN>            the type of the root bean of {@link CONSTRAINT_VIOLATION}
      * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
      */
     protected interface Accessor<CONSTRAINT_VIOLATION, PATH, ROOT_BEAN> {
@@ -119,146 +127,255 @@ public abstract class AbstractConstraintViolationAssert<
         this.accessor = requireNonNull(accessor, "accessor is null");
     }
 
-    // ---------------------------------------------------------------------------------------------------- invalidValue
+    // ----------------------------------------------------------------------------------------------- getInvalidValue()
 
     /**
-     * Verifies that the {@code actual.invalidValue} satisfies given requirements expressed as a {@link Consumer}.
+     * Returns an assertion for the value of {@code actual.getInvalidValue()}.
      *
-     * @param requirements the consumer accepts {@code actual.invalidValue}.
-     * @return {@link #myself self}
+     * @return an assertion for the value of {@code actual.getInvalidValue()}.
+     * @see Accessor#getInvalidValue(Object)
      */
-    public SELF hasInvalidValueSatisfying(final Consumer<? super Object> requirements) {
-        return isNotNull().satisfies(a -> {
-            assertThat(accessor.getInvalidValue(a)).satisfies(requirements);
-        });
+    public ObjectAssert<Object> invalidValue() {
+        return isNotNull()
+                .extracting(accessor::getInvalidValue, type(Object.class))
+                ;
     }
 
     /**
-     * Verifies that the {@code actual.invalidValue} is {@link AbstractAssert#isEqualTo(Object) equal} to specified
-     * value.
+     * Verifies that the value of {@code actual.getInvalidValue()} satisfies given requirements expressed as a {@link
+     * Consumer}.
      *
-     * @param expected the expected value of {@code actual.invalidValue}.
+     * @param requirements the consumer accepts the value of {@code actual.getInvalidValue()}.
+     * @return {@link #myself self}
+     * @see #invalidValue()
+     */
+    public SELF hasInvalidValueSatisfying(final Consumer<? super Object> requirements) {
+        requireNonNull(requirements, "requirements is null");
+        return isNotNull()
+                .satisfies(a -> {
+                    final Object invalidValue = accessor.getInvalidValue(a);
+                    assertThat(invalidValue)
+                            .satisfies(requirements)
+                    ;
+                })
+                ;
+    }
+
+    /**
+     * Verifies that the value of {@code actual.getInvalidValue()} {@link AbstractAssert#isEqualTo(Object) is equal to}
+     * specified value.
+     *
+     * @param expected the expected value of {@code actual.getInvalidValue()}.
      * @return {@link #myself self}
      */
     public SELF hasInvalidValueEqualTo(final Object expected) {
-        return hasInvalidValueSatisfying(v -> assertThat(v).isEqualTo(expected));
-    }
-
-    // -------------------------------------------------------------------------------------------------------- leafBean
-
-    /**
-     * Verifies that the {@code actual.leafBean} satisfies given requirements expresses as a {@link Consumer}.
-     *
-     * @param requirements the consumer accepts and verifies the {@code actual.leafBean}.
-     * @return {@link #myself self}
-     */
-    public SELF hasLeafBeanSatisfying(final Consumer<Object> requirements) {
-        return isNotNull().satisfies(a -> {
-            assertThat(accessor.getLeafBean(a)).satisfies(requirements);
+        return hasInvalidValueSatisfying(v -> {
+            assertThat(v)
+                    .isEqualTo(expected);
         });
     }
 
+    // --------------------------------------------------------------------------------------------------- getLeafBean()
+
     /**
-     * Verifies that the {@code actual.leafBean} is same as specified value.
+     * Returns an assertion for the value of {@code actual.getRootBean()}.
      *
-     * @param expected the expected value of {@code actual.leafBean} method.
+     * @return an assertion for the value of {@code actual.getRootBean()}.
+     * @see Accessor#getInvalidValue(Object)
+     */
+    public ObjectAssert<Object> leafBean() {
+        return isNotNull()
+                .extracting(accessor::getRootBean, type(Object.class))
+                ;
+    }
+
+    /**
+     * Verifies that the value of {@code actual.getLeafBean()} satisfies given requirements expresses as a {@link
+     * Consumer}.
+     *
+     * @param requirements the consumer accepts and verifies the value of {@code actual.getLeafBean()}.
+     * @return {@link #myself self}
+     */
+    public SELF hasLeafBeanSatisfying(final Consumer<Object> requirements) {
+        requireNonNull(requirements, "requirements is null");
+        return isNotNull()
+                .satisfies(a -> {
+                    final Object leafBean = accessor.getLeafBean(a);
+                    assertThat(leafBean)
+                            .satisfies(requirements);
+                })
+                ;
+    }
+
+    /**
+     * Verifies that the value of {@code actual.getLeafBean()} is same as specified value.
+     *
+     * @param expected the expected value of {@code actual.getLeafBean()}.
      * @return {@link #myself self}
      */
     public SELF hasLeafBeanSameAs(final Object expected) {
-        return hasLeafBeanSatisfying(v -> assertThat(v).isSameAs(expected));
+        return hasLeafBeanSatisfying(v -> {
+            assertThat(v)
+                    .isSameAs(expected);
+        });
     }
 
-    // --------------------------------------------------------------------------------------------------------- message
+    // --------------------------------------------------------------------------------------------- actual.getMessage()
 
     /**
-     * Verifies that the {@code actual.message} satisfies given requirements expresses as a {@link Consumer}.
+     * Returns an assertion for the value of {@code actual.getMessage()}.
      *
-     * @param requirements the consumer accepts and verifies the {@code actual.message}.
+     * @return an assertion for the value of {@code actual.getMessage()}.
+     */
+    public StringAssert message() {
+        return (StringAssert) isNotNull()
+                .extracting(accessor::getMessage, Assertions.as(STRING))
+                ;
+    }
+
+    /**
+     * Verifies that the value of {@code actual.getMessage()} satisfies given requirements expresses as a {@link
+     * Consumer}.
+     *
+     * @param requirements the consumer accepts and verifies the value of {@code actual.getMessage()}.
      * @return {@link #myself self}
      */
     public SELF hasMessageSatisfying(final Consumer<? super String> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(accessor.getMessage(a)).satisfies(requirements::accept);
+            final String message = accessor.getMessage(a);
+            assertThat(message)
+                    .satisfies(requirements::accept);
         });
     }
 
     /**
-     * Verifies that the {@code actual.message} is {@link AbstractAssert#isEqualTo(Object) equal} to specified value.
+     * Verifies that the value of {@code actual.getMessage()} {@link AbstractAssert#isEqualTo(Object) is equal to}
+     * specified value.
      *
-     * @param expected the expected value of {@code actual.message}.
+     * @param expected the expected value of {@code actual.getMessage()}.
      * @return {@link #myself self}
      */
     public SELF hasMessageEqualTo(final Object expected) {
-        return hasMessageSatisfying(v -> assertThat(v).isEqualTo(expected));
+        return hasMessageSatisfying(v -> {
+            assertThat(v)
+                    .isEqualTo(expected);
+        });
     }
 
-    // ---------------------------------------------------------------------------------------------------- propertyPath
+    // ----------------------------------------------------------------------------------------------- getPropertyPath()
 
     /**
-     * Verifies that the {@code actual.propertyPath} satisfies given requirements expresses as a {@link Consumer}.
+     * Returns an assertion for the value of {@code actual.getPropertyPath()}.
      *
-     * @param requirements the consumer accepts and verifies the {@code actual.propertyPath}.
+     * @return an assertion for the value of {@code actual.getPropertyPath()}.
+     */
+    public abstract AbstractPathAssert<?, PATH, ?> propertyPath();
+
+    /**
+     * Verifies that the value of {@code actual.getPropertyPath()} satisfies given requirements expresses as a {@link
+     * Consumer}.
+     *
+     * @param requirements the consumer accepts and verifies the value of {@code actual.getPropertyPath()}.
      * @return {@link #myself self}
      */
     public SELF hasPropertyPathSatisfying(final Consumer<? super PATH> requirements) {
         requireNonNull(requirements, "requirements is null");
-        return isNotNull().satisfies(a -> {
-            assertThat(accessor.getPropertyPath(a)).satisfies(requirements::accept);
-        });
+        return isNotNull()
+                .satisfies(a -> {
+                    final PATH propertyPath = accessor.getPropertyPath(a);
+                    assertThat(propertyPath)
+                            .satisfies(requirements::accept)
+                    ;
+                })
+                ;
     }
 
     /**
-     * Verifies that the {@code actual.propertyPath} is {@link AbstractIterableAssert#isEqualTo(Object) equal} to
-     * specified value.
+     * Verifies that the value of {@code actual.getPropertyPath()} is {@link AbstractIterableAssert#isEqualTo(Object)
+     * equal} to specified value.
      *
-     * @param expected the expected value of {@code actual.message}.
+     * @param expected the expected value of {@code actual.getPropertyPath()}.
      * @return {@link #myself self}
      */
     public SELF hasPropertyPathEqualTo(final Object expected) {
-        return hasPropertyPathSatisfying(v -> assertThat(v).isEqualTo(expected));
+        return hasPropertyPathSatisfying(v -> {
+            assertThat(v)
+                    .isEqualTo(expected);
+        });
     }
 
-    // -------------------------------------------------------------------------------------------------------- rootBean
+    // --------------------------------------------------------------------------------------------------- getRootBean()
 
     /**
-     * Verifies that the {@code actual.rootBean} satisfies given requirements expresses as a {@link Consumer}.
+     * Returns an assertion for the value of {@code actual.getRootBean()}.
      *
-     * @param requirements the consumer accepts and verifies the {@code actual.rootBean}.
+     * @return an assertion for the value of {@code actual.getRootBean()}.
+     */
+    public AbstractObjectAssert<?, ROOT_BEAN> rootBean() {
+        return isNotNull()
+                .extracting(accessor::getRootBean, type(accessor.getRootBeanClass(actual)))
+                ;
+    }
+
+    /**
+     * Verifies that the value of {@code actual.getRootBean()} satisfies given requirements expresses as a {@link
+     * Consumer}.
+     *
+     * @param requirements the consumer accepts and verifies the value of {@code actual.getRootBean()}.
      * @return {@link #myself self}
      */
     public SELF hasRootBeanSatisfying(final Consumer<? super ROOT_BEAN> requirements) {
         requireNonNull(requirements, "requirements is null");
-        return isNotNull().satisfies(a -> {
-            assertThat(accessor.getRootBean(a)).satisfies(requirements::accept);
-        });
+        return isNotNull()
+                .satisfies(a -> {
+                    final ROOT_BEAN rootBean = accessor.getRootBean(a);
+                    assertThat(rootBean)
+                            .satisfies(requirements::accept)
+                    ;
+                })
+                ;
     }
 
     /**
-     * Verifies that the {@code actual.rootBean} is {@link AbstractAssert#isEqualTo(Object) equal} to specified value.
+     * Verifies that the value of {@code actual.getRootBean()} is {@link AbstractAssert#isEqualTo(Object) equal} to
+     * specified value.
      *
-     * @param expected the expected value of {@code actual.rootBean}.
+     * @param expected the expected value of {@code actual.getRootBean()}.
      * @return {@link #myself self}
      */
     public SELF hasRootBeanSameAs(final Object expected) {
         return hasRootBeanSatisfying(v -> {
-            assertThat(v).isSameAs(expected);
+            assertThat(v)
+                    .isSameAs(expected);
         });
     }
 
     // ------------------------------------------------------------------------------------------------ getRootBeanClass
 
     /**
-     * Verifies that the {@code actual.rootBeanClass} satisfies given requirements expresses as a {@link Consumer}.
+     * Returns an assertion for the value of {@code actual.getRootBeanClass()}.
      *
-     * @param requirements the consumer accepts and verifies the {@code actual.rootBeanClass}.
+     * @return an assertion for the value of {@code actual.getRootBeanClass()}.
+     */
+    public AbstractClassAssert<?> rootBeanClass() {
+        return isNotNull()
+                .extracting(accessor::getRootBeanClass, Assertions.as(CLASS));
+    }
+
+    /**
+     * Verifies that the {@code actual.rootBeanClass()} satisfies given requirements expresses as a {@link Consumer}.
+     *
+     * @param requirements the consumer accepts and verifies the {@code actual.getRootBeanClass()}.
      * @return {@link #myself self}
      */
     @SuppressWarnings({"unchecked"})
     public SELF hasRootBeanClassSatisfying(final Consumer<? super Class<ROOT_BEAN>> requirements) {
         requireNonNull(requirements, "requirements is null");
         return isNotNull().satisfies(a -> {
-            assertThat(accessor.getRootBeanClass(a)).satisfies(v -> requirements.accept((Class<ROOT_BEAN>) v));
+            final Class<ROOT_BEAN> rootBeanClass = accessor.getRootBeanClass(a);
+            assertThat(rootBeanClass)
+                    .satisfies(v -> requirements.accept((Class<ROOT_BEAN>) v));
         });
     }
 
@@ -271,9 +388,12 @@ public abstract class AbstractConstraintViolationAssert<
      */
     public SELF hasRootBeanClassSameAs(final Object expected) {
         return hasRootBeanClassSatisfying(v -> {
-            assertThat(v).isSameAs(expected);
+            assertThat(v)
+                    .isSameAs(expected);
         });
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * The accessor for getting values from {@link #actual}.

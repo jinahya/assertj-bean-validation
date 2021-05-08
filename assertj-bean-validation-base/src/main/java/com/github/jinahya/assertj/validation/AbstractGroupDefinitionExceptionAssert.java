@@ -29,12 +29,12 @@ public abstract class AbstractGroupDefinitionExceptionAssert<
         extends AbstractExtendedValidationExceptionAssert<SELF, ACTUAL> {
 
     /**
-     * An interface for getting values from an actual value of {@code GroupDefinitionException}.
+     * An interface for getting values from a value of {@code GroupDefinitionException}.
      *
-     * @param <GROUP_DEFINITION_EXCEPTION> the actual type of {@code GroupDefinitionException}
+     * @param <GROUP_DEFINITION_EXCEPTION> the type of {@code GroupDefinitionException}
      */
     protected interface Accessor<GROUP_DEFINITION_EXCEPTION> {
-
+        // empty
     }
 
     /**

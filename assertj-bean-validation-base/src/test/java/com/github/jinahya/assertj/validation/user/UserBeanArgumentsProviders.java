@@ -38,7 +38,7 @@ public final class UserBeanArgumentsProviders {
         }
     }
 
-    public static class OfInvalidAges
+    public static class OfInvalidAge
             implements ArgumentsProvider {
 
         @Override
@@ -47,7 +47,7 @@ public final class UserBeanArgumentsProviders {
         }
     }
 
-    public static class OfInvalidNames
+    public static class OfInvalidName
             implements ArgumentsProvider {
 
         @Override

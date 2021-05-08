@@ -34,7 +34,7 @@ class ValueAssert_IsValidFor_User_Test {
 
     @DisplayName("assertValue(validAge).isValidFor(User.class, \"age\") succeeds")
     @ParameterizedTest
-    @ArgumentsSource(UserValueArgumentsProviders.OfValidAges.class)
+    @ArgumentsSource(UserValueArgumentsProviders.OfValidAge.class)
     void isValidFor_Succeed_ValidAge(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
         assertThatCode(() -> a.isValidFor(User.class, "age"))
                 .doesNotThrowAnyException();
@@ -42,7 +42,7 @@ class ValueAssert_IsValidFor_User_Test {
 
     @DisplayName("assertValue(validName).isValidFor(User.class, \"name\") succeeds")
     @ParameterizedTest
-    @ArgumentsSource(UserValueArgumentsProviders.OfValidNames.class)
+    @ArgumentsSource(UserValueArgumentsProviders.OfValidName.class)
     void isValidFor_Succeed_ValidName(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
         assertThatCode(() -> a.isValidFor(User.class, "name"))
                 .doesNotThrowAnyException();
@@ -50,7 +50,7 @@ class ValueAssert_IsValidFor_User_Test {
 
     @DisplayName("assertValue(invalidAge).isValidFor(User.class, \"age\") fails")
     @ParameterizedTest
-    @ArgumentsSource(UserValueArgumentsProviders.OfInvalidAges.class)
+    @ArgumentsSource(UserValueArgumentsProviders.OfInvalidAge.class)
     void isValidFor_Fail_InvalidAge(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
         assertThatThrownBy(() -> a.isValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
@@ -58,7 +58,7 @@ class ValueAssert_IsValidFor_User_Test {
 
     @DisplayName("assertValue(invalidName).isValidFor(User.class, \"name\") fails")
     @ParameterizedTest
-    @ArgumentsSource(UserValueArgumentsProviders.OfInvalidNames.class)
+    @ArgumentsSource(UserValueArgumentsProviders.OfInvalidName.class)
     void isValidFor_Fail_InvalidName(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
         assertThatThrownBy(() -> a.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);

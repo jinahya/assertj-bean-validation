@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
  * An abstract assertion class for verifying instances of {@code ConstraintDeclarationException} class.
  *
  * @param <SELF>   self type parameter
- * @param <ACTUAL> the actual type of {@code ConstraintDeclarationException}
+ * @param <ACTUAL> the type of {@code ConstraintDeclarationException} class
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
@@ -38,10 +38,10 @@ public abstract class AbstractConstraintDeclarationExceptionAssert<
     /**
      * An interface for getting values from an actual value of {@code ConstraintDeclarationException} class.
      *
-     * @param <CONSTRAINT_DECLARATION_EXCEPTION> the actual type of {@code ConstraintViolationException}
+     * @param <CONSTRAINT_DECLARATION_EXCEPTION> the type of {@code ConstraintViolationException}
      */
     protected interface Accessor<CONSTRAINT_DECLARATION_EXCEPTION extends RuntimeException> {
-
+        // empty
     }
 
     /**
@@ -49,6 +49,7 @@ public abstract class AbstractConstraintDeclarationExceptionAssert<
      *
      * @param actual   the actual value to verify.
      * @param selfType a self type.
+     * @param accessor an accessor for getting values from {@code actual}.
      */
     protected AbstractConstraintDeclarationExceptionAssert(final ACTUAL actual, final Class<?> selfType,
                                                            final Accessor<ACTUAL> accessor) {

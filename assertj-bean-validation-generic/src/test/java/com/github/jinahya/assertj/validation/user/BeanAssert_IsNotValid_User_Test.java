@@ -54,7 +54,6 @@ class BeanAssert_IsNotValid_User_Test {
     @ParameterizedTest
     @ArgumentsSource(UserBeanArgumentsProviders.OfInvalid.class)
     void isNotValid_Succeed_Invalid(@ConvertWith(BeanAssertArgumentConverter.class) final BeanAssert a) {
-        // then
         assertThatCode(a::isNotValid)
                 .doesNotThrowAnyException();
     }
@@ -70,47 +69,66 @@ class BeanAssert_IsNotValid_User_Test {
         });
     }
 
-    @DisplayName("assertBean(invalid.age).isNotValid(consumer) accepts non-empty constraint violations")
+    @DisplayName("assertBean(withInvalidAge).isNotValid(consumer) accepts non-empty constraint violations")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidAges.class)
-    void isNotValid_NonEmptyConstraintViolations_InvalidAge(final User user) {
+    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidAge.class)
+    void isNotValid_NonEmptyConstraintViolations_InvalidAge(final User withInvalidAge) {
         // given, when
-        final BeanAssert beanAssert = assertThat(bean(user));
+        final BeanAssert beanAssert = assertThat(bean(withInvalidAge));
         // then
         beanAssert.isNotValid(s -> {
             assertThat(s).hasSize(1).element(0, as(CONSTRAINT_VIOLATION))
-                    .hasInvalidValueEqualTo(user.getAge())
-                    .hasLeafBeanSameAs(user)
+                    .hasInvalidValueEqualTo(withInvalidAge.getAge())
+                    .hasLeafBeanSameAs(withInvalidAge)
                     .hasMessageSatisfying(m -> {
-                        assertThat(m).isNotBlank();
                         log.debug("message: {}", m);
+                        assertThat(m).isNotBlank();
                     })
                     .hasPropertyPathSatisfying(p -> {
+                        log.debug("propertyPath: {}", p);
                         assertThat(path(p)).isNotNull();
                         assertThat(path(p)).asIterable().hasSize(1);
-                        assertThat(path(p)).node(0).hasIndexEqualTo(null);
-                        assertThat(path(p)).node(0).hasKeyEqualTo(null);
-                        assertThat(path(p)).node(0).hasNameEqualTo("age");
+                        {
+                            assertThat(path(p)).node(0).index().isEqualTo(null);
+                            assertThat(path(p)).node(0).hasIndexEqualTo(null);
+                        }
+                        {
+                            assertThat(path(p)).node(0).key().isEqualTo(null);
+                            assertThat(path(p)).node(0).hasKeyEqualTo(null);
+                        }
+                        {
+                            assertThat(path(p)).node(0).hasKindNameEqualTo("PROPERTY");
+                        }
+                        {
+                            assertThat(path(p)).node(0).name().isEqualTo("age");
+                            assertThat(path(p)).node(0).hasNameEqualTo("age");
+                        }
+                        {
+                            assertThat(path(p)).node(0).inIterable().isFalse();
+                            assertThat(path(p)).node(0).isNotInIterable();
+                        }
+                        assertThat(path(p)).node(0).asPropertyNode().hasContainerClassSameAs(null);
                         assertThat(path(p)).propertyNode(0).hasContainerClassSameAs(null);
+                        assertThat(path(p)).node(0).asPropertyNode().hasTypeArgumentIndexEqualTo(null);
                         assertThat(path(p)).propertyNode(0).hasTypeArgumentIndexEqualTo(null);
                     })
-                    .hasRootBeanSameAs(user)
+                    .hasRootBeanSameAs(withInvalidAge)
                     .hasRootBeanClassSameAs(User.class)
             ;
         });
     }
 
-    @DisplayName("assertBean(invalid.name).isNotValid(consumer) accepts non-empty constraint violations")
+    @DisplayName("assertBean(withInvalidName).isNotValid(consumer) accepts non-empty constraint violations")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidNames.class)
-    void isNotValid_NonEmptyConstraintViolations_InvalidName(final User user) {
+    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidName.class)
+    void isNotValid_NonEmptyConstraintViolations_InvalidName(final User withInvalidName) {
         // given, when
-        final BeanAssert beanAssert = assertThat(bean(user));
+        final BeanAssert beanAssert = assertThat(bean(withInvalidName));
         // then
         beanAssert.isNotValid(s -> {
             assertThat(s).hasSize(1).element(0, as(CONSTRAINT_VIOLATION))
-                    .hasInvalidValueEqualTo(user.getName())
-                    .hasLeafBeanSameAs(user)
+                    .hasInvalidValueEqualTo(withInvalidName.getName())
+                    .hasLeafBeanSameAs(withInvalidName)
                     .hasMessageSatisfying(m -> {
                         assertThat(m).isNotBlank();
                         log.debug("message: {}", m);
@@ -124,7 +142,7 @@ class BeanAssert_IsNotValid_User_Test {
                         assertThat(path(p)).propertyNode(0).hasContainerClassSameAs(null);
                         assertThat(path(p)).propertyNode(0).hasTypeArgumentIndexEqualTo(null);
                     })
-                    .hasRootBeanSameAs(user)
+                    .hasRootBeanSameAs(withInvalidName)
                     .hasRootBeanClassSameAs(User.class)
             ;
         });

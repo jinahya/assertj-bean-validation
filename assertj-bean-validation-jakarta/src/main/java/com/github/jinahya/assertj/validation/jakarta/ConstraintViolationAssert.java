@@ -75,4 +75,11 @@ public class ConstraintViolationAssert<T>
     public ConstraintViolationAssert(final ConstraintViolation<T> actual) {
         super(actual, ConstraintViolationAssert.class, new AccessorImpl<>());
     }
+
+    // ----------------------------------------------------------------------------------------------- getPropertyPath()
+
+    @Override
+    public PathAssert propertyPath() {
+        return isNotNull().extracting(accessor::getPropertyPath, PathAssert::new);
+    }
 }

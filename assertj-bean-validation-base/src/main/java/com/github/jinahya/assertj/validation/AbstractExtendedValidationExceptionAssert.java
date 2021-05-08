@@ -23,10 +23,10 @@ package com.github.jinahya.assertj.validation;
 import org.assertj.core.api.AbstractThrowableAssert;
 
 /**
- * An abstract assertion class for subclasses of {@code ValidationException} class.
+ * An abstract assertion class for verifying values of subclasses of {@code ValidationException} class.
  *
  * @param <SELF>   a self type
- * @param <ACTUAL> an actual type of the subclass of {@code validationException} class.
+ * @param <ACTUAL> the type of the subclass of {@code validationException}.
  */
 public abstract class AbstractExtendedValidationExceptionAssert<
         SELF extends AbstractExtendedValidationExceptionAssert<SELF, ACTUAL>,
@@ -37,7 +37,7 @@ public abstract class AbstractExtendedValidationExceptionAssert<
      * Creates a new instance for verifying specified actual value.
      *
      * @param actual   the actual value to verify.
-     * @param selfType a class of self type.
+     * @param selfType a self type.
      */
     protected AbstractExtendedValidationExceptionAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);

@@ -30,13 +30,14 @@ import static com.github.jinahya.assertj.validation.ConstraintViolationException
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 public class ConstraintViolationExceptionAssert
-        extends AbstractConstraintViolationExceptionAssert<ConstraintViolationExceptionAssert, RuntimeException, Object> {
+        extends AbstractConstraintViolationExceptionAssert<
+        ConstraintViolationExceptionAssert, RuntimeException, Object> {
 
     private static class AccessorImpl
             implements Accessor<RuntimeException, Object> {
 
         @Override
-        public Set<?> getConstraintViolations(final RuntimeException actual) {
+        public Set<Object> getConstraintViolations(final RuntimeException actual) {
             return ConstraintViolationExceptionUtils.getConstraintViolations(actual);
         }
     }

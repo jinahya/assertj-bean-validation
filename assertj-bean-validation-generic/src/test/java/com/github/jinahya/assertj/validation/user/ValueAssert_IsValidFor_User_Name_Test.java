@@ -20,8 +20,8 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.BeanAssert;
-import com.github.jinahya.assertj.validation.BeanAssertArgumentConverter;
+import com.github.jinahya.assertj.validation.ValueAssert;
+import com.github.jinahya.assertj.validation.ValueAssertArgumentConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
@@ -30,26 +30,21 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * A class for testing {@link BeanAssert#isValid()} method with beans of {@link User} class.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
-class BeanAssert_IsValid_User_Test {
+class ValueAssert_IsValidFor_User_Name_Test {
 
-    @DisplayName("assertBean(valid).isValid() succeeds")
+    @DisplayName("assertValue(validName).isValidFor(User.class, \"name\") succeeds")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfValid.class)
-    void isValid_Succeed_Valid(@ConvertWith(BeanAssertArgumentConverter.class) final BeanAssert a) {
-        assertThatCode(a::isValid)
+    @ArgumentsSource(UserValueArgumentsProviders.OfValidName.class)
+    void isValidFor_Succeed_ValidName(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
+        assertThatCode(() -> a.isValidFor(User.class, "name"))
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("assertBean(invalid).isValid() fails")
+    @DisplayName("assertValue(invalidName).isValidFor(User.class, \"name\") fails")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalid.class)
-    void isValid_Fail_Invalid(@ConvertWith(BeanAssertArgumentConverter.class) final BeanAssert a) {
-        assertThatThrownBy(a::isValid)
+    @ArgumentsSource(UserValueArgumentsProviders.OfInvalidName.class)
+    void isValidFor_Fail_InvalidName(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
+        assertThatThrownBy(() -> a.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
 }

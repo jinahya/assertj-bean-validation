@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 public final class UserValueArgumentsProviders {
 
-    public static class OfInvalidAges
+    public static class OfInvalidAge
             implements ArgumentsProvider {
 
         @Override
@@ -38,7 +38,7 @@ public final class UserValueArgumentsProviders {
         }
     }
 
-    public static class OfInvalidNames
+    public static class OfInvalidName
             implements ArgumentsProvider {
 
         @Override
@@ -47,7 +47,7 @@ public final class UserValueArgumentsProviders {
         }
     }
 
-    public static class OfValidAges
+    public static class OfValidAge
             implements ArgumentsProvider {
 
         @Override
@@ -56,7 +56,7 @@ public final class UserValueArgumentsProviders {
         }
     }
 
-    public static class OfValidNames
+    public static class OfValidName
             implements ArgumentsProvider {
 
         @Override

@@ -72,7 +72,7 @@ class BeanAssert_IsNotValid_User_Test {
 
     @DisplayName("assertBean(invalid.age).isNotValid(consumer) accepts non-empty constraint violations")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidAges.class)
+    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidAge.class)
     void isNotValid_NonEmptyConstraintViolations_InvalidAge(final User user) {
         // given, when
         final BeanAssert<?> beanAssert = BeanAssertions.assertThat(bean(user));
@@ -102,7 +102,7 @@ class BeanAssert_IsNotValid_User_Test {
 
     @DisplayName("assertBean(invalid.name).isNotValid(consumer) accepts non-empty constraint violations")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidNames.class)
+    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalidName.class)
     void isNotValid_NonEmptyConstraintViolations_InvalidName(final User user) {
         // given, when
         final BeanAssert<?> beanAssert = BeanAssertions.assertThat(bean(user));

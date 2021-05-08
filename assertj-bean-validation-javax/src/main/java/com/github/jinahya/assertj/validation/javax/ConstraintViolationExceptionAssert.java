@@ -39,8 +39,7 @@ public class ConstraintViolationExceptionAssert
             implements Accessor<ConstraintViolationException, ConstraintViolation<?>> {
 
         @Override
-        public Set<? extends ConstraintViolation<?>> getConstraintViolations(
-                final ConstraintViolationException actual) {
+        public Set<ConstraintViolation<?>> getConstraintViolations(final ConstraintViolationException actual) {
             return actual.getConstraintViolations();
         }
     }

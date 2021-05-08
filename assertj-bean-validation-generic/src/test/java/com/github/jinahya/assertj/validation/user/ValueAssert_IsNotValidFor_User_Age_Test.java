@@ -20,8 +20,8 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.BeanAssert;
-import com.github.jinahya.assertj.validation.BeanAssertArgumentConverter;
+import com.github.jinahya.assertj.validation.ValueAssert;
+import com.github.jinahya.assertj.validation.ValueAssertArgumentConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.ConvertWith;
@@ -30,26 +30,21 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * A class for testing {@link BeanAssert#isValid()} method with beans of {@link User} class.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
-class BeanAssert_IsValid_User_Test {
+class ValueAssert_IsNotValidFor_User_Age_Test {
 
-    @DisplayName("assertBean(valid).isValid() succeeds")
+    @DisplayName("assertValue(invalidAge).isNotValidFor(User.class, \"age\") succeeds")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfValid.class)
-    void isValid_Succeed_Valid(@ConvertWith(BeanAssertArgumentConverter.class) final BeanAssert a) {
-        assertThatCode(a::isValid)
+    @ArgumentsSource(UserValueArgumentsProviders.OfInvalidAge.class)
+    void isNotValidFor_Succeed_InvalidAge(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
+        assertThatCode(() -> a.isNotValidFor(User.class, "age"))
                 .doesNotThrowAnyException();
     }
 
-    @DisplayName("assertBean(invalid).isValid() fails")
+    @DisplayName("assertValue(validAge).isNotValidFor(User.class, \"age\") fails")
     @ParameterizedTest
-    @ArgumentsSource(UserBeanArgumentsProviders.OfInvalid.class)
-    void isValid_Fail_Invalid(@ConvertWith(BeanAssertArgumentConverter.class) final BeanAssert a) {
-        assertThatThrownBy(a::isValid)
+    @ArgumentsSource(UserValueArgumentsProviders.OfValidAge.class)
+    void isNotValidFor_Fail_ValidAge(@ConvertWith(ValueAssertArgumentConverter.class) final ValueAssert a) {
+        assertThatThrownBy(() -> a.isNotValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
     }
 }

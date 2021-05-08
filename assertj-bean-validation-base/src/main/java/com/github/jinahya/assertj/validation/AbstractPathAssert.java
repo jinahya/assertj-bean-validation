@@ -21,22 +21,29 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractBooleanAssert;
+import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractIterableAssert;
+import org.assertj.core.api.AbstractStringAssert;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.BooleanAssert;
 import org.assertj.core.api.ClassAssert;
 import org.assertj.core.api.IntegerAssert;
 import org.assertj.core.api.ListAssert;
 import org.assertj.core.api.ObjectAssert;
-import org.assertj.core.api.StringAssert;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.BOOLEAN;
+import static org.assertj.core.api.InstanceOfAssertFactories.INTEGER;
+import static org.assertj.core.api.InstanceOfAssertFactories.STRING;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 
 /**
- * An abstract assertion class for verifying instances of {@code Path} which is an iterable of {@code Node}s.
+ * An abstract assertion class for verifying instances of {@code Path} which is an iterable of {@code Path.Node}s.
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
@@ -49,14 +56,44 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
 
     interface NodeBaseAccessor<NODE, ELEMENT_KIND> {
 
+        /**
+         * Returns the value of {@code getIndex()} of specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getIndex()}.
+         */
         Integer getIndex(NODE actual);
 
+        /**
+         * Returns the value of {@code getKey()} of specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getKey()}.
+         */
         Object getKey(NODE actual);
 
+        /**
+         * Returns the value of {@code getKind()} of specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getKind()}.
+         */
         ELEMENT_KIND getKind(NODE actual);
 
+        /**
+         * Returns the value of {@code getName()} of specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.getName()}.
+         */
         String getName(NODE actual);
 
+        /**
+         * Returns the value of {@code isInIterable()} of specified actual value.
+         *
+         * @param actual the actual value.
+         * @return the value of {@code actual.isInIterable()}.
+         */
         boolean isInIterable(NODE actual);
     }
 
@@ -79,35 +116,40 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          *
          * @return an assertion for the value of {@code actual.getIndex()}.
          */
-        public IntegerAssert index() {
-            isNotNull();
-            return (IntegerAssert) assertThat(accessor.getIndex(actual));
+        public AbstractIntegerAssert<?> index() {
+            return isNotNull()
+                    .extracting(accessor::getIndex, Assertions.as(INTEGER))
+                    ;
         }
 
         /**
          * Verifies that the value of {@code actual.getIndex()} satisfies the requirements by being accepted to
          * specified consumer.
          *
-         * @param requirements the consumer accepts and verifies {@code actual.index}.
+         * @param requirements the consumer accepts and verifies the value of {@code actual.getIndex()}.
          * @return {@link #myself myself}.
          */
         public SELF hasIndexSatisfying(final Consumer<? super Integer> requirements) {
-            return isNotNull().satisfies(a -> {
-                final Integer index = accessor.getIndex(a);
-                assertThat(index).satisfies(requirements::accept);
-            });
+            return isNotNull()
+                    .satisfies(a -> {
+                        final Integer index = accessor.getIndex(a);
+                        assertThat(index)
+                                .satisfies(requirements::accept);
+                    })
+                    ;
         }
 
         /**
          * Verifies that the value of {@code actual.getIndex()} is {@link AbstractAssert#isEqualTo(Object) equal} to
          * specified value.
          *
-         * @param expected the value expected to be equal to {@code actual.index}.
+         * @param expected the value expected to be equal to {@code actual.getIndex()}.
          * @return {@link #myself myself}.
          */
         public SELF hasIndexEqualTo(final Object expected) {
             return hasIndexSatisfying(v -> {
-                assertThat(v).isEqualTo(expected);
+                assertThat(v)
+                        .isEqualTo(expected);
             });
         }
 
@@ -119,9 +161,9 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          * @return an assertion for the value of {@code actual.getKey()}.
          */
         public ObjectAssert<Object> key() {
-            isNotNull();
-            final Object key = accessor.getKey(actual);
-            return assertThat(key);
+            return isNotNull()
+                    .extracting(accessor::getKey, type(Object.class))
+                    ;
         }
 
         /**
@@ -161,33 +203,53 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
         public ObjectAssert<ELEMENT_KIND> kind() {
             isNotNull();
             final ELEMENT_KIND kind = accessor.getKind(actual);
-            return assertThat(kind);
+            return new ObjectAssert<>(kind);
         }
 
         /**
          * Verifies that the {@code actual.getKind()} satisfies the requirements by being accepted to specified
          * consumer.
          *
-         * @param requirements the consumer accepts and verifies {@code actual.kind}.
+         * @param requirements the consumer accepts and verifies the value of {@code actual.getKind()}.
          * @return {@link #myself myself}.
          */
         public SELF hasKindSatisfying(final Consumer<? super ELEMENT_KIND> requirements) {
-            return isNotNull().satisfies(a -> {
-                final ELEMENT_KIND kind = accessor.getKind(a);
-                assertThat(kind).satisfies(requirements::accept);
-            });
+            requireNonNull(requirements, "requirements is null");
+            return isNotNull()
+                    .satisfies(a -> {
+                        final ELEMENT_KIND kind = accessor.getKind(a);
+                        assertThat(kind)
+                                .satisfies(requirements::accept);
+                    })
+                    ;
         }
 
         /**
          * Verifies that the {@code actual.getKind()} is {@link AbstractAssert#isSameAs(Object) same} as specified
          * value.
          *
-         * @param expected the value expected to be same as {@code actual.kind}.
+         * @param expected the value expected to be same as {@code actual.getKind()}.
          * @return {@link #myself myself}.
          */
         public SELF hasKindSameAs(final Object expected) {
             return hasKindSatisfying(v -> {
-                assertThat(v).isSameAs(expected);
+                assertThat(v)
+                        .isSameAs(expected);
+            });
+        }
+
+        /**
+         * Verifies that the {@code actual.getKind().name()} is {@link AbstractAssert#isEqualTo(Object) equal} to
+         * specified value.
+         *
+         * @param expected the value expected to be equal to {@code actual.getKind().name()}.
+         * @return {@link #myself myself}.
+         */
+        public SELF hasKindNameEqualTo(final Object expected) {
+            return hasKindSatisfying(v -> {
+                final String kindName = ((Enum<?>) v).name();
+                assertThat(kindName)
+                        .isSameAs(expected);
             });
         }
 
@@ -198,24 +260,28 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          *
          * @return an assertion for the value of {@code actual.getName()}.
          */
-        public StringAssert name() {
-            isNotNull();
-            final String name = accessor.getName(actual);
-            return (StringAssert) assertThat(name);
+        public AbstractStringAssert<?> name() {
+            return isNotNull()
+                    .extracting(accessor::getName, Assertions.as(STRING))
+                    ;
         }
 
         /**
-         * Verifies that the {@code actual.getName()} satisfies the requirements by being accepted to specified
+         * Verifies that the value of {@code actual.getName()} satisfies the requirements by being accepted to specified
          * consumer.
          *
-         * @param requirements the consumer accepts and verifies {@code actual.name}.
+         * @param requirements the consumer accepts and verifies the value of {@code actual.getName()}.
          * @return {@link #myself myself}.
          */
         public SELF hasNameSatisfying(final Consumer<? super String> requirements) {
-            return isNotNull().satisfies(a -> {
-                final String name = accessor.getName(a);
-                assertThat(name).satisfies(requirements::accept);
-            });
+            requireNonNull(requirements, "requirements is null");
+            return isNotNull()
+                    .satisfies(a -> {
+                        final String name = accessor.getName(a);
+                        assertThat(name)
+                                .satisfies(requirements::accept);
+                    })
+                    ;
         }
 
         /**
@@ -237,24 +303,28 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
          *
          * @return an assertion for the value of {@code actual.isInIterable()}.
          */
-        public BooleanAssert inIterable() {
-            isNotNull();
-            final boolean inIterable = accessor.isInIterable(actual);
-            return (BooleanAssert) assertThat(inIterable);
+        public AbstractBooleanAssert<?> inIterable() {
+            return isNotNull()
+                    .extracting(accessor::isInIterable, Assertions.as(BOOLEAN))
+                    ;
         }
 
         /**
          * Verifies that the value of {@code actual.isInIterable()} satisfies the requirements by being accepted to
          * specified consumer.
          *
-         * @param requirements the consumer accepts and verifies the {@code actual.inIterable} value.
+         * @param requirements the consumer accepts and verifies the value of {@code actual.isInnIterable()}.
          * @return {@link #myself myself}.
          */
         public SELF hasInIterableSatisfying(final Consumer<? super Boolean> requirements) {
-            return isNotNull().satisfies(a -> {
-                final boolean inIterable = accessor.isInIterable(a);
-                assertThat(inIterable).satisfies(requirements::accept);
-            });
+            return isNotNull()
+                    .satisfies(a -> {
+                        final boolean inIterable = accessor.isInIterable(a);
+                        assertThat(inIterable)
+                                .satisfies(requirements::accept)
+                        ;
+                    })
+                    ;
         }
 
         /**
@@ -278,6 +348,8 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, A
                 assertThat(v).isFalse();
             });
         }
+
+        // -------------------------------------------------------------------------------------------------------------
 
         /**
          * The accessor for getting values from {@link #actual}.

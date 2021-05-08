@@ -30,10 +30,10 @@ import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * An abstract assertion class for verifying instances of {@code ConstraintViolationException}.
+ * An abstract assertion class for verifying values of {@code ConstraintViolationException} class.
  *
  * @param <SELF>                 self type parameter
- * @param <ACTUAL>               the type of actual {@code ConstraintViolationException}.
+ * @param <ACTUAL>               the type of {@code ConstraintViolationException}.
  * @param <CONSTRAINT_VIOLATION> the type of {@code ConstraintViolation}.
  */
 @SuppressWarnings({"java:S119"})
@@ -53,13 +53,16 @@ public abstract class AbstractConstraintViolationExceptionAssert<
     protected interface Accessor<CONSTRAINT_VIOLATION_EXCEPTION, CONSTRAINT_VIOLATION> {
 
         /**
-         * Returns the value of {@code getConstraintViolation()} from specified actual value.
+         * Returns the value of {@code getConstraintViolation()} from specified {@code ConstraintViolationException}
+         * value.
          *
-         * @param actual the actual {@code ConstraintViolationException} value.
-         * @return the set of constraint violations that the {@code actual} holds.
+         * @param actual the {@code ConstraintViolationException} value.
+         * @return the value of {@code actual.getConstraintViolations()}.
          */
-        Set<? extends CONSTRAINT_VIOLATION> getConstraintViolations(CONSTRAINT_VIOLATION_EXCEPTION actual);
+        Set<CONSTRAINT_VIOLATION> getConstraintViolations(CONSTRAINT_VIOLATION_EXCEPTION actual);
     }
+
+    // ---------------------------------------------------------------------------------------------------- constructors
 
     /**
      * Creates a new instance with specified actual value.
@@ -74,44 +77,52 @@ public abstract class AbstractConstraintViolationExceptionAssert<
         this.accessor = requireNonNull(accessor, "accessor is null");
     }
 
+    // --------------------------------------------------------------------------------------- getConstraintViolations()
+
     /**
-     * Returns an iterable assert for the constraint violations that {@link #actual} is holding.
+     * Returns an assertion for the value of {@code actual.getConstraintViolations()}.
      *
-     * @return an iterable assert of {@link CONSTRAINT_VIOLATION}.
+     * @return an assertion of {@code actual.getConstraintViolations()}.
      */
     public IterableAssert<CONSTRAINT_VIOLATION> constraintViolations() {
-        return new IterableAssert<>(accessor.getConstraintViolations(actual));
+        isNotNull();
+        final Set<CONSTRAINT_VIOLATION> constraintViolations = accessor.getConstraintViolations(actual);
+        return new IterableAssert<>(constraintViolations);
     }
 
     /**
-     * Verifies that the {@link #actual} has a set of constraint violations satisfies specified requirements by being
-     * accepted to specified consumer.
+     * Verifies that the value of {@code actual.getConstraintViolations()} satisfies given requirements expressed as a
+     * {@link Consumer}.
      *
-     * @param requirements the consumer accepts and verifies the set of constraint violations contained in {@link
-     *                     #actual}; must not be {@code null}.
+     * @param requirements the consumer accepts and verifies the value of {@code actual.getConstraintViolations()}.
      * @return {@link #myself self}.
      */
     public SELF hasConstraintViolationsSatisfying(
-            final Consumer<? super Set<? extends CONSTRAINT_VIOLATION>> requirements) {
+            final Consumer<? super Set<CONSTRAINT_VIOLATION>> requirements) {
         requireNonNull(requirements, "requirements is null");
-        return isNotNull().satisfies(a -> {
-            final Set<? extends CONSTRAINT_VIOLATION> constraintViolations = accessor.getConstraintViolations(a);
-            requirements.accept(constraintViolations);
-        });
+        return isNotNull()
+                .satisfies(a -> {
+                    final Set<CONSTRAINT_VIOLATION> constraintViolations = accessor.getConstraintViolations(a);
+                    requirements.accept(constraintViolations);
+                })
+                ;
     }
 
     /**
-     * Verifies that the {@link #actual}'s constraint violations {@link AbstractIterableAssert#isEqualTo(Object) is
-     * equal} to specified value.
+     * Verifies that the value of {@code actual.getConstraintViolations()} is {@link
+     * AbstractIterableAssert#isEqualTo(Object) equal} to specified value.
      *
      * @param expected the expected value of {@code actual#getConstraintViolations()}.
      * @return {@link #myself self}.
      */
     public SELF hasConstraintViolationsEqualTo(final Object expected) {
         return hasConstraintViolationsSatisfying(v -> {
-            assertThat(v).isEqualTo(expected);
+            assertThat(v)
+                    .isEqualTo(expected);
         });
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * The accessor for getting values from {@link #actual}.
