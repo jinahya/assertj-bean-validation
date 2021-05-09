@@ -206,14 +206,21 @@ public class PathAssertions {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Creates a new assertion for specified actual {@code Path} value.
+     *
+     * @param actual the value of actual {@code Path} value to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
     public static PathAssert assertThat(final Object actual) {
         return new PathAssert(actual);
     }
 
     /**
-     * Creates a new assertion for the actual value wrapped in specified wrapper.
+     * Creates a new assertion for the actual {@code Path} value wrapped in specified wrapper.
      *
-     * @param wrapper the wrapper wraps the actual value; must not be {@code null}.
+     * @param wrapper the wrapper wraps the actual {@code Path} value; must not be {@code null}.
      * @return a new assertion instance for {@code wrapper.actual}.
      */
     public static PathAssert assertThat(final PathWrapper wrapper) {

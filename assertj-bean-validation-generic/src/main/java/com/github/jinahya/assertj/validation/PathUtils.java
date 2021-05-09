@@ -30,7 +30,7 @@ final class PathUtils {
 
     static final class NodeUtils {
 
-        private static final Class<?> NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$Node");
+        static final Class<?> NODE_CLASS = getClassForSuffixOrExceptionInInitializerError("Path$Node");
 
         private static <T> T requireInstanceOfNodeClass(final T object) {
             return LangUtils.requireInstanceOf(NODE_CLASS, object);
@@ -340,7 +340,7 @@ final class PathUtils {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private static final Class<?> PATH_CLASS = getClassForSuffixOrExceptionInInitializerError("Path");
+    static final Class<?> PATH_CLASS = getClassForSuffixOrExceptionInInitializerError("Path");
 
     private static <T> T requireInstanceOfPathClass(final T object) {
         return LangUtils.requireInstanceOf(PATH_CLASS, object);
