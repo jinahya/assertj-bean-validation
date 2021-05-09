@@ -21,7 +21,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping actual values of a subclass of {@code ValidationException} class.
+ * A abstract class for wrapping values of a subclass of {@code ValidationException} class.
  *
  * @param <ACTUAL> actual value type parameter
  */

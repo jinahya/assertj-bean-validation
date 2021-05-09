@@ -22,7 +22,12 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
-public class GroupDefinitionExceptionAssertions {
+/**
+ * A class for fluently creating assertions for values of {@code GroupDefinitionException} class.
+ *
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
+public final class GroupDefinitionExceptionAssertions {
 
     public static GroupDefinitionExceptionAssert assertThat(final RuntimeException actual) {
         return new GroupDefinitionExceptionAssert(actual);

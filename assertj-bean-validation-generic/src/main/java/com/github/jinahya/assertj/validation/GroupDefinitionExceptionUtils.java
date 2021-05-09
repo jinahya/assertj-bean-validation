@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings({"java:S125"})
 final class GroupDefinitionExceptionUtils {
 
-    private static final Class<?> GROUP_DEFINITION_EXCEPTION_CLASS
+    static final Class<?> GROUP_DEFINITION_EXCEPTION_CLASS
             = getClassForSuffixOrExceptionInInitializerError("GroupDefinitionException");
 
     static boolean isGroupDefinitionException(final Object object, final boolean nullable) {

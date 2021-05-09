@@ -192,7 +192,8 @@ public class PathAssertions {
 
         public static PathAssert.ReturnValueNodeAssert assertThat(
                 final AbstractPathWrapper.AbstractReturnValueNodeWrapper<?> wrapper) {
-            return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+            requireNonNull(wrapper, "wrapper is null");
+            return assertThat(wrapper.getActual());
         }
 
         public static PathAssert.ReturnValueNodeAssert assertReturnValueNode(final Object actual) {
@@ -216,7 +217,8 @@ public class PathAssertions {
      * @return a new assertion instance for {@code wrapper.actual}.
      */
     public static PathAssert assertThat(final PathWrapper wrapper) {
-        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+        requireNonNull(wrapper, "wrapper is null");
+        return assertThat(wrapper.getActual());
     }
 
     /**

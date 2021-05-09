@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import java.util.Objects;
-
 /**
  * An abstract base class for wrapping specific type of actual values.
  *
@@ -39,26 +37,6 @@ public abstract class AbstractWrapper<ACTUAL> {
     protected AbstractWrapper(final ACTUAL actual) {
         super();
         this.actual = actual;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + '{'
-               + "actual=" + actual
-               + '}';
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        final AbstractWrapper<?> that = (AbstractWrapper<?>) obj;
-        return Objects.equals(actual, that.actual);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(actual);
     }
 
     /**

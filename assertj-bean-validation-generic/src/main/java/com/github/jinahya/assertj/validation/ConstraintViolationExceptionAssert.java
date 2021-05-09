@@ -48,7 +48,7 @@ public class ConstraintViolationExceptionAssert
      * @param actual the actual value to verify.
      */
     public ConstraintViolationExceptionAssert(final RuntimeException actual) {
-        super(requireConstraintViolationException(actual, true),
-              ConstraintViolationExceptionAssert.class, new AccessorImpl());
+        super(requireConstraintViolationException(actual, true), ConstraintViolationExceptionAssert.class,
+              new AccessorImpl());
     }
 }

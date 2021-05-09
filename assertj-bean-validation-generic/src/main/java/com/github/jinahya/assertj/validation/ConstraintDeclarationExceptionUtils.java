@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
 
 final class ConstraintDeclarationExceptionUtils {
 
-    private static final Class<?> CONSTRAINT_DECLARATION_EXCEPTION_CLASS
+    static final Class<?> CONSTRAINT_DECLARATION_EXCEPTION_CLASS
             = getClassForSuffixOrError("ConstraintDeclarationException", ExceptionInInitializerError::new);
 
     static boolean isConstraintDeclarationException(final Object object, final boolean nullable) {

@@ -33,9 +33,9 @@ public class ConstraintDeclarationExceptionAssert
     /**
      * An accessor class for getting values from an actual value of {@code ConstraintDeclarationException} class.
      */
-    protected static class AccessorImpl
+    private static class AccessorImpl
             implements Accessor<RuntimeException> {
-
+        // empty
     }
 
     /**
@@ -44,7 +44,7 @@ public class ConstraintDeclarationExceptionAssert
      * @param actual the actual value to verify.
      */
     public ConstraintDeclarationExceptionAssert(final RuntimeException actual) {
-        super(requireConstraintDeclarationException(actual, true),
-              ConstraintDeclarationExceptionAssert.class, new AccessorImpl());
+        super(requireConstraintDeclarationException(actual, true), ConstraintDeclarationExceptionAssert.class,
+              new AccessorImpl());
     }
 }

@@ -31,7 +31,7 @@ import static com.github.jinahya.assertj.validation.ConstraintViolationUtils.req
 public class ConstraintViolationAssert<T>
         extends AbstractConstraintViolationAssert<ConstraintViolationAssert<T>, Object, Object, T> {
 
-    protected static class AccessorImpl<T>
+    private static class AccessorImpl<T>
             implements Accessor<Object, Object, T> {
 
         @Override

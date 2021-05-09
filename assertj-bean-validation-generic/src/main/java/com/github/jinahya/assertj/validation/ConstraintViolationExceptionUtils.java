@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings({"java:S119", "java:S125"})
 final class ConstraintViolationExceptionUtils {
 
-    private static final Class<?> CONSTRAINT_VIOLATION_EXCEPTION_CLASS
+    static final Class<?> CONSTRAINT_VIOLATION_EXCEPTION_CLASS
             = getClassForSuffixOrError("ConstraintViolationException", ExceptionInInitializerError::new);
 
     private static boolean isConstraintViolationException(final Object object, final boolean nullable) {

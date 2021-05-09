@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
-public class ConstraintDefinitionExceptionAssertions {
+public final class ConstraintDefinitionExceptionAssertions {
 
     public static ConstraintDefinitionExceptionAssert assertThat(final RuntimeException actual) {
         return new ConstraintDefinitionExceptionAssert(actual);
@@ -30,7 +30,8 @@ public class ConstraintDefinitionExceptionAssertions {
 
     public static ConstraintDefinitionExceptionAssert assertThat(
             final AbstractWrapper<? extends RuntimeException> wrapper) {
-        return assertThat(requireNonNull(wrapper, "wrapper is null").getActual());
+        requireNonNull(wrapper, "wrapper is null");
+        return assertThat(wrapper.getActual());
     }
 
     public static ConstraintDefinitionExceptionAssert assertConstraintDefinitionException(

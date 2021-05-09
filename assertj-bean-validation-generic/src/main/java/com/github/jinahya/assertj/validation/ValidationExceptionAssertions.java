@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import static java.util.Objects.requireNonNull;
 
-public class ValidationExceptionAssertions {
+public final class ValidationExceptionAssertions {
 
     public static ValidationExceptionAssert assertThat(final RuntimeException actual) {
         return new ValidationExceptionAssert(actual);

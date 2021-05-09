@@ -75,7 +75,7 @@ public abstract class AbstractValidationExceptionAssert<
     protected abstract SELF isConstraintDefinitionException();
 
     /**
-     * Verifies that the {@link #actual} is an instance of {@code ConstraintDefinisionException} and returns an assert
+     * Verifies that the {@link #actual} is an instance of {@code ConstraintDefinitionException} and returns an assert
      * of {@code ConstraintDefinitionException} for subsequent verifications.
      *
      * @param <T> self type parameter
@@ -84,12 +84,38 @@ public abstract class AbstractValidationExceptionAssert<
     public abstract <T extends AbstractConstraintDefinitionExceptionAssert<T, ?>> T asConstraintDefinitionException();
 
     // ------------------------------------------------------------------------------------ ConstraintViolationException
+
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code ConstraintViolationException}.
+     *
+     * @return {@link #myself self}.
+     */
     protected abstract SELF isConstraintViolationException();
 
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code ConstraintViolationException} and returns an assert of
+     * {@code ConstraintViolationException} for subsequent verifications.
+     *
+     * @param <T> self type parameter
+     * @return {@link #myself self}.
+     */
     public abstract <T extends AbstractConstraintViolationExceptionAssert<T, ?, ?>> T asConstraintViolationException();
 
     // ---------------------------------------------------------------------------------------- GroupDefinitionException
+
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code GroupDefinitionException}.
+     *
+     * @return {@link #myself self}.
+     */
     protected abstract SELF isGroupDefinitionException();
 
+    /**
+     * Verifies that the {@link #actual} is an instance of {@code GroupDefinitionException} and returns an assert of
+     * {@code GroupDefinitionException} for subsequent verifications.
+     *
+     * @param <T> self type parameter
+     * @return {@link #myself self}.
+     */
     public abstract <T extends AbstractGroupDefinitionExceptionAssert<T, ?>> T asGroupDefinitionException();
 }

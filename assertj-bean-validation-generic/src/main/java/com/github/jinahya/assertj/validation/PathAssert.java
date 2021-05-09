@@ -24,6 +24,7 @@ import org.assertj.core.api.ClassBasedNavigableIterableAssert;
 
 import java.util.List;
 
+import static com.github.jinahya.assertj.validation.PathUtils.BeanNodeUtils.requireNullOrInstanceOfBeanNodeClass;
 import static com.github.jinahya.assertj.validation.PathUtils.NodeUtils.requireNullOrInstanceOfNodeClass;
 import static com.github.jinahya.assertj.validation.PathUtils.PropertyNodeUtils.requireNullOrInstanceOfPropertyNodeClass;
 import static com.github.jinahya.assertj.validation.PathUtils.requireNullOrInstanceOfPathClass;
@@ -168,12 +169,21 @@ public class PathAssert
         }
     }
 
+    /**
+     * An assertion class for verifying values of {@code BeanNode} class.
+     *
+     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+     */
     public static class BeanNodeAssert
             extends AbstractBeanNodeAssert<BeanNodeAssert, Object, Object> {
 
-        public BeanNodeAssert(Object actual) {
-            super(PathUtils.BeanNodeUtils.requireNullOrInstanceOfBeanNodeClass(actual), BeanNodeAssert.class,
-                  new BeanNodeAssertDelegateImpl());
+        /**
+         * Creates a new instance for verifying specified actual value.
+         *
+         * @param actual the actual value to verify.
+         */
+        public BeanNodeAssert(final Object actual) {
+            super(requireNullOrInstanceOfBeanNodeClass(actual), BeanNodeAssert.class, new BeanNodeAssertDelegateImpl());
         }
     }
 
@@ -366,22 +376,22 @@ public class PathAssert
     }
 
     @Override
-    public MethodNodeAssert methodNode(int index) {
+    public MethodNodeAssert methodNode(final int index) {
         return (MethodNodeAssert) super.methodNode(index);
     }
 
     @Override
-    public ParameterNodeAssert parameterNode(int index) {
+    public ParameterNodeAssert parameterNode(final int index) {
         return (ParameterNodeAssert) super.parameterNode(index);
     }
 
     @Override
-    public PropertyNodeAssert propertyNode(int index) {
+    public PropertyNodeAssert propertyNode(final int index) {
         return (PropertyNodeAssert) super.propertyNode(index);
     }
 
     @Override
-    public ReturnValueNodeAssert returnValueNode(int index) {
+    public ReturnValueNodeAssert returnValueNode(final int index) {
         return (ReturnValueNodeAssert) super.returnValueNode(index);
     }
 }

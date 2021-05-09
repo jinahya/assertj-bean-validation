@@ -24,7 +24,7 @@ import static com.github.jinahya.assertj.validation.ReflectionUtils.getClassForS
 
 final class ValidationExceptionUtils {
 
-    private static final Class<?> VALIDATION_EXCEPTION_CLASS
+    static final Class<?> VALIDATION_EXCEPTION_CLASS
             = getClassForSuffixOrExceptionInInitializerError("ValidationException");
 
     static boolean isValidationException(final Object object, final boolean nullable) {

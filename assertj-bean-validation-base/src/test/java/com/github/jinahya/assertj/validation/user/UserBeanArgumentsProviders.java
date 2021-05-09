@@ -34,7 +34,10 @@ public final class UserBeanArgumentsProviders {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
-            return IntStream.range(0, 16).mapToObj(i -> User.newInvalidInstance()).map(Arguments::of);
+            return IntStream.range(0, 16)
+                    .mapToObj(i -> User.newInvalidInstance())
+                    .map(Arguments::of)
+                    ;
         }
     }
 
@@ -43,7 +46,10 @@ public final class UserBeanArgumentsProviders {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
-            return IntStream.range(0, 16).mapToObj(i -> User.newInstanceWithInvalidAge()).map(Arguments::of);
+            return IntStream.range(0, 16)
+                    .mapToObj(i -> User.newInstanceWithInvalidAge())
+                    .map(Arguments::of)
+                    ;
         }
     }
 
@@ -52,7 +58,9 @@ public final class UserBeanArgumentsProviders {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
-            return IntStream.range(0, 16).mapToObj(i -> User.newInstanceWithInvalidName()).map(Arguments::of);
+            return IntStream.range(0, 16)
+                    .mapToObj(i -> User.newInstanceWithInvalidName())
+                    .map(Arguments::of);
         }
     }
 
@@ -61,7 +69,9 @@ public final class UserBeanArgumentsProviders {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
-            return IntStream.range(0, 16).mapToObj(i -> User.newValidInstance()).map(Arguments::of);
+            return IntStream.range(0, 16)
+                    .mapToObj(i -> User.newValidInstance())
+                    .map(Arguments::of);
         }
     }
 

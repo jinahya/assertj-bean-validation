@@ -31,7 +31,7 @@ public class ConstraintDefinitionExceptionAssert
     }
 
     public ConstraintDefinitionExceptionAssert(final RuntimeException actual) {
-        super(requireConstraintDefinitionException(actual, true),
-              ConstraintDefinitionExceptionAssert.class, new AccessorImpl());
+        super(requireConstraintDefinitionException(actual, true), ConstraintDefinitionExceptionAssert.class,
+              new AccessorImpl());
     }
 }
