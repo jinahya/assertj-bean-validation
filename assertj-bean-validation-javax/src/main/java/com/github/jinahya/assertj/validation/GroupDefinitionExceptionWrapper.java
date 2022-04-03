@@ -20,33 +20,33 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import javax.validation.GroupDefinitionException;
+
 /**
- * A class for wrapping a property value.
+ * A class for wrapping actual values of {@link GroupDefinitionException}.
  *
- * @param <ACTUAL> property type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
-public class ValueWrapper<ACTUAL>
-        extends AbstractWrapper<ACTUAL> {
+public class GroupDefinitionExceptionWrapper
+        extends ExtendedValidationExceptionWrapper<GroupDefinitionException> {
 
     /**
-     * Creates a new instance wraps specified property value.
+     * Creates a new instance wraps specified actual value.
      *
-     * @param <ACTUAL> type parameter
-     * @param actual   the value to wrap; may be {@code null}.
+     * @param actual the actual value to wrap.
      * @return a new instance wraps {@code actual}.
+     * @see GroupDefinitionExceptionAssertions#assertThat(AbstractWrapper)
      */
-    public static <ACTUAL> ValueWrapper<ACTUAL> value(final ACTUAL actual) {
-        return new ValueWrapper<>(actual);
+    public static GroupDefinitionExceptionWrapper groupDefinitionException(final GroupDefinitionException actual) {
+        return new GroupDefinitionExceptionWrapper(actual);
     }
 
     /**
-     * Creates a new instance wraps specified property value.
+     * Creates a new instance with specified actual value.
      *
-     * @param actual the property value to wrap.
+     * @param actual the actual value to wrap.
      */
-    private ValueWrapper(final ACTUAL actual) {
+    private GroupDefinitionExceptionWrapper(final GroupDefinitionException actual) {
         super(actual);
     }
 }

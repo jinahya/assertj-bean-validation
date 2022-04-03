@@ -20,33 +20,29 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import javax.validation.ConstraintDefinitionException;
+
 /**
- * A class for wrapping a property value.
+ * A class for wrapping an actual values of {@link ConstraintDefinitionException}.
  *
- * @param <ACTUAL> property type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
-public class ValueWrapper<ACTUAL>
-        extends AbstractWrapper<ACTUAL> {
+public class ConstraintDefinitionExceptionWrapper
+        extends ExtendedValidationExceptionWrapper<ConstraintDefinitionException> {
 
     /**
-     * Creates a new instance wraps specified property value.
+     * Creates a new instance wraps specified actual value.
      *
-     * @param <ACTUAL> type parameter
-     * @param actual   the value to wrap; may be {@code null}.
+     * @param actual the actual value to wrap.
      * @return a new instance wraps {@code actual}.
+     * @see ConstraintDefinitionExceptionAssertions#assertThat(AbstractWrapper)
      */
-    public static <ACTUAL> ValueWrapper<ACTUAL> value(final ACTUAL actual) {
-        return new ValueWrapper<>(actual);
+    public static ConstraintDefinitionExceptionWrapper constraintDefinitionException(
+            final ConstraintDefinitionException actual) {
+        return new ConstraintDefinitionExceptionWrapper(actual);
     }
 
-    /**
-     * Creates a new instance wraps specified property value.
-     *
-     * @param actual the property value to wrap.
-     */
-    private ValueWrapper(final ACTUAL actual) {
+    private ConstraintDefinitionExceptionWrapper(final ConstraintDefinitionException actual) {
         super(actual);
     }
 }

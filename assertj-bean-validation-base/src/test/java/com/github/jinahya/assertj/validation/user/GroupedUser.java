@@ -25,9 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-import javax.validation.groups.Default;
 import java.util.Objects;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
@@ -98,11 +96,11 @@ class GroupedUser {
         return Objects.hash(name, age);
     }
 
-    @jakarta.validation.constraints.NotBlank(groups = {Default.class, NameOnly.class})
-    @javax.validation.constraints.NotBlank(groups = {Default.class, NameOnly.class})
+    //    @jakarta.validation.constraints.NotBlank(groups = {Default.class, NameOnly.class})
+//    @javax.validation.constraints.NotBlank(groups = {Default.class, NameOnly.class})
     private String name;
 
-    @jakarta.validation.constraints.PositiveOrZero(groups = {Default.class, AgeOnly.class})
-    @javax.validation.constraints.PositiveOrZero(groups = {Default.class, AgeOnly.class})
+    //    @jakarta.validation.constraints.PositiveOrZero(groups = {Default.class, AgeOnly.class})
+//    @javax.validation.constraints.PositiveOrZero(groups = {Default.class, AgeOnly.class})
     private int age;
 }

@@ -12,7 +12,8 @@
 
 An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
 
-This module works for both `javax.validation.*` and `jakarta.validation.*` without directly (nor transitively) depending on any of these APIs.
+This module works for both `javax.validation.*` and `jakarta.validation.*` without directly (nor transitively) depending
+on any of these APIs.
 
 ## Usages
 
@@ -36,7 +37,8 @@ assertThat(bean(user)).isValid(); // equivalent
 
 #### `isNotValid()`, `isNotValid(Consumer)`
 
-Verifies that the `actual` value is not valid and, optionally, accepts a non-empty set of `ConstraintViolation`s to specified consumer.
+Verifies that the `actual` value is not valid and, optionally, accepts a non-empty set of `ConstraintViolation`s to
+specified consumer.
 
 ```java
 user.setName(null);
@@ -133,7 +135,8 @@ assertBeanProperty(-1).isValidFor(User.class, "age");      // fails
 
 #### `isValidFor(Class<?>, String)`, `isNotValidFor(Class<?>, String, Consumer)`
 
-Verifies that the `actual` value is not valid for a property of specified name of specified class and, optionally, accepts a non-empty set of `ConstraintViolation`s to specified consumer. 
+Verifies that the `actual` value is not valid for a property of specified name of specified class and, optionally,
+accepts a non-empty set of `ConstraintViolation`s to specified consumer.
 
 ```java
 assertBeanProperty("John").isNotValidFor(User.class, "name");            // fails

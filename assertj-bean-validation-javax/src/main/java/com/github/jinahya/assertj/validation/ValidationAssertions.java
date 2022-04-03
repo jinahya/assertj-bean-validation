@@ -21,32 +21,31 @@ package com.github.jinahya.assertj.validation;
  */
 
 /**
- * A class for wrapping a property value.
+ * A utility class for fluently creating instances of {@link BeanAssertImpl}.
  *
- * @param <ACTUAL> property type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
-public class ValueWrapper<ACTUAL>
-        extends AbstractWrapper<ACTUAL> {
+public final class ValidationAssertions {
 
     /**
-     * Creates a new instance wraps specified property value.
+     * Creates a new assertion instance for verifying specified bean object.
      *
-     * @param <ACTUAL> type parameter
-     * @param actual   the value to wrap; may be {@code null}.
-     * @return a new instance wraps {@code actual}.
+     * @param <ACTUAL> actual value type parameter
+     * @param actual   the bean object to be verified.
+     * @return a new assertion instance for {@code object}.
      */
-    public static <ACTUAL> ValueWrapper<ACTUAL> value(final ACTUAL actual) {
-        return new ValueWrapper<>(actual);
+    public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertBean(final ACTUAL actual) {
+        return new BeanAssertImpl<>(actual);
+    }
+
+    public static <ACTUAL> AbstractValueAssert<?, ACTUAL> assertValue(final ACTUAL actual) {
+        return new ValueAssertImpl<>(actual);
     }
 
     /**
-     * Creates a new instance wraps specified property value.
-     *
-     * @param actual the property value to wrap.
+     * Creates a new instance.
      */
-    private ValueWrapper(final ACTUAL actual) {
-        super(actual);
+    private ValidationAssertions() {
+        throw new AssertionError("instantiation is not allowed");
     }
 }

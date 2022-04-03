@@ -96,11 +96,11 @@ public class User {
         return Objects.hash(name, age);
     }
 
-    @jakarta.validation.constraints.NotBlank
-    @javax.validation.constraints.NotBlank
+    //    @jakarta.validation.constraints.NotBlank
+//    @javax.validation.constraints.NotBlank
     private String name;
 
-    @jakarta.validation.constraints.PositiveOrZero
-    @javax.validation.constraints.PositiveOrZero
+    //    @jakarta.validation.constraints.PositiveOrZero
+//    @javax.validation.constraints.PositiveOrZero
     private int age;
 }

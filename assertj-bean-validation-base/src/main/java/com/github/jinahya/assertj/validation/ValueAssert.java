@@ -20,33 +20,23 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * A class for wrapping a property value.
+ * An assertion class for validating values against constraints defined on property of specified bean type.
  *
- * @param <ACTUAL> property type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
-public class ValueWrapper<ACTUAL>
-        extends AbstractWrapper<ACTUAL> {
+interface ValueAssert<SELF extends ValueAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+        extends ValidationAssert<SELF, VALIDATOR> {
 
     /**
-     * Creates a new instance wraps specified property value.
+     * Verifies that the {@code actual} would be valid for specified property of specified class.
      *
-     * @param <ACTUAL> type parameter
-     * @param actual   the value to wrap; may be {@code null}.
-     * @return a new instance wraps {@code actual}.
+     * @param beanType     the class whose all constraints placed on specified property are examined.
+     * @param propertyName the name of the property.
+     * @param <T>          bean type parameter
+     * @return this assertion object.
      */
-    public static <ACTUAL> ValueWrapper<ACTUAL> value(final ACTUAL actual) {
-        return new ValueWrapper<>(actual);
-    }
-
-    /**
-     * Creates a new instance wraps specified property value.
-     *
-     * @param actual the property value to wrap.
-     */
-    private ValueWrapper(final ACTUAL actual) {
-        super(actual);
-    }
+    <T> SELF isValidFor(@NotNull Class<T> beanType, @NotNull String propertyName);
 }
