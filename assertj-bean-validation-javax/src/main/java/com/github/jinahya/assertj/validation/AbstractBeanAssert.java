@@ -25,40 +25,81 @@ import org.jetbrains.annotations.NotNull;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.groups.Default;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings({"java:S119"})
-public class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractBeanAssertBase<SELF, ACTUAL, Validator, ConstraintViolation<ACTUAL>> {
+public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
+        extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
 
     protected AbstractBeanAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
     @Override
-    protected Validator defaultValidator() {
-        if (defaultValidator == null) {
-            defaultValidator = Validation.buildDefaultValidatorFactory().getValidator();
-        }
-        return defaultValidator;
+    protected @NotNull Validator getValidator() {
+        return Optional.ofNullable(super.getValidator())
+                .orElseGet(() -> {
+                    setValidator(Validation.buildDefaultValidatorFactory().getValidator());
+                    return getValidator();
+                });
     }
 
-    @Override
-    protected Set<ConstraintViolation<ACTUAL>> validate() {
-        isNotNull();
-        return validator().validate(actual, groups());
+    public @NotNull SELF isValid(final @NotNull Consumer<? super ConstraintViolation<ACTUAL>> consumer) {
+        return isNotNull()
+                .satisfies(a -> {
+                    final Validator validator = getValidator();
+                    final Class<?>[] groups = getGroups();
+                    final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
+                    violations.forEach(consumer);
+                    assertThat(violations)
+                            .as("validating actual...")
+                            .withFailMessage("expected no constraint violations but got %s", violations)
+                            .isEmpty();
+                })
+                ;
     }
 
-    @Override
-    protected @NotNull Class<?> defaultGroup() {
-        return Default.class;
+    public @NotNull SELF isValid() {
+        return isValid(
+                v -> {
+                }
+        );
     }
 
-    @Override
-    protected Set<ConstraintViolation<ACTUAL>> validateProperty(final @NotNull String propertyName) {
-        return null;
+    /**
+     * Verifies that all constraints placed on the property of specified name, of {@link #actual}, are validated.
+     *
+     * @param propertyName the name of the property to validate.
+     * @param consumer     the consumer accepts constraint violations.
+     * @return this assertion object.
+     */
+    public @NotNull SELF hasValidProperty(final @NotNull String propertyName,
+                                          final @NotNull Consumer<? super ConstraintViolation<ACTUAL>> consumer) {
+        return isNotNull()
+                .satisfies(a -> {
+                    final Validator validator = getValidator();
+                    final Class<?>[] groups = getGroups();
+                    final Set<ConstraintViolation<ACTUAL>> violations
+                            = validator.validateProperty(actual, propertyName, groups);
+                    violations.forEach(consumer);
+                    assertThat(violations)
+                            .as("validating %s...", propertyName)
+                            .withFailMessage("expected no constraint violations but got %s", violations)
+                            .isEmpty();
+                })
+                ;
     }
 
-    private Validator defaultValidator;
+    protected @NotNull SELF hasValidProperty(final @NotNull String propertyName) {
+        return hasValidProperty(
+                propertyName,
+                v -> {
+                    // does nothing.
+                }
+        );
+    }
 }

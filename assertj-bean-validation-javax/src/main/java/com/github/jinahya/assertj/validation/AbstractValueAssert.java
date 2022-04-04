@@ -25,8 +25,11 @@ import org.jetbrains.annotations.NotNull;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.groups.Default;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * An assertion class for validating a value against constraints defined on a bean property.
@@ -35,25 +38,45 @@ import java.util.Set;
  */
 @SuppressWarnings({"java:S119"})
 public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractValueAssertBase<SELF, ACTUAL, Validator, ConstraintViolation<?>> {
+        extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
 
     protected AbstractValueAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
     @Override
-    protected Validator defaultValidator() {
-        return Validation.buildDefaultValidatorFactory().getValidator();
+    protected @NotNull Validator getValidator() {
+        return Optional.ofNullable(super.getValidator())
+                .orElseGet(() -> {
+                    setValidator(Validation.buildDefaultValidatorFactory().getValidator());
+                    return getValidator();
+                });
     }
 
-    @Override
-    protected @NotNull Class<?> defaultGroup() {
-        return Default.class;
+    public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName,
+                                        final @NotNull Consumer<? super ConstraintViolation<T>> consumer) {
+        return isNotNull()
+                .satisfies(a -> {
+                    final Validator validator = getValidator();
+                    final Class<?>[] groups = getGroups();
+                    final Set<ConstraintViolation<T>> violations
+                            = validator.validateValue(beanType, propertyName, actual, groups);
+                    violations.forEach(consumer);
+                    assertThat(violations)
+                            .as("validating actual against %s#%s", beanType, propertyName)
+                            .withFailMessage("expected no constraint violations but got %s", violations)
+                            .isEmpty();
+                })
+                ;
     }
 
-    @Override
-    protected <T> Set<? extends ConstraintViolation<?>> validateValue(
-            final @NotNull Class<T> beanType, final @NotNull String propertyName) {
-        return null;
+    public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
+        return isValidFor(
+                beanType,
+                propertyName,
+                v -> {
+                    // does nothing.
+                }
+        );
     }
 }

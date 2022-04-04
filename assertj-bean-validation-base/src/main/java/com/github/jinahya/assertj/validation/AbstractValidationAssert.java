@@ -20,63 +20,68 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.AbstractAssert;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 abstract class AbstractValidationAssert<
         SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
         ACTUAL,
         VALIDATOR>
-        extends AbstractObjectAssert<SELF, ACTUAL>
+        extends AbstractAssert<SELF, ACTUAL>
         implements ValidationAssert<SELF, VALIDATOR> {
 
     protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
-    @SuppressWarnings({"unchecked"})
-    @Override
-    public SELF usingValidator(final VALIDATOR validator) {
+    protected VALIDATOR getValidator() {
+        return validator;
+    }
+
+    protected void setValidator(VALIDATOR validator) {
         this.validator = validator;
-        return (SELF) this;
     }
-
-    protected VALIDATOR validator() {
-        return Optional.ofNullable(validator)
-                .orElseGet(this::defaultValidator);
-    }
-
-    protected abstract @NotNull VALIDATOR defaultValidator();
 
     @SuppressWarnings({"unchecked"})
     @Override
-    public SELF targetingGroups(final Class<?>... groups) {
-        this.groups = groups;
+    public @NotNull SELF usingValidator(final @Nullable VALIDATOR validator) {
+        setValidator(validator);
         return (SELF) this;
     }
 
-    protected abstract @NotNull Class<?> defaultGroup();
+    protected @Nullable Class<?>[] getGroups() {
+        return groups.toArray(new Class<?>[0]);
+    }
 
-    protected Class<?>[] groups() {
-        return Optional.ofNullable(groups)
-                .map(v -> Arrays.copyOf(v, v.length))
-                .orElseGet(() -> new Class<?>[] {defaultGroup()});
+    protected void setGroups(final @Nullable Class<?>[] groups) {
+        this.groups.clear();
+        if (groups != null) {
+            Arrays.stream(groups)
+                    .filter(Objects::nonNull)
+                    .forEach(this.groups::add);
+        }
+    }
+
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public @NotNull SELF targetingGroups(final Class<?>... groups) {
+        setGroups(groups);
+        return (SELF) this;
     }
 
     /**
      * The validator being used.
-     *
-     * @see #validator()
      */
     private VALIDATOR validator;
 
     /**
      * The targeting groups being used.
-     *
-     * @see #groups()
      */
-    private Class<?>[] groups;
+    private final Set<@NotNull Class<?>> groups = new HashSet<>();
 }

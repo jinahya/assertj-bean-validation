@@ -32,9 +32,24 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 interface ValidationAssert<SELF extends ValidationAssert<SELF, VALIDATOR>, VALIDATOR> {
 
-    SELF usingValidator(VALIDATOR validator);
+    /**
+     * Sets this assertion object to use specified validator instead of default validator.
+     *
+     * @param validator the validator to use; may be {@code null}.
+     * @return this assertion object.
+     */
+    @NotNull SELF usingValidator(@Nullable VALIDATOR validator);
 
-    SELF targetingGroups(Class<?>... groups);
+    /**
+     * Sets this assertion object to use specified groups targeted for validation.
+     *
+     * @param groups the validation groups to use; may be {@code null} or empty.
+     * @return this assertion object.
+     */
+    @NotNull SELF targetingGroups(@Nullable Class<?>... groups);
 }

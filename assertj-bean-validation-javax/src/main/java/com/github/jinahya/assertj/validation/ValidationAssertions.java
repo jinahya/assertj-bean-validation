@@ -25,19 +25,27 @@ package com.github.jinahya.assertj.validation;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
+@SuppressWarnings({"java:S119"})
 public final class ValidationAssertions {
 
     /**
-     * Creates a new assertion instance for verifying specified bean object.
+     * Creates a new assertion object for verifying specified bean object.
      *
-     * @param <ACTUAL> actual value type parameter
-     * @param actual   the bean object to be verified.
-     * @return a new assertion instance for {@code object}.
+     * @param <ACTUAL> type of actual bean
+     * @param actual   the actual bean object to verify.
+     * @return a new assertion instance for {@code actual}.
      */
     public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertBean(final ACTUAL actual) {
         return new BeanAssertImpl<>(actual);
     }
 
+    /**
+     * Creates a new assertion object for verifying specified value against a property name of specific bean type.
+     *
+     * @param <ACTUAL> type of actual value
+     * @param actual   the actual property value to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
     public static <ACTUAL> AbstractValueAssert<?, ACTUAL> assertValue(final ACTUAL actual) {
         return new ValueAssertImpl<>(actual);
     }

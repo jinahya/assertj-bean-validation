@@ -1,11 +1,10 @@
 package com.github.jinahya.assertj.validation;
 
 public abstract class AbstractBeanAssertTest<
-        SELF extends AbstractBeanAssertBase<SELF, ACTUAL, VALIDATOR, CONSTRAINT_VIOLATION>,
-        ACTUAL,
+        SELF extends AbstractBeanAssertBase<SELF, VALIDATOR, CONSTRAINT_VIOLATION>,
         VALIDATOR,
         CONSTRAINT_VIOLATION>
-        extends AbstractValidationAssertTest<SELF, ACTUAL, VALIDATOR> {
+        extends AbstractValidationAssertTest<SELF, VALIDATOR> {
 
     protected AbstractBeanAssertTest(final Class<SELF> assertClass) {
         super(assertClass);
