@@ -46,11 +46,17 @@ interface BeanAssert<
     SELF targetingGroups(Class<?>... groups);
 
     /**
-     * Verifies that the {@code actual} is valid.
+     * Verifies that the {@code actual} bean is valid.
      *
      * @return this assertion object.
      */
     SELF isValid();
 
+    /**
+     * Verifies that the {@code actual} bean has as valid property value of specified name.
+     *
+     * @param propertyName the name of the property to verify.
+     * @return this assertion object.
+     */
     SELF hasValidProperty(@NotNull String propertyName);
 }
