@@ -32,10 +32,13 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-interface ValidationAssert<SELF extends ValidationAssert<SELF, VALIDATOR>, VALIDATOR> {
+@SuppressWarnings({"java:S119"})
+interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+        extends Assert<SELF, ACTUAL> {
 
     /**
      * Sets this assertion object to use specified validator instead of default validator.

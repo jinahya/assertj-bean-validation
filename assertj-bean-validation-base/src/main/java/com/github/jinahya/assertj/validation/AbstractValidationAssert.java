@@ -29,36 +29,62 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@SuppressWarnings({"java:S119"})
 abstract class AbstractValidationAssert<
         SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
         ACTUAL,
         VALIDATOR>
         extends AbstractAssert<SELF, ACTUAL>
-        implements ValidationAssert<SELF, VALIDATOR> {
+        implements ValidationAssert<SELF, ACTUAL, VALIDATOR> {
 
     protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
-    protected VALIDATOR getValidator() {
+    /**
+     * Returns the validator configured to use.
+     *
+     * @return the validator configured to use.
+     */
+    protected @Nullable VALIDATOR getValidator() {
         return validator;
     }
 
-    protected void setValidator(VALIDATOR validator) {
+    /**
+     * Replaces the validator, currently configured to use, with specified value.
+     *
+     * @param validator new validator to use.
+     */
+    protected void setValidator(@Nullable VALIDATOR validator) {
         this.validator = validator;
     }
 
-    @SuppressWarnings({"unchecked"})
+    /**
+     * Configure this assertion object to use specified validator.
+     *
+     * @param validator the validator to use; may be {@code null}.
+     * @return this assertion object.
+     */
     @Override
     public @NotNull SELF usingValidator(final @Nullable VALIDATOR validator) {
         setValidator(validator);
-        return (SELF) this;
+        return myself;
     }
 
-    protected @Nullable Class<?>[] getGroups() {
+    /**
+     * Returns an array of targeting groups.
+     *
+     * @return an array of targeting groups; may be {@code empty}.
+     */
+    protected @NotNull Class<?>[] getGroups() {
         return groups.toArray(new Class<?>[0]);
     }
 
+    /**
+     * Replaces current targeting groups with specified value.
+     *
+     * @param groups new targeting groups; may be {@code null}.
+     */
     protected void setGroups(final @Nullable Class<?>[] groups) {
         this.groups.clear();
         if (groups != null) {
@@ -68,11 +94,16 @@ abstract class AbstractValidationAssert<
         }
     }
 
-    @SuppressWarnings({"unchecked"})
+    /**
+     * Configure this assertion object to use specified groups targeted for validation.
+     *
+     * @param groups the groups targeted for validation; may be {@code null} or empty.
+     * @return this assertion object.
+     */
     @Override
-    public @NotNull SELF targetingGroups(final Class<?>... groups) {
+    public @NotNull SELF targetingGroups(final @Nullable Class<?>... groups) {
         setGroups(groups);
-        return (SELF) this;
+        return myself;
     }
 
     /**

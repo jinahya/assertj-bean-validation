@@ -47,12 +47,20 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
     @Override
     protected @NotNull Validator getValidator() {
         return Optional.ofNullable(super.getValidator())
-                .orElseGet(() -> {
-                    setValidator(Validation.buildDefaultValidatorFactory().getValidator());
-                    return getValidator();
-                });
+                .orElseGet(Validation.buildDefaultValidatorFactory()::getValidator);
     }
 
+    /**
+     * Verifies that the {@link #actual} is valid for the property of specified name of specified bean type while
+     * accepting constraint violations, if any populated, to specified consumer.
+     *
+     * @param beanType     the bean type.
+     * @param propertyName the name of the property.
+     * @param consumer     the consumer accepts constraint violations.
+     * @param <T>          type of the bean
+     * @return this assertion instance.
+     * @see #isValidFor(Class, String)
+     */
     public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName,
                                         final @NotNull Consumer<? super ConstraintViolation<T>> consumer) {
         return isNotNull()
@@ -70,6 +78,15 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
                 ;
     }
 
+    /**
+     * Verifies that the {@link #actual} is valid for the property of specified name of specified bean type.
+     *
+     * @param beanType     the bean type.
+     * @param propertyName the name of the property.
+     * @param <T>          type of the bean
+     * @return this assertion instance.
+     * @see #isValidFor(Class, String, Consumer)
+     */
     public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
         return isValidFor(
                 beanType,

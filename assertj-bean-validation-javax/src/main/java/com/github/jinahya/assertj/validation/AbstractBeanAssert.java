@@ -39,15 +39,27 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
         super(actual, selfType);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     * @implNote Overridden, if not configured yet, to return an instance created from {@link
+     * Validation#buildDefaultValidatorFactory() default validator factory}.
+     * @see Validation#buildDefaultValidatorFactory()
+     */
     @Override
     protected @NotNull Validator getValidator() {
         return Optional.ofNullable(super.getValidator())
-                .orElseGet(() -> {
-                    setValidator(Validation.buildDefaultValidatorFactory().getValidator());
-                    return getValidator();
-                });
+                .orElseGet(Validation.buildDefaultValidatorFactory()::getValidator);
     }
 
+    /**
+     * Verifies that the {@link #actual} bean object is valid while accepting constraint violations, if any populated,
+     * to specified consumer.
+     *
+     * @return this assertion object.
+     * @see #isValid()
+     */
     public @NotNull SELF isValid(final @NotNull Consumer<? super ConstraintViolation<ACTUAL>> consumer) {
         return isNotNull()
                 .satisfies(a -> {
@@ -56,13 +68,20 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                     final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
                     violations.forEach(consumer);
                     assertThat(violations)
-                            .as("validating actual...")
+                            .as("check constraint violations")
                             .withFailMessage("expected no constraint violations but got %s", violations)
                             .isEmpty();
                 })
                 ;
     }
 
+    /**
+     * Verifies that the {@link #actual} bean object is valid.
+     *
+     * @return this assertion object.
+     * @apiNote This method invokes {@link #isValid(Consumer)} method with a consumer does nothing.
+     * @see #isValid(Consumer)
+     */
     public @NotNull SELF isValid() {
         return isValid(
                 v -> {
@@ -73,9 +92,10 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
     /**
      * Verifies that all constraints placed on the property of specified name, of {@link #actual}, are validated.
      *
-     * @param propertyName the name of the property to validate.
+     * @param propertyName the name of the property whose constraints are validated.
      * @param consumer     the consumer accepts constraint violations.
      * @return this assertion object.
+     * @see #hasValidProperty(String)
      */
     public @NotNull SELF hasValidProperty(final @NotNull String propertyName,
                                           final @NotNull Consumer<? super ConstraintViolation<ACTUAL>> consumer) {
@@ -87,14 +107,24 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                             = validator.validateProperty(actual, propertyName, groups);
                     violations.forEach(consumer);
                     assertThat(violations)
-                            .as("validating %s...", propertyName)
-                            .withFailMessage("expected no constraint violations but got %s", violations)
+                            .as("check constraint violations")
+                            .withFailMessage("expected no constraint violations on the property named %s but got %s",
+                                             propertyName, violations)
                             .isEmpty();
                 })
                 ;
     }
 
-    protected @NotNull SELF hasValidProperty(final @NotNull String propertyName) {
+    /**
+     * Verifies that all constraints placed on the property of specified name, of {@link #actual}, are validated.
+     *
+     * @param propertyName the name of the property whose constraints are validated.
+     * @return this assertion object.
+     * @apiNote This method invokes {@link #hasValidProperty(String, Consumer)} method with {@code propertyName} and a
+     * consumer does nothing.
+     * @see #hasValidProperty(String, Consumer)
+     */
+    public @NotNull SELF hasValidProperty(final @NotNull String propertyName) {
         return hasValidProperty(
                 propertyName,
                 v -> {

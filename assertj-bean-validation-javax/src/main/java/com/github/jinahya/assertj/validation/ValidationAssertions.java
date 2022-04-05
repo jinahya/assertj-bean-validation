@@ -40,7 +40,7 @@ public final class ValidationAssertions {
     }
 
     /**
-     * Creates a new assertion object for verifying specified value against a property name of specific bean type.
+     * Creates a new assertion object for verifying specified value against a property of specific bean type.
      *
      * @param <ACTUAL> type of actual value
      * @param actual   the actual property value to verify.
