@@ -45,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
         extends Assert<SELF, ACTUAL> {
 
     /**

@@ -20,11 +20,19 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-@SuppressWarnings({"unchecked", "java:S119"})
-class ValueAssertImpl<ACTUAL>
-        extends AbstractValueAssert<ValueAssertImpl<ACTUAL>, ACTUAL> {
+import org.jetbrains.annotations.NotNull;
 
-    ValueAssertImpl(final ACTUAL actual) {
-        super(actual, (Class<ValueAssertImpl<ACTUAL>>) (Class<?>) ValueAssertImpl.class);
-    }
+@SuppressWarnings({"java:S119"})
+public interface ValueAssert<SELF extends ValueAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+        extends ValidationAssert<SELF, ACTUAL, VALIDATOR> {
+
+    /**
+     * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
+     *
+     * @param beanType     the bean type.
+     * @param propertyName the name of the property.
+     * @param <T>          type of the bean
+     * @return this assertion instance.
+     */
+    @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName);
 }

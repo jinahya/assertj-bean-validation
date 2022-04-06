@@ -9,10 +9,10 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>assertj-bean-validation-javax</artifactId>
-  <version>${project.parent.version}</version>
+  <artifactId>assertj-bean-validation-jakarta</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
 
-  <name>assertj-bean-validation-javax</name>
+  <name>${project.artifactId}</name>
 
   <properties>
     <version.org.hibernate.validator>6.2.0.Final</version.org.hibernate.validator>

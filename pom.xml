@@ -24,8 +24,7 @@
 
   <modules>
     <module>assertj-bean-validation-base</module>
-    <!--    <module>assertj-bean-validation-generic</module>-->
-    <!--    <module>assertj-bean-validation-jakarta</module>-->
+    <module>assertj-bean-validation-jakarta</module>
     <module>assertj-bean-validation-javax</module>
   </modules>
 

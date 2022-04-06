@@ -20,7 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-@SuppressWarnings({"unchecked", "java:S116"})
+@SuppressWarnings({"unchecked", "java:S119"})
 class BeanAssertImpl<ACTUAL>
         extends AbstractBeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
 

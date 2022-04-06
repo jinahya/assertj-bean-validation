@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * An assertion class for validating a value against constraints defined on a bean property.
+ * An abstract assertion class for validating a value against constraints defined on a bean property.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -40,6 +40,12 @@ import java.util.function.Consumer;
 public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
 
+    /**
+     * Creates a new instance with specified actual value and self type.
+     *
+     * @param actual   the actual value to verify.
+     * @param selfType the self type.
+     */
     protected AbstractValueAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }

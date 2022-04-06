@@ -32,7 +32,8 @@ import java.util.function.Consumer;
 
 @SuppressWarnings({"java:S119"})
 public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
+        extends AbstractValidationAssert<SELF, ACTUAL, Validator>
+        implements BeanAssert<SELF, ACTUAL, Validator> {
 
     protected AbstractBeanAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
@@ -68,20 +69,21 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                     final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
                     violations.forEach(consumer);
                     Assertions.assertThat(violations)
-                            .as("check constraint violations")
-                            .withFailMessage("expected no constraint violations but got %s", violations)
+                            .as("no constraint violations")
+                            .withFailMessage("expected but got %s", violations)
                             .isEmpty();
                 })
                 ;
     }
 
     /**
-     * Verifies that the {@link #actual actual} bean object is valid.
+     * {@inheritDoc}
      *
-     * @return this assertion object.
+     * @return {@inheritDoc}
      * @implNote This method invokes {@link #isValid(Consumer)} method with a consumer does nothing.
      * @see #isValid(Consumer)
      */
+    @Override
     public @NotNull SELF isValid() {
         return isValid(
                 v -> {
@@ -108,24 +110,23 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                             = validator.validateProperty(actual, propertyName, groups);
                     violations.forEach(consumer);
                     Assertions.assertThat(violations)
-                            .as("check constraint violations")
-                            .withFailMessage("expected no constraint violations on the property named %s but got %s",
-                                             propertyName, violations)
+                            .as("no constraint violations")
+                            .withFailMessage("expected on %s but got %s", propertyName, violations)
                             .isEmpty();
                 })
                 ;
     }
 
     /**
-     * Verifies that all constraints placed on the property of specified name, of {@link #actual actual}, are
-     * validated.
+     * {@inheritDoc}
      *
-     * @param propertyName the name of the property whose constraints are validated.
-     * @return this assertion object.
+     * @param {@inheritDoc}
+     * @return {@inheritDoc}
      * @implNote This method invokes {@link #hasValidProperty(String, Consumer)} method with {@code propertyName} and a
      * consumer does nothing.
      * @see #hasValidProperty(String, Consumer)
      */
+    @Override
     public @NotNull SELF hasValidProperty(final @NotNull String propertyName) {
         return hasValidProperty(
                 propertyName,
