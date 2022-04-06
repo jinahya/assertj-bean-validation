@@ -49,6 +49,7 @@
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
     <maven.compiler.testSource>11</maven.compiler.testSource>
     <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
+    <delombok.outputDirectory>${project.build.directory}/delombok</delombok.outputDirectory>
     <sonar.projectKey>jinahya_assertj-bean-validation</sonar.projectKey>
     <sonar.organization>jinahya-github</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -152,6 +153,13 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.9.0</version>
           <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${version.lombok}</version>
+              </path>
+            </annotationProcessorPaths>
             <compilerArgs>
               <arg>-Xlint</arg>
             </compilerArgs>
@@ -231,6 +239,7 @@
               <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>
               <link>https://javadoc.io/static/javax.validation/validation-api/${version.javax.validation-api}/</link>
             </links>
+            <sourcepath>${delombok.outputDirectory}</sourcepath>
             <tags>
               <tag>
                 <name>apiNote</name>
@@ -328,6 +337,25 @@
               <goals>
                 <goal>report</goal>
               </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok-maven-plugin</artifactId>
+          <version>1.18.20.0</version>
+          <executions>
+            <execution>
+              <id>delombok-for-javadoc</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>delombok</goal>
+              </goals>
+              <configuration>
+                <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                <outputDirectory>${delombok.outputDirectory}</outputDirectory>
+                <addOutputDirectory>false</addOutputDirectory>
+              </configuration>
             </execution>
           </executions>
         </plugin>

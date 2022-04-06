@@ -65,7 +65,7 @@ abstract class AbstractValidationAssert<
     }
 
     /**
-     * Replaces the validator, currently configured to use, with specified value.
+     * Replaces currently configured validator with specified value.
      *
      * @param validator new validator to use.
      */
@@ -73,12 +73,6 @@ abstract class AbstractValidationAssert<
         this.validator = validator;
     }
 
-    /**
-     * Configure this assertion object to use specified validator.
-     *
-     * @param validator the validator to use; may be {@code null}.
-     * @return this assertion object.
-     */
     @Override
     public @NotNull SELF usingValidator(final @Nullable VALIDATOR validator) {
         setValidator(validator);
@@ -86,7 +80,7 @@ abstract class AbstractValidationAssert<
     }
 
     /**
-     * Returns an array of targeting groups.
+     * Returns currently configured groups targeted for validation.
      *
      * @return an array of targeting groups; may be {@code empty}.
      */
@@ -95,7 +89,7 @@ abstract class AbstractValidationAssert<
     }
 
     /**
-     * Replaces current targeting groups with specified value.
+     * Replaces currently configured groups for validation with specified value.
      *
      * @param groups new targeting groups; may be {@code null}.
      */
@@ -108,12 +102,6 @@ abstract class AbstractValidationAssert<
         }
     }
 
-    /**
-     * Configure this assertion object to use specified groups targeted for validation.
-     *
-     * @param groups the groups targeted for validation; may be {@code null} or empty.
-     * @return this assertion object.
-     */
     @Override
     public @NotNull SELF targetingGroups(final @Nullable Class<?>... groups) {
         setGroups(groups);
