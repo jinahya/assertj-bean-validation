@@ -1,7 +1,5 @@
 package com.github.jinahya.assertj.validation.user;
 
-import com.github.jinahya.assertj.validation.AbstractBeanAssert;
-import com.github.jinahya.assertj.validation.ValidationAssertions;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +13,9 @@ import java.util.Set;
 class UserAssert_HasValidProperty_Test
         extends UserAssertTest {
 
-    @DisplayName("(Valid) should pass")
+    @DisplayName("[Valid] hasValidProperty(both) should pass")
     @Test
-    void _Pass_Valid() {
+    void hasValidProperty_Pass_Valid() {
         final User actual = User.newValidInstance();
         final UserAssert assertion = assertInstant(actual);
         assertion
@@ -25,20 +23,29 @@ class UserAssert_HasValidProperty_Test
                 .hasValidProperty("age");
     }
 
-    @DisplayName("(WithInvalidName) should fail")
+    @DisplayName("[InvalidName] hasValidProperty(\"name\") should fail")
     @Test
-    void isValid_Fail_InvalidName() {
+    void hasValidPropertyName_Fail_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
         final UserAssert assertion = assertInstant(actual);
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("name"))
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("(WithInvalidName, Consumer) should fail")
+    @DisplayName("[InvalidName] hasValidProperty(\"age\") should pass")
     @Test
-    void isValidWithConsumer_Fail_InvalidName() {
+    void hasValidPropertyAge_Pass_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
-        final AbstractBeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
+        final UserAssert assertion = assertInstant(actual);
+        Assertions.assertThatCode(() -> assertion.hasValidProperty("age"))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("[InvalidName] hasValidProperty(\"name\", Consumer) should fail")
+    @Test
+    void hasValidPropertyNameConsumer_Fail_InvalidName() {
+        final User actual = User.newInstanceWithInvalidName();
+        final UserAssert assertion = assertInstant(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("name", cv -> {
                     Assertions.assertThat(cv)
@@ -49,29 +56,55 @@ class UserAssert_HasValidProperty_Test
         Assertions.assertThat(violations)
                 .isNotEmpty()
                 .allSatisfy(cv -> {
-                    Assertions.assertThat(cv.getPropertyPath()).allSatisfy(n -> {
-                        Assertions.assertThat(n.getName())
-                                .isEqualTo("name");
-                    });
+                    Assertions.assertThat(cv.getPropertyPath())
+                            .allSatisfy(n -> {
+                                Assertions.assertThat(n.getName())
+                                        .isEqualTo("name");
+                            });
                     Assertions.assertThat(cv.getInvalidValue())
                             .isEqualTo(actual.getName());
                 });
     }
 
-    @DisplayName("(WithInvalidAge) should fail")
+    @DisplayName("[InvalidName] hasValidProperty(\"age\", Consumer) should pass")
     @Test
-    void isValid_Fail_InvalidAge() {
+    void hasValidPropertyAgeConsumer_Pass_InvalidName() {
+        final User actual = User.newInstanceWithInvalidName();
+        final UserAssert assertion = assertInstant(actual);
+        final Set<ConstraintViolation<User>> violations = new HashSet<>();
+        Assertions.assertThatCode(() -> assertion.hasValidProperty("age", cv -> {
+                    Assertions.assertThat(cv)
+                            .isNotNull();
+                    violations.add(cv);
+                }))
+                .doesNotThrowAnyException();
+        Assertions.assertThat(violations)
+                .isEmpty();
+    }
+
+    @DisplayName("[InvalidAge] hasValidProperty(\"age\") should fail")
+    @Test
+    void hasValidPropertyAge_Fail_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
-        final AbstractBeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
+        final UserAssert assertion = assertInstant(actual);
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("age"))
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("(WithInvalidAge, Consumer) should fail")
+    @DisplayName("[InvalidAge] hasValidProperty(\"name\") should pass")
     @Test
-    void isValidWithConsumer_Fail_InvalidAge() {
+    void hasValidPropertyName_Pass_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
-        final AbstractBeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
+        final UserAssert assertion = assertInstant(actual);
+        Assertions.assertThatCode(() -> assertion.hasValidProperty("name"))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("[InvalidAge] hasValidProperty(\"age\", Consumer) should fail")
+    @Test
+    void hasValidPropertyAgeConsumer_Fail_InvalidAge() {
+        final User actual = User.newInstanceWithInvalidAge();
+        final UserAssert assertion = assertInstant(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("age", cv -> {
                     Assertions.assertThat(cv)
@@ -88,5 +121,21 @@ class UserAssert_HasValidProperty_Test
                     Assertions.assertThat(cv.getInvalidValue())
                             .isEqualTo(actual.getAge());
                 });
+    }
+
+    @DisplayName("[InvalidAge] hasValidProperty(\"name\", Consumer) should pass")
+    @Test
+    void hasValidPropertyNameConsumer_Pass_InvalidAge() {
+        final User actual = User.newInstanceWithInvalidAge();
+        final UserAssert assertion = assertInstant(actual);
+        final Set<ConstraintViolation<User>> violations = new HashSet<>();
+        Assertions.assertThatCode(() -> assertion.hasValidProperty("name", cv -> {
+                    Assertions.assertThat(cv)
+                            .isNotNull();
+                    violations.add(cv);
+                }))
+                .doesNotThrowAnyException();
+        Assertions.assertThat(violations)
+                .isEmpty();
     }
 }

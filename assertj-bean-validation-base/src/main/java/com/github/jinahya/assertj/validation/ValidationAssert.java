@@ -36,12 +36,20 @@ import org.assertj.core.api.Assert;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A base interface for verifying beans and values.
+ *
+ * @param <SELF>      self type parameter
+ * @param <ACTUAL>    actual type parameter
+ * @param <VALIDATOR> type of validator
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 @SuppressWarnings({"java:S119"})
-interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
         extends Assert<SELF, ACTUAL> {
 
     /**
-     * Sets this assertion object to use specified validator instead of default validator.
+     * Configures this assertion object to use specified validator for validation.
      *
      * @param validator the validator to use; may be {@code null}.
      * @return this assertion object.
@@ -49,7 +57,7 @@ interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR
     @NotNull SELF usingValidator(@Nullable VALIDATOR validator);
 
     /**
-     * Sets this assertion object to use specified groups targeted for validation.
+     * Configures this assertion object to use specified groups targeted for validation.
      *
      * @param groups the validation groups to use; may be {@code null} or empty.
      * @return this assertion object.

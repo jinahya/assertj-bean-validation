@@ -29,6 +29,14 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * An abstract base class for verifying beans and values.
+ *
+ * @param <SELF>      self type parameter
+ * @param <ACTUAL>    actual type parameter
+ * @param <VALIDATOR> type of validator
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 @SuppressWarnings({"java:S119"})
 abstract class AbstractValidationAssert<
         SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
@@ -37,6 +45,12 @@ abstract class AbstractValidationAssert<
         extends AbstractAssert<SELF, ACTUAL>
         implements ValidationAssert<SELF, ACTUAL, VALIDATOR> {
 
+    /**
+     * Creates a new instance with specified actual value.
+     *
+     * @param actual   the actual value to verify.
+     * @param selfType self type class.
+     */
     protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }

@@ -22,23 +22,13 @@ package com.github.jinahya.assertj.validation.user;
 
 import org.assertj.core.api.Condition;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public final class UserConditions {
 
     public static final Condition<User> NAMED_JANE
             = new Condition<>(v -> "Jane".equalsIgnoreCase(v.getName()), "named Jane");
 
-    static {
-        assertThat(User.builder().name("Jane").age(28).build()).is(NAMED_JANE);
-    }
-
     public static final Condition<User> NAMED_JOHN
             = new Condition<>(v -> "John".equalsIgnoreCase(v.getName()), "named John");
-
-    static {
-        assertThat(User.builder().name("John").age(28).build()).is(NAMED_JOHN);
-    }
 
     private UserConditions() {
         throw new AssertionError("instantiation is not allowed");

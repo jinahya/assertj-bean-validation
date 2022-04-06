@@ -20,16 +20,16 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * An assertion class for validating a value against constraints defined on a bean property.
@@ -51,7 +51,7 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
     }
 
     /**
-     * Verifies that the {@link #actual} is valid for the property of specified name of specified bean type while
+     * Verifies that the {@link #actual actual} is valid for the property of specified name of specified bean type while
      * accepting constraint violations, if any populated, to specified consumer.
      *
      * @param beanType     the bean type.
@@ -63,15 +63,18 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
      */
     public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName,
                                         final @NotNull Consumer<? super ConstraintViolation<T>> consumer) {
-        return isNotNull()
+        Objects.requireNonNull(beanType, "beanType is null");
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        Objects.requireNonNull(consumer, "consumer is null");
+        return myself
                 .satisfies(a -> {
                     final Validator validator = getValidator();
                     final Class<?>[] groups = getGroups();
                     final Set<ConstraintViolation<T>> violations
                             = validator.validateValue(beanType, propertyName, actual, groups);
                     violations.forEach(consumer);
-                    assertThat(violations)
-                            .as("validating actual against %s#%s", beanType, propertyName)
+                    Assertions.assertThat(violations)
+                            .as("is valid for %s#%s", beanType.getSimpleName(), propertyName)
                             .withFailMessage("expected no constraint violations but got %s", violations)
                             .isEmpty();
                 })
@@ -79,15 +82,18 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
     }
 
     /**
-     * Verifies that the {@link #actual} is valid for the property of specified name of specified bean type.
+     * Verifies that the {@link #actual actual} is valid for the property of specified name of specified bean type.
      *
      * @param beanType     the bean type.
      * @param propertyName the name of the property.
      * @param <T>          type of the bean
      * @return this assertion instance.
+     * @implNote This method invokes {@link #isValidFor(Class, String, Consumer)} method with {@code beanType}, {@code
+     * propertyName}, and a consumer does nothing.
      * @see #isValidFor(Class, String, Consumer)
      */
-    public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
+    public @NotNull <T> SELF
+    isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
         return isValidFor(
                 beanType,
                 propertyName,

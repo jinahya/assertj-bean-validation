@@ -1,6 +1,5 @@
 package com.github.jinahya.assertj.validation.user;
 
-import com.github.jinahya.assertj.validation.AbstractBeanAssert;
 import com.github.jinahya.assertj.validation.AbstractValueAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
 import lombok.extern.slf4j.Slf4j;
@@ -15,55 +14,80 @@ import java.util.Set;
 @Slf4j
 class UserValueAssert_IsValidFor_Test {
 
-    @DisplayName("(Valid) should pass")
+    @DisplayName("[ValidName] isValidFor(\"name\") should pass")
     @Test
-    void isValid_Pass_Valid() {
+    void isValidForName_Pass_Valid() {
         final String actual = User.newValidName();
         final AbstractValueAssert<?, String> assertion = ValidationAssertions.assertValue(actual);
         assertion.isValidFor(User.class, "name");
     }
 
-    @DisplayName("(WithInvalidName) should fail")
+    @DisplayName("[ValidName] isValidFor(\"name\", Consumer) should pass")
     @Test
-    void isValid_Fail_InvalidName() {
-        final AbstractBeanAssert<?, User> assertion
-                = ValidationAssertions.assertBean(User.newInstanceWithInvalidName());
-        Assertions.assertThatThrownBy(assertion::isValid)
+    void isValidForNameConsumer_Pass_Valid() {
+        final String actual = User.newValidName();
+        final AbstractValueAssert<?, String> assertion = ValidationAssertions.assertValue(actual);
+        final Set<ConstraintViolation<User>> violations = new HashSet<>();
+        assertion.isValidFor(User.class, "name", violations::add);
+        Assertions.assertThat(violations).isEmpty();
+    }
+
+    @DisplayName("[InvalidName] isValidFor(User.class, \"name\") should fail")
+    @Test
+    void isValidForName_Fail_InvalidName() {
+        final String actual = User.newInvalidName();
+        final AbstractValueAssert<?, String> assertion = ValidationAssertions.assertValue(actual);
+        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("(WithInvalidName, Consumer) should fail")
+    @DisplayName("[InvalidName] isValidFor(User.class, \"name\", Consumer) should fail")
     @Test
-    void isValidWithConsumer_Fail_InvalidName() {
-        final AbstractBeanAssert<?, User> assertion
-                = ValidationAssertions.assertBean(User.newInstanceWithInvalidName());
+    void isValidForNameConsumer_Fail_InvalidName() {
+        final String actual = User.newInvalidName();
+        final AbstractValueAssert<?, String> assertion = ValidationAssertions.assertValue(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
-        Assertions.assertThatThrownBy(() -> assertion.isValid(cv -> {
-                    Assertions.assertThat(cv)
-                            .isNotNull();
-                    violations.add(cv);
-                }))
+        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "name", violations::add))
                 .isInstanceOf(AssertionError.class);
         Assertions.assertThat(violations)
-                .isNotEmpty();
+                .isNotEmpty()
+                .doesNotContainNull()
+                .allSatisfy(cv -> {
+                    Assertions.assertThat(cv.getInvalidValue())
+                            .isEqualTo(actual);
+                    Assertions.assertThat(cv.getPropertyPath())
+                            .isNotEmpty()
+                            .allSatisfy(n -> {
+                                Assertions.assertThat(n.getName())
+                                        .isEqualTo("name");
+                            });
+                });
     }
 
-    @DisplayName("(WithInvalidAge) should fail")
+    @DisplayName("[Valid] isValidFor(User.class, \"age\") should pass")
     @Test
-    void isValid_Fail_InvalidAge() {
-        final AbstractBeanAssert<?, User> assertion
-                = ValidationAssertions.assertBean(User.newInstanceWithInvalidAge());
-        Assertions.assertThatThrownBy(assertion::isValid)
+    void isValidForAge_Pass_Valid() {
+        final int actual = User.newValidAge();
+        final AbstractValueAssert<?, Integer> assertion = ValidationAssertions.assertValue(actual);
+        assertion.isValidFor(User.class, "age");
+    }
+
+    @DisplayName("[InvalidAge] isValidFor(User.class, \"age\") should fail")
+    @Test
+    void isValidForAge_Fail_InvalidAge() {
+        final int actual = User.newInvalidAge();
+        final AbstractValueAssert<?, Integer> assertion = ValidationAssertions.assertValue(actual);
+        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("(WithInvalidAge, Consumer) should fail")
+    @DisplayName("[InvalidAge] isValidFor(User.class, \"age\", Consumer) should fail")
     @Test
-    void isValidWithConsumer_Fail_InvalidAge() {
-        final AbstractBeanAssert<?, User> assertion
-                = ValidationAssertions.assertBean(User.newInstanceWithInvalidAge());
+    void isValidForAgeConsumer_Fail_InvalidAge() {
+        final int actual = User.newInvalidAge();
+        final AbstractValueAssert<?, Integer> assertion = ValidationAssertions.assertValue(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
-        Assertions.assertThatThrownBy(() -> assertion.isValid(cv -> {
+        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "age", cv -> {
                     Assertions.assertThat(cv)
                             .isNotNull();
                     violations.add(cv);

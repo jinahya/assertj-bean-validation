@@ -15,7 +15,7 @@ import java.util.Set;
 class UserAssert_IsValid_Test
         extends UserAssertTest {
 
-    @DisplayName("(Valid) should pass")
+    @DisplayName("[Valid] isValid() should pass")
     @Test
     void isValid_Pass_Valid() {
         final User actual = User.newValidInstance();
@@ -23,20 +23,20 @@ class UserAssert_IsValid_Test
         assertion.isValid();
     }
 
-    @DisplayName("(WithInvalidName) should fail")
+    @DisplayName("[InvalidName] isValid() should fail")
     @Test
     void isValid_Fail_InvalidName() {
-        final AbstractBeanAssert<?, User> assertion
-                = ValidationAssertions.assertBean(User.newInstanceWithInvalidName());
+        final User actual = User.newInstanceWithInvalidName();
+        final UserAssert assertion = assertInstant(actual);
         Assertions.assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("(WithInvalidName, Consumer) should fail")
+    @DisplayName("[InvalidName] isValid(Consumer) should fail")
     @Test
     void isValidWithConsumer_Fail_InvalidName() {
-        final AbstractBeanAssert<?, User> assertion
-                = ValidationAssertions.assertBean(User.newInstanceWithInvalidName());
+        final User actual = User.newInstanceWithInvalidName();
+        final UserAssert assertion = assertInstant(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatThrownBy(() -> assertion.isValid(cv -> {
                     Assertions.assertThat(cv)
@@ -45,7 +45,17 @@ class UserAssert_IsValid_Test
                 }))
                 .isInstanceOf(AssertionError.class);
         Assertions.assertThat(violations)
-                .isNotEmpty();
+                .isNotEmpty()
+                .allSatisfy(cv -> {
+                    Assertions.assertThat(cv.getPropertyPath())
+                            .isNotEmpty()
+                            .allSatisfy(n -> {
+                                Assertions.assertThat(n.getName())
+                                        .isEqualTo("name");
+                            });
+                    Assertions.assertThat(cv.getInvalidValue())
+                            .isEqualTo(actual.getName());
+                });
     }
 
     @DisplayName("(WithInvalidAge) should fail")

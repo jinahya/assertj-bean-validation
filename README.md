@@ -57,7 +57,7 @@ class UserTest {
 
     @Test
     void test() {
-        assertBean(new User("Jane", 28))
+        ValidationAssertions.assertBean(new User("Jane", 28))
                 .isValid()
                 .hasValidProperty("name")
                 .hasValidProperty("age");
@@ -72,12 +72,20 @@ class UserTest {
 
     @Test
     void test() {
-        assertThatThrownBy(() -> assertBean(new User("", 27)).isValid(cv -> {
-            log.debug("cv: {}", cv);
-        })).isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertBean(new User("John", 300)).isValid(cv -> {
-            log.debug("cv: {}", cv);
-        })).isInstanceOf(AssertionError.class);
+        Assertions.assertThatThrownBy(() -> {
+                    ValidationAssertions.assertBean(new User("", 27))
+                            .isValid(cv -> {
+                                log.debug("cv: {}", cv);
+                            });
+                })
+                .isInstanceOf(AssertionError.class);
+        Assertions.assertThatThrownBy(() -> {
+                    ValidationAssertions.assertBean(new User("John", 300))
+                            .hasValidProperty("age", cv -> {
+                                log.debug("cv: {}", cv);
+                            });
+                })
+                .isInstanceOf(AssertionError.class);
     }
 }
 ```
