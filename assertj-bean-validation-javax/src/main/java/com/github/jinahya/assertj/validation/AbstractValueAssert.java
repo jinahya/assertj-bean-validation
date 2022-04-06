@@ -40,7 +40,7 @@ import java.util.function.Consumer;
 public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
 
-    protected AbstractValueAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractValueAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 

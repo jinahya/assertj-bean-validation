@@ -51,7 +51,7 @@ abstract class AbstractValidationAssert<
      * @param actual   the actual value to verify.
      * @param selfType self type class.
      */
-    protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractValidationAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 

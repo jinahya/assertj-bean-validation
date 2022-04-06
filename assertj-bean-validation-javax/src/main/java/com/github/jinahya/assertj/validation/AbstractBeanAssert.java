@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
 
-    protected AbstractBeanAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractBeanAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 

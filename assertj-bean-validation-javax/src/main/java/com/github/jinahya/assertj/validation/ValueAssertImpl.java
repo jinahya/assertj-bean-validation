@@ -20,10 +20,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+@SuppressWarnings({"unchecked", "java:S116"})
 class ValueAssertImpl<ACTUAL>
         extends AbstractValueAssert<ValueAssertImpl<ACTUAL>, ACTUAL> {
 
     ValueAssertImpl(final ACTUAL actual) {
-        super(actual, ValueAssertImpl.class);
+        super(actual, (Class<ValueAssertImpl<ACTUAL>>) (Class<?>) ValueAssertImpl.class);
     }
 }
