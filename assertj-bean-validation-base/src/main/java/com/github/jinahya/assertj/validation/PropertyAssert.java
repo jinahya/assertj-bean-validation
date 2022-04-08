@@ -33,6 +33,8 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL, VALIDA
      * @param propertyName the name of the property.
      * @param <T>          type of the bean
      * @return this assertion instance.
+     * @apiNote Note that the {@code @Valid} is not honored by the {@code Validator#validateValue(Class<T> beanType,
+     * String propertyName, Object value, Class<?>... groups)} method which this method invokes.
      */
-    @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName);
+    <T> @NotNull SELF isValidFor(@NotNull Class<T> beanType, @NotNull String propertyName);
 }

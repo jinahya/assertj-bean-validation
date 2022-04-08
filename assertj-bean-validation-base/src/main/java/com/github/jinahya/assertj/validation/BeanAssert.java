@@ -38,6 +38,8 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL, VALIDATOR>, AC
      *
      * @param propertyName the name of the property whose constraints are validated.
      * @return this assertion object.
+     * @apiNote Note that the {@code @Valid} is not honored by the {@code Validator#validateProperty(T object, String
+     * propertyName, Class<?>... groups)} method which this method invokes.
      */
-    @NotNull SELF hasValidProperty(final @NotNull String propertyName);
+    @NotNull SELF hasValidProperty(@NotNull String propertyName);
 }
