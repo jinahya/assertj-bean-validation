@@ -74,16 +74,16 @@ class UserAssert_IsValid_Test
                 });
     }
 
-    @DisplayName("(WithInvalidAge) should fail")
+    @DisplayName("[InvalidAge] isValid() should fail")
     @Test
     void isValid_Fail_InvalidAge() {
-        final AbstractBeanAssert<?, User> assertion
-                = ValidationAssertions.assertBean(User.newInstanceWithInvalidAge());
+        final User actual = User.newInstanceWithInvalidAge();
+        final AbstractBeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
         Assertions.assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("(WithInvalidAge, Consumer) should fail")
+    @DisplayName("[InvalidAge] isValid(Consumer) should fail")
     @Test
     void isValidWithConsumer_Fail_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
@@ -95,12 +95,12 @@ class UserAssert_IsValid_Test
                 .isNotEmpty()
                 .allSatisfy(cv -> {
                     Assertions.assertThat(cv.getInvalidValue())
-                            .isEqualTo(actual.getName());
+                            .isEqualTo(actual.getAge());
                     Assertions.assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> {
                                 Assertions.assertThat(n.getName())
-                                        .isEqualTo("name");
+                                        .isEqualTo("age");
                             });
                 });
     }

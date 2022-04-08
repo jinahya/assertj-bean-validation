@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL>
+public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
 
     /**
@@ -46,7 +46,7 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
      * @param actual   the actual value to verify.
      * @param selfType the self type.
      */
-    protected AbstractValueAssert(final ACTUAL actual, final Class<SELF> selfType) {
+    protected AbstractPropertyAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 

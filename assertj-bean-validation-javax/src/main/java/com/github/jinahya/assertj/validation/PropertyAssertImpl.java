@@ -21,10 +21,10 @@ package com.github.jinahya.assertj.validation;
  */
 
 @SuppressWarnings({"unchecked", "java:S119"})
-class ValueAssertImpl<ACTUAL>
-        extends AbstractValueAssert<ValueAssertImpl<ACTUAL>, ACTUAL> {
+class PropertyAssertImpl<ACTUAL>
+        extends AbstractPropertyAssert<PropertyAssertImpl<ACTUAL>, ACTUAL> {
 
-    ValueAssertImpl(final ACTUAL actual) {
-        super(actual, (Class<ValueAssertImpl<ACTUAL>>) (Class<?>) ValueAssertImpl.class);
+    PropertyAssertImpl(final ACTUAL actual) {
+        super(actual, (Class<PropertyAssertImpl<ACTUAL>>) (Class<?>) PropertyAssertImpl.class);
     }
 }

@@ -23,7 +23,7 @@ package com.github.jinahya.assertj.validation;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({"java:S119"})
-public interface ValueAssert<SELF extends ValueAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
         extends ValidationAssert<SELF, ACTUAL, VALIDATOR> {
 
     /**

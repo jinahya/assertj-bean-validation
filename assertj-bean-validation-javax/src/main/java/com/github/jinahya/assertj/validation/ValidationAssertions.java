@@ -103,11 +103,11 @@ public final class ValidationAssertions {
      * @param actual   the actual property value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL> AbstractValueAssert<?, ACTUAL> assertValue(final ACTUAL actual) {
-        return new ValueAssertImpl<>(actual);
+    public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertProperty(final ACTUAL actual) {
+        return new PropertyAssertImpl<>(actual);
     }
 
-    public static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> @NotNull SELF assertValue(
+    public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> @NotNull SELF assertProperty(
             final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualClass, final ACTUAL actual) {
         try {
             final Constructor<SELF> constructor = selfClass.getDeclaredConstructor(actualClass);
@@ -120,20 +120,20 @@ public final class ValidationAssertions {
         }
     }
 
-    private static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> SELF assertValueHelper(
+    private static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertPropertyHelper(
             final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualClass, final Object actual) {
-        return assertValue(selfClass, actualClass, actualClass.cast(actual));
+        return assertProperty(selfClass, actualClass, actualClass.cast(actual));
     }
 
-    public static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> SELF assertValue(
+    public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertProperty(
             final @NotNull Class<SELF> selfClass, final @NotNull ACTUAL actual) {
         Objects.requireNonNull(actual, "actual is null");
         @SuppressWarnings({"unchecked"})
         final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
-        return assertValueHelper(selfClass, actualClass, actual);
+        return assertPropertyHelper(selfClass, actualClass, actual);
     }
 
-    public static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualValue(
+    public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualProperty(
             final @NotNull Object actual) {
         Objects.requireNonNull(actual, "actual is null");
         @SuppressWarnings({"unchecked"})
@@ -142,7 +142,7 @@ public final class ValidationAssertions {
         try {
             @SuppressWarnings({"unchecked"})
             final Class<SELF> selfClass = (Class<SELF>) Class.forName(selfClassName);
-            return assertValue(selfClass, actualClass.cast(actual));
+            return assertProperty(selfClass, actualClass.cast(actual));
         } catch (final ClassNotFoundException cnfe) {
             throw new RuntimeException("unable to find class for " + selfClassName, cnfe);
         }

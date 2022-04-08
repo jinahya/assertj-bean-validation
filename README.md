@@ -33,7 +33,8 @@ For Jakarta EE,
 
 ## Compatibilities
 
-* Depends(`provided`) on the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
+* Depends(`provided`) on
+  the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
 * Targets Java 8.
 
 ## Usages
@@ -159,3 +160,10 @@ class UserAssertTest {
 ```
 
 ### Verifying values for properties of bean types.
+
+```java
+assertValue("John")
+        .isValidFor(User.class,"name");
+        assertValue(31)
+        .isValidFor(User.class,"age");
+```

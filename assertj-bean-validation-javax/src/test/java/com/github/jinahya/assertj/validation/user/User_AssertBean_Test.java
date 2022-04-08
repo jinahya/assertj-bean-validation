@@ -5,7 +5,7 @@ import com.github.jinahya.assertj.validation.ValidationAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class User_ValidationAssertions_BeanTest {
+class User_AssertBean_Test {
 
     @DisplayName("assertBean(actual)")
     @Test
