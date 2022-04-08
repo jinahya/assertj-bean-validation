@@ -96,15 +96,14 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
     }
 
     /**
-     * Verifies that the {@link #actual actual} value is valid for the property of specified name of specified bean
-     * type.
+     * {@inheritDoc}
      *
-     * @param beanType     the bean type.
-     * @param propertyName the name of the property.
-     * @param <T>          type of the bean
-     * @return this assertion instance.
+     * @param beanType     {@inheritDoc}
+     * @param propertyName {@inheritDoc}
+     * @param <T>          {@inheritDoc}
+     * @return {@inheritDoc}
      * @implNote This method invokes {@link #isValidFor(Class, String, Consumer)} method with {@code beanType}, {@code
-     * propertyName}, and an empty consumer.
+     * propertyName}, and a consumer does nothing.
      * @see #isValidFor(Class, String, Consumer)
      */
     @Override

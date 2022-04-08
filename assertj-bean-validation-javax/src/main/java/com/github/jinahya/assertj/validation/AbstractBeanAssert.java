@@ -108,7 +108,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                     violations.forEach(consumer);
                     Assertions.assertThat(violations)
                             .as("no constraint violations")
-                            .withFailMessage("expected, on %s, but got %s", propertyName, violations)
+                            .withFailMessage("expected, on #%s, but got %s", propertyName, violations)
                             .isEmpty();
                 });
     }
