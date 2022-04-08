@@ -31,7 +31,10 @@ For Jakarta EE,
 </dependency>
 ```
 
-## Binary Compatibilities
+## Compatibilities
+
+* Depends(`provided`) on the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
+* Targets Java 8.
 
 ## Usages
 
@@ -46,9 +49,16 @@ class User {
     @PositiveOrZero
     int age;
 }
+
+class Registration {
+
+    @Valid
+    @NotNull
+    User user;
+}
 ```
 
-### Verifying Bean Objects
+### Verifying beans
 
 Verifies that the actual bean object is valid.
 
@@ -56,36 +66,94 @@ Verifies that the actual bean object is valid.
 class UserTest {
 
     @Test
-    void test() {
-        ValidationAssertions.assertBean(new User("Jane", 28))
+    void test1() {
+        assertBean(new User("Jane", 28))
                 .isValid()
                 .hasValidProperty("name")
                 .hasValidProperty("age");
     }
+
+    @DisplayName("debug with constraint violations")
+    @Test
+    void test2() {
+        assertThatThrownBy(() -> {
+            assertBean(new User("", 27))
+                    .isValid(cv -> {
+                        assertThat(cv.getInvalidValue()).isEqualTo(actual.getName());
+                        assertThat(cv.getPropertyPath())
+                                .isNotEmpty()
+                                .allSatisfy(n -> {
+                                    assertThat(n.getName()).isEqualTo("name");
+                                });
+                    });
+        }).isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> assertBean(new User("John", 300))
+                .hasValidProperty("age", cv -> {
+                    assertThat(cv.getInvalidValue()).isEqualTo(actual.getAge());
+                    assertThat(cv.getPropertyPath())
+                            .isNotEmpty()
+                            .allSatisfy(n -> assertThat(n.getName()).isEqualTo("age"));
+                })
+        ).isInstanceOf(AssertionError.class);
+    }
 }
 ```
 
-Debug with constraint violations.
+### Verifying beans using extended assert classes
+
+You can work with your own (extended) assert class.
 
 ```java
-class UserTest {
+class UserAssert
+        extends AbstractBeanAssert<UserAssert, User> {
+
+    UserAssert(User actual) {
+        super(actua, UserAssert.class);
+    }
+
+    UserAssert isNamedJane() {
+        return isNotNull()
+                .is(new Condition<>(v -> "Jane".equalsIgnoreCase(v.getName()),
+                                    "named Jane"));
+    }
+}
+```
+
+A number of static factory methods are prepared.
+
+```java
+class UserAssertTest {
 
     @Test
-    void test() {
-        Assertions.assertThatThrownBy(() -> {
-                    ValidationAssertions.assertBean(new User("", 27))
-                            .isValid(cv -> {
-                                log.debug("cv: {}", cv);
-                            });
-                })
-                .isInstanceOf(AssertionError.class);
-        Assertions.assertThatThrownBy(() -> {
-                    ValidationAssertions.assertBean(new User("John", 300))
-                            .hasValidProperty("age", cv -> {
-                                log.debug("cv: {}", cv);
-                            });
-                })
-                .isInstanceOf(AssertionError.class);
+    void test1() {
+        // specify your assert class along with actual class
+        {
+            final User actual = User.newValidInstance_().name("Jane").build();
+            final UserAssert assertion = assertBean(UserAssert.class, User.class, actual);
+            assertion.isValid()
+                    .hasValidProperty("name")
+                    .hasValidProperty("age")
+                    .isNamedJane();
+        }
+        // or emit the actual class
+        {
+            final User actual = User.newValidInstance_().name("Jane").build();
+            final UserAssert assertion = assertBean(UserAssert.class, actual);
+            assertion.isValid()
+                    .hasValidProperty("name")
+                    .hasValidProperty("age")
+                    .isNamedJane();
+        }
+        // or let it find whatever required
+        {
+            // finds the `UserAssert` class in the same package of `User` class
+            final Object actual = User.newValidInstance_().name("Jane").build();
+            final UserAssert assertion = assertVirtualBean(actual);
+            assertion.isValid()
+                    .hasValidProperty("name")
+                    .hasValidProperty("age")
+                    .isNamedJane();
+        }
     }
 }
 ```

@@ -20,6 +20,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Constructor;
+import java.util.Objects;
+
 /**
  * A utility class for fluently creating instances of {@link BeanAssertImpl}.
  *
@@ -40,6 +45,58 @@ public final class ValidationAssertions {
     }
 
     /**
+     * Creates a new assertion object for verifying specified bean object.
+     *
+     * @param <SELF>     assertion type parameter
+     * @param <ACTUAL>   actual type parameter
+     * @param selfClass  type of assertion.
+     * @param actualType type of actual.
+     * @param actual     the actual bean object to verify.
+     * @return a new assertion object for verifying {@code actual}.
+     */
+    public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBean(
+            final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualType, final ACTUAL actual) {
+        try {
+            final Constructor<SELF> constructor = selfClass.getDeclaredConstructor(actualType);
+            if (!constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
+            return constructor.newInstance(actual);
+        } catch (final ReflectiveOperationException roe) {
+            throw new RuntimeException(roe);
+        }
+    }
+
+    private static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBeanHelper(
+            final @NotNull Class<SELF> selfClass, final Class<ACTUAL> actualClass, final @NotNull Object actual) {
+        Objects.requireNonNull(actual, "actual is null");
+        return assertBean(selfClass, actualClass, actualClass.cast(actual));
+    }
+
+    public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBean(
+            final @NotNull Class<SELF> selfClass, final @NotNull ACTUAL actual) {
+        Objects.requireNonNull(actual, "actual is null");
+        @SuppressWarnings({"unchecked"})
+        final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
+        return assertBeanHelper(selfClass, actualClass, actual);
+    }
+
+    public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualBean(
+            final @NotNull Object actual) {
+        Objects.requireNonNull(actual, "actual is null");
+        @SuppressWarnings({"unchecked"})
+        final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
+        final String selfClassName = actualClass.getName() + "Assert";
+        try {
+            @SuppressWarnings({"unchecked"})
+            final Class<SELF> selfClass = (Class<SELF>) Class.forName(selfClassName);
+            return assertBean(selfClass, actualClass.cast(actual));
+        } catch (final ClassNotFoundException cnfe) {
+            throw new RuntimeException("unable to find class for " + selfClassName, cnfe);
+        }
+    }
+
+    /**
      * Creates a new assertion object for verifying specified value against a property of specific bean type.
      *
      * @param <ACTUAL> type of actual value
@@ -48,6 +105,47 @@ public final class ValidationAssertions {
      */
     public static <ACTUAL> AbstractValueAssert<?, ACTUAL> assertValue(final ACTUAL actual) {
         return new ValueAssertImpl<>(actual);
+    }
+
+    public static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> @NotNull SELF assertValue(
+            final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualClass, final ACTUAL actual) {
+        try {
+            final Constructor<SELF> constructor = selfClass.getDeclaredConstructor(actualClass);
+            if (!constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
+            return constructor.newInstance(actual);
+        } catch (final ReflectiveOperationException roe) {
+            throw new RuntimeException("failed to instantiate " + selfClass + " with " + actual, roe);
+        }
+    }
+
+    private static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> SELF assertValueHelper(
+            final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualClass, final Object actual) {
+        return assertValue(selfClass, actualClass, actualClass.cast(actual));
+    }
+
+    public static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> SELF assertValue(
+            final @NotNull Class<SELF> selfClass, final @NotNull ACTUAL actual) {
+        Objects.requireNonNull(actual, "actual is null");
+        @SuppressWarnings({"unchecked"})
+        final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
+        return assertValueHelper(selfClass, actualClass, actual);
+    }
+
+    public static <SELF extends AbstractValueAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualValue(
+            final @NotNull Object actual) {
+        Objects.requireNonNull(actual, "actual is null");
+        @SuppressWarnings({"unchecked"})
+        final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass(); // ClassCastException!
+        final String selfClassName = actualClass.getName() + "Assert";
+        try {
+            @SuppressWarnings({"unchecked"})
+            final Class<SELF> selfClass = (Class<SELF>) Class.forName(selfClassName);
+            return assertValue(selfClass, actualClass.cast(actual));
+        } catch (final ClassNotFoundException cnfe) {
+            throw new RuntimeException("unable to find class for " + selfClassName, cnfe);
+        }
     }
 
     /**

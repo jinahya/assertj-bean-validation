@@ -31,11 +31,13 @@ class UserAssert
     }
 
     public UserAssert isNamedJane() {
-        return is(UserConditions.NAMED_JANE);
+        return isNotNull()
+                .is(UserConditions.NAMED_JANE);
     }
 
     public UserAssert isNamedJohn() {
-        return is(UserConditions.NAMED_JOHN);
+        return isNotNull()
+                .is(UserConditions.NAMED_JOHN);
     }
 
     public UserAssert hasAge(final int expected) {
