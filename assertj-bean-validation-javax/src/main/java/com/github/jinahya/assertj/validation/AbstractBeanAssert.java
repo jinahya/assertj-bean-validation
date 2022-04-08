@@ -30,28 +30,41 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * An abstract assertion class for verifying bean values.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ * @see ValidationAssertions#assertBean(Object)
+ */
 @SuppressWarnings({"java:S119"})
 public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractValidationAssert<SELF, ACTUAL, Validator>
+        extends AbstractPropertyAssert<SELF, ACTUAL>
         implements BeanAssert<SELF, ACTUAL, Validator> {
 
+    /**
+     * Creates a new instance with specified actual value and self type.
+     *
+     * @param actual   the actual value to verify.
+     * @param selfType the self type.
+     */
     protected AbstractBeanAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @return {@inheritDoc}
-     * @implNote Overridden, if not configured yet, to return an instance created from {@link
-     * Validation#buildDefaultValidatorFactory() default validator factory}.
-     * @see Validation#buildDefaultValidatorFactory()
-     */
-    @Override
-    protected @NotNull Validator getValidator() {
-        return Optional.ofNullable(super.getValidator())
-                .orElseGet(Validation.buildDefaultValidatorFactory()::getValidator);
-    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * @return {@inheritDoc}
+//     * @implNote Overridden, if not configured yet, to return an instance created from {@link
+//     * Validation#buildDefaultValidatorFactory() default validator factory}.
+//     * @see Validation#buildDefaultValidatorFactory()
+//     */
+//    @Override
+//    protected @NotNull Validator getValidator() {
+//        return Optional.ofNullable(super.getValidator())
+//                .orElseGet(Validation.buildDefaultValidatorFactory()::getValidator);
+//    }
 
     /**
      * Verifies that the {@link #actual actual} bean object is valid while accepting constraint violations, if any

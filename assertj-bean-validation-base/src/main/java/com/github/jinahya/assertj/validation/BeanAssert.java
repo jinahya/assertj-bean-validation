@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({"java:S119"})
 public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
-        extends ValidationAssert<SELF, ACTUAL, VALIDATOR> {
+        extends PropertyAssert<SELF, ACTUAL, VALIDATOR> {
 
     /**
      * Verifies that the {@code actual} bean is valid.
