@@ -86,8 +86,8 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
                             = validator.validateValue(beanType, propertyName, actual, groups);
                     violations.forEach(consumer);
                     Assertions.assertThat(violations)
-                            .as("is valid for %s#%s", beanType.getSimpleName(), propertyName)
-                            .withFailMessage("expected no constraint violations but got %s", violations)
+                            .as("no constraint violations")
+                            .withFailMessage("expected, for %s#%s, but got %s", beanType.getSimpleName(), propertyName, violations)
                             .isEmpty();
                 });
     }

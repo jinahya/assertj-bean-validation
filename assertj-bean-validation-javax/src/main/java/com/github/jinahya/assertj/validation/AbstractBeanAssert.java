@@ -24,9 +24,7 @@ import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -51,20 +49,6 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
     protected AbstractBeanAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
-
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * @return {@inheritDoc}
-//     * @implNote Overridden, if not configured yet, to return an instance created from {@link
-//     * Validation#buildDefaultValidatorFactory() default validator factory}.
-//     * @see Validation#buildDefaultValidatorFactory()
-//     */
-//    @Override
-//    protected @NotNull Validator getValidator() {
-//        return Optional.ofNullable(super.getValidator())
-//                .orElseGet(Validation.buildDefaultValidatorFactory()::getValidator);
-//    }
 
     /**
      * Verifies that the {@link #actual actual} bean object is valid while accepting constraint violations, if any
@@ -123,7 +107,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                     violations.forEach(consumer);
                     Assertions.assertThat(violations)
                             .as("no constraint violations")
-                            .withFailMessage("expected on %s but got %s", propertyName, violations)
+                            .withFailMessage("expected, on %s, but got %s", propertyName, violations)
                             .isEmpty();
                 });
     }

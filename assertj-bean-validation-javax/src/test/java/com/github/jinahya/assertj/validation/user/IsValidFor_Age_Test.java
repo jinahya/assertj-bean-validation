@@ -32,7 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-class ValidationAssertions_IsValidForAge_Test {
+class IsValidFor_Age_Test {
 
     @DisplayName("[Valid] isValidFor(User.class, \"age\") should pass")
     @Test

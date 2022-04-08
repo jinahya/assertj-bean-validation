@@ -32,7 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-class ValidationAssertions_IsValidForName_Test {
+class IsValidFor_Name_Test {
 
     @DisplayName("[Valid] isValidFor(\"name\") should pass")
     @Test
@@ -49,7 +49,8 @@ class ValidationAssertions_IsValidForName_Test {
         final AbstractPropertyAssert<?, String> assertion = ValidationAssertions.assertProperty(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         assertion.isValidFor(User.class, "name", violations::add);
-        Assertions.assertThat(violations).isEmpty();
+        Assertions.assertThat(violations)
+                .isEmpty();
     }
 
     @DisplayName("[Invalid] isValidFor(User.class, \"name\") should fail")
@@ -73,7 +74,8 @@ class ValidationAssertions_IsValidForName_Test {
                 .isNotEmpty()
                 .doesNotContainNull()
                 .allSatisfy(cv -> {
-                    Assertions.assertThat(cv.getInvalidValue()).isEqualTo(actual);
+                    Assertions.assertThat(cv.getInvalidValue())
+                            .isEqualTo(actual);
                     Assertions.assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> {

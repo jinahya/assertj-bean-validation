@@ -162,8 +162,37 @@ class UserAssertTest {
 ### Verifying values for properties of bean types.
 
 ```java
-assertValue("John")
-        .isValidFor(User.class,"name");
+class UserPropertyTest {
+
+    @Test
+    void test() {
+        assertValue("John")
+                .isValidFor(User.class, "name");
         assertValue(31)
-        .isValidFor(User.class,"age");
+                .isValidFor(User.class, "age");
+    }
+}
+```
+
+Note that a bean can also be validated for a property of other beans.
+(Note also that the `@Valid` is not honored by `validateProperty` method nor `validateValue` method.)
+
+```java
+class UserPropertyTest {
+
+    @Test
+    void test() {
+        User user = null;
+        assertBean(null)
+                .isValidFor(Registration.class, "user");
+        user = new User("John", 300); // invalid
+        assertThatCode(
+                () -> assertBean(actual).isValidFor(Registration.class, "user")
+        ).doesNotThrowAnyException();
+        Registration registration = new Registration(user);
+        assertThatThrownBy(
+                () -> assertBean(registration).isValid()
+        ).isInstanceOf(AssertionError.class);
+    }
+}
 ```

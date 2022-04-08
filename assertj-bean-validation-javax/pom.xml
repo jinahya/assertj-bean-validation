@@ -41,9 +41,10 @@
     </dependency>
     <dependency>
       <!-- https://hibernate.org/validator/documentation/migration-guide/ -->
+      <!-- https://hibernate.org/validator/releases/ -->
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>6.2.3.Final</version>
+      <version>6.0.23.Final</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

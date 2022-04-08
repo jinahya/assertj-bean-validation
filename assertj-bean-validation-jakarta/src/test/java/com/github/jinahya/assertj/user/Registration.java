@@ -1,10 +1,9 @@
-package com.github.jinahya.assertj.validation.user;
+package com.github.jinahya.assertj.user;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @SuperBuilder
