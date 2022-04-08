@@ -10,7 +10,6 @@
   </parent>
 
   <artifactId>assertj-bean-validation-base</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>

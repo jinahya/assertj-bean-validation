@@ -33,7 +33,7 @@ public final class ValidationAssertions {
      *
      * @param <ACTUAL> type of actual bean
      * @param actual   the actual bean object to verify.
-     * @return a new assertion instance for {@code actual}.
+     * @return a new assertion object for verifying {@code actual}.
      */
     public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertBean(final ACTUAL actual) {
         return new BeanAssertImpl<>(actual);

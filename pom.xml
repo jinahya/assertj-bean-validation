@@ -77,16 +77,6 @@
         <artifactId>validation-api</artifactId>
         <version>${version.javax.validation-api}</version>
       </dependency>
-      <dependency>
-        <groupId>org.glassfish</groupId>
-        <artifactId>jakarta.el</artifactId>
-        <version>${version.jakarta.el}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate.validator</groupId>
-        <artifactId>hibernate-validator</artifactId>
-        <version>${version.org.hibernate.validator}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -110,22 +100,28 @@
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
+      <artifactId>junit-jupiter</artifactId>
       <version>${version.org.junit.jupiter}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${version.org.junit.jupiter}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>${version.org.junit.jupiter}</version>
-      <scope>test</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.junit.jupiter</groupId>-->
+<!--      <artifactId>junit-jupiter-api</artifactId>-->
+<!--      <version>${version.org.junit.jupiter}</version>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.junit.jupiter</groupId>-->
+<!--      <artifactId>junit-jupiter-engine</artifactId>-->
+<!--      <version>${version.org.junit.jupiter}</version>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.junit.jupiter</groupId>-->
+<!--      <artifactId>junit-jupiter-params</artifactId>-->
+<!--      <version>${version.org.junit.jupiter}</version>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

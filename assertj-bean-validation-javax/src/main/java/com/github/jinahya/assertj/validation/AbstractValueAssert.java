@@ -50,6 +50,12 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
         super(actual, selfType);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     * @implNote Overridden to return {@code Validation.buildDefaultValidatorFactory().getValidator()}.
+     */
     @Override
     protected @NotNull Validator getValidator() {
         return Optional.ofNullable(super.getValidator())
@@ -57,8 +63,8 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
     }
 
     /**
-     * Verifies that the {@link #actual actual} is valid for the property of specified name of specified bean type while
-     * accepting constraint violations, if any populated, to specified consumer.
+     * Verifies that the {@link #actual actual} value is valid for the property of specified name of specified bean type
+     * while accepting constraint violations, if any populated, to specified consumer.
      *
      * @param beanType     the bean type.
      * @param propertyName the name of the property.
@@ -83,23 +89,22 @@ public abstract class AbstractValueAssert<SELF extends AbstractValueAssert<SELF,
                             .as("is valid for %s#%s", beanType.getSimpleName(), propertyName)
                             .withFailMessage("expected no constraint violations but got %s", violations)
                             .isEmpty();
-                })
-                ;
+                });
     }
 
     /**
-     * Verifies that the {@link #actual actual} is valid for the property of specified name of specified bean type.
+     * Verifies that the {@link #actual actual} value is valid for the property of specified name of specified bean
+     * type.
      *
      * @param beanType     the bean type.
      * @param propertyName the name of the property.
      * @param <T>          type of the bean
      * @return this assertion instance.
      * @implNote This method invokes {@link #isValidFor(Class, String, Consumer)} method with {@code beanType}, {@code
-     * propertyName}, and a consumer does nothing.
+     * propertyName}, and an empty consumer.
      * @see #isValidFor(Class, String, Consumer)
      */
-    public @NotNull <T> SELF
-    isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
+    public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
         return isValidFor(
                 beanType,
                 propertyName,

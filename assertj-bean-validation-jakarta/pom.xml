@@ -10,14 +10,9 @@
   </parent>
 
   <artifactId>assertj-bean-validation-jakarta</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
-
-  <properties>
-    <version.org.hibernate.validator>6.2.0.Final</version.org.hibernate.validator>
-    <version.jakarta.el>3.0.3</version.jakarta.el>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -52,39 +47,4 @@
     </dependency>
   </dependencies>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>

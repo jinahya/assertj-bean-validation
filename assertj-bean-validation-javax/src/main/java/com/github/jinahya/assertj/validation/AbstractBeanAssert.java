@@ -72,8 +72,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                             .as("no constraint violations")
                             .withFailMessage("expected but got %s", violations)
                             .isEmpty();
-                })
-                ;
+                });
     }
 
     /**
@@ -113,8 +112,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                             .as("no constraint violations")
                             .withFailMessage("expected on %s but got %s", propertyName, violations)
                             .isEmpty();
-                })
-                ;
+                });
     }
 
     /**
