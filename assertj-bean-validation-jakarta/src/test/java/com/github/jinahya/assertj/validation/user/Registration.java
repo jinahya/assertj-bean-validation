@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.user;
+package com.github.jinahya.assertj.validation.user;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

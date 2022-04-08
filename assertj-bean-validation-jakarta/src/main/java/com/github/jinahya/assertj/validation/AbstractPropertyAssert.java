@@ -20,12 +20,12 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -34,14 +34,11 @@ import java.util.function.Consumer;
 /**
  * An abstract assertion class for validating a value against constraints defined on a bean property.
  *
- * @param <SELF>   self type parameter
- * @param <ACTUAL> actual value type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
 public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractValidationAssert<SELF, ACTUAL, Validator>
-        implements PropertyAssert<SELF, ACTUAL, Validator> {
+        extends AbstractValidationAssert<SELF, ACTUAL, Validator> {
 
     /**
      * Creates a new instance with specified actual value and self type.
@@ -107,8 +104,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      * propertyName}, and an empty consumer.
      * @see #isValidFor(Class, String, Consumer)
      */
-    @Override
-    public <T> @NotNull SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
+    public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
         return isValidFor(
                 beanType,
                 propertyName,

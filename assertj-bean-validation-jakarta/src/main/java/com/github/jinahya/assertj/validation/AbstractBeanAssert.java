@@ -20,20 +20,19 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * An abstract assertion class for verifying bean objects.
+ * An abstract assertion class for verifying bean values.
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  * @see ValidationAssertions#assertBean(Object)
  */
 @SuppressWarnings({"java:S119"})
