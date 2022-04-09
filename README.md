@@ -198,7 +198,7 @@ class UserPropertyTest {
     @Test
     void test() {
         User user2 = new User("John", 300);                       // invalid!
-        assertBean(user2).isValidFor(Registration.class, "user"); // won't fail!
+        assertBean(user2).isValidFor(Registration.class, "user"); // doesn't fail!
         Registration registration = new Registration(user);
         assertBean(registration).isValid();                       // should fail!
     }
