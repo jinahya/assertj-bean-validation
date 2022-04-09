@@ -196,10 +196,10 @@ class Test {
 
     @Test
     void test() {
-        User user = new User("John", 300);                        // invalid, obviously
-        assertBean(user).isValid();                               // fails
-        assertBean(user2).isValidFor(Registration.class, "user"); // DOES NOT FAIL!
-        assertBean(new Registration(user)).isValid();             // fails
+        User user = new User("John", 300);                       // invalid, obviously
+        assertBean(user).isValid();                              // so does fail
+        assertBean(user).isValidFor(Registration.class, "user"); // DOES NOT FAIL!
+        assertBean(new Registration(user)).isValid();            // fails, after ...
     }
 }
 ```
