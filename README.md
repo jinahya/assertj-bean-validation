@@ -68,34 +68,31 @@ class UserTest {
 
     @Test
     void test1() {
-        assertThatBean(new User("Jane", 28))
-                .isValid()
-                .hasValidProperty("name")
-                .hasValidProperty("age");
+        assertBean(new User("Jane", 28))
+                .isValid()                // passes
+                .hasValidProperty("name") // passes
+                .hasValidProperty("age"); // passes
     }
 
     @DisplayName("debug with constraint violations")
     @Test
     void test2() {
-        assertThatThrownBy(() -> {
-            assertThatBean(new User("", 27))
-                    .isValid(cv -> {
-                        assertThat(cv.getInvalidValue()).isEqualTo(actual.getName());
-                        assertThat(cv.getPropertyPath())
-                                .isNotEmpty()
-                                .allSatisfy(n -> {
-                                    assertThat(n.getName()).isEqualTo("name");
-                                });
-                    });
-        }).isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertThatBean(new User("John", 300))
-                .hasValidProperty("age", cv -> {
+        assertBean(new User("", 27))
+                .isValid(cv -> {                 // fails
+                    assertThat(cv.getInvalidValue()).isEqualTo(actual.getName());
+                    assertThat(cv.getPropertyPath())
+                            .isNotEmpty()
+                            .allSatisfy(n -> {
+                                assertThat(n.getName()).isEqualTo("name");
+                            });
+                });
+        assertBean(new User("John", 300))
+                .hasValidProperty("age", cv -> { // fails
                     assertThat(cv.getInvalidValue()).isEqualTo(actual.getAge());
                     assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> assertThat(n.getName()).isEqualTo("age"));
-                })
-        ).isInstanceOf(AssertionError.class);
+                });
     }
 }
 ```
