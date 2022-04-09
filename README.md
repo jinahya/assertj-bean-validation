@@ -192,18 +192,16 @@ Note also that the `@Valid` is not honored by `Validator#validateProperty` metho
 See [6.1.1. Validation methods] (Jakarta Bean Validation specification).
 
 ```java
-
-class UserPropertyTest {
+class Test {
 
     @Test
     void test() {
-        User user2 = new User("John", 300);                       // invalid!
-        assertBean(user2).isValidFor(Registration.class, "user"); // doesn't fail!
-        Registration registration = new Registration(user);
-        assertBean(registration).isValid();                       // should fail!
+        User user = new User("John", 300);                        // invalid, obviously
+        assertBean(user).isValid();                               // fails
+        assertBean(user2).isValidFor(Registration.class, "user"); // DOES NOT FAIL!
+        assertBean(new Registration(user)).isValid();             // fails
     }
 }
-
 ```
 
 [6.1.1. Validation methods]: https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods
