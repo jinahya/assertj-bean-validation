@@ -33,7 +33,7 @@ For Jakarta EE,
 
 ## Compatibilities
 
-* Depends(`provided`) on
+* Depends(as `provided`) on
   the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
 * Targets Java 8.
 
@@ -68,7 +68,7 @@ class UserTest {
 
     @Test
     void test1() {
-        assertBean(new User("Jane", 28))
+        assertThatBean(new User("Jane", 28))
                 .isValid()
                 .hasValidProperty("name")
                 .hasValidProperty("age");
@@ -78,7 +78,7 @@ class UserTest {
     @Test
     void test2() {
         assertThatThrownBy(() -> {
-            assertBean(new User("", 27))
+            assertThatBean(new User("", 27))
                     .isValid(cv -> {
                         assertThat(cv.getInvalidValue()).isEqualTo(actual.getName());
                         assertThat(cv.getPropertyPath())
@@ -88,7 +88,7 @@ class UserTest {
                                 });
                     });
         }).isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertBean(new User("John", 300))
+        assertThatThrownBy(() -> assertThatBean(new User("John", 300))
                 .hasValidProperty("age", cv -> {
                     assertThat(cv.getInvalidValue()).isEqualTo(actual.getAge());
                     assertThat(cv.getPropertyPath())
@@ -166,33 +166,49 @@ class UserPropertyTest {
 
     @Test
     void test() {
-        assertValue("John")
+        assertBeanProperty("John")
                 .isValidFor(User.class, "name");
-        assertValue(31)
+        assertBeanProperty(31)
                 .isValidFor(User.class, "age");
     }
 }
 ```
 
 Note that a bean can also be validated for a property of other beans.
-(Note also that the `@Valid` is not honored by `validateProperty` method nor `validateValue` method.)
 
 ```java
+        final User actual = null;
+        assertThatThrownBy(() -> assertBean(actual).isValidFor(Registration.class, "user"))
+                .isInstanceOf(AssertionError.class);
+```
+
+Note also that the `@Valid` is not honored by `Validator#validateProperty` method nor `Validator#validateValue` method.[^1]
+
+```java
+
 class UserPropertyTest {
 
     @Test
     void test() {
-        User user = null;
-        assertBean(null)
-                .isValidFor(Registration.class, "user");
-        user = new User("John", 300); // invalid
-        assertThatCode(
-                () -> assertBean(actual).isValidFor(Registration.class, "user")
-        ).doesNotThrowAnyException();
+
+        final User user1 = null;
+        assertThatThrownBy(() -> assertBean(user1).isValidFor(Registration.class, "user"))
+                .isInstanceOf(AssertionError.class);
+
+        // by the spec, `@Valid` is not honored by validate `Validator#validateValue` method
+        final User user2 = new User("John", 300); // invalid!
+        assertThatCode(() -> assertBean(user2).isValidFor(Registration.class, "user"))
+                .doesNotThrowAnyException();
+
         Registration registration = new Registration(user);
         assertThatThrownBy(
                 () -> assertBean(registration).isValid()
         ).isInstanceOf(AssertionError.class);
     }
+
 }
+
 ```
+
+
+[^1]: aaa
