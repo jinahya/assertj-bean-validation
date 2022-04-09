@@ -39,6 +39,8 @@ For Jakarta EE,
 
 ## Usages
 
+Say, we have the following beans to verify.
+
 ```java
 class User {
 
@@ -57,28 +59,43 @@ class Registration {
     @NotNull
     User user;
 }
+
+class SeniorRegistration
+        extends Registration {
+
+    @AssertTrue
+    boolean isUserSenior() {
+        return user == null || user.age >= 60;
+    }
+}
 ```
 
-### Verifying beans
+### Verifying beans and properties
 
-Verifies that the actual bean object is valid.
+Verifies that actual bean objects and/or their properties are valid.
 
 ```java
-class UserTest {
+class Test {
 
     @Test
-    void test1() {
-        assertBean(new User("Jane", 28))
+    void test() {
+        assertBean(new User("Jane", 28))  // valid
                 .isValid()                // passes
                 .hasValidProperty("name") // passes
                 .hasValidProperty("age"); // passes
     }
+}
+```
 
-    @DisplayName("debug with constraint violations")
+You can debug by verifying constraint violations, if any populated.
+
+```java
+class Test {
+
     @Test
-    void test2() {
-        assertBean(new User("", 27))
-                .isValid(cv -> {                 // fails
+    void test() {
+        assertBean(new User("", 27))             // invalid; name is blank
+                .isValid(cv -> {                 // should fail
                     assertThat(cv.getInvalidValue()).isEqualTo(actual.getName());
                     assertThat(cv.getPropertyPath())
                             .isNotEmpty()
@@ -86,8 +103,8 @@ class UserTest {
                                 assertThat(n.getName()).isEqualTo("name");
                             });
                 });
-        assertBean(new User("John", 300))
-                .hasValidProperty("age", cv -> { // fails
+        assertBean(new User("John", 300))        // invalid; too old to be true
+                .hasValidProperty("age", cv -> { // should fail
                     assertThat(cv.getInvalidValue()).isEqualTo(actual.getAge());
                     assertThat(cv.getPropertyPath())
                             .isNotEmpty()
@@ -97,7 +114,7 @@ class UserTest {
 }
 ```
 
-### Verifying beans using extended assert classes
+### Using extended assertion classes
 
 You can work with your own (extended) assert class.
 
@@ -120,34 +137,35 @@ class UserAssert
 A number of static factory methods are prepared.
 
 ```java
-class UserAssertTest {
+class Test {
 
     @Test
-    void test1() {
-        // specify your assert class along with actual class
+    void test() {
+        // specify your assert class along with specific actual class
         {
-            final User actual = User.newValidInstance_().name("Jane").build();
-            final UserAssert assertion = assertBean(UserAssert.class, User.class, actual);
-            assertion.isValid()
+            final User actual = new User("Jane", 0);
+            assertBean(UserAssert.class, User.class, actual)
+                    .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
                     .isNamedJane();
         }
         // or emit the actual class
         {
-            final User actual = User.newValidInstance_().name("Jane").build();
-            final UserAssert assertion = assertBean(UserAssert.class, actual);
-            assertion.isValid()
+            final User actual = new User("John", 1);
+            assertBean(UserAssert.class, actual)
+                    .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
                     .isNamedJane();
         }
         // or let it find whatever required
         {
-            // finds the `UserAssert` class in the same package of `User` class
-            final Object actual = User.newValidInstance_().name("Jane").build();
-            final UserAssert assertion = assertVirtualBean(actual);
-            assertion.isValid()
+            // tries to find a class named `UserAssert` class
+            // in the same package of `User` class
+            final Object actual = new User("Jane", 0); // java.lang.Object
+            assertVirtualBean(actual)                  // mind the name of the method
+                    .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
                     .isNamedJane();
@@ -156,27 +174,29 @@ class UserAssertTest {
 }
 ```
 
-### Verifying values for properties of bean types.
+### Verifying property values
+
+You can verify a value against a property of specific bean type.
 
 ```java
-class UserPropertyTest {
+class Test {
 
     @Test
     void test() {
-        assertBeanProperty("John").isValidFor(User.class, "name"); // pass
-        assertBeanProperty(null).isValidFor(User.class, "name");   // fail
-        assertBeanProperty("  ").isValidFor(User.class, "name");   // fail
-        assertBeanProperty(31).isValidFor(User.class, "age");      // pass
-        assertBeanProperty(-1).isValidFor(User.class, "age");      // fail
-        assertBeanProperty(297).isValidFor(User.class, "age");     // fail
+        assertBeanProperty("John").isValidFor(User.class, "name"); // passes
+        assertBeanProperty(null).isValidFor(User.class, "name");   // fails
+        assertBeanProperty("  ").isValidFor(User.class, "name");   // fails
+        assertBeanProperty(31).isValidFor(User.class, "age");      // passes
+        assertBeanProperty(-1).isValidFor(User.class, "age");      // fails
+        assertBeanProperty(297).isValidFor(User.class, "age");     // fails
     }
 }
 ```
 
-Note that a bean can also be validated for a property of other beans.
+Note that a bean can also be validated against a property of another bean.
 
 ```java
-class RegistrationAssertionTest {
+class Test {
 
     @Test
     void test() {

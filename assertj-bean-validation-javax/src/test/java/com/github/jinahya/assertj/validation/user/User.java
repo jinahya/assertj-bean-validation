@@ -98,10 +98,10 @@ public class User {
     public static final int MAX_VALUE_AGE = 128;
 
     @NotBlank
-    private final String name;
+    final String name;
 
     @Max(MAX_VALUE_AGE)
     @Min(MIN_VALUE_AGE)
     @PositiveOrZero
-    private final int age;
+    final int age;
 }

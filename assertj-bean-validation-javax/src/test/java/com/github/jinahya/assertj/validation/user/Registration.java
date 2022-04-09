@@ -12,5 +12,5 @@ class Registration {
 
     @Valid
     @NotNull
-    private final User user;
+    final User user;
 }
