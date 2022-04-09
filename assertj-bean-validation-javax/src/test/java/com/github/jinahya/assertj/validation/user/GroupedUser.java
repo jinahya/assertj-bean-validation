@@ -20,48 +20,62 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.Default;
+import java.lang.invoke.MethodHandles;
+import java.util.Objects;
 
-@Getter
-@EqualsAndHashCode
-@ToString
-@SuperBuilder(toBuilder = true)
 class GroupedUser {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     static GroupedUser newValidInstance() {
         final User user = User.newValidInstance();
-        return builder()
-                .name(user.getName())
-                .age(user.getAge())
-                .build();
+        return new GroupedUser(user.getName(), user.getAge());
     }
 
     static GroupedUser newInstanceWithInvalidName() {
-        final User user = User.newInstanceWithInvalidName();
-        return builder()
-                .name(user.getName())
-                .age(user.getAge())
-                .build();
+        return of(User.newInstanceWithInvalidName());
     }
 
     static GroupedUser newInstanceWithInvalidAge() {
-        final User user = User.newInstanceWithInvalidAge();
-        return builder()
-                .name(user.getName())
-                .age(user.getAge())
-                .build();
+        return of(User.newInstanceWithInvalidAge());
+    }
+
+    static GroupedUser of(final User user) {
+        Objects.requireNonNull(user, "user is null");
+        return new GroupedUser(user.getName(), user.getAge());
+    }
+
+    GroupedUser(String name, int age) {
+        super();
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(final int age) {
+        this.age = age;
     }
 
     @NotBlank(groups = {Default.class, NameOnly.class})
-    private String name;
+    String name;
 
     @PositiveOrZero(groups = {Default.class, AgeOnly.class})
-    private int age;
+    int age;
 }

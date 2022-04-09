@@ -21,25 +21,29 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.AbstractBeanAssert;
+import com.github.jinahya.assertj.validation.BeanAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
+import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
 
-@Slf4j
 class UserAssert_IsValid_Test
         extends UserAssertTest {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @DisplayName("[Valid] isValid() should pass")
     @Test
     void isValid_Pass_Valid() {
         final User actual = User.newValidInstance();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         assertion.isValid();
     }
 
@@ -47,7 +51,7 @@ class UserAssert_IsValid_Test
     @Test
     void isValid_Fail_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         Assertions.assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
@@ -56,7 +60,7 @@ class UserAssert_IsValid_Test
     @Test
     void isValidWithConsumer_Fail_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatThrownBy(() -> assertion.isValid(violations::add))
                 .isInstanceOf(AssertionError.class);
@@ -78,7 +82,7 @@ class UserAssert_IsValid_Test
     @Test
     void isValid_Fail_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
-        final AbstractBeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
+        final BeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
         Assertions.assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }

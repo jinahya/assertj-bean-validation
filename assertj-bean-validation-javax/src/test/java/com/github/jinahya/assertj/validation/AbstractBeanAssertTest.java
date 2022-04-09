@@ -20,12 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import javax.validation.Validator;
-
 public abstract class AbstractBeanAssertTest<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractValidationAssertTest<SELF, ACTUAL, Validator> {
+        extends AbstractPropertyAssertTest<SELF, ACTUAL> {
 
     protected AbstractBeanAssertTest(final Class<SELF> assertionClass, final Class<ACTUAL> actualClass) {
-        super(assertionClass, actualClass, Validator.class);
+        super(assertionClass, actualClass);
     }
 }

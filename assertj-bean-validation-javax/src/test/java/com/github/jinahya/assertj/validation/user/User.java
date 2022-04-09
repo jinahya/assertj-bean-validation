@@ -20,22 +20,19 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
+import java.lang.invoke.MethodHandles;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Getter
-@EqualsAndHashCode
-@ToString
-@SuperBuilder
 public class User {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     static String newValidName() {
         return Long.toString(System.nanoTime());
@@ -45,14 +42,8 @@ public class User {
         return ThreadLocalRandom.current().nextInt(MIN_VALUE_AGE, MAX_VALUE_AGE);
     }
 
-    static User.UserBuilder<?, ?> newValidInstance_() {
-        return User.builder()
-                .name(newValidName())
-                .age(newValidAge());
-    }
-
-    public static User newValidInstance() {
-        return newValidInstance_().build();
+    static User newValidInstance() {
+        return new User(newValidName(), newValidAge());
     }
 
     static String newInvalidName() {
@@ -69,27 +60,15 @@ public class User {
         return ThreadLocalRandom.current().nextInt(MAX_VALUE_AGE + 1, Integer.MAX_VALUE);
     }
 
-    static User.UserBuilder<?, ?> newInstanceWithInvalidName_() {
-        return newValidInstance_()
-                .name(newInvalidName())
-                ;
-    }
-
     public static User newInstanceWithInvalidName() {
-        final User instance = newInstanceWithInvalidName_().build();
-        final String name = instance.name;
+        final User instance = newValidInstance();
+        instance.setName(newInvalidName());
         return instance;
     }
 
-    static User.UserBuilder<?, ?> newInstanceWithInvalidAge_() {
-        return newValidInstance_()
-                .age(newInvalidAge())
-                ;
-    }
-
     public static User newInstanceWithInvalidAge() {
-        final User instance = newInstanceWithInvalidAge_().build();
-        final int age = instance.age;
+        final User instance = newValidInstance();
+        instance.setAge(newInvalidAge());
         return instance;
     }
 
@@ -97,11 +76,32 @@ public class User {
 
     public static final int MAX_VALUE_AGE = 128;
 
+    public User(final String name, final int age) {
+        super();
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     @NotBlank
-    final String name;
+    String name;
 
     @Max(MAX_VALUE_AGE)
     @Min(MIN_VALUE_AGE)
-    @PositiveOrZero
-    final int age;
+    @PositiveOrZero int age;
 }

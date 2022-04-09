@@ -20,21 +20,19 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.jetbrains.annotations.NotNull;
-
 @SuppressWarnings({"java:S119"})
-public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+interface IPropertyAssert<SELF extends IPropertyAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
         extends ValidationAssert<SELF, ACTUAL, VALIDATOR> {
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
      *
-     * @param beanType     the bean type.
-     * @param propertyName the name of the property.
+     * @param beanType     the bean type; not {@code null}.
+     * @param propertyName the name of the property; not {@code null}.
      * @param <T>          type of the bean
      * @return this assertion instance.
      * @apiNote Note that the {@code @Valid} is not honored by the {@code Validator#validateValue(Class<T> beanType,
-     * String propertyName, Object value, Class<?>... groups)} method which this method invokes.
+     * String propertyName, Object value, Class<?>... groups)} method on which this method relies.
      */
-    <T> @NotNull SELF isValidFor(@NotNull Class<T> beanType, @NotNull String propertyName);
+    <T> SELF isValidFor(Class<T> beanType, String propertyName);
 }

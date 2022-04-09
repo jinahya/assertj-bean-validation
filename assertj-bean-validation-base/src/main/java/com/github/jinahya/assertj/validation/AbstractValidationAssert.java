@@ -21,8 +21,6 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -38,7 +36,7 @@ import java.util.Set;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-abstract class AbstractValidationAssert<
+public abstract class AbstractValidationAssert<
         SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
         ACTUAL,
         VALIDATOR>
@@ -60,21 +58,21 @@ abstract class AbstractValidationAssert<
      *
      * @return the validator configured to use.
      */
-    protected @Nullable VALIDATOR getValidator() {
+    protected VALIDATOR getValidator() {
         return validator;
     }
 
     /**
      * Replaces currently configured validator with specified value.
      *
-     * @param validator new validator to use.
+     * @param validator new validator to use; may be {@code null}.
      */
-    protected void setValidator(@Nullable VALIDATOR validator) {
+    protected void setValidator(VALIDATOR validator) {
         this.validator = validator;
     }
 
     @Override
-    public @NotNull SELF usingValidator(final @Nullable VALIDATOR validator) {
+    public SELF usingValidator(final VALIDATOR validator) {
         setValidator(validator);
         return myself;
     }
@@ -84,7 +82,7 @@ abstract class AbstractValidationAssert<
      *
      * @return an array of targeting groups; may be {@code empty}.
      */
-    protected @NotNull Class<?>[] getGroups() {
+    protected Class<?>[] getGroups() {
         return groups.toArray(new Class<?>[0]);
     }
 
@@ -93,7 +91,7 @@ abstract class AbstractValidationAssert<
      *
      * @param groups new targeting groups; may be {@code null}.
      */
-    protected void setGroups(final @Nullable Class<?>[] groups) {
+    protected void setGroups(final Class<?>[] groups) {
         this.groups.clear();
         if (groups != null) {
             Arrays.stream(groups)
@@ -103,7 +101,7 @@ abstract class AbstractValidationAssert<
     }
 
     @Override
-    public @NotNull SELF targetingGroups(final @Nullable Class<?>... groups) {
+    public SELF targetingGroups(final Class<?>... groups) {
         setGroups(groups);
         return myself;
     }
@@ -116,5 +114,5 @@ abstract class AbstractValidationAssert<
     /**
      * The targeting groups being used.
      */
-    private final Set<@NotNull Class<?>> groups = new HashSet<>();
+    private final Set<Class<?>> groups = new HashSet<>();
 }

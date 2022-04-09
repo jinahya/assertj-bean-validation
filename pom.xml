@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.github.jinahya</groupId>
     <artifactId>jinahya-parent</artifactId>
-    <version>0.8.6</version>
+    <version>0.8.7</version>
   </parent>
 
   <artifactId>assertj-bean-validation</artifactId>
@@ -48,17 +48,16 @@
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
     <maven.compiler.testSource>11</maven.compiler.testSource>
     <maven.compiler.testTarget>${maven.compiler.testSource}</maven.compiler.testTarget>
-    <delombok.outputDirectory>${project.build.directory}/delombok</delombok.outputDirectory>
     <sonar.projectKey>jinahya_assertj-bean-validation</sonar.projectKey>
     <sonar.organization>jinahya-github</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <version.animal-sniffer>1.21</version.animal-sniffer>
     <version.assertj-core>3.22.0</version.assertj-core>
+    <version.checkstyle>10.1</version.checkstyle>
     <version.jakarta.el>4.0.1</version.jakarta.el> <!-- latest -->
     <version.jakarta.validation-api>3.0.0</version.jakarta.validation-api> <!-- latest -->
     <version.javax.validation-api>2.0.1.Final</version.javax.validation-api>
     <version.logback-classic>1.3.0-alpha14</version.logback-classic>
-    <version.lombok>1.18.22</version.lombok>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-surefire>3.0.0-M5</version.maven-surefire>
     <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator> <!-- latest -->
@@ -92,12 +91,12 @@
       <version>${version.assertj-core}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>23.0.0</version>
-      <scope>provided</scope>
-    </dependency>
+    <!--    <dependency>-->
+    <!--      <groupId>org.jetbrains</groupId>-->
+    <!--      <artifactId>annotations</artifactId>-->
+    <!--      <version>23.0.0</version>-->
+    <!--      <scope>provided</scope>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -122,12 +121,6 @@
     <!--      <version>${version.org.junit.jupiter}</version>-->
     <!--      <scope>test</scope>-->
     <!--    </dependency>-->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${version.lombok}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -142,19 +135,19 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>3.1.2</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${version.checkstyle}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.9.0</version>
           <configuration>
-            <annotationProcessorPaths>
-              <path>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${version.lombok}</version>
-              </path>
-            </annotationProcessorPaths>
             <compilerArgs>
               <arg>-Xlint</arg>
             </compilerArgs>
@@ -217,24 +210,12 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.3.1</version>
           <configuration>
-            <additionalDependencies>
-              <additionalDependency>
-                <groupId>jakarta.validation</groupId>
-                <artifactId>jakarta.validation-api</artifactId>
-                <version>${version.jakarta.validation-api}</version>
-              </additionalDependency>
-              <additionalDependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>${version.javax.validation-api}</version>
-              </additionalDependency>
-            </additionalDependencies>
             <links>
+              <!--              <link>https://javadoc.io/doc/org.jetbrains/annotations/latest/index.html</link>-->
               <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}</link>
               <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>
               <link>https://javadoc.io/static/javax.validation/validation-api/${version.javax.validation-api}/</link>
             </links>
-            <sourcepath>${delombok.outputDirectory}</sourcepath>
             <tags>
               <tag>
                 <name>apiNote</name>
@@ -294,6 +275,11 @@
           <version>3.10.0</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-report-plugin</artifactId>
+          <version>3.0.0-M5</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>3.3.0</version>
@@ -335,25 +321,6 @@
             </execution>
           </executions>
         </plugin>
-        <plugin>
-          <groupId>org.projectlombok</groupId>
-          <artifactId>lombok-maven-plugin</artifactId>
-          <version>1.18.20.0</version>
-          <executions>
-            <execution>
-              <id>delombok-for-javadoc</id>
-              <phase>generate-sources</phase>
-              <goals>
-                <goal>delombok</goal>
-              </goals>
-              <configuration>
-                <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                <outputDirectory>${delombok.outputDirectory}</outputDirectory>
-                <addOutputDirectory>false</addOutputDirectory>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -380,6 +347,70 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <configuration>
+          <showSuccess>false</showSuccess>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <targetJdk>${maven.compiler.source}</targetJdk>
+          <skipEmptyReport>false</skipEmptyReport> <!-- https://issues.apache.org/jira/browse/MPMD-225 -->
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependency-updates-report</report>
+              <report>plugin-updates-report</report>
+              <report>property-updates-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
   <profiles>
     <profile>

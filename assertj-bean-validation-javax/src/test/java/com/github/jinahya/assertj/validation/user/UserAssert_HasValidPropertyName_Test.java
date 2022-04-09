@@ -20,24 +20,27 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
+import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
 
-@Slf4j
 class UserAssert_HasValidPropertyName_Test
         extends UserAssertTest {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @DisplayName("[Valid] hasValidProperty(both) should pass")
     @Test
     void hasValidProperty_Pass_Valid() {
         final User actual = User.newValidInstance();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         assertion
                 .hasValidProperty("name")
                 .hasValidProperty("age");
@@ -47,7 +50,7 @@ class UserAssert_HasValidPropertyName_Test
     @Test
     void hasValidPropertyName_Fail_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("name"))
                 .isInstanceOf(AssertionError.class);
     }
@@ -56,7 +59,7 @@ class UserAssert_HasValidPropertyName_Test
     @Test
     void hasValidPropertyAge_Pass_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         Assertions.assertThatCode(() -> assertion.hasValidProperty("age"))
                 .doesNotThrowAnyException();
     }
@@ -65,7 +68,7 @@ class UserAssert_HasValidPropertyName_Test
     @Test
     void hasValidPropertyNameConsumer_Fail_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("name", cv -> {
                     Assertions.assertThat(cv)
@@ -90,7 +93,7 @@ class UserAssert_HasValidPropertyName_Test
     @Test
     void hasValidPropertyAgeConsumer_Pass_InvalidName() {
         final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatCode(() -> assertion.hasValidProperty("age", cv -> {
                     Assertions.assertThat(cv)

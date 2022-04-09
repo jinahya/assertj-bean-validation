@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import java.util.Objects;
 
-abstract class ValidationAssertTest<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR> {
+public abstract class ValidationAssertTest<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR> {
 
     protected ValidationAssertTest(final Class<SELF> assertClass, final Class<ACTUAL> actualClass,
                                    final Class<VALIDATOR> validatorClass) {

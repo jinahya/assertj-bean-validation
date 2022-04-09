@@ -33,8 +33,6 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.Assert;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A base interface for verifying beans and values.
@@ -54,7 +52,7 @@ interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR
      * @param validator the validator to use; may be {@code null}.
      * @return this assertion object.
      */
-    @NotNull SELF usingValidator(@Nullable VALIDATOR validator);
+    SELF usingValidator(VALIDATOR validator);
 
     /**
      * Configures this assertion object to use specified groups targeted for validation.
@@ -62,5 +60,5 @@ interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR
      * @param groups the validation groups to use; may be {@code null} or empty.
      * @return this assertion object.
      */
-    @NotNull SELF targetingGroups(@Nullable Class<?>... groups);
+    SELF targetingGroups(Class<?>... groups);
 }

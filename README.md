@@ -56,7 +56,7 @@ class User {
 class Registration {
 
     @Valid
-    @NotNull
+    
     User user;
 }
 
@@ -200,7 +200,7 @@ class Test {
 
     @Test
     void test() {
-        assertBean(null).isValidFor(Registration.class, "user"); // should fail by @NotNull
+        assertBean(null).isValidFor(Registration.class, "user"); // should fail by 
     }
 }
 ```

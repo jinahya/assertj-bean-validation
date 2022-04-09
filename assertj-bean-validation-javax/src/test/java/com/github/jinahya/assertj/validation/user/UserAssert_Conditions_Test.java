@@ -20,40 +20,48 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
+import java.lang.invoke.MethodHandles;
+
 class UserAssert_Conditions_Test
         extends UserAssertTest {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
     @Test
     void isNamedJane__() {
-        final User actual = User.newValidInstance_().name("Jane").build();
-        assertInstant(actual)
+        final User actual = User.newValidInstance();
+        actual.setName("Jane");
+        assertInstance(actual)
                 .isNamedJane();
     }
 
     @Test
     void isNamedJane_Fail_John() {
-        final User actual = User.newValidInstance_().name("John").build();
-        final UserAssert assertion = assertInstant(actual);
+        final User actual = User.newValidInstance();
+        actual.setName("John");
+        final UserAssert assertion = assertInstance(actual);
         Assertions.assertThatThrownBy(assertion::isNamedJane)
                 .isInstanceOf(AssertionError.class);
     }
 
     @Test
     void isNamedJohn__() {
-        final User actual = User.newValidInstance_().name("John").build();
-        assertInstant(actual)
+        final User actual = User.newValidInstance();
+        actual.setName("John");
+        assertInstance(actual)
                 .isNamedJohn();
     }
 
     @Test
     void isNamedJohn_Fail_Jane() {
-        final User actual = User.newValidInstance_().name("Jane").build();
-        final UserAssert assertion = assertInstant(actual);
+        final User actual = User.newValidInstance();
+        actual.setName("Jane");
+        final UserAssert assertion = assertInstance(actual);
         Assertions.assertThatThrownBy(assertion::isNamedJohn)
                 .isInstanceOf(AssertionError.class);
     }

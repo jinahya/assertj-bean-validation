@@ -22,17 +22,20 @@ package com.github.jinahya.assertj.validation.user;
 
 import com.github.jinahya.assertj.validation.AbstractPropertyAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
+import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
 
-@Slf4j
 class IsValidFor_Age_Test {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @DisplayName("[Valid] isValidFor(User.class, \"age\") should pass")
     @Test

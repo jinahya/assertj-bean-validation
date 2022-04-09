@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Constructor;
 import java.util.Objects;
 
@@ -55,7 +53,7 @@ public final class ValidationAssertions {
      * @return a new assertion object for verifying {@code actual}.
      */
     public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBean(
-            final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualType, final ACTUAL actual) {
+            final Class<SELF> selfClass, final Class<ACTUAL> actualType, final ACTUAL actual) {
         try {
             final Constructor<SELF> constructor = selfClass.getDeclaredConstructor(actualType);
             if (!constructor.isAccessible()) {
@@ -68,13 +66,13 @@ public final class ValidationAssertions {
     }
 
     private static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBeanHelper(
-            final @NotNull Class<SELF> selfClass, final Class<ACTUAL> actualClass, final @NotNull Object actual) {
+            final Class<SELF> selfClass, final Class<ACTUAL> actualClass, final Object actual) {
         Objects.requireNonNull(actual, "actual is null");
         return assertBean(selfClass, actualClass, actualClass.cast(actual));
     }
 
     public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBean(
-            final @NotNull Class<SELF> selfClass, final @NotNull ACTUAL actual) {
+            final Class<SELF> selfClass, final ACTUAL actual) {
         Objects.requireNonNull(actual, "actual is null");
         @SuppressWarnings({"unchecked"})
         final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
@@ -82,7 +80,7 @@ public final class ValidationAssertions {
     }
 
     public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualBean(
-            final @NotNull Object actual) {
+            final Object actual) {
         Objects.requireNonNull(actual, "actual is null");
         @SuppressWarnings({"unchecked"})
         final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
@@ -107,8 +105,8 @@ public final class ValidationAssertions {
         return new PropertyAssertImpl<>(actual);
     }
 
-    public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> @NotNull SELF assertProperty(
-            final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualClass, final ACTUAL actual) {
+    public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertProperty(
+            final Class<SELF> selfClass, final Class<ACTUAL> actualClass, final ACTUAL actual) {
         try {
             final Constructor<SELF> constructor = selfClass.getDeclaredConstructor(actualClass);
             if (!constructor.isAccessible()) {
@@ -121,12 +119,12 @@ public final class ValidationAssertions {
     }
 
     private static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertPropertyHelper(
-            final @NotNull Class<SELF> selfClass, final @NotNull Class<ACTUAL> actualClass, final Object actual) {
+            final Class<SELF> selfClass, final Class<ACTUAL> actualClass, final Object actual) {
         return assertProperty(selfClass, actualClass, actualClass.cast(actual));
     }
 
     public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertProperty(
-            final @NotNull Class<SELF> selfClass, final @NotNull ACTUAL actual) {
+            final Class<SELF> selfClass, final ACTUAL actual) {
         Objects.requireNonNull(actual, "actual is null");
         @SuppressWarnings({"unchecked"})
         final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
@@ -134,7 +132,7 @@ public final class ValidationAssertions {
     }
 
     public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualProperty(
-            final @NotNull Object actual) {
+            final Object actual) {
         Objects.requireNonNull(actual, "actual is null");
         @SuppressWarnings({"unchecked"})
         final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass(); // ClassCastException!

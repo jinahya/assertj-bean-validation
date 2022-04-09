@@ -20,26 +20,24 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.jetbrains.annotations.NotNull;
-
 @SuppressWarnings({"java:S119"})
-public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
-        extends PropertyAssert<SELF, ACTUAL, VALIDATOR> {
+interface IBeanAssert<SELF extends IBeanAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+        extends IPropertyAssert<SELF, ACTUAL, VALIDATOR> {
 
     /**
-     * Verifies that the {@code actual} bean is valid.
+     * Verifies that the {@code actual} value is valid.
      *
      * @return this assertion object.
      */
-    @NotNull SELF isValid();
+    SELF isValid();
 
     /**
-     * Verifies that all constraints placed on the property of specified name, of {@code actual}, are validated.
+     * Verifies that all constraints placed on the property of specified name, of {@code actual} value, are validated.
      *
-     * @param propertyName the name of the property whose constraints are validated.
+     * @param propertyName the name of the property whose constraints are validated; not {@code null}.
      * @return this assertion object.
      * @apiNote Note that the {@code @Valid} is not honored by the {@code Validator#validateProperty(T object, String
-     * propertyName, Class<?>... groups)} method which this method invokes.
+     * propertyName, Class<?>... groups)} method on which this method relies.
      */
-    @NotNull SELF hasValidProperty(@NotNull String propertyName);
+    SELF hasValidProperty(String propertyName);
 }

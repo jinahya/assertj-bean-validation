@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import java.lang.reflect.Constructor;
 
-abstract class AbstractValidationAssertTest<
+public abstract class AbstractValidationAssertTest<
         SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
         ACTUAL,
         VALIDATOR>
@@ -33,7 +33,7 @@ abstract class AbstractValidationAssertTest<
         super(assertClass, actualClass, validatorClass);
     }
 
-    protected SELF assertInstant(final ACTUAL actual) {
+    protected SELF assertInstance(final ACTUAL actual) {
         try {
             final Constructor<SELF> constructor = assertClass.getDeclaredConstructor(actualClass);
             if (!constructor.isAccessible()) {

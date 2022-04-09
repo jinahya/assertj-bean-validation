@@ -24,7 +24,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.assertj.core.api.Assertions;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -57,7 +56,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      * @implNote Overridden to return {@code Validation.buildDefaultValidatorFactory().getValidator()}.
      */
     @Override
-    protected @NotNull Validator getValidator() {
+    protected Validator getValidator() {
         return Optional.ofNullable(super.getValidator())
                 .orElseGet(Validation.buildDefaultValidatorFactory()::getValidator);
     }
@@ -73,8 +72,8 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      * @return this assertion instance.
      * @see #isValidFor(Class, String)
      */
-    public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName,
-                                        final @NotNull Consumer<? super ConstraintViolation<T>> consumer) {
+    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
+                               final Consumer<? super ConstraintViolation<T>> consumer) {
         Objects.requireNonNull(beanType, "beanType is null");
         Objects.requireNonNull(propertyName, "propertyName is null");
         Objects.requireNonNull(consumer, "consumer is null");
@@ -104,7 +103,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      * propertyName}, and an empty consumer.
      * @see #isValidFor(Class, String, Consumer)
      */
-    public @NotNull <T> SELF isValidFor(final @NotNull Class<T> beanType, final @NotNull String propertyName) {
+    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
         return isValidFor(
                 beanType,
                 propertyName,

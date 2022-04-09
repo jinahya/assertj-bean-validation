@@ -20,24 +20,27 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
+import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
 
-@Slf4j
 class UserAssert_HasValidPropertyAge_Test
         extends UserAssertTest {
+
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @DisplayName("[Invalid] hasValidProperty(\"age\") should fail")
     @Test
     void hasValidPropertyAge_Fail_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("age"))
                 .isInstanceOf(AssertionError.class);
     }
@@ -46,7 +49,7 @@ class UserAssert_HasValidPropertyAge_Test
     @Test
     void hasValidPropertyName_Pass_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         Assertions.assertThatCode(() -> assertion.hasValidProperty("name"))
                 .doesNotThrowAnyException();
     }
@@ -55,7 +58,7 @@ class UserAssert_HasValidPropertyAge_Test
     @Test
     void hasValidPropertyAgeConsumer_Fail_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatThrownBy(() -> assertion.hasValidProperty("age", violations::add))
                 .isInstanceOf(AssertionError.class);
@@ -77,7 +80,7 @@ class UserAssert_HasValidPropertyAge_Test
     @Test
     void hasValidPropertyNameConsumer_Pass_InvalidAge() {
         final User actual = User.newInstanceWithInvalidAge();
-        final UserAssert assertion = assertInstant(actual);
+        final UserAssert assertion = assertInstance(actual);
         final Set<ConstraintViolation<User>> violations = new HashSet<>();
         Assertions.assertThatCode(() -> assertion.hasValidProperty("name", violations::add))
                 .doesNotThrowAnyException();
