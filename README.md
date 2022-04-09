@@ -166,8 +166,12 @@ class UserPropertyTest {
 
     @Test
     void test() {
-        assertBeanProperty("John").isValidFor(User.class, "name");
-        assertBeanProperty(31).isValidFor(User.class, "age");
+        assertBeanProperty("John").isValidFor(User.class, "name"); // pass
+        assertBeanProperty(null).isValidFor(User.class, "name");   // fail
+        assertBeanProperty("  ").isValidFor(User.class, "name");   // fail
+        assertBeanProperty(31).isValidFor(User.class, "age");      // pass
+        assertBeanProperty(-1).isValidFor(User.class, "age");      // fail
+        assertBeanProperty(297).isValidFor(User.class, "age");     // fail
     }
 }
 ```
