@@ -177,12 +177,17 @@ class UserPropertyTest {
 Note that a bean can also be validated for a property of other beans.
 
 ```java
-        final User actual = null;
-        assertThatThrownBy(() -> assertBean(actual).isValidFor(Registration.class, "user"))
-                .isInstanceOf(AssertionError.class);
+class RegistrationAssertionTest {
+
+    @Test
+    void test() {
+        assertBean(null).isValidFor(Registration.class, "user"); // should fail by @NotNull
+    }
+}
 ```
 
-Note also that the `@Valid` is not honored by `Validator#validateProperty` method nor `Validator#validateValue` method.[^1]
+Note also that the `@Valid` is not honored by `Validator#validateProperty` method nor `Validator#validateValue` method.
+See [6.1.1. Validation methods] (Jakarta Bean Validation specification).
 
 ```java
 
@@ -190,25 +195,13 @@ class UserPropertyTest {
 
     @Test
     void test() {
-
-        final User user1 = null;
-        assertThatThrownBy(() -> assertBean(user1).isValidFor(Registration.class, "user"))
-                .isInstanceOf(AssertionError.class);
-
-        // by the spec, `@Valid` is not honored by validate `Validator#validateValue` method
-        final User user2 = new User("John", 300); // invalid!
-        assertThatCode(() -> assertBean(user2).isValidFor(Registration.class, "user"))
-                .doesNotThrowAnyException();
-
+        User user2 = new User("John", 300); // invalid!
+        assertBean(user2).isValidFor(Registration.class, "user"); // won't fail!
         Registration registration = new Registration(user);
-        assertThatThrownBy(
-                () -> assertBean(registration).isValid()
-        ).isInstanceOf(AssertionError.class);
+        assertBean(registration).isValid(); // should fail!
     }
-
 }
 
 ```
 
-
-[^1]: aaa
+[6.1.1. Validation methods]: https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods
