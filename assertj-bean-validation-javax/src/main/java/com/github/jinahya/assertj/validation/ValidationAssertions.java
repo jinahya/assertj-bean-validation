@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import sun.jvm.hotspot.utilities.ProcImageClassLoader;
-
 import java.lang.reflect.Constructor;
 import java.util.Objects;
 
