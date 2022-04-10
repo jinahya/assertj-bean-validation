@@ -50,8 +50,8 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
     }
 
     /**
-     * Verifies that the {@link #actual actual} bean object is valid while accepting constraint violations, if any
-     * populated, to specified consumer.
+     * Verifies that the {@link #actual actual} value is valid while accepting constraint violations, if any populated,
+     * to specified consumer.
      *
      * @param consumer the consumer accepts constraint violations.
      * @return this assertion object.

@@ -37,7 +37,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         extends IBeanAssert<SELF, ACTUAL, Validator> {
 
     /**
-     * Verifies that the {@code actual} bean is valid while accepting constraint violations, if any populated, to
+     * Verifies that the {@code actual} value is valid while accepting constraint violations, if any populated, to
      * specified consumer.
      *
      * @param consumer the consumer accepts constraint violations; not {@code null}.
@@ -48,7 +48,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
     SELF isValid(Consumer<? super ConstraintViolation<ACTUAL>> consumer);
 
     /**
-     * Verifies that the {@code actual} bean is valid.
+     * Verifies that the {@code actual} value is valid.
      *
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or is not valid.
