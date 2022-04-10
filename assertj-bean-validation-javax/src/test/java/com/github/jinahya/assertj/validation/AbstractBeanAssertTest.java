@@ -20,6 +20,12 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+/**
+ * An abstract base class for testing subclasses of {@link AbstractBeanAssert} class.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ */
 public abstract class AbstractBeanAssertTest<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractPropertyAssertTest<SELF, ACTUAL> {
 

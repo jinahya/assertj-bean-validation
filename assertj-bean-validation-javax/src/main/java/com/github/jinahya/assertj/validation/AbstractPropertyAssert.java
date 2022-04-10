@@ -75,7 +75,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
                     violations.forEach(consumer);
                     Assertions.assertThat(violations)
                             .as("no constraint violations, against %s#%s", beanType.getSimpleName(), propertyName)
-                            .withFailMessage("expected, but got %s", violations)
+                            .withFailMessage("expected but got %s", violations)
                             .isEmpty();
                 });
     }

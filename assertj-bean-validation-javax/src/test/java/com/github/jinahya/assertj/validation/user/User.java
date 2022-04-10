@@ -43,7 +43,7 @@ public class User {
     }
 
     static User newValidInstance() {
-        return new User(newValidName(), newValidAge());
+        return User.of(newValidName(), newValidAge());
     }
 
     static String newInvalidName() {
@@ -60,26 +60,39 @@ public class User {
         return ThreadLocalRandom.current().nextInt(MAX_VALUE_AGE + 1, Integer.MAX_VALUE);
     }
 
-    public static User newInstanceWithInvalidName() {
+    static User newInstanceWithInvalidName() {
         final User instance = newValidInstance();
         instance.setName(newInvalidName());
         return instance;
     }
 
-    public static User newInstanceWithInvalidAge() {
+    static User newInstanceWithInvalidAge() {
         final User instance = newValidInstance();
         instance.setAge(newInvalidAge());
         return instance;
     }
 
-    public static final int MIN_VALUE_AGE = 0;
+    static final int MIN_VALUE_AGE = 0;
 
-    public static final int MAX_VALUE_AGE = 128;
+    static final int MAX_VALUE_AGE = 128;
 
-    public User(final String name, final int age) {
+    static User of(final String name, final int age) {
+        final User instance = new User();
+        instance.name = name;
+        instance.age = age;
+        return instance;
+    }
+
+    User() {
         super();
-        this.name = name;
-        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + '{'
+               + "name=" + name
+               + ",age=" + age
+               + '}';
     }
 
     public String getName() {

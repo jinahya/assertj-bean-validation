@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.AbstractPropertyAssert;
+import com.github.jinahya.assertj.validation.PropertyAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 class IsValidFor_Age_Test {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -40,39 +44,36 @@ class IsValidFor_Age_Test {
     @DisplayName("[Valid] isValidFor(User.class, \"age\") should pass")
     @Test
     void isValidForAge_Pass_Valid() {
-        final int actual = User.newValidAge();
-        final AbstractPropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
+        final var actual = User.newValidAge();
+        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
         assertion.isValidFor(User.class, "age");
     }
 
     @DisplayName("[Invalid] isValidFor(User.class, \"age\") should fail")
     @Test
     void isValidForAge_Fail_InvalidAge() {
-        final int actual = User.newInvalidAge();
-        final AbstractPropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
-        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "age"))
+        final var actual = User.newInvalidAge();
+        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
+        assertThatThrownBy(() -> assertion.isValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
     }
 
     @DisplayName("[Invalid] isValidFor(User.class, \"age\", Consumer) should fail")
     @Test
     void isValidForAgeConsumer_Fail_InvalidAge() {
-        final int actual = User.newInvalidAge();
-        final AbstractPropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
-        final Set<ConstraintViolation<User>> violations = new HashSet<>();
-        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "age", cv -> {
-                    Assertions.assertThat(cv).isNotNull();
-                    violations.add(cv);
-                }))
+        final var actual = User.newInvalidAge();
+        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
+        final var violations = new HashSet<ConstraintViolation<User>>();
+        assertThatThrownBy(() -> assertion.isValidFor(User.class, "age", violations::add))
                 .isInstanceOf(AssertionError.class);
-        Assertions.assertThat(violations)
+        assertThat(violations)
                 .isNotEmpty()
                 .allSatisfy(cv -> {
-                    Assertions.assertThat(cv.getInvalidValue()).isEqualTo(actual);
-                    Assertions.assertThat(cv.getPropertyPath())
+                    assertThat(cv.getInvalidValue()).isEqualTo(actual);
+                    assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> {
-                                Assertions.assertThat(n.getName()).isEqualTo("age");
+                                assertThat(n.getName()).isEqualTo("age");
                             });
                 });
     }

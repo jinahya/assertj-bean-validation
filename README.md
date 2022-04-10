@@ -35,7 +35,11 @@ For Jakarta EE,
 
 * Depends(as `provided`) on
   the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
-* Targets Java 8.
+* Targets **Java 8**.
+
+### JDK
+
+This module requires **JDK 18**, especially with its test sources, for building itself.
 
 ## Usages
 
@@ -44,20 +48,14 @@ Say, we have the following beans to verify.
 ```java
 class User {
 
-    @NotBlank
-    String name;
+    @NotBlank String name;
 
-    @Max(128)
-    @Min(0)
-    @PositiveOrZero
-    int age;
+    @Max(128) @Min(0) @PositiveOrZero int age;
 }
 
 class Registration {
 
-    @Valid
-    
-    User user;
+    @Valid User user;
 }
 
 class SeniorRegistration
@@ -87,7 +85,7 @@ class Test {
 }
 ```
 
-You can debug by verifying constraint violations, if any populated.
+You can debug by analyzing (or verifying) constraint violations populated while validating.
 
 ```java
 class Test {
@@ -116,7 +114,7 @@ class Test {
 
 ### Using extended assertion classes
 
-You can work with your own (extended) assert class.
+You can work with your own (extended) assertion class.
 
 ```java
 class UserAssert
@@ -134,7 +132,7 @@ class UserAssert
 }
 ```
 
-A number of static factory methods are prepared.
+A number of static factory methods are prepared for extended assertion classes.
 
 ```java
 class Test {
@@ -148,7 +146,7 @@ class Test {
                     .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
-                    .isNamedJane();
+                    .isNamedJane(); // should pass
         }
         // or emit the actual class
         {
@@ -157,11 +155,11 @@ class Test {
                     .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
-                    .isNamedJane();
+                    .isNamedJane(); // should fail
         }
         // or let it find whatever required
         {
-            // tries to find a class named `UserAssert` class
+            // tries to find a class named `UserAssert`
             // in the same package of `User` class
             final Object actual = new User("Jane", 0); // java.lang.Object
             assertVirtualBean(actual)                  // mind the name of the method
@@ -174,21 +172,21 @@ class Test {
 }
 ```
 
-### Verifying property values
+### Verifying values against properties
 
-You can verify a value against a property of specific bean type.
+You can verify a value against specific property of specific bean type.
 
 ```java
 class Test {
 
     @Test
     void test() {
-        assertBeanProperty("John").isValidFor(User.class, "name"); // passes
-        assertBeanProperty(null).isValidFor(User.class, "name");   // fails
-        assertBeanProperty("  ").isValidFor(User.class, "name");   // fails
-        assertBeanProperty(31).isValidFor(User.class, "age");      // passes
-        assertBeanProperty(-1).isValidFor(User.class, "age");      // fails
-        assertBeanProperty(297).isValidFor(User.class, "age");     // fails
+        assertProperty("John").isValidFor(User.class, "name"); // should pass
+        assertProperty(  null).isValidFor(User.class, "name"); // should fail; @NotBlank
+        assertProperty(   " ").isValidFor(User.class, "name"); // should fail; @NotBlank
+        assertProperty(    31).isValidFor(User.class, "age");  // should pass
+        assertProperty(    -1).isValidFor(User.class, "age");  // should fail; @Min(0x00)
+        assertProperty(   297).isValidFor(User.class, "age");  // should fail; @Max(0x80)
     }
 }
 ```
@@ -200,7 +198,7 @@ class Test {
 
     @Test
     void test() {
-        assertBean(null).isValidFor(Registration.class, "user"); // should fail by 
+        assertBean(null).isValidFor(Registration.class, "user"); // @NotNull
     }
 }
 ```
@@ -219,6 +217,17 @@ class Test {
         assertBean(new Registration(user)).isValid();            // fails, after ...
     }
 }
+```
+
+### Using a `Validator` and/or targeting groups
+
+You can configure a `Validator` or groups for validating.
+
+```java
+assertBean(user)
+        .usingValidator(...)       // null to reset
+        .targetingGroups(..., ...) // null or empty to reset
+        .isValid();
 ```
 
 [6.1.1. Validation methods]: https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods

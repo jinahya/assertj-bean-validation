@@ -25,8 +25,14 @@ import javax.validation.constraints.AssertTrue;
 class SeniorRegistration
         extends Registration {
 
-    SeniorRegistration(final User user) {
-        super(user);
+    static SeniorRegistration of(final User user) {
+        final var instance = new SeniorRegistration();
+        instance.user = user;
+        return instance;
+    }
+
+    SeniorRegistration() {
+        super();
     }
 
     @AssertTrue

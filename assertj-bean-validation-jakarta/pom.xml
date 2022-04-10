@@ -39,13 +39,11 @@
       <version>4.0.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <!-- https://hibernate.org/validator/documentation/migration-guide/ -->
+    <dependency><!-- https://hibernate.org/validator/documentation/migration-guide/ -->
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>7.0.4.Final</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
 </project>

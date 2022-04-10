@@ -24,11 +24,15 @@ import org.assertj.core.api.Condition;
 
 public final class UserConditions {
 
-    public static final Condition<User> NAMED_JANE
+    public static final Condition<User> JANE
             = new Condition<>(v -> "Jane".equalsIgnoreCase(v.getName()), "named Jane");
 
-    public static final Condition<User> NAMED_JOHN
+    public static final Condition<User> JOHN
             = new Condition<>(v -> "John".equalsIgnoreCase(v.getName()), "named John");
+
+    public static final Condition<User> JUNIOR = new Condition<>(v -> v.age < 60, "junior");
+
+    public static final Condition<User> SENIOR = new Condition<>(v -> !JUNIOR.matches(v), "senior");
 
     private UserConditions() {
         throw new AssertionError("instantiation is not allowed");

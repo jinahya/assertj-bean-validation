@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import java.lang.reflect.Constructor;
 import java.util.Objects;
 
 public abstract class ValidationAssertTest<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR> {
@@ -30,6 +31,18 @@ public abstract class ValidationAssertTest<SELF extends ValidationAssert<SELF, A
         this.assertClass = Objects.requireNonNull(assertClass, "assertClass is null");
         this.actualClass = Objects.requireNonNull(actualClass, "actualClass is null");
         this.validatorClass = Objects.requireNonNull(validatorClass, "validatorClass is null");
+    }
+
+    protected SELF assertInstance(final ACTUAL actual) {
+        try {
+            final Constructor<SELF> constructor = assertClass.getDeclaredConstructor(actualClass);
+            if (!constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
+            return constructor.newInstance(actual);
+        } catch (final ReflectiveOperationException roe) {
+            throw new RuntimeException(roe);
+        }
     }
 
     protected final Class<SELF> assertClass;

@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
@@ -20,15 +20,14 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-@SuppressWarnings({"unchecked", "java:S119"})
-class PropertyAssertImpl<ACTUAL>
-        extends AbstractPropertyAssert<PropertyAssertImpl<ACTUAL>, ACTUAL> {
+import org.assertj.core.api.Condition;
 
-    static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertThat(final ACTUAL actual) {
-        return new PropertyAssertImpl<>(actual);
-    }
+final class RegistrationConditions {
 
-    PropertyAssertImpl(final ACTUAL actual) {
-        super(actual, (Class<PropertyAssertImpl<ACTUAL>>) (Class<?>) PropertyAssertImpl.class);
+    public static final Condition<Registration> SENIOR_USER
+            = new Condition<>(v -> v.getUser() == null || UserConditions.SENIOR.matches(v.getUser()), "senior user");
+
+    private RegistrationConditions() {
+        throw new AssertionError("instantiation is not allowed");
     }
 }

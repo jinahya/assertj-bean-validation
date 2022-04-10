@@ -99,8 +99,8 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      * @param propertyName the name of the property.
      * @param <T>          type of the bean
      * @return this assertion instance.
-     * @implNote This method invokes {@link #isValidFor(Class, String, Consumer)} method with {@code beanType}, {@code
-     * propertyName}, and an empty consumer.
+     * @implNote This method invokes {@link #isValidFor(Class, String, Consumer)} method with {@code beanType},
+     * {@code propertyName}, and an empty consumer.
      * @see #isValidFor(Class, String, Consumer)
      */
     public <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {

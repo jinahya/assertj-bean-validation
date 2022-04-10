@@ -25,13 +25,29 @@ import javax.validation.constraints.NotNull;
 
 class Registration {
 
-    Registration(final User user) {
+    static Registration of(final User user) {
+        final Registration instance = new Registration();
+        instance.user = user;
+        return instance;
+    }
+
+    Registration() {
         super();
-        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + '{'
+               + "user=" + user
+               + '}';
     }
 
     public User getUser() {
         return user;
+    }
+
+    public void setUser(final User user) {
+        this.user = user;
     }
 
     @Valid

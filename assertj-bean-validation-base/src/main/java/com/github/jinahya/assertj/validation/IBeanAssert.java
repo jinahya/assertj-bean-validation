@@ -36,8 +36,9 @@ interface IBeanAssert<SELF extends IBeanAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL,
      *
      * @param propertyName the name of the property whose constraints are validated; not {@code null}.
      * @return this assertion object.
-     * @apiNote Note that the {@code @Valid} is not honored by the {@code Validator#validateProperty(T object, String
-     * propertyName, Class<?>... groups)} method on which this method relies.
+     * @apiNote Note that the {@code @Valid} is not honored by the
+     * {@code Validator#validateProperty(T object, String propertyName, Class<?>... groups)} method on which this method
+     * relies.
      */
     SELF hasValidProperty(String propertyName);
 }

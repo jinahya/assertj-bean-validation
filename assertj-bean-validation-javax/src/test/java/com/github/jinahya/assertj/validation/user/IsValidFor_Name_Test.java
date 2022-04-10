@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.AbstractPropertyAssert;
+import com.github.jinahya.assertj.validation.PropertyAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 class IsValidFor_Name_Test {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -40,49 +44,48 @@ class IsValidFor_Name_Test {
     @DisplayName("[Valid] isValidFor(\"name\") should pass")
     @Test
     void isValidForName_Pass_Valid() {
-        final String actual = User.newValidName();
-        final AbstractPropertyAssert<?, String> assertion = ValidationAssertions.assertProperty(actual);
+        final var actual = User.newValidName();
+        final var assertion = ValidationAssertions.assertProperty(actual);
         assertion.isValidFor(User.class, "name");
     }
 
     @DisplayName("[Valid] isValidFor(\"name\", Consumer) should pass")
     @Test
     void isValidForNameConsumer_Pass_Valid() {
-        final String actual = User.newValidName();
-        final AbstractPropertyAssert<?, String> assertion = ValidationAssertions.assertProperty(actual);
-        final Set<ConstraintViolation<User>> violations = new HashSet<>();
+        final var actual = User.newValidName();
+        final var assertion = ValidationAssertions.assertProperty(actual);
+        final var violations = new HashSet<ConstraintViolation<User>>();
         assertion.isValidFor(User.class, "name", violations::add);
-        Assertions.assertThat(violations)
+        assertThat(violations)
                 .isEmpty();
     }
 
     @DisplayName("[Invalid] isValidFor(User.class, \"name\") should fail")
     @Test
     void isValidForName_Fail_InvalidName() {
-        final String actual = User.newInvalidName();
-        final AbstractPropertyAssert<?, String> assertion = ValidationAssertions.assertProperty(actual);
-        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "name"))
+        final var actual = User.newInvalidName();
+        final var assertion = ValidationAssertions.assertProperty(actual);
+        assertThatThrownBy(() -> assertion.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
 
     @DisplayName("[Invalid] isValidFor(User.class, \"name\", Consumer) should fail")
     @Test
     void isValidForNameConsumer_Fail_InvalidName() {
-        final String actual = User.newInvalidName();
-        final AbstractPropertyAssert<?, String> assertion = ValidationAssertions.assertProperty(actual);
-        final Set<ConstraintViolation<User>> violations = new HashSet<>();
-        Assertions.assertThatThrownBy(() -> assertion.isValidFor(User.class, "name", violations::add))
+        final var actual = User.newInvalidName();
+        final var assertion = ValidationAssertions.assertProperty(actual);
+        final var violations = new HashSet<ConstraintViolation<User>>();
+        assertThatThrownBy(() -> assertion.isValidFor(User.class, "name", violations::add))
                 .isInstanceOf(AssertionError.class);
-        Assertions.assertThat(violations)
+        assertThat(violations)
                 .isNotEmpty()
                 .doesNotContainNull()
                 .allSatisfy(cv -> {
-                    Assertions.assertThat(cv.getInvalidValue())
-                            .isEqualTo(actual);
-                    Assertions.assertThat(cv.getPropertyPath())
+                    assertThat(cv.getInvalidValue()).isEqualTo(actual);
+                    assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> {
-                                Assertions.assertThat(n.getName()).isEqualTo("name");
+                                assertThat(n.getName()).isEqualTo("name");
                             });
                 });
     }

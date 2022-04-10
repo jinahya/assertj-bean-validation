@@ -20,6 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import sun.jvm.hotspot.utilities.ProcImageClassLoader;
+
 import java.lang.reflect.Constructor;
 import java.util.Objects;
 
@@ -39,7 +41,7 @@ public final class ValidationAssertions {
      * @return a new assertion object for verifying {@code actual}.
      */
     public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertBean(final ACTUAL actual) {
-        return new BeanAssertImpl<>(actual);
+        return BeanAssertImpl.assertThat(actual);
     }
 
     /**
@@ -119,7 +121,7 @@ public final class ValidationAssertions {
      * @return a new assertion instance for {@code actual}.
      */
     public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertProperty(final ACTUAL actual) {
-        return new PropertyAssertImpl<>(actual);
+        return PropertyAssertImpl.assertThat(actual);
     }
 
     /**

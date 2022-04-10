@@ -32,12 +32,13 @@ class SeniorRegistration_IsValid_Test {
 
     @Test
     void isValid_ShouldFail_59YearsOld() {
-        final int age = 59;
+        final var age = 59;
         assertThatCode(() -> assertProperty(age).isValidFor(User.class, "age"))
                 .doesNotThrowAnyException();
         assertThatCode(() -> assertProperty(age).isValidFor(Registration.class, "user.age"))
                 .doesNotThrowAnyException();
-        final SeniorRegistration actual = new SeniorRegistration(new User("John", age));
+        final var user = User.of("John", age);
+        final var actual = SeniorRegistration.of(user);
         final BeanAssert<?, SeniorRegistration> assertion = assertBean(actual);
         assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);

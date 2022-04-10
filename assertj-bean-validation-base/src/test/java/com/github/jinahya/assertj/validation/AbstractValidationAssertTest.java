@@ -32,16 +32,4 @@ public abstract class AbstractValidationAssertTest<
                                            final Class<VALIDATOR> validatorClass) {
         super(assertClass, actualClass, validatorClass);
     }
-
-    protected SELF assertInstance(final ACTUAL actual) {
-        try {
-            final Constructor<SELF> constructor = assertClass.getDeclaredConstructor(actualClass);
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
-            return constructor.newInstance(actual);
-        } catch (final ReflectiveOperationException roe) {
-            throw new RuntimeException(roe);
-        }
-    }
 }

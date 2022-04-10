@@ -21,7 +21,8 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.AbstractBeanAssert;
-import org.assertj.core.api.Assertions;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserAssert
         extends AbstractBeanAssert<UserAssert, User> {
@@ -31,17 +32,15 @@ class UserAssert
     }
 
     public UserAssert isNamedJane() {
-        return isNotNull()
-                .is(UserConditions.NAMED_JANE);
+        return isValid().is(UserConditions.JANE);
     }
 
     public UserAssert isNamedJohn() {
-        return isNotNull()
-                .is(UserConditions.NAMED_JOHN);
+        return isValid().is(UserConditions.JOHN);
     }
 
     public UserAssert hasAge(final int expected) {
-        return isNotNull()
-                .satisfies(a -> Assertions.assertThat(a.getAge()).isEqualTo(expected));
+        return isValid()
+                .satisfies(a -> assertThat(a.getAge()).isEqualTo(expected));
     }
 }
