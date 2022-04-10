@@ -24,6 +24,10 @@ package com.github.jinahya.assertj.validation;
 class PropertyAssertImpl<ACTUAL>
         extends AbstractPropertyAssert<PropertyAssertImpl<ACTUAL>, ACTUAL> {
 
+    static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertThat(final ACTUAL actual) {
+        return new PropertyAssertImpl<>(actual);
+    }
+
     PropertyAssertImpl(final ACTUAL actual) {
         super(actual, (Class<PropertyAssertImpl<ACTUAL>>) (Class<?>) PropertyAssertImpl.class);
     }

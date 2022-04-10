@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 import java.util.Objects;
 
 /**
- * A utility class for fluently creating instances of {@link BeanAssertImpl}.
+ * A class for creating assertion instances.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
@@ -39,7 +39,7 @@ public final class ValidationAssertions {
      * @return a new assertion object for verifying {@code actual}.
      */
     public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertBean(final ACTUAL actual) {
-        return new BeanAssertImpl<>(actual);
+        return BeanAssertImpl.assertThat(actual);
     }
 
     /**
@@ -47,13 +47,15 @@ public final class ValidationAssertions {
      *
      * @param <SELF>     assertion type parameter
      * @param <ACTUAL>   actual type parameter
-     * @param selfClass  type of assertion.
-     * @param actualType type of actual.
+     * @param selfClass  type of assertion; not {@code null}.
+     * @param actualType type of actual; not {@code null}.
      * @param actual     the actual bean object to verify.
      * @return a new assertion object for verifying {@code actual}.
      */
     public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBean(
             final Class<SELF> selfClass, final Class<ACTUAL> actualType, final ACTUAL actual) {
+        Objects.requireNonNull(selfClass, "selfClass is null");
+        Objects.requireNonNull(actual, "actual is null");
         try {
             final Constructor<SELF> constructor = selfClass.getDeclaredConstructor(actualType);
             if (!constructor.isAccessible()) {
@@ -67,10 +69,18 @@ public final class ValidationAssertions {
 
     private static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBeanHelper(
             final Class<SELF> selfClass, final Class<ACTUAL> actualClass, final Object actual) {
-        Objects.requireNonNull(actual, "actual is null");
         return assertBean(selfClass, actualClass, actualClass.cast(actual));
     }
 
+    /**
+     * Creates a new assertion object for verifying specified bean object.
+     *
+     * @param <SELF>    assertion type parameter
+     * @param <ACTUAL>  actual type parameter
+     * @param selfClass type of assertion.
+     * @param actual    the actual bean object to verify; not {@code null}.
+     * @return a new assertion object for verifying {@code actual}.
+     */
     public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertBean(
             final Class<SELF> selfClass, final ACTUAL actual) {
         Objects.requireNonNull(actual, "actual is null");
@@ -79,8 +89,15 @@ public final class ValidationAssertions {
         return assertBeanHelper(selfClass, actualClass, actual);
     }
 
-    public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualBean(
-            final Object actual) {
+    /**
+     * Creates a new assertion object for verifying specified bean object.
+     *
+     * @param <SELF>   assertion type parameter
+     * @param <ACTUAL> actual type parameter
+     * @param actual   the actual bean object to verify; not {@code null}.
+     * @return a new assertion object for verifying {@code actual}.
+     */
+    public static <SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualBean(final Object actual) {
         Objects.requireNonNull(actual, "actual is null");
         @SuppressWarnings({"unchecked"})
         final Class<ACTUAL> actualClass = (Class<ACTUAL>) actual.getClass();
@@ -102,9 +119,19 @@ public final class ValidationAssertions {
      * @return a new assertion instance for {@code actual}.
      */
     public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertProperty(final ACTUAL actual) {
-        return new PropertyAssertImpl<>(actual);
+        return PropertyAssertImpl.assertThat(actual);
     }
 
+    /**
+     * Creates a new assertion object for verifying specified value against a property of specific bean type.
+     *
+     * @param <SELF>      type of assertion
+     * @param <ACTUAL>    type of actual value
+     * @param selfClass   assertion class.
+     * @param actualClass actual class.
+     * @param actual      the actual property value to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
     public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertProperty(
             final Class<SELF> selfClass, final Class<ACTUAL> actualClass, final ACTUAL actual) {
         try {
@@ -123,6 +150,15 @@ public final class ValidationAssertions {
         return assertProperty(selfClass, actualClass, actualClass.cast(actual));
     }
 
+    /**
+     * Creates a new assertion object for verifying specified value against a property of specific bean type.
+     *
+     * @param <SELF>    type of assertion
+     * @param <ACTUAL>  type of actual value
+     * @param selfClass assertion class.
+     * @param actual    the actual property value to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
     public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertProperty(
             final Class<SELF> selfClass, final ACTUAL actual) {
         Objects.requireNonNull(actual, "actual is null");
@@ -131,6 +167,14 @@ public final class ValidationAssertions {
         return assertPropertyHelper(selfClass, actualClass, actual);
     }
 
+    /**
+     * Creates a new assertion object for verifying specified value against a property of specific bean type.
+     *
+     * @param <SELF>   type of assertion
+     * @param <ACTUAL> type of actual value
+     * @param actual   the actual property value to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
     public static <SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL> SELF assertVirtualProperty(
             final Object actual) {
         Objects.requireNonNull(actual, "actual is null");
