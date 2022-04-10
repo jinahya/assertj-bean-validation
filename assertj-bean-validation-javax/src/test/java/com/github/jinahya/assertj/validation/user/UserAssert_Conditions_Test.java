@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 class UserAssert_Conditions_Test
         extends UserAssertTest {
 
@@ -34,7 +36,7 @@ class UserAssert_Conditions_Test
 
     @Test
     void isNamedJane__() {
-        final User actual = User.newValidInstance();
+        final var actual = User.newValidInstance();
         actual.setName("Jane");
         assertInstance(actual)
                 .isNamedJane();
@@ -42,16 +44,16 @@ class UserAssert_Conditions_Test
 
     @Test
     void isNamedJane_Fail_John() {
-        final User actual = User.newValidInstance();
+        final var actual = User.newValidInstance();
         actual.setName("John");
-        final UserAssert assertion = assertInstance(actual);
-        Assertions.assertThatThrownBy(assertion::isNamedJane)
+        final var assertion = assertInstance(actual);
+        assertThatThrownBy(assertion::isNamedJane)
                 .isInstanceOf(AssertionError.class);
     }
 
     @Test
     void isNamedJohn__() {
-        final User actual = User.newValidInstance();
+        final var actual = User.newValidInstance();
         actual.setName("John");
         assertInstance(actual)
                 .isNamedJohn();
@@ -62,7 +64,7 @@ class UserAssert_Conditions_Test
         final User actual = User.newValidInstance();
         actual.setName("Jane");
         final UserAssert assertion = assertInstance(actual);
-        Assertions.assertThatThrownBy(assertion::isNamedJohn)
+        assertThatThrownBy(assertion::isNamedJohn)
                 .isInstanceOf(AssertionError.class);
     }
 }
