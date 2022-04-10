@@ -51,6 +51,7 @@
     <maven.compiler.testRelease>${maven.compiler.testTarget}</maven.compiler.testRelease>
     <sonar.projectKey>jinahya_assertj-bean-validation</sonar.projectKey>
     <sonar.organization>jinahya-github</sonar.organization>
+    <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <version.animal-sniffer>1.21</version.animal-sniffer>
     <version.assertj-core>3.22.0</version.assertj-core>
