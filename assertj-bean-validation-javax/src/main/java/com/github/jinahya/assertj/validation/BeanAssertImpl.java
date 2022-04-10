@@ -1,10 +1,5 @@
-/**
- * Defines assertion classes, based on top of <a href="https://assertj.github.io/doc/">AssertJ</a>, for fluently
- * verifying objects and values using <a href="https://beanvalidation.org/">Jakarta Bean-Validation</a>.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
 package com.github.jinahya.assertj.validation;
+
 /*-
  * #%L
  * assertj-bean-validation
@@ -24,3 +19,26 @@ package com.github.jinahya.assertj.validation;
  * limitations under the License.
  * #L%
  */
+
+/**
+ * A default assertion class for verifying bean values.
+ *
+ * @param <ACTUAL> actual type parameter
+ */
+@SuppressWarnings({"unchecked", "java:S119"})
+class BeanAssertImpl<ACTUAL>
+        extends AbstractBeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
+
+    static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertThat(final ACTUAL actual) {
+        return new BeanAssertImpl<>(actual);
+    }
+
+    /**
+     * Creates a new instance for verifying specified actual value.
+     *
+     * @param actual the actual value to verify.
+     */
+    BeanAssertImpl(final ACTUAL actual) {
+        super(actual, (Class<BeanAssertImpl<ACTUAL>>) (Class<?>) BeanAssertImpl.class);
+    }
+}

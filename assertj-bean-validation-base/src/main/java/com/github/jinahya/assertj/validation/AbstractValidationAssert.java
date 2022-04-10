@@ -1,15 +1,3 @@
-/*
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- *
- * Copyright 2012-2021 the original author or authors.
- */
 package com.github.jinahya.assertj.validation;
 
 /*-
@@ -34,116 +22,97 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 /**
- * An abstract class for Bean-Validation assertion classes.
+ * An abstract base class for verifying beans and values.
  *
- * @param <SELF>   self type parameter
- * @param <ACTUAL> actual value type parameter
+ * @param <SELF>      self type parameter
+ * @param <ACTUAL>    actual type parameter
+ * @param <VALIDATOR> type of validator
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119", "java:S2160"})
+@SuppressWarnings({"java:S119"})
 public abstract class AbstractValidationAssert<
         SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
         ACTUAL,
         VALIDATOR>
-        extends AbstractAssert<SELF, ACTUAL> {
+        extends AbstractAssert<SELF, ACTUAL>
+        implements ValidationAssert<SELF, ACTUAL, VALIDATOR> {
 
     /**
-     * Creates a new instance with specified actual value and self type.
+     * Creates a new instance with specified actual value.
      *
-     * @param actual   the actual value.
-     * @param selfType the self type.
+     * @param actual   the actual value to verify.
+     * @param selfType self type class.
      */
-    protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractValidationAssert(final ACTUAL actual, final Class<SELF> selfType) {
         super(actual, selfType);
     }
 
     /**
-     * Sets a validator for subsequent verifications. This method is an alias of {@link #validator(Object)} method.
+     * Returns the validator configured to use.
      *
-     * @param validator the validator; may be {@code null}.
-     * @return {@link #myself self}.
-     * @see #validator(Object)
+     * @return the validator configured to use.
      */
-    public SELF using(final VALIDATOR validator) {
-        return validator(validator);
-    }
-
-    /**
-     * Sets a validator for subsequent verifications.
-     *
-     * @param validator the validator; may be {@code null} yet must be an instance of either {@code
-     *                  javax.validation.Validator} or {@code jakarta.validation.Validator}.
-     * @return {@link #myself self}.
-     * @see #using(Object)
-     */
-    @SuppressWarnings({"unchecked"})
-    public SELF validator(final VALIDATOR validator) {
-        this.validator = validator;
-        return (SELF) this;
-    }
-
-    protected abstract VALIDATOR getDefaultValidator();
-
-    /**
-     * Returns current validator instance being used.
-     *
-     * @return current validator instance being used; never {@code null}.
-     */
-    protected VALIDATOR validator() {
-        if (validator == null) {
-            validator = getDefaultValidator();
-        }
+    protected VALIDATOR getValidator() {
         return validator;
     }
 
     /**
-     * Sets targeting groups for subsequent verifications. This method is an alias of {@link #groups(Class[])} method.
+     * Replaces currently configured validator with specified value.
      *
-     * @param groups the targeting groups; may be {@code null}.
-     * @return {@link #myself self}.
-     * @see #groups(Class[])
+     * @param validator new validator to use; may be {@code null}.
      */
-    public SELF targeting(final Class<?>... groups) {
-        return groups(groups);
+    protected void setValidator(VALIDATOR validator) {
+        this.validator = validator;
+    }
+
+    @Override
+    public SELF usingValidator(final VALIDATOR validator) {
+        setValidator(validator);
+        return myself;
     }
 
     /**
-     * Sets targeting groups for subsequent verifications.
+     * Returns currently configured groups targeted for validation.
      *
-     * @param groups the targeting groups; may be {@code null}.
-     * @return {@link #myself self}.
-     * @see #targeting(Class[])
+     * @return an array of targeting groups; may be {@code empty}.
      */
-    @SuppressWarnings({"unchecked"})
-    public SELF groups(final Class<?>... groups) {
-        this.groups = groups;
-        return (SELF) this;
+    protected Class<?>[] getGroups() {
+        return groups.toArray(new Class<?>[0]);
     }
 
     /**
-     * Returns current targeting groups being used.
+     * Replaces currently configured groups for validation with specified value.
      *
-     * @return current targeting groups being used; never {@code null} yet may be empty.
+     * @param groups new targeting groups; may be {@code null}.
      */
-    protected Class<?>[] groups() {
-        if (groups == null) {
-            groups = new Class<?>[0];
+    protected void setGroups(final Class<?>[] groups) {
+        this.groups.clear();
+        if (groups != null) {
+            Arrays.stream(groups)
+                    .filter(Objects::nonNull)
+                    .forEach(this.groups::add);
         }
-        return groups;
+    }
+
+    @Override
+    public SELF targetingGroups(final Class<?>... groups) {
+        setGroups(groups);
+        return myself;
     }
 
     /**
      * The validator being used.
-     *
-     * @see #validator()
      */
     private VALIDATOR validator;
 
     /**
      * The targeting groups being used.
-     *
-     * @see #groups()
      */
-    private Class<?>[] groups;
+    private final Set<Class<?>> groups = new HashSet<>();
 }
