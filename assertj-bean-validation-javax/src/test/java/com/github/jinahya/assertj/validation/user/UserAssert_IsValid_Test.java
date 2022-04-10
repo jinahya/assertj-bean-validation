@@ -34,6 +34,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 class UserAssert_IsValid_Test
         extends UserAssertTest {
 
@@ -42,37 +45,37 @@ class UserAssert_IsValid_Test
     @DisplayName("[Valid] isValid() should pass")
     @Test
     void isValid_Pass_Valid() {
-        final User actual = User.newValidInstance();
-        final UserAssert assertion = assertInstance(actual);
+        final var actual = User.newValidInstance();
+        final var assertion = assertInstance(actual);
         assertion.isValid();
     }
 
     @DisplayName("[InvalidName] isValid() should fail")
     @Test
     void isValid_Fail_InvalidName() {
-        final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstance(actual);
-        Assertions.assertThatThrownBy(assertion::isValid)
+        final var actual = User.newInstanceWithInvalidName();
+        final var assertion = assertInstance(actual);
+        assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
 
     @DisplayName("[InvalidName] isValid(Consumer) should fail")
     @Test
     void isValidWithConsumer_Fail_InvalidName() {
-        final User actual = User.newInstanceWithInvalidName();
-        final UserAssert assertion = assertInstance(actual);
-        final Set<ConstraintViolation<User>> violations = new HashSet<>();
-        Assertions.assertThatThrownBy(() -> assertion.isValid(violations::add))
+        final var actual = User.newInstanceWithInvalidName();
+        final var assertion = assertInstance(actual);
+        final var violations = new HashSet<ConstraintViolation<User>>();
+        assertThatThrownBy(() -> assertion.isValid(violations::add))
                 .isInstanceOf(AssertionError.class);
-        Assertions.assertThat(violations)
+        assertThat(violations)
                 .isNotEmpty()
                 .allSatisfy(cv -> {
-                    Assertions.assertThat(cv.getInvalidValue())
+                    assertThat(cv.getInvalidValue())
                             .isEqualTo(actual.getName());
-                    Assertions.assertThat(cv.getPropertyPath())
+                    assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> {
-                                Assertions.assertThat(n.getName())
+                                assertThat(n.getName())
                                         .isEqualTo("name");
                             });
                 });
@@ -81,29 +84,29 @@ class UserAssert_IsValid_Test
     @DisplayName("[InvalidAge] isValid() should fail")
     @Test
     void isValid_Fail_InvalidAge() {
-        final User actual = User.newInstanceWithInvalidAge();
+        final var actual = User.newInstanceWithInvalidAge();
         final BeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
-        Assertions.assertThatThrownBy(assertion::isValid)
+        assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
 
     @DisplayName("[InvalidAge] isValid(Consumer) should fail")
     @Test
     void isValidWithConsumer_Fail_InvalidAge() {
-        final User actual = User.newInstanceWithInvalidAge();
-        final AbstractBeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
-        final Set<ConstraintViolation<User>> violations = new HashSet<>();
-        Assertions.assertThatThrownBy(() -> assertion.isValid(violations::add))
+        final var actual = User.newInstanceWithInvalidAge();
+        final var assertion = ValidationAssertions.assertBean(actual);
+        final var violations = new HashSet<ConstraintViolation<User>>();
+        assertThatThrownBy(() -> assertion.isValid(violations::add))
                 .isInstanceOf(AssertionError.class);
-        Assertions.assertThat(violations)
+        assertThat(violations)
                 .isNotEmpty()
                 .allSatisfy(cv -> {
-                    Assertions.assertThat(cv.getInvalidValue())
+                    assertThat(cv.getInvalidValue())
                             .isEqualTo(actual.getAge());
-                    Assertions.assertThat(cv.getPropertyPath())
+                    assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> {
-                                Assertions.assertThat(n.getName())
+                                assertThat(n.getName())
                                         .isEqualTo("age");
                             });
                 });
