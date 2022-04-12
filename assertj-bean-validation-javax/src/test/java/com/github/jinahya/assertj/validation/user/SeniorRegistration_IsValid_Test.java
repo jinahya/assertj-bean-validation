@@ -21,10 +21,11 @@ package com.github.jinahya.assertj.validation.user;
  */
 
 import com.github.jinahya.assertj.validation.BeanAssert;
+import com.github.jinahya.assertj.validation.ValidationAssertions;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertBean;
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertProperty;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -33,13 +34,13 @@ class SeniorRegistration_IsValid_Test {
     @Test
     void isValid_ShouldFail_59YearsOld() {
         final var age = 59;
-        assertThatCode(() -> assertProperty(age).isValidFor(User.class, "age"))
+        assertThatCode(() -> ValidationAssertions.assertThatProperty(age).isValidFor(User.class, "age"))
                 .doesNotThrowAnyException();
-        assertThatCode(() -> assertProperty(age).isValidFor(Registration.class, "user.age"))
+        assertThatCode(() -> ValidationAssertions.assertThatProperty(age).isValidFor(Registration.class, "user.age"))
                 .doesNotThrowAnyException();
         final var user = User.of("John", age);
         final var actual = SeniorRegistration.of(user);
-        final BeanAssert<?, SeniorRegistration> assertion = assertBean(actual);
+        final BeanAssert<?, SeniorRegistration> assertion = ValidationAssertions.assertThatBean(actual);
         assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }

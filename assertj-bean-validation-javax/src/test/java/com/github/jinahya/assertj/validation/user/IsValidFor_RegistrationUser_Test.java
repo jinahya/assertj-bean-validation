@@ -43,7 +43,7 @@ class IsValidFor_RegistrationUser_Test {
     @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#validUserStream")
     @ParameterizedTest
     void isValidFor_Pass_Valid(final User actual) {
-        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertProperty(actual);
+        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
         assertion.isValidFor(Registration.class, "user");
     }
 
@@ -51,7 +51,7 @@ class IsValidFor_RegistrationUser_Test {
     @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#validUserStream")
     @ParameterizedTest
     void isValidForWithConsumer_Pass_Valid(final User actual) {
-        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertProperty(actual);
+        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
         final Set<ConstraintViolation<Registration>> violations = new HashSet<>();
         assertion.isValidFor(Registration.class, "user", violations::add);
         Assertions.assertThat(violations)
@@ -62,7 +62,7 @@ class IsValidFor_RegistrationUser_Test {
     @Test
     void isValidFor_Fail_Null() {
         final User actual = null;
-        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertProperty(actual);
+        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
         Assertions.assertThatThrownBy(() -> assertion.isValidFor(Registration.class, "user"))
                 .isInstanceOf(AssertionError.class);
     }
@@ -71,7 +71,7 @@ class IsValidFor_RegistrationUser_Test {
     @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#invalidUserStream")
     @ParameterizedTest
     void isValidFor_Fail_Invalid(final User actual) {
-        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertProperty(actual);
+        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
         Assertions.assertThatCode(() -> assertion.isValidFor(Registration.class, "user"))
                 .doesNotThrowAnyException(); // @Valid is not honored by validateValue
     }
@@ -80,7 +80,7 @@ class IsValidFor_RegistrationUser_Test {
     @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#invalidUserStream")
     @ParameterizedTest
     void isValidForWithConsumer_Fail_Invalid(final User actual) {
-        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertProperty(actual);
+        final AbstractPropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
         final Set<ConstraintViolation<Registration>> violations = new HashSet<>();
         Assertions.assertThatCode(() -> assertion.isValidFor(Registration.class, "user", violations::add))
                 .doesNotThrowAnyException(); // @Valid is not honored by validateValue

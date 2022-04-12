@@ -20,10 +20,8 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.AbstractPropertyAssert;
 import com.github.jinahya.assertj.validation.PropertyAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -32,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import javax.validation.ConstraintViolation;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -45,7 +42,7 @@ class IsValidFor_Age_Test {
     @Test
     void isValidForAge_Pass_Valid() {
         final var actual = User.newValidAge();
-        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
+        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertThatProperty(actual);
         assertion.isValidFor(User.class, "age");
     }
 
@@ -53,7 +50,7 @@ class IsValidFor_Age_Test {
     @Test
     void isValidForAge_Fail_InvalidAge() {
         final var actual = User.newInvalidAge();
-        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
+        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertThatProperty(actual);
         assertThatThrownBy(() -> assertion.isValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
     }
@@ -62,7 +59,7 @@ class IsValidFor_Age_Test {
     @Test
     void isValidForAgeConsumer_Fail_InvalidAge() {
         final var actual = User.newInvalidAge();
-        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertProperty(actual);
+        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertThatProperty(actual);
         final var violations = new HashSet<ConstraintViolation<User>>();
         assertThatThrownBy(() -> assertion.isValidFor(User.class, "age", violations::add))
                 .isInstanceOf(AssertionError.class);

@@ -31,7 +31,7 @@ class User_AssertBean_Test {
     @Test
     void assertBean__() {
         final User actual = User.newValidInstance();
-        final BeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
+        final BeanAssert<?, User> assertion = ValidationAssertions.assertThatBean(actual);
         assertion.isValid()
                 .hasValidProperty("name")
                 .hasValidProperty("age");
@@ -42,7 +42,7 @@ class User_AssertBean_Test {
     void assertBeanWithSelfClassAndActualClass__() {
         final User actual = User.newValidInstance();
         actual.setName("Jane");
-        final UserAssert assertion = ValidationAssertions.assertBean(UserAssert.class, User.class, actual);
+        final UserAssert assertion = ValidationAssertions.assertThatBean(UserAssert.class, User.class, actual);
         assertion.isValid()
                 .hasValidProperty("name")
                 .hasValidProperty("age")
@@ -54,7 +54,7 @@ class User_AssertBean_Test {
     void assertBeanWithSelfClass__() {
         final User actual = User.newValidInstance();
         actual.setName("Jane");
-        final UserAssert assertion = ValidationAssertions.assertBean(UserAssert.class, actual);
+        final UserAssert assertion = ValidationAssertions.assertThatBean(UserAssert.class, actual);
         assertion.isValid()
                 .hasValidProperty("name")
                 .hasValidProperty("age")
@@ -66,7 +66,7 @@ class User_AssertBean_Test {
     void assertVirtualBean__() {
         final User actual = User.newValidInstance();
         actual.setName("Jane");
-        final UserAssert assertion = ValidationAssertions.assertVirtualBean(actual);
+        final UserAssert assertion = ValidationAssertions.assertThatVirtualBean(actual);
         assertion.isValid()
                 .hasValidProperty("name")
                 .hasValidProperty("age")

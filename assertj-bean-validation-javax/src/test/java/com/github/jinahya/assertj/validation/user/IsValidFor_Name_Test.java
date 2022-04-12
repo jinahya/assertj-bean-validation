@@ -20,10 +20,7 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.AbstractPropertyAssert;
-import com.github.jinahya.assertj.validation.PropertyAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -32,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import javax.validation.ConstraintViolation;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -45,7 +41,7 @@ class IsValidFor_Name_Test {
     @Test
     void isValidForName_Pass_Valid() {
         final var actual = User.newValidName();
-        final var assertion = ValidationAssertions.assertProperty(actual);
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
         assertion.isValidFor(User.class, "name");
     }
 
@@ -53,7 +49,7 @@ class IsValidFor_Name_Test {
     @Test
     void isValidForNameConsumer_Pass_Valid() {
         final var actual = User.newValidName();
-        final var assertion = ValidationAssertions.assertProperty(actual);
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
         final var violations = new HashSet<ConstraintViolation<User>>();
         assertion.isValidFor(User.class, "name", violations::add);
         assertThat(violations)
@@ -64,7 +60,7 @@ class IsValidFor_Name_Test {
     @Test
     void isValidForName_Fail_InvalidName() {
         final var actual = User.newInvalidName();
-        final var assertion = ValidationAssertions.assertProperty(actual);
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
         assertThatThrownBy(() -> assertion.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
@@ -73,7 +69,7 @@ class IsValidFor_Name_Test {
     @Test
     void isValidForNameConsumer_Fail_InvalidName() {
         final var actual = User.newInvalidName();
-        final var assertion = ValidationAssertions.assertProperty(actual);
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
         final var violations = new HashSet<ConstraintViolation<User>>();
         assertThatThrownBy(() -> assertion.isValidFor(User.class, "name", violations::add))
                 .isInstanceOf(AssertionError.class);

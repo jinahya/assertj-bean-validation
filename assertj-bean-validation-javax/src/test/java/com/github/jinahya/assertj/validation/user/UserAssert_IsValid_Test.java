@@ -20,10 +20,8 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.AbstractBeanAssert;
 import com.github.jinahya.assertj.validation.BeanAssert;
 import com.github.jinahya.assertj.validation.ValidationAssertions;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -32,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import javax.validation.ConstraintViolation;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -85,7 +82,7 @@ class UserAssert_IsValid_Test
     @Test
     void isValid_Fail_InvalidAge() {
         final var actual = User.newInstanceWithInvalidAge();
-        final BeanAssert<?, User> assertion = ValidationAssertions.assertBean(actual);
+        final BeanAssert<?, User> assertion = ValidationAssertions.assertThatBean(actual);
         assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
@@ -94,7 +91,7 @@ class UserAssert_IsValid_Test
     @Test
     void isValidWithConsumer_Fail_InvalidAge() {
         final var actual = User.newInstanceWithInvalidAge();
-        final var assertion = ValidationAssertions.assertBean(actual);
+        final var assertion = ValidationAssertions.assertThatBean(actual);
         final var violations = new HashSet<ConstraintViolation<User>>();
         assertThatThrownBy(() -> assertion.isValid(violations::add))
                 .isInstanceOf(AssertionError.class);
