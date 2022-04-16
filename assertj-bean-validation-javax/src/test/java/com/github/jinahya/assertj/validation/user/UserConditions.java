@@ -30,7 +30,7 @@ public final class UserConditions {
     public static final Condition<User> JOHN
             = new Condition<>(v -> "John".equalsIgnoreCase(v.getName()), "named John");
 
-    public static final Condition<User> JUNIOR = new Condition<>(v -> v.age < 60, "junior");
+    public static final Condition<User> JUNIOR = new Condition<>(v -> v.getAge() < 60, "junior");
 
     public static final Condition<User> SENIOR = new Condition<>(v -> !JUNIOR.matches(v), "senior");
 

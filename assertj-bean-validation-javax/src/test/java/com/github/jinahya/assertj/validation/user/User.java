@@ -99,7 +99,7 @@ public class User {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -107,14 +107,15 @@ public class User {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(final int age) {
         this.age = age;
     }
 
     @NotBlank
-    String name;
+    private String name;
 
     @Max(MAX_VALUE_AGE)
     @Min(MIN_VALUE_AGE)
-    @PositiveOrZero int age;
+    @PositiveOrZero
+    private int age;
 }
