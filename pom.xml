@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>assertj-bean-validation</artifactId>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.1.2</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
@@ -32,7 +32,7 @@
         <role>developer</role>
       </roles>
       <timezone>Asia/Seoul</timezone>
-      <properties/>
+      <properties />
     </developer>
   </developers>
 
@@ -46,7 +46,7 @@
     <connection>scm:git:git@github.com:jinahya/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/${project.artifactId}.git</developerConnection>
     <url>https://github.com:jinahya/${project.artifactId}</url>
-    <tag>HEAD</tag>
+    <tag>0.1.2</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
@@ -153,7 +153,7 @@
               <configuration>
                 <skip>true</skip>
                 <rules>
-                  <dependencyConvergence/>
+                  <dependencyConvergence />
                 </rules>
               </configuration>
               <goals>
