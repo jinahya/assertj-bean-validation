@@ -319,6 +319,11 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.12</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
