@@ -34,7 +34,8 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings({"java:S119"})
 public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
-        extends IPropertyAssert<SELF, ACTUAL, Validator> {
+//        extends IPropertyAssert<SELF, ACTUAL, Validator> {
+        extends ValidationAssert<SELF, ACTUAL, Validator> {
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type while
@@ -65,7 +66,6 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
      * @implNote This method invokes {@link #isValidFor(Class, String, Consumer)} method with {@code beanType},
      * {@code propertyName}, and a consumer does nothing.
      */
-    @Override
     default <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
         return isValidFor(
                 beanType,
