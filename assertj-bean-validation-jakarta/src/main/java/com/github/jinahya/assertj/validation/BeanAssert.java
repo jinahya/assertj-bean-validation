@@ -34,7 +34,8 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings({"java:S119"})
 public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
-        extends IBeanAssert<SELF, ACTUAL, Validator> {
+//        extends IBeanAssert<SELF, ACTUAL, Validator> {
+        extends PropertyAssert<SELF, ACTUAL> {
 
     /**
      * Verifies that the {@code actual} value is valid while accepting constraint violations, if any populated, to
@@ -54,7 +55,6 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * @throws AssertionError when the {@code actual} is {@code null} or is not valid.
      * @implNote This method invokes {@link #isValid(Consumer)} method with a consumer does nothing.
      */
-    @Override
     default SELF isValid() {
         return isValid(
                 v -> {
@@ -109,7 +109,6 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * consumer does nothing.
      * @see #hasValidProperty(String, Consumer)
      */
-    @Override
     default SELF hasValidProperty(final String propertyName) {
         return hasValidProperty(
                 propertyName,
