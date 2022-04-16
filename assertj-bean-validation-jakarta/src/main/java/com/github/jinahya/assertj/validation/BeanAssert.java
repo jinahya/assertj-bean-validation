@@ -97,7 +97,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      *         // @end
      *     }
      * }
-     * }
+     *}
      *
      * @param propertyName the name of the property to be verified as valid; not {@code null}.
      * @return this assertion object.

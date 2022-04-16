@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation.user;
+package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
@@ -20,8 +20,6 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.BeanAssert;
-import com.github.jinahya.assertj.validation.ValidationAssertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;

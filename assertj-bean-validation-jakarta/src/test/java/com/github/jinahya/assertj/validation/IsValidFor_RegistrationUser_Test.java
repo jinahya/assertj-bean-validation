@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation.user;
+package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
@@ -20,8 +20,7 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.PropertyAssert;
-import com.github.jinahya.assertj.validation.ValidationAssertions;
+import jakarta.validation.ConstraintViolation;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintViolation;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +38,7 @@ class IsValidFor_RegistrationUser_Test {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @DisplayName("[Valid] isValidFor(Registration.class, \"user\") should pass")
-    @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#validUserStream")
+    @MethodSource("com.github.jinahya.assertj.validation.UserTests#validUserStream")
     @ParameterizedTest
     void isValidFor_Pass_Valid(final User actual) {
         final PropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
@@ -48,7 +46,7 @@ class IsValidFor_RegistrationUser_Test {
     }
 
     @DisplayName("[Valid] isValidFor(Registration.class, \"user\") should pass")
-    @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#validUserStream")
+    @MethodSource("com.github.jinahya.assertj.validation.UserTests#validUserStream")
     @ParameterizedTest
     void isValidForWithConsumer_Pass_Valid(final User actual) {
         final PropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
@@ -68,7 +66,7 @@ class IsValidFor_RegistrationUser_Test {
     }
 
     @DisplayName("[Invalid] isValidFor(Registration.class, \"user\") should fail")
-    @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#invalidUserStream")
+    @MethodSource("com.github.jinahya.assertj.validation.UserTests#invalidUserStream")
     @ParameterizedTest
     void isValidFor_Fail_Invalid(final User actual) {
         final PropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);
@@ -77,7 +75,7 @@ class IsValidFor_RegistrationUser_Test {
     }
 
     @DisplayName("[Invalid] isValidFor(Registration.class, \"user\", Consumer) should fail")
-    @MethodSource("com.github.jinahya.assertj.validation.user.UserTests#invalidUserStream")
+    @MethodSource("com.github.jinahya.assertj.validation.UserTests#invalidUserStream")
     @ParameterizedTest
     void isValidForWithConsumer_Fail_Invalid(final User actual) {
         final PropertyAssert<?, User> assertion = ValidationAssertions.assertThatProperty(actual);

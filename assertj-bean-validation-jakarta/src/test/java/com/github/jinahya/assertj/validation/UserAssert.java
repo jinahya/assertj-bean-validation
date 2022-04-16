@@ -2,9 +2,9 @@ package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
- * assertj-bean-validation
+ * assertj-bean-validation-javax
  * %%
- * Copyright (C) 2021 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +20,25 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-/**
- * A default assertion class for verifying bean values.
- *
- * @param <ACTUAL> actual type parameter
- */
-@SuppressWarnings({"unchecked", "java:S119"})
-class BeanAssertImpl<ACTUAL>
-        extends AbstractBeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    /**
-     * Creates a new instance for verifying specified actual value.
-     *
-     * @param actual the actual value to verify.
-     */
-    BeanAssertImpl(final ACTUAL actual) {
-        super(actual, (Class<BeanAssertImpl<ACTUAL>>) (Class<?>) BeanAssertImpl.class);
+class UserAssert
+        extends AbstractBeanAssert<UserAssert, User> {
+
+    UserAssert(final User actual) {
+        super(actual, UserAssert.class);
+    }
+
+    public UserAssert isNamedJane() {
+        return isValid().is(UserConditions.JANE);
+    }
+
+    public UserAssert isNamedJohn() {
+        return isValid().is(UserConditions.JOHN);
+    }
+
+    public UserAssert hasAge(final int expected) {
+        return isValid()
+                .satisfies(a -> assertThat(a.getAge()).isEqualTo(expected));
     }
 }

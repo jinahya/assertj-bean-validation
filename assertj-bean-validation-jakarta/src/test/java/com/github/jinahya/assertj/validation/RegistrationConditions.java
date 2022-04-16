@@ -20,21 +20,14 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-/**
- * A default assertion class for verifying bean values.
- *
- * @param <ACTUAL> actual type parameter
- */
-@SuppressWarnings({"unchecked", "java:S119"})
-class BeanAssertImpl<ACTUAL>
-        extends AbstractBeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
+import org.assertj.core.api.Condition;
 
-    /**
-     * Creates a new instance for verifying specified actual value.
-     *
-     * @param actual the actual value to verify.
-     */
-    BeanAssertImpl(final ACTUAL actual) {
-        super(actual, (Class<BeanAssertImpl<ACTUAL>>) (Class<?>) BeanAssertImpl.class);
+final class RegistrationConditions {
+
+    public static final Condition<Registration> SENIOR_USER
+            = new Condition<>(v -> v.getUser() == null || UserConditions.SENIOR.matches(v.getUser()), "senior user");
+
+    private RegistrationConditions() {
+        throw new AssertionError("instantiation is not allowed");
     }
 }

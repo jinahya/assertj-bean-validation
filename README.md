@@ -226,7 +226,7 @@ You can configure a `Validator` or groups for validating.
 ```java
 assertBean(user)
         .usingValidator(...)       // null to reset
-        .targetingGroups(..., ...) // null or empty to reset
+        .targetingGroups(...,...) // null or empty to reset
         .isValid();
 ```
 

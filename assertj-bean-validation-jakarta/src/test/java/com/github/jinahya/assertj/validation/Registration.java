@@ -2,7 +2,7 @@ package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
- * assertj-bean-validation-base
+ * assertj-bean-validation-javax
  * %%
  * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
@@ -20,14 +20,37 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public abstract class AbstractValidationAssertTest<
-        SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
-        ACTUAL,
-        VALIDATOR>
-        extends ValidationAssertTest<SELF, ACTUAL, VALIDATOR> {
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
-    protected AbstractValidationAssertTest(final Class<SELF> assertClass, final Class<ACTUAL> actualClass,
-                                           final Class<VALIDATOR> validatorClass) {
-        super(assertClass, actualClass, validatorClass);
+class Registration {
+
+    static Registration of(final User user) {
+        final Registration instance = new Registration();
+        instance.user = user;
+        return instance;
     }
+
+    Registration() {
+        super();
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + '{'
+               + "user=" + user
+               + '}';
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(final User user) {
+        this.user = user;
+    }
+
+    @Valid
+    @NotNull
+    User user;
 }
