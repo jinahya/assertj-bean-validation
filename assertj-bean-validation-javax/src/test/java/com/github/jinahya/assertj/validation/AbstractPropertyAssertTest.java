@@ -1,15 +1,10 @@
-/**
- * Defines assertion classes, based on top of <a href="https://assertj.github.io/doc/">AssertJ</a>, for fluently
- * verifying objects and values using <a href="https://beanvalidation.org/">Jakarta Bean-Validation</a>.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
 package com.github.jinahya.assertj.validation;
+
 /*-
  * #%L
- * assertj-bean-validation
+ * assertj-bean-validation-javax
  * %%
- * Copyright (C) 2021 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,3 +19,13 @@ package com.github.jinahya.assertj.validation;
  * limitations under the License.
  * #L%
  */
+
+import javax.validation.Validator;
+
+public abstract class AbstractPropertyAssertTest<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
+        extends AbstractValidationAssertTest<SELF, ACTUAL, Validator> {
+
+    protected AbstractPropertyAssertTest(final Class<SELF> assertionClass, final Class<ACTUAL> actualClass) {
+        super(assertionClass, actualClass, Validator.class);
+    }
+}

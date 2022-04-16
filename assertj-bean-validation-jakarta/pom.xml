@@ -1,41 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
-    <artifactId>assertj-bean-validation</artifactId>
     <groupId>com.github.jinahya</groupId>
-    <version>0.0.9</version>
+    <artifactId>assertj-bean-validation</artifactId>
+    <version>0.1.0</version>
   </parent>
 
   <artifactId>assertj-bean-validation-jakarta</artifactId>
-  <version>0.0.9</version>
+  <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
-
-  <properties>
-    <version.org.hibernate.validator>7.0.1.Final</version.org.hibernate.validator>
-    <version.jakarta.el>4.0.1</version.jakarta.el>
-    <version.jakarta.validation-api>3.0.0</version.jakarta.validation-api>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.github.jinahya</groupId>
       <artifactId>assertj-bean-validation-base</artifactId>
       <version>${project.version}</version>
-      <scope>provided</scope>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.github.jinahya</groupId>
       <artifactId>assertj-bean-validation-base</artifactId>
-      <classifier>tests</classifier>
       <version>${project.version}</version>
+      <classifier>tests</classifier>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId> <!-- Required to avoid NPE from java.lang.reflect.Field#getAnnotatedType -->
-      <artifactId>validation-api</artifactId>
-      <scope>runtime</scope> <!-- test-runtime -->
     </dependency>
     <dependency>
       <groupId>jakarta.validation</groupId>
@@ -45,49 +35,14 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.el</artifactId>
+      <version>4.0.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
+    <dependency><!-- https://hibernate.org/validator/documentation/migration-guide/ -->
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
+      <version>7.0.4.Final</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-    </plugins>
-  </reporting>
-
 </project>

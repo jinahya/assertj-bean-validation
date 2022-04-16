@@ -2,7 +2,7 @@ package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
- * assertj-bean-validation-base
+ * assertj-bean-validation-javax
  * %%
  * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
@@ -20,14 +20,25 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public abstract class AbstractValidationAssertTest<
-        SELF extends AbstractValidationAssert<SELF, ACTUAL, VALIDATOR>,
-        ACTUAL,
-        VALIDATOR>
-        extends ValidationAssertTest<SELF, ACTUAL, VALIDATOR> {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    protected AbstractValidationAssertTest(final Class<SELF> assertClass, final Class<ACTUAL> actualClass,
-                                           final Class<VALIDATOR> validatorClass) {
-        super(assertClass, actualClass, validatorClass);
+class UserAssert
+        extends AbstractBeanAssert<UserAssert, User> {
+
+    UserAssert(final User actual) {
+        super(actual, UserAssert.class);
+    }
+
+    public UserAssert isNamedJane() {
+        return isValid().is(UserConditions.JANE);
+    }
+
+    public UserAssert isNamedJohn() {
+        return isValid().is(UserConditions.JOHN);
+    }
+
+    public UserAssert hasAge(final int expected) {
+        return isValid()
+                .satisfies(a -> assertThat(a.getAge()).isEqualTo(expected));
     }
 }

@@ -1,15 +1,10 @@
-/**
- * Defines assertion classes, based on top of <a href="https://assertj.github.io/doc/">AssertJ</a>, for fluently
- * verifying objects and values using <a href="https://beanvalidation.org/">Jakarta Bean-Validation</a>.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
+
 /*-
  * #%L
- * assertj-bean-validation
+ * assertj-bean-validation-javax
  * %%
- * Copyright (C) 2021 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,3 +19,24 @@ package com.github.jinahya.assertj.validation;
  * limitations under the License.
  * #L%
  */
+
+import javax.validation.constraints.AssertTrue;
+
+class SeniorRegistration
+        extends Registration {
+
+    static SeniorRegistration of(final User user) {
+        final var instance = new SeniorRegistration();
+        instance.user = user;
+        return instance;
+    }
+
+    SeniorRegistration() {
+        super();
+    }
+
+    @AssertTrue
+    boolean isUserSenior() {
+        return user == null || user.getAge() > 60;
+    }
+}

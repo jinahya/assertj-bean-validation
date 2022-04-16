@@ -1,9 +1,6 @@
 # assertj-bean-validation
 
 [![CI](https://github.com/jinahya/assertj-bean-validation/actions/workflows/maven.yml/badge.svg)](https://github.com/jinahya/assertj-bean-validation/actions/workflows/maven.yml)
-[![javax](https://github.com/jinahya/assertj-bean-validation/actions/workflows/javax.yml/badge.svg)](https://github.com/jinahya/assertj-bean-validation/actions/workflows/javax.yml)
-[![jakarta](https://github.com/jinahya/assertj-bean-validation/actions/workflows/jakarta.yml/badge.svg)](https://github.com/jinahya/assertj-bean-validation/actions/workflows/jakarta.yml)
-
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jinahya_assertj-bean-validation&metric=alert_status)](https://sonarcloud.io/dashboard?id=jinahya_assertj-bean-validation)
 [![Known Vulnerabilities](https://snyk.io/test/github/jinahya/assertj-bean-validation/badge.svg)](https://snyk.io/test/github/jinahya/assertj-bean-validation)
 
@@ -12,247 +9,225 @@
 
 An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
 
-## Compatibility
+## Coordinates
 
-There are, due to the [Transition from Java EE to Jakarta EE](https://blogs.oracle.com/javamagazine/transition-from-java-ee-to-jakarta-ee), currently two packages for Bean-Validation. One is `javax.validation.*` and the other is `jakarta.validation.*`. This project, hence, defines three artifacts which each is applicable for both/each environment(s).
+For Java EE,
 
-|artifact                         |`jakrta.*`|`javax.*`|notes|
-|---------------------------------|----------|---------|-----|
-|`assertj-bean-validation-generic`|&check;   |&check;  |     |
-|`assertj-bean-validation-jakrta` |&check;   |&cross;  |     |
-|`assertj-bean-validation-javax`  |&cross;   |&check;  |     |
+```xml
 
-### assertj-bean-validation-generic
-
-Works for both `jakarta.validation:jakarta.validation-api` and `javax.validation:validation-api` using reflections.
-
-### assertj-bean-validation-jakarta
-
-Works for `jakarta.validation:jakarta.validation-api:[3.0.0,)`.
-
-### assertj-bean-validation-javax
-
-Works for `javax.validation:validation-api` and `jakarta.validation:jakarta.validation-api:(,2.0.2]`
-
-## Idioms
-
-### for an `actual` value of `java.lang.Object`
-
-Special idioms are provided for each assertion to avoid confusion with AssertJ's `assertThat` idiom.
-
-```java
-Object b = getBean();
-BeanAssert a;
-
-a = BeanAssertions.assertThat(b);
-a = BeanAssertions.assertThat(BeanWrapper.bean(b));
-a = BeanAssertions.assertBean(b);
-
-// with static imports
-a = assertThat(b); // mind the import static ...BeanAssertions.assertThat;
-a = assertThat(bean(b));
-a = assertBean(b);
-
-assertThat(a).isValid();
-assertThat(bean(a)).isNotValid();
-assertBean(a).isNotValid(s -> {});
-```
-```java
-Object v = getValue();
-ValueAssert a;
-
-a = ValueAssertions.assertThat(v);
-a = ValueAssertions.assertThat(ValueWrapper.value(v));
-a = ValueAssertions.assertValue(v);
-
-// with static imports
-a = assertThat(v); // mind the import static ...ValueAssertions.assertThat;
-a = assertThat(value(v));
-a = assertValue(v);
-
-assertThat(v).isValidFor(SomeBean.class, "someProperty");
-assertThat(value(v)).isNotValidFor(SomeBean.class, "someProeprty");
-assertValue(v).isNotValidFor(SomeBean.class, "someProperty", s -> {});
+<dependency>
+  <groupId>com.github.jinahya</groupId>
+  <artifactId>assertj-bean-validation-javax</artifactId>
+</dependency>
 ```
 
-### for an `actual` value of `(jakarta|javax).validation.<Type>`
+For Jakarta EE,
 
-For an actual of `<Type>` defined within Bean-Validation API, you can create assertions using either one of following idioms.
+```xml
 
-#### `<Type>Assertions.assertThat((Object|<Type>) actual)`
-
-Same as AssertJ does.
-
-#### `<Type>Assertions.assert<Type>(Object actual)`
-
-```java
-<Type> actual;
-<Type>Assert a;
-a = <Type>Assertions.assert<Type>(actual);
-
-// e.g.
-ConstraintViolation<?> actual;
-ConstrintViolationAssertions.assertConstraintViolation(actual);
-
-// with static imports
-assertConstraintViolation(actual).hasInvalidValueEqualTo(expected);
+<dependency>
+  <groupId>com.github.jinahya</groupId>
+  <artifactId>assertj-bean-validation-jakarta</artifactId>
+</dependency>
 ```
 
-#### `<Type>Assertions.assertThat(<Type>Wrapper.<type>(actual))`
+## Compatibilities
 
-```java
-<Type> actual;
-<Type>Assert a;
-a = <Type>Assertions.assertThat(<Type>Wrapper.<type>(actual));
+* Depends(as `provided`) on
+  the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
+* Targets **Java 8**.
 
-// e.g.
-Path actual;
-PathAssert a = PathAssertions.assertThat(PathWrapper.path(actual));
+### JDK
 
-// with static imports
-assertThat(path(actual)).node(0).hasIndexEqualTo(null);
-```
+This module requires **JDK 18**, especially with its test sources, for building itself.
 
-#### `<Type>Assertions.assertThat(<Type> actual)` (only for `-jakarta` and `-javax`)
+## Usages
 
-With `assertj-bean-validation-jakarta` or `assertj-bean-validation-javax`, you can create assertions just like AssertJ.
-
-```java
-ConstructorNode actual;
-ConstructorNodeAssert a = ConstructorNodeAssertion.asserThat(actual);
-
-assertThat(actual).hasParameterTypeEqualTo(expected);
-```
-
-## APIs
-
-### Verifying a bean and/or its properties.
-
-#### `isValid()`
-
-Verifies that the `actual` bean is valid.
+Say, we have the following beans to verify.
 
 ```java
 class User {
-    @NotBlank String name = "UNKNOWN";
-    @PositiveOrZero int age;
+
+    @NotBlank String name;
+
+    @Max(128) @Min(0) @PositiveOrZero int age;
 }
 
-User user = new User();
+class Registration {
 
-assertBean(user).isValid();
-assertThat(bean(user)).isValid(); // equivalent
+    @Valid User user;
+}
+
+class SeniorRegistration
+        extends Registration {
+
+    @AssertTrue
+    boolean isUserSenior() {
+        return user == null || user.age >= 60;
+    }
+}
 ```
 
-#### `isNotValid()`, `isNotValid(Consumer)`
+### Verifying beans and properties
 
-Verifies that the `actual` bean is not valid and, optionally, accepts a non-empty set of constraint violations to specified consumer.
+Verifies that actual bean objects and/or their properties are valid.
 
 ```java
-User user = new User();
+class Test {
 
-assertThat(bean(user)).isNotValid(); // fails
-
-user.setName(null);
-
-assertThat(bean(user)).isNotValid(); // succeeds
-
-asserBean(user).isNotValid(s -> {    // succeeds
-    assertThat(s).hasSize(1).element(0, as(CONSTRAINT_VIOLATION))
-        .hasInvalidValueEqualTo(user.getAge())
-        .hasLeafBeanSameAs(user)
-        .hasMessageSatisfying(m -> {
-            assertThat(m).isNotBlank(); // "must not be blank"
-        })
-        .hasPropertyPathSatisfying(p -> {
-            assertPath(p).isNotNull();
-            assertPath(p).asIterable().hasSize(1);
-            assertPath(p).node(0).hasIndexEqualTo(null);
-            assertPath(p).node(0).hasKeyEqualTo(null);
-            assertPath(p).node(0).hasNameEqualTo("age");
-            assertPath(p).propertyNode(0).hasContainerClassSameAs(null);
-            assertPath(p).propertyNode(0).hasTypeArgumentIndexEqualTo(null);
-        })
-        .hasRootBeanSameAs(user)
-        .hasRootBeanClassSameAs(User.class)
-        ;
-});
+    @Test
+    void test() {
+        assertBean(new User("Jane", 28))  // valid
+                .isValid()                // passes
+                .hasValidProperty("name") // passes
+                .hasValidProperty("age"); // passes
+    }
+}
 ```
 
-#### `hasValidProperty(String)`
-
-Verifies that the current value of a property of the actual bean is valid.
+You can debug by analyzing (or verifying) constraint violations populated while validating.
 
 ```java
-User user = new User();
+class Test {
 
-assertBean(user).hasValidProprty("name");       // succeeds
-assertThat(bean(user)).hasValidProperty("age"); // succeeds
+    @Test
+    void test() {
+        assertBean(new User("", 27))             // invalid; name is blank
+                .isValid(cv -> {                 // should fail
+                    assertThat(cv.getInvalidValue()).isEqualTo(actual.getName());
+                    assertThat(cv.getPropertyPath())
+                            .isNotEmpty()
+                            .allSatisfy(n -> {
+                                assertThat(n.getName()).isEqualTo("name");
+                            });
+                });
+        assertBean(new User("John", 300))        // invalid; too old to be true
+                .hasValidProperty("age", cv -> { // should fail
+                    assertThat(cv.getInvalidValue()).isEqualTo(actual.getAge());
+                    assertThat(cv.getPropertyPath())
+                            .isNotEmpty()
+                            .allSatisfy(n -> assertThat(n.getName()).isEqualTo("age"));
+                });
+    }
+}
 ```
 
-#### `doesNotHaveValidProperty(String)`, `doesNotHaveValidProperty(String, Consumer)`
+### Using extended assertion classes
 
-Verifies that the current value of a property of the actual bean is not valid.
+You can work with your own (extended) assertion class.
 
 ```java
-assertBean(user).doesNotHaveValidProperty("age");       // fails
+class UserAssert
+        extends AbstractBeanAssert<UserAssert, User> {
 
-user.setAge(-1);
+    UserAssert(User actual) {
+        super(actua, UserAssert.class);
+    }
 
-assertThat(bean(user)).doesNotHaveValidProperty("age"); // succeeds
+    UserAssert isNamedJane() {
+        return isNotNull()
+                .is(new Condition<>(v -> "Jane".equalsIgnoreCase(v.getName()),
+                                    "named Jane"));
+    }
+}
 ```
 
-### Verifying a value against a property of a bean type
-
-#### `isValidFor(Class<?>, String)`
-
-Verifies that the `actual` value would be valid for a property of a bean type.
+A number of static factory methods are prepared for extended assertion classes.
 
 ```java
-assertThat(value("Jane")).isValidFor(User.class, "name"); // succeeds
-assertValue(null).isValidFor(User.class, "name");         // fails
+class Test {
 
-assertThat(vaue(0)).isValidFor(User.class, "age");        // succeeds
-assertValue(-1).isValidFor(User.class, "age");            // fails
+    @Test
+    void test() {
+        // specify your assert class along with specific actual class
+        {
+            final User actual = new User("Jane", 0);
+            assertBean(UserAssert.class, User.class, actual)
+                    .isValid()
+                    .hasValidProperty("name")
+                    .hasValidProperty("age")
+                    .isNamedJane(); // should pass
+        }
+        // or emit the actual class
+        {
+            final User actual = new User("John", 1);
+            assertBean(UserAssert.class, actual)
+                    .isValid()
+                    .hasValidProperty("name")
+                    .hasValidProperty("age")
+                    .isNamedJane(); // should fail
+        }
+        // or let it find whatever required
+        {
+            // tries to find a class named `UserAssert`
+            // in the same package of `User` class
+            final Object actual = new User("Jane", 0); // java.lang.Object
+            assertVirtualBean(actual)                  // mind the name of the method
+                    .isValid()
+                    .hasValidProperty("name")
+                    .hasValidProperty("age")
+                    .isNamedJane();
+        }
+    }
+}
 ```
 
-#### `isValidFor(Class<?>, String)`, `isNotValidFor(Class<?>, String, Consumer)`
+### Verifying values against properties
 
-Verifies that the `actual` value is not valid for a property specified class and, optionally, accepts a non-empty set of `ConstraintViolation`s to specified consumer. 
+You can verify a value against specific property of specific bean type.
 
 ```java
-assertValue("John").isNotValidFor(User.class, "name");            // fails
-        
-String invalidName = getInvalidName();
-assertThat(value(invalidName)).isNotValidFor(User.class, "name"); // succeeds
-assertValue(invalidName).isNotValidFor(User.class, "name", s -> { // succeeds
-});
+class Test {
 
-assertValue(1).isNotValidFor(User.class, "age");                  // fails
-        
-int invalidAge = getInvalidAge();
-assertThat(value(invalidAge)).isNotValidFor(User.class, "name");  // succeeds
-assertValue(invalidAge).isNotValidFor(User.class, "name", s -> {  // succeeds
-});
+    @Test
+    void test() {
+        assertProperty("John").isValidFor(User.class, "name"); // should pass
+        assertProperty(  null).isValidFor(User.class, "name"); // should fail; @NotBlank
+        assertProperty(   " ").isValidFor(User.class, "name"); // should fail; @NotBlank
+        assertProperty(    31).isValidFor(User.class, "age");  // should pass
+        assertProperty(    -1).isValidFor(User.class, "age");  // should fail; @Min(0x00)
+        assertProperty(   297).isValidFor(User.class, "age");  // should fail; @Max(0x80)
+    }
+}
 ```
 
-### Using custom validators and/or targeting groups
+Note that a bean can also be validated against a property of another bean.
 
 ```java
-Validator validator = validator();
-Class<?>[] groups = groups();
-assert...(...)
-        .using(validator)  // using a custom validator
-        .targeting(groups) // using custom groups
-        .(is|has)...(...);
+class Test {
+
+    @Test
+    void test() {
+        assertBean(null).isValidFor(Registration.class, "user"); // @NotNull
+    }
+}
 ```
 
-[validate]: https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validate-T-java.lang.Class...-
+Note also that the `@Valid` is not honored by `Validator#validateProperty` method nor `Validator#validateValue` method.
+See [6.1.1. Validation methods] (Jakarta Bean Validation specification).
 
-[validateProperty]: https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateProperty-T-java.lang.String-java.lang.Class...-
+```java
+class Test {
 
-[validateValue]: https://javadoc.io/static/jakarta.validation/jakarta.validation-api/3.0.0/jakarta/validation/Validator.html#validateValue-java.lang.Class-java.lang.String-java.lang.Object-java.lang.Class...-
+    @Test
+    void test() {
+        User user = new User("John", 300);                       // invalid, obviously
+        assertBean(user).isValid();                              // so does fail
+        assertBean(user).isValidFor(Registration.class, "user"); // DOES NOT FAIL!
+        assertBean(new Registration(user)).isValid();            // fails, after ...
+    }
+}
+```
 
-[jakarta.validation:jakarta.validation-api]: https://search.maven.org/artifact/jakarta.validation/jakarta.validation-api
-[javax.validation:validation-api]: https://search.maven.org/artifact/javax.validation/validation-api
+### Using a `Validator` and/or targeting groups
 
+You can configure a `Validator` or groups for validating.
+
+```java
+assertBean(user)
+        .usingValidator(...)       // null to reset
+        .targetingGroups(...,...) // null or empty to reset
+        .isValid();
+```
+
+[6.1.1. Validation methods]: https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods

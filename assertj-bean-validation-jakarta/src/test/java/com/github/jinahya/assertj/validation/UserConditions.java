@@ -1,10 +1,5 @@
-/**
- * Defines assertion classes, based on top of <a href="https://assertj.github.io/doc/">AssertJ</a>, for fluently
- * verifying objects and values using <a href="https://beanvalidation.org/">Jakarta Bean-Validation</a>.
- *
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
 package com.github.jinahya.assertj.validation;
+
 /*-
  * #%L
  * assertj-bean-validation
@@ -24,3 +19,22 @@ package com.github.jinahya.assertj.validation;
  * limitations under the License.
  * #L%
  */
+
+import org.assertj.core.api.Condition;
+
+public final class UserConditions {
+
+    public static final Condition<User> JANE
+            = new Condition<>(v -> "Jane".equalsIgnoreCase(v.getName()), "named Jane");
+
+    public static final Condition<User> JOHN
+            = new Condition<>(v -> "John".equalsIgnoreCase(v.getName()), "named John");
+
+    public static final Condition<User> JUNIOR = new Condition<>(v -> v.age < 60, "junior");
+
+    public static final Condition<User> SENIOR = new Condition<>(v -> !JUNIOR.matches(v), "senior");
+
+    private UserConditions() {
+        throw new AssertionError("instantiation is not allowed");
+    }
+}
