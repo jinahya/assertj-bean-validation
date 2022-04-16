@@ -58,7 +58,7 @@ public abstract class AbstractValidationAssert<
      *
      * @return the validator configured to use.
      */
-    protected VALIDATOR getValidator() {
+    VALIDATOR getValidator() {
         return validator;
     }
 
@@ -67,7 +67,7 @@ public abstract class AbstractValidationAssert<
      *
      * @param validator new validator to use; may be {@code null}.
      */
-    protected void setValidator(VALIDATOR validator) {
+    void setValidator(VALIDATOR validator) {
         this.validator = validator;
     }
 
@@ -82,7 +82,7 @@ public abstract class AbstractValidationAssert<
      *
      * @return an array of targeting groups; may be {@code empty}.
      */
-    protected Class<?>[] getGroups() {
+    Class<?>[] getGroups() {
         return groups.toArray(new Class<?>[0]);
     }
 
@@ -91,7 +91,7 @@ public abstract class AbstractValidationAssert<
      *
      * @param groups new targeting groups; may be {@code null}.
      */
-    protected void setGroups(final Class<?>[] groups) {
+    void setGroups(final Class<?>[] groups) {
         this.groups.clear();
         if (groups != null) {
             Arrays.stream(groups)

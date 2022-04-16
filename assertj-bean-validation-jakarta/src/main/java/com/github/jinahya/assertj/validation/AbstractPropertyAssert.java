@@ -52,7 +52,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
     }
 
     @Override
-    protected Validator getValidator() {
+    Validator getValidator() {
         final Validator validator = super.getValidator();
         if (validator != null) {
             return validator;

@@ -188,11 +188,11 @@ class Test {
     @Test
     void test() {
         assertProperty("John").isValidFor(User.class, "name"); // should pass
-        assertProperty(  null).isValidFor(User.class, "name"); // should fail; @NotBlank
-        assertProperty(   " ").isValidFor(User.class, "name"); // should fail; @NotBlank
-        assertProperty(    31).isValidFor(User.class, "age");  // should pass
-        assertProperty(    -1).isValidFor(User.class, "age");  // should fail; @Min(0x00)
-        assertProperty(   297).isValidFor(User.class, "age");  // should fail; @Max(0x80)
+        assertProperty(null).isValidFor(User.class, "name"); // should fail; @NotBlank
+        assertProperty(" ").isValidFor(User.class, "name"); // should fail; @NotBlank
+        assertProperty(31).isValidFor(User.class, "age");  // should pass
+        assertProperty(-1).isValidFor(User.class, "age");  // should fail; @Min(0x00)
+        assertProperty(297).isValidFor(User.class, "age");  // should fail; @Max(0x80)
     }
 }
 ```
