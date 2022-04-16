@@ -4,8 +4,11 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jinahya_assertj-bean-validation&metric=alert_status)](https://sonarcloud.io/dashboard?id=jinahya_assertj-bean-validation)
 [![Known Vulnerabilities](https://snyk.io/test/github/jinahya/assertj-bean-validation/badge.svg)](https://snyk.io/test/github/jinahya/assertj-bean-validation)
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation)
-[![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation/javadoc.svg)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation-javax?label=maven-central%20%28javax%29)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation-javax)
+[![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation-javax/javadoc.svg?label=javadoc.io%20%28javax%29)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation-javax)
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation-jakarta?label=maven-central%20%28jakarta%29)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation-jakarta)
+[![javadoc-](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation-jakarta/javadoc.svg?label=javadoc.io%20%28jakarta%29)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation-jakarta)
 
 An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
 

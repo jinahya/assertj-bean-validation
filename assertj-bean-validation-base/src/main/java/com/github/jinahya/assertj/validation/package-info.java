@@ -1,6 +1,6 @@
 /**
  * Defines assertion classes, based on top of <a href="https://assertj.github.io/doc/">AssertJ</a>, for fluently
- * verifying objects and values using <a href="https://beanvalidation.org/">Jakarta Bean-Validation</a>.
+ * verifying objects and values using <a href="https://beanvalidation.org/">Bean-Validation</a>.
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
