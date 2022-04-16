@@ -29,10 +29,6 @@ package com.github.jinahya.assertj.validation;
 class BeanAssertImpl<ACTUAL>
         extends AbstractBeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
 
-    static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertThat(final ACTUAL actual) {
-        return new BeanAssertImpl<>(actual);
-    }
-
     /**
      * Creates a new instance for verifying specified actual value.
      *

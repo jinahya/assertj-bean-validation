@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation.user;
+package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
@@ -20,14 +20,12 @@ package com.github.jinahya.assertj.validation.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.PropertyAssert;
-import com.github.jinahya.assertj.validation.ValidationAssertions;
+import jakarta.validation.ConstraintViolation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintViolation;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 
