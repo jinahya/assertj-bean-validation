@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>assertj-bean-validation</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${project.artifactId}</name>
