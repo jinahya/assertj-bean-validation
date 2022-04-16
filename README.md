@@ -12,6 +12,9 @@
 
 An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
 
+<img src="https://raw.githubusercontent.com/joel-costigliola/assertj/gh-pages/favicon.png" height="100"/> + 
+<img src="https://beanvalidation.org/logo/logo.svg" height="100" alt="BeanValidation"/>
+
 ## Coordinates
 
 For Java EE,
@@ -42,7 +45,7 @@ For Jakarta EE,
 
 ### JDK
 
-This module requires **JDK 18**, especially with its test sources, for building itself.
+This module requires **latest JDK(currently, 18)**, especially with its test sources, for building itself.
 
 ## Usages
 
