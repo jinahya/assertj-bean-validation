@@ -43,7 +43,7 @@ import org.assertj.core.api.Assert;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
+public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL, VALIDATOR>, ACTUAL, VALIDATOR>
         extends Assert<SELF, ACTUAL> {
 
     /**
