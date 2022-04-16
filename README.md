@@ -42,7 +42,7 @@ For Jakarta EE,
 
 ### JDK
 
-This module requires **JDK 18**, especially with its test sources, for building itself.
+This module requires **latest JDK(currently, 18)**, especially with its test sources, for building itself.
 
 ## Usages
 
