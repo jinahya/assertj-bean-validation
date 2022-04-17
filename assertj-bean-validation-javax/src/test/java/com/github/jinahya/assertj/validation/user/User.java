@@ -103,10 +103,20 @@ public class User {
         this.name = name;
     }
 
+    /**
+     * Returns current value of {@code age} property.
+     *
+     * @return current value of the {@code age} property.
+     */
     public int getAge() {
         return age;
     }
 
+    /**
+     * Replaces current value of {@code age} property with specified value.
+     *
+     * @param age new value for the {@code age} property.
+     */
     public void setAge(final int age) {
         this.age = age;
     }

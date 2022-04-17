@@ -26,6 +26,7 @@
       <artifactId>assertj-bean-validation-base</artifactId>
       <version>${project.version}</version>
       <classifier>tests</classifier>
+      <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>

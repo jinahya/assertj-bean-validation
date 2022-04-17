@@ -39,8 +39,13 @@ class UserAssert
         return isValid().is(UserConditions.JOHN);
     }
 
+    public UserAssert hasName(final String expected) {
+        return isValid()
+                .satisfies(a -> assertThat(a.getName()).as("name").isEqualTo(expected));
+    }
+
     public UserAssert hasAge(final int expected) {
         return isValid()
-                .satisfies(a -> assertThat(a.getAge()).isEqualTo(expected));
+                .satisfies(a -> assertThat(a.getAge()).as("age").isEqualTo(expected));
     }
 }
