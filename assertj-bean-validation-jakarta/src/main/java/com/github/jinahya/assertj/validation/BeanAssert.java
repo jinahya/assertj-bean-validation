@@ -26,7 +26,7 @@ import jakarta.validation.Validator;
 import java.util.function.Consumer;
 
 /**
- * An interface for verifying beans.
+ * An interface for verifying bean objects.
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
@@ -102,7 +102,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or its current value of {@code propertyName} is
      *                        not valid.
-     * @apiNote Note that the {@link jakarta.validation.Valid @Valid} is not honored by the
+     * @apiNote Note that the {@link jakarta.validation.Valid @Valid}, as specified, is not honored by the
      * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies.
      * @implNote This method invokes {@link #hasValidProperty(String, Consumer)} method with {@code propertyName} and a
      * consumer does nothing.

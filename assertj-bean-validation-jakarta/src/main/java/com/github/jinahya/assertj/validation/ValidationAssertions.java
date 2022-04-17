@@ -39,7 +39,7 @@ public final class ValidationAssertions {
      * @return a new assertion object for verifying {@code actual}.
      */
     public static <ACTUAL> BeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
-        return new BeanAssertImpl(actual);
+        return new BeanAssertImpl<>(actual);
     }
 
     /**
@@ -119,7 +119,7 @@ public final class ValidationAssertions {
      * @return a new assertion instance for {@code actual}.
      */
     public static <ACTUAL> PropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
-        return new PropertyAssertImpl(actual);
+        return new PropertyAssertImpl<>(actual);
     }
 
     /**

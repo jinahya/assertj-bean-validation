@@ -2,7 +2,7 @@ package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
- * assertj-bean-validation-jakarta
+ * assertj-bean-validation-javax
  * %%
  * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%

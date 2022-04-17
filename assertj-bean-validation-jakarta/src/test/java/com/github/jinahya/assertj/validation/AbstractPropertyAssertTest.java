@@ -22,9 +22,22 @@ package com.github.jinahya.assertj.validation;
 
 import jakarta.validation.Validator;
 
+/**
+ * An abstract class for testing subclasses of {@link AbstractPropertyAssert} class.
+ *
+ * @param <SELF>   assertion class type parameter
+ * @param <ACTUAL> actual class type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public abstract class AbstractPropertyAssertTest<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssertTest<SELF, ACTUAL, Validator> {
 
+    /**
+     * Creates a new instance with specified arguments.
+     *
+     * @param assertionClass an assertion class to test.
+     * @param actualClass    an actual class of the {@code assertionClass}.
+     */
     protected AbstractPropertyAssertTest(final Class<SELF> assertionClass, final Class<ACTUAL> actualClass) {
         super(assertionClass, actualClass, Validator.class);
     }
