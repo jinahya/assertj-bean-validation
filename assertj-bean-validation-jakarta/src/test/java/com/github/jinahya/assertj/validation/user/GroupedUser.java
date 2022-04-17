@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L

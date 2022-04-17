@@ -33,7 +33,6 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings({"java:S119"})
 public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
-//        extends IPropertyAssert<SELF, ACTUAL, Validator> {
         extends ValidationAssert<SELF, ACTUAL, Validator> {
 
     /**

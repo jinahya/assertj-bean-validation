@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import com.github.jinahya.assertj.validation.ValidationAssertions;
 import jakarta.validation.ConstraintViolation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,43 +33,55 @@ import java.util.HashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class IsValidFor_Age_Test {
+class IsValidFor_Name_Test {
 
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @DisplayName("[Valid] isValidFor(User.class, \"age\") should pass")
+    @DisplayName("[Valid] isValidFor(\"name\") should pass")
     @Test
-    void isValidForAge_Pass_Valid() {
-        final var actual = User.newValidAge();
-        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertThatProperty(actual);
-        assertion.isValidFor(User.class, "age");
+    void isValidForName_Pass_Valid() {
+        final var actual = User.newValidName();
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
+        assertion.isValidFor(User.class, "name");
     }
 
-    @DisplayName("[Invalid] isValidFor(User.class, \"age\") should fail")
+    @DisplayName("[Valid] isValidFor(\"name\", Consumer) should pass")
     @Test
-    void isValidForAge_Fail_InvalidAge() {
-        final var actual = User.newInvalidAge();
-        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertThatProperty(actual);
-        assertThatThrownBy(() -> assertion.isValidFor(User.class, "age"))
+    void isValidForNameConsumer_Pass_Valid() {
+        final var actual = User.newValidName();
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
+        final var violations = new HashSet<ConstraintViolation<User>>();
+        assertion.isValidFor(User.class, "name", violations::add);
+        assertThat(violations)
+                .isEmpty();
+    }
+
+    @DisplayName("[Invalid] isValidFor(User.class, \"name\") should fail")
+    @Test
+    void isValidForName_Fail_InvalidName() {
+        final var actual = User.newInvalidName();
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
+        assertThatThrownBy(() -> assertion.isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("[Invalid] isValidFor(User.class, \"age\", Consumer) should fail")
+    @DisplayName("[Invalid] isValidFor(User.class, \"name\", Consumer) should fail")
     @Test
-    void isValidForAgeConsumer_Fail_InvalidAge() {
-        final var actual = User.newInvalidAge();
-        final PropertyAssert<?, Integer> assertion = ValidationAssertions.assertThatProperty(actual);
+    void isValidForNameConsumer_Fail_InvalidName() {
+        final var actual = User.newInvalidName();
+        final var assertion = ValidationAssertions.assertThatProperty(actual);
         final var violations = new HashSet<ConstraintViolation<User>>();
-        assertThatThrownBy(() -> assertion.isValidFor(User.class, "age", violations::add))
+        assertThatThrownBy(() -> assertion.isValidFor(User.class, "name", violations::add))
                 .isInstanceOf(AssertionError.class);
         assertThat(violations)
                 .isNotEmpty()
+                .doesNotContainNull()
                 .allSatisfy(cv -> {
                     assertThat(cv.getInvalidValue()).isEqualTo(actual);
                     assertThat(cv.getPropertyPath())
                             .isNotEmpty()
                             .allSatisfy(n -> {
-                                assertThat(n.getName()).isEqualTo("age");
+                                assertThat(n.getName()).isEqualTo("name");
                             });
                 });
     }

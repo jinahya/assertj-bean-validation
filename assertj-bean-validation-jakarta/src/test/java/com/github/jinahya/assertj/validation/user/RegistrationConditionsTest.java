@@ -1,10 +1,8 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class RegistrationConditionsTest {
 

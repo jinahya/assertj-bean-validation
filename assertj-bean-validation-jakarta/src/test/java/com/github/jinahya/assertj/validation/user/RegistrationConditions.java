@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
@@ -22,19 +22,12 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.Condition;
 
-public final class UserConditions {
+final class RegistrationConditions {
 
-    public static final Condition<User> JANE
-            = new Condition<>(v -> "Jane".equalsIgnoreCase(v.getName()), "named Jane");
+    public static final Condition<Registration> SENIOR_USER
+            = new Condition<>(v -> v.getUser() == null || UserConditions.SENIOR.matches(v.getUser()), "senior user");
 
-    public static final Condition<User> JOHN
-            = new Condition<>(v -> "John".equalsIgnoreCase(v.getName()), "named John");
-
-    public static final Condition<User> JUNIOR = new Condition<>(v -> v.age < 60, "junior");
-
-    public static final Condition<User> SENIOR = new Condition<>(v -> !JUNIOR.matches(v), "senior");
-
-    private UserConditions() {
+    private RegistrationConditions() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

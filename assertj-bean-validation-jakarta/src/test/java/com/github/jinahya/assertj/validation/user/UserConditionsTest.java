@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;

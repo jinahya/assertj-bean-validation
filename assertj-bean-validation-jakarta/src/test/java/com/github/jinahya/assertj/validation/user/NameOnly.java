@@ -1,10 +1,10 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
- * assertj-bean-validation-javax
+ * assertj-bean-validation
  * %%
- * Copyright (C) 2021 - 2022 Jinahya, Inc.
+ * Copyright (C) 2021 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-abstract class UserAssertTest
-        extends AbstractBeanAssertTest<UserAssert, User> {
+interface NameOnly {
 
-    protected UserAssertTest() {
-        super(UserAssert.class, User.class);
-    }
 }

@@ -39,7 +39,8 @@ For Jakarta EE,
 
 ## Compatibilities
 
-* Depends (as `provided`) on the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
+* Depends (as `provided`) on
+  the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
 * Targets **Java 8**.
 
 ### JDK
@@ -232,7 +233,7 @@ You can configure a `Validator` or targeting groups for validating.
 ```java
 assertThatBean(user)
         .usingValidator(...)       // null to reset
-        .targetingGroups(..., ...) // null or empty to reset
+        .targetingGroups(...,...) // null or empty to reset
         .isValid();
 ```
 

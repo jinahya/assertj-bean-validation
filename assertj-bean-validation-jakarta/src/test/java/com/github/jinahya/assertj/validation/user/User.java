@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
@@ -99,22 +99,33 @@ public class User {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
+    /**
+     * Returns current value of {@code age} property.
+     *
+     * @return current value of the {@code age} property.
+     */
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    /**
+     * Replaces current value of {@code age} property with specified value.
+     *
+     * @param age new value for the {@code age} property.
+     */
+    public void setAge(final int age) {
         this.age = age;
     }
 
     @NotBlank
-    String name;
+    private String name;
 
     @Max(MAX_VALUE_AGE)
     @Min(MIN_VALUE_AGE)
-    @PositiveOrZero int age;
+    @PositiveOrZero
+    private int age;
 }

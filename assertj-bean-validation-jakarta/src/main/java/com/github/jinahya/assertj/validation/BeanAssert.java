@@ -34,7 +34,6 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings({"java:S119"})
 public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
-//        extends IBeanAssert<SELF, ACTUAL, Validator> {
         extends PropertyAssert<SELF, ACTUAL> {
 
     /**
@@ -88,11 +87,11 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * class UserTest {
      *     @Test void test() {
      *         // @highlight region substring="fail" type=highlighted
-     *         // @link region substring="assertProperty" target="ValidationAssertions#assertProperty(Object)"
-     *         assertProperty( -1).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
-     *         assertProperty(300).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
-     *         assertProperty(  0).isValidFor(User.class, "age"); // should pass
-     *         assertProperty( 28).isValidFor(User.class, "age"); // should pass
+     *         // @link region substring="assertThatProperty" target="ValidationAssertions#assertThatProperty(Object)"
+     *         assertThatProperty( -1).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         assertThatProperty(300).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         assertThatProperty(  0).isValidFor(User.class, "age"); // should pass
+     *         assertThatProperty( 28).isValidFor(User.class, "age"); // should pass
      *         // @end
      *         // @end
      *     }

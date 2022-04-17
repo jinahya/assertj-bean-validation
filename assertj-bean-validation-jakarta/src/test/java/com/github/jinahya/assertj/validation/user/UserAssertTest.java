@@ -1,10 +1,10 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
- * assertj-bean-validation
+ * assertj-bean-validation-javax
  * %%
- * Copyright (C) 2021 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,12 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.Condition;
+import com.github.jinahya.assertj.validation.AbstractBeanAssertTest;
 
-final class RegistrationConditions {
+abstract class UserAssertTest
+        extends AbstractBeanAssertTest<UserAssert, User> {
 
-    public static final Condition<Registration> SENIOR_USER
-            = new Condition<>(v -> v.getUser() == null || UserConditions.SENIOR.matches(v.getUser()), "senior user");
-
-    private RegistrationConditions() {
-        throw new AssertionError("instantiation is not allowed");
+    protected UserAssertTest() {
+        super(UserAssert.class, User.class);
     }
 }

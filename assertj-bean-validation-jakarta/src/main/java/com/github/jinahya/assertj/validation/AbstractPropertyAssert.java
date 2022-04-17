@@ -23,6 +23,7 @@ package com.github.jinahya.assertj.validation;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.assertj.core.api.Assertions;
 
 import java.util.Objects;
@@ -51,13 +52,23 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
         super(actual, selfType);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     * @throws RuntimeException if failed to build a default validator factory.
+     * @implNote Overridden to return a validator from {@link Validation#buildDefaultValidatorFactory()} if no validator
+     * is configured.
+     */
     @Override
     Validator getValidator() {
         final Validator validator = super.getValidator();
         if (validator != null) {
             return validator;
         }
-        return Validation.buildDefaultValidatorFactory().getValidator();
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            return factory.getValidator();
+        }
     }
 
     @Override

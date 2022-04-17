@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.user;
 
 /*-
  * #%L
@@ -20,6 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import com.github.jinahya.assertj.validation.AbstractBeanAssert;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserAssert
@@ -37,8 +39,13 @@ class UserAssert
         return isValid().is(UserConditions.JOHN);
     }
 
+    public UserAssert hasName(final String expected) {
+        return isValid()
+                .satisfies(a -> assertThat(a.getName()).as("name").isEqualTo(expected));
+    }
+
     public UserAssert hasAge(final int expected) {
         return isValid()
-                .satisfies(a -> assertThat(a.getAge()).isEqualTo(expected));
+                .satisfies(a -> assertThat(a.getAge()).as("age").isEqualTo(expected));
     }
 }
