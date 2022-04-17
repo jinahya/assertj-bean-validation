@@ -25,10 +25,17 @@ package com.github.jinahya.assertj.validation;
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 public abstract class AbstractBeanAssertTest<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractPropertyAssertTest<SELF, ACTUAL> {
 
+    /**
+     * Creates a new instance with specified arguments.
+     *
+     * @param assertionClass an assertion class to test.
+     * @param actualClass    an actual class of the {@code assertionClass}.
+     */
     protected AbstractBeanAssertTest(final Class<SELF> assertionClass, final Class<ACTUAL> actualClass) {
         super(assertionClass, actualClass);
     }
