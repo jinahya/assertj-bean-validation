@@ -4,42 +4,41 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jinahya_assertj-bean-validation&metric=alert_status)](https://sonarcloud.io/dashboard?id=jinahya_assertj-bean-validation)
 [![Known Vulnerabilities](https://snyk.io/test/github/jinahya/assertj-bean-validation/badge.svg)](https://snyk.io/test/github/jinahya/assertj-bean-validation)
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation)
-[![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation/javadoc.svg)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation?label=maven-central)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation)
+[![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation-javax/javadoc.svg?label=javadoc.io)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation)
 
 An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
 
+<img src="https://raw.githubusercontent.com/joel-costigliola/assertj/gh-pages/favicon.png" height="100"/> + 
+<img src="https://beanvalidation.org/logo/logo.svg" height="100" alt="BeanValidation"/>
+
 ## Coordinates
 
-For Java EE,
-
 ```xml
-
-<dependency>
-  <groupId>com.github.jinahya</groupId>
-  <artifactId>assertj-bean-validation-javax</artifactId>
-</dependency>
+<groupId>com.github.jinahya</groupId>
+<artifactId>assertj-bean-validation</artifactId>
 ```
 
-For Jakarta EE,
+### Classifiers
 
-```xml
-
-<dependency>
-  <groupId>com.github.jinahya</groupId>
-  <artifactId>assertj-bean-validation-jakarta</artifactId>
-</dependency>
-```
+classifier           | `-release` | `javax.*` | `jakarta.*` |notes
+---------------------|------------|-----------|-------------|-----
+NONE                 | 8          | ✓         |             |
+`jakarta`            | 8          |           | ✓           |
+`release-11`         | 11         | ✓         |             |
+`release-11-jakarta` | 11         |           | ✓           |
+`release-17`         | 17         | ✓         |             |
+`release-17-jakarta` | 17         |           | ✓           |
 
 ## Compatibilities
 
-* Depends(as `provided`) on
+* Depends (as `provided`) on
   the [latest org.assertj:assertj-core](https://javadoc.io/doc/org.assertj/assertj-core/latest/index.html).
 * Targets **Java 8**.
 
 ### JDK
 
-This module requires **JDK 18**, especially with its test sources, for building itself.
+This module requires the **latest JDK**(currently, 18), especially with its test sources, for building itself.
 
 ## Usages
 
@@ -47,20 +46,16 @@ Say, we have the following beans to verify.
 
 ```java
 class User {
-
     @NotBlank String name;
-
-    @Max(128) @Min(0) @PositiveOrZero int age;
+    @Max(0x80) @PositiveOrZero int age;
 }
 
 class Registration {
-
-    @Valid User user;
+    @Valid @NotNull User user;
 }
 
 class SeniorRegistration
         extends Registration {
-
     @AssertTrue
     boolean isUserSenior() {
         return user == null || user.age >= 60;
@@ -77,10 +72,10 @@ class Test {
 
     @Test
     void test() {
-        assertBean(new User("Jane", 28))  // valid
-                .isValid()                // passes
-                .hasValidProperty("name") // passes
-                .hasValidProperty("age"); // passes
+        assertThatBean(new User("Jane", 28))  // valid
+                .isValid()                    // passes
+                .hasValidProperty("name")     // passes
+                .hasValidProperty("age");     // passes
     }
 }
 ```
@@ -92,8 +87,8 @@ class Test {
 
     @Test
     void test() {
-        assertBean(new User("", 27))             // invalid; name is blank
-                .isValid(cv -> {                 // should fail
+        assertThatBean(new User("", 27)) // invalid; name is blank
+                .isValid(cv -> {         // should fail
                     assertThat(cv.getInvalidValue()).isEqualTo(actual.getName());
                     assertThat(cv.getPropertyPath())
                             .isNotEmpty()
@@ -101,7 +96,7 @@ class Test {
                                 assertThat(n.getName()).isEqualTo("name");
                             });
                 });
-        assertBean(new User("John", 300))        // invalid; too old to be true
+        assertThatBean(new User("John", 300))    // invalid; too old to be true
                 .hasValidProperty("age", cv -> { // should fail
                     assertThat(cv.getInvalidValue()).isEqualTo(actual.getAge());
                     assertThat(cv.getPropertyPath())
@@ -142,7 +137,7 @@ class Test {
         // specify your assert class along with specific actual class
         {
             final User actual = new User("Jane", 0);
-            assertBean(UserAssert.class, User.class, actual)
+            assertThatBean(UserAssert.class, User.class, actual)
                     .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
@@ -151,7 +146,7 @@ class Test {
         // or emit the actual class
         {
             final User actual = new User("John", 1);
-            assertBean(UserAssert.class, actual)
+            assertThatBean(UserAssert.class, actual)
                     .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
@@ -162,7 +157,7 @@ class Test {
             // tries to find a class named `UserAssert`
             // in the same package of `User` class
             final Object actual = new User("Jane", 0); // java.lang.Object
-            assertVirtualBean(actual)                  // mind the name of the method
+            assertThatVirtualBean(actual)              // mind the name of the method
                     .isValid()
                     .hasValidProperty("name")
                     .hasValidProperty("age")
@@ -181,24 +176,24 @@ class Test {
 
     @Test
     void test() {
-        assertProperty("John").isValidFor(User.class, "name"); // should pass
-        assertProperty(  null).isValidFor(User.class, "name"); // should fail; @NotBlank
-        assertProperty(   " ").isValidFor(User.class, "name"); // should fail; @NotBlank
-        assertProperty(    31).isValidFor(User.class, "age");  // should pass
-        assertProperty(    -1).isValidFor(User.class, "age");  // should fail; @Min(0x00)
-        assertProperty(   297).isValidFor(User.class, "age");  // should fail; @Max(0x80)
+        assertThatProperty("John").isValidFor(User.class, "name"); // should pass
+        assertThatProperty(null).isValidFor(User.class, "name");   // should fail; @NotBlank
+        assertThatProperty(" ").isValidFor(User.class, "name");    // should fail; @NotBlank
+        assertThatProperty(31).isValidFor(User.class, "age");      // should pass
+        assertThatProperty(-1).isValidFor(User.class, "age");      // should fail; @Min(0x00)
+        assertThatProperty(297).isValidFor(User.class, "age");     // should fail; @Max(0x80)
     }
 }
 ```
 
-Note that a bean can also be validated against a property of another bean.
+Note that a bean value can also be validated against a property of another bean.
 
 ```java
 class Test {
 
     @Test
     void test() {
-        assertBean(null).isValidFor(Registration.class, "user"); // @NotNull
+        assertThatBean(null).isValidFor(Registration.class, "user"); // should fail; @NotNull
     }
 }
 ```
@@ -211,20 +206,21 @@ class Test {
 
     @Test
     void test() {
-        User user = new User("John", 300);                       // invalid, obviously
-        assertBean(user).isValid();                              // so does fail
-        assertBean(user).isValidFor(Registration.class, "user"); // DOES NOT FAIL!
-        assertBean(new Registration(user)).isValid();            // fails, after ...
+        User user = new User("John", 300);                           // not valid, obviously
+        assertThatBean(user).isValid();                              // so does fail
+        assertThatBean(user).isValidFor(Registration.class, "user"); // DOES NOT FAIL!
+        assertThatBean(null).isValidFor(Registration.class, "user"); // while fails
+        assertThatBean(new Registration(user)).isValid();            // fails, after ...
     }
 }
 ```
 
 ### Using a `Validator` and/or targeting groups
 
-You can configure a `Validator` or groups for validating.
+You can configure a `Validator` or targeting groups for validating.
 
 ```java
-assertBean(user)
+assertThatBean(user)
         .usingValidator(...)       // null to reset
         .targetingGroups(...,...) // null or empty to reset
         .isValid();
