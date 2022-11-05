@@ -35,6 +35,25 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
+     * <p>
+     * {@snippet lang = "java" id = "example":
+     * class User {
+     *     @Max(0x80) @PositiveOrZero int age;
+     * }
+     *
+     * class UserTest {
+     *     @Test void test() {
+     *         // @highlight region substring="fail" type=highlighted
+     *         // @link region substring="assertThatProperty" target="ValidationAssertions#assertThatProperty(Object)"
+     *         assertThatProperty( -1).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         assertThatProperty(300).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         assertThatProperty(  0).isValidFor(User.class, "age"); // should pass
+     *         assertThatProperty( 28).isValidFor(User.class, "age"); // should pass
+     *         // @end
+     *         // @end
+     *     }
+     * }
+     *}
      *
      * @param beanType     the bean type; not {@code null}.
      * @param propertyName the name of the property; not {@code null}.

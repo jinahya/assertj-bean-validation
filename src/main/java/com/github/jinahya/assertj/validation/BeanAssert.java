@@ -33,18 +33,6 @@ import javax.validation.Validator;
 public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         extends PropertyAssert<SELF, ACTUAL> {
 
-//    /**
-//     * Verifies that the {@code actual} bean is valid while accepting constraint violations, if any populated, to
-//     * specified consumer.
-//     *
-//     * @param consumer the consumer accepts constraint violations; not {@code null}.
-//     * @return this assertion object.
-//     * @throws AssertionError when the {@code actual} is {@code null} or is not valid.
-//     * @see #isValid()
-//     */
-//    @Deprecated
-//    SELF isValid(Consumer<? super ConstraintViolation<ACTUAL>> consumer);
-
     /**
      * Verifies that the {@code actual} bean is valid.
      *
@@ -56,24 +44,6 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
     /**
      * Verifies that all constraints placed on the property of specified name, of {@code actual} bean, are validated.
      * <p>
-     * {@snippet lang = "java" id = "example":
-     * class User {
-     *     @Max(0x80) @Min(0x00) int age;
-     * }
-     *
-     * class UserTest {
-     *     @Test void test() {
-     *         // @highlight region substring="fail" type=highlighted
-     *         // @link region substring="assertThatProperty" target="ValidationAssertions#assertThatProperty(Object)"
-     *         assertThatProperty( -1).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
-     *         assertThatProperty(300).isValidFor(User.class, "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
-     *         assertThatProperty(  0).isValidFor(User.class, "age"); // should pass
-     *         assertThatProperty( 28).isValidFor(User.class, "age"); // should pass
-     *         // @end
-     *         // @end
-     *     }
-     * }
-     *}
      *
      * @param propertyName the name of the property to be verified as valid; not {@code null}.
      * @return this assertion object.
