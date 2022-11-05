@@ -38,7 +38,7 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
      * <p>
      * {@snippet lang = "java" id = "example":
      * class User {
-     *     @Max(0x80) @PositiveOrZero int age;
+     *     @Max(0x7F) @PositiveOrZero int age;
      * }
      *
      * class UserTest {

@@ -47,7 +47,7 @@ Say, we have the following beans to verify.
 ```java
 class User {
     @NotBlank String name;
-    @Max(0x80) @PositiveOrZero int age;
+    @Max(0x7F) @PositiveOrZero int age;
 }
 
 class Registration {

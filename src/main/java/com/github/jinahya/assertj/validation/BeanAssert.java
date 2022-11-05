@@ -35,15 +35,56 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
 
     /**
      * Verifies that the {@code actual} bean is valid.
+     * <p>
+     * {@snippet lang="java" id="example":
+     * class User {
+     *     @NotBlank String name;
+     *     @Max(0x7F) @PositiveOrZero int age;
+     * }
+     *
+     * class UserTest {
+     *     @Test void test() {
+     *         // @highlight region substring="fail" type=highlighted
+     *         // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+     *         assertThatBean(new User("Jane", 28)).isValid(); // should pass
+     *         assertThatBean(new User(  null,  0)).isValid(); // should fail // @highlight regex="\-?null" type=highlighted
+     *         assertThatBean(new User("John", -1)).isValid(); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         // @end
+     *         // @end
+     *     }
+     * }
+     *}
      *
      * @return this assertion object.
-     * @throws AssertionError when the {@code actual} is {@code null} or is not valid.
+     * @throws AssertionError when the {@code actual} is {@code null} or invalid.
      */
+    // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
     SELF isValid();
 
     /**
      * Verifies that all constraints placed on the property of specified name, of {@code actual} bean, are validated.
      * <p>
+     * {@snippet lang="java" id="example":
+     * class User {
+     *     @NotBlank String name;
+     *     @Max(0x7F) @PositiveOrZero int age;
+     * }
+     *
+     * class UserTest {
+     *     @Test void test() {
+     *         // @highlight region substring="fail" type=highlighted
+     *         // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+     *         assertThatBean(new User("Jane", 28)).hasValidProperty("name"); // should pass
+     *         assertThatBean(new User("John", 28)).hasValidProperty( "age"); // should pass
+     *         assertThatBean(new User(  null,  0)).hasValidProperty("name"); // should fail // @highlight regex="\-?null" type=highlighted
+     *         assertThatBean(new User(  null,  0)).hasValidProperty( "age"); // should pass
+     *         assertThatBean(new User("John", -1)).hasValidProperty("name"); // should pass
+     *         assertThatBean(new User("John", -1)).hasValidProperty( "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         // @end
+     *         // @end
+     *     }
+     * }
+     *}
      *
      * @param propertyName the name of the property to be verified as valid; not {@code null}.
      * @return this assertion object.
