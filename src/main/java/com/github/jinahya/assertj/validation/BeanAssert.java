@@ -53,7 +53,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      *         // @end
      *     }
      * }
-     *}
+     * }
      *
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
