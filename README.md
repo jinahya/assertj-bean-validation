@@ -17,25 +17,21 @@ An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Va
 
 ## Coordinates
 
-For Java EE,
-
 ```xml
-
-<dependency>
-  <groupId>com.github.jinahya</groupId>
-  <artifactId>assertj-bean-validation-javax</artifactId>
-</dependency>
+<groupId>com.github.jinahya</groupId>
+<artifactId>assertj-bean-validation</artifactId>
 ```
 
-For Jakarta EE,
+### Classifiers
 
-```xml
-
-<dependency>
-  <groupId>com.github.jinahya</groupId>
-  <artifactId>assertj-bean-validation-jakarta</artifactId>
-</dependency>
-```
+classifier           | `-release` | `javax.*` | `jakarta.*` |notes
+---------------------|------------|-----------|-------------|-----
+NONE                 | 8          | ✓         |             |
+`jakarta`            | 8          |           | ✓           |
+`release-11`         | 11         | ✓         |             |
+`release-11-jakarta` | 11         |           | ✓           |
+`release-17`         | 17         | ✓         |             |
+`release-17-jakarta` | 17         |           | ✓           |
 
 ## Compatibilities
 
@@ -54,14 +50,19 @@ Say, we have the following beans to verify.
 ```java
 class User {
 
-    @NotBlank String name;
+    @NotBlank
+    String name;
 
-    @Max(0x80) @Min(0x00) @PositiveOrZero int age;
+    @Max(0x80)
+    @PositiveOrZero
+    int age;
 }
 
 class Registration {
 
-    @Valid User user;
+    @Valid
+    @NotNull            
+    User user;
 }
 
 class SeniorRegistration
