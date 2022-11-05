@@ -9,9 +9,9 @@ package com.github.jinahya.assertj.validation.example.user;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -118,5 +118,31 @@ class User_IsValid_Test {
         final ConstraintViolation<?> violation = captor.getValue();
         assertThat(violation.getRootBeanClass()).isSameAs(User.class);
         assertThat(violation.getPropertyPath().iterator().next().getName()).isEqualTo(User.PROPERTY_NAME_AGE);
+    }
+
+    @Test
+    void __Invalid() {
+        final var actual = User.newInstance(false, false);
+        final var assertion = assertThatBean(actual);
+        assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    void WithConsumer__Invalid() {
+        final var bean = User.newInstance(false, false);
+        final var assertion = assertThatBean(bean);
+        final Consumer<ConstraintViolation<?>> consumer = spy(new Consumer<ConstraintViolation<?>>() {
+            @Override
+            public void accept(final ConstraintViolation<?> constraintViolation) {
+                log.debug("violation: {}", constraintViolation);
+            }
+        });
+        // WHEN
+        assertThatThrownBy(() -> assertion.consumingViolations(consumer).isValid()).isInstanceOf(AssertionError.class);
+        // THEN
+        @SuppressWarnings({"unchecked"})
+        final ArgumentCaptor<ConstraintViolation<User>> captor = ArgumentCaptor.forClass(ConstraintViolation.class);
+        verify(consumer, times(2)).accept(captor.capture());
+        final ConstraintViolation<?> violation = captor.getValue();
     }
 }
