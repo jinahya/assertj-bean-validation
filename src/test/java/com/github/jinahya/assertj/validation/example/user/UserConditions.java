@@ -20,24 +20,23 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import org.assertj.core.api.Condition;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+final class UserConditions {
 
-@Setter(AccessLevel.PACKAGE)
-@Getter(AccessLevel.PACKAGE)
-@ToString
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-abstract class Registration {
+    public static final Condition<User> JUNIOR = new Condition<>(
+            v -> v.getAge() < UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE,
+            "a junior whose `age` is less than [%d]",
+            UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE
+    );
 
-    @Valid
-    @NotNull
-    private User user;
+    public static final Condition<User> SENIOR = new Condition<>(
+            v -> v.getAge() >= UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE,
+            "a senior whose 'age' is greater than or equal to [%d]",
+            UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE
+    );
+
+    private UserConditions() {
+        throw new AssertionError("instantiation is not allowed");
+    }
 }

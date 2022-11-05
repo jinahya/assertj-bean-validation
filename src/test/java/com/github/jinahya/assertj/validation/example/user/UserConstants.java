@@ -20,24 +20,9 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+final class UserConstants {
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+    static final int MAX_AGE_FOR_JUNIOR_EXCLUSIVE = 60;
 
-@Setter(AccessLevel.PACKAGE)
-@Getter(AccessLevel.PACKAGE)
-@ToString
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-abstract class Registration {
-
-    @Valid
-    @NotNull
-    private User user;
+    static final int MIN_AGE_FOR_SENIOR_INCLUSIVE = MAX_AGE_FOR_JUNIOR_EXCLUSIVE;
 }
