@@ -76,15 +76,15 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      *         // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
      *         assertThatBean(new User("Jane", 28)).hasValidProperty("name"); // should pass
      *         assertThatBean(new User("John", 28)).hasValidProperty( "age"); // should pass
-     *         assertThatBean(new User(  null,  0)).hasValidProperty("name"); // should fail // @highlight regex="\-?null" type=highlighted
+     *         assertThatBean(new User(  null,  0)).hasValidProperty("name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
      *         assertThatBean(new User(  null,  0)).hasValidProperty( "age"); // should pass
      *         assertThatBean(new User("John", -1)).hasValidProperty("name"); // should pass
-     *         assertThatBean(new User("John", -1)).hasValidProperty( "age"); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         assertThatBean(new User("John", -1)).hasValidProperty( "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
      *         // @end
      *         // @end
      *     }
      * }
-     *}
+     * }
      *
      * @param propertyName the name of the property to be verified as valid; not {@code null}.
      * @return this assertion object.
