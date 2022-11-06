@@ -7,7 +7,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation?label=maven-central)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation)
 [![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation-javax/javadoc.svg?label=javadoc.io)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation)
 
-An [AssertJ](https://joel-costigliola.github.io/assertj/) extension for [Bean-Validation](https://beanvalidation.org/).
+An [AssertJ](https://assertj.github.io/doc/) extension for [Bean-Validation](https://beanvalidation.org/).
 
 <img src="https://raw.githubusercontent.com/joel-costigliola/assertj/gh-pages/favicon.png" height="100"/> + 
 <img src="https://beanvalidation.org/logo/logo.svg" height="100" alt="BeanValidation"/>
