@@ -9,9 +9,9 @@ package com.github.jinahya.assertj.validation.example.user;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,10 +23,10 @@ package com.github.jinahya.assertj.validation.example.user;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-class SeniorValidator
+public class SeniorValidator
         implements ConstraintValidator<Senior, User> {
 
-    static final int MIN_AGE_INCLUSIVE = JuniorValidator.MAX_AGE_EXCLUSIVE;
+    private static final int MIN_AGE_INCLUSIVE = UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE;
 
     @Override
     public void initialize(final Senior junior) {
@@ -38,6 +38,6 @@ class SeniorValidator
         if (value == null) {
             return true;
         }
-        return value.age >= MIN_AGE_INCLUSIVE;
+        return value.getAge() >= MIN_AGE_INCLUSIVE;
     }
 }

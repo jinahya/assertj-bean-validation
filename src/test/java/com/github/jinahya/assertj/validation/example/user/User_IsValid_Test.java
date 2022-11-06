@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
+import com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -131,11 +132,8 @@ class User_IsValid_Test {
     void WithConsumer__Invalid() {
         final var bean = User.newInstance(false, false);
         final var assertion = assertThatBean(bean);
-        final Consumer<ConstraintViolation<?>> consumer = spy(new Consumer<ConstraintViolation<?>>() {
-            @Override
-            public void accept(final ConstraintViolation<?> constraintViolation) {
-                log.debug("violation: {}", constraintViolation);
-            }
+        final var consumer = ValidationAssertionsTestUtils.violationConsumerSpy(cv -> {
+            log.debug("violation: {}", cv);
         });
         // WHEN
         assertThatThrownBy(() -> assertion.consumingViolations(consumer).isValid()).isInstanceOf(AssertionError.class);

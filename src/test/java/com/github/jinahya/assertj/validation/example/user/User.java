@@ -9,9 +9,9 @@ package com.github.jinahya.assertj.validation.example.user;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,6 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -35,14 +34,13 @@ import java.util.concurrent.ThreadLocalRandom;
 @Getter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
-class User {
+public class User {
 
-    static final String PROPERTY_NAME_NAME = "name";
+    public static final String PROPERTY_NAME_NAME = "name";
 
-    static final String PROPERTY_NAME_AGE = "age";
+    public static final String PROPERTY_NAME_AGE = "age";
 
-    static final int MAX_AGE = 127;
+    public static final int MAX_AGE = 127;
 
     static String validName() {
         return "name";
@@ -65,16 +63,16 @@ class User {
                 ;
     }
 
-    static User newInstance(final boolean validName, final boolean validAge) {
+    public static User newInstance(final boolean validName, final boolean validAge) {
         final var name = validName ? validName() : invalidName();
         final var age = validAge ? validAge() : invalidAge();
         return new User(name, age);
     }
 
     @NotBlank
-    String name;
+    private String name;
 
     @Max(MAX_AGE)
     @PositiveOrZero
-    int age;
+    private int age;
 }

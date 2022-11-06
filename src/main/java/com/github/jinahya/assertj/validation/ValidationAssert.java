@@ -35,7 +35,6 @@ package com.github.jinahya.assertj.validation;
 import org.assertj.core.api.Assert;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.function.Consumer;
 
 /**
@@ -49,13 +48,13 @@ import java.util.function.Consumer;
 public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends Assert<SELF, ACTUAL> {
 
-    /**
-     * Configures this assertion object to use specified validator for validation.
-     *
-     * @param validator the validator to use; may be {@code null}.
-     * @return this assertion object.
-     */
-    SELF usingValidator(Validator validator);
+//    /**
+//     * Configures this assertion object to use specified validator for validation.
+//     *
+//     * @param validator the validator to use; may be {@code null}.
+//     * @return this assertion object.
+//     */
+//    SELF usingValidator(Validator validator);
 
     /**
      * Configures this assertion object to use specified groups targeted for validation.

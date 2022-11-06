@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.example.user;
 
 /*-
  * #%L
@@ -20,10 +20,9 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-abstract class AbstractBeanAssertTest<T extends AbstractBeanAssert<T, ?>>
-        extends AbstractPropertyAssertTest<T> {
+public final class UserConstants {
 
-    AbstractBeanAssertTest(final Class<T> assertionClass) {
-        super(assertionClass);
-    }
+    public static final int MAX_AGE_FOR_JUNIOR_EXCLUSIVE = 60;
+
+    public static final int MIN_AGE_FOR_SENIOR_INCLUSIVE = MAX_AGE_FOR_JUNIOR_EXCLUSIVE;
 }

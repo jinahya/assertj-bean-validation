@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.example.user2;
 
 /*-
  * #%L
@@ -20,10 +20,9 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-abstract class AbstractBeanAssertTest<T extends AbstractBeanAssert<T, ?>>
-        extends AbstractPropertyAssertTest<T> {
+import lombok.extern.slf4j.Slf4j;
 
-    AbstractBeanAssertTest(final Class<T> assertionClass) {
-        super(assertionClass);
-    }
+@Slf4j
+class User2_HasValidProperty_Test {
+
 }

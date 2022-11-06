@@ -20,24 +20,23 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import org.assertj.core.api.Condition;
 
-public class JuniorValidator
-        implements ConstraintValidator<Junior, User> {
+final class UserConditions {
 
-    private static final int MAX_AGE_EXCLUSIVE = UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE;
+    public static final Condition<User> JUNIOR = new Condition<>(
+            v -> v.getAge() < UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE,
+            "a junior whose `age` is less than [%d]",
+            UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE
+    );
 
-    @Override
-    public void initialize(final Junior junior) {
-        // empty
-    }
+    public static final Condition<User> SENIOR = new Condition<>(
+            v -> v.getAge() >= UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE,
+            "a senior whose 'age' is greater than or equal to [%d]",
+            UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE
+    );
 
-    @Override
-    public boolean isValid(final User value, final ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
-        return value.getAge() < MAX_AGE_EXCLUSIVE;
+    private UserConditions() {
+        throw new AssertionError("instantiation is not allowed");
     }
 }
