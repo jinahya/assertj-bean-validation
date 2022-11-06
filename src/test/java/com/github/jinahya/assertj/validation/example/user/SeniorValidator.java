@@ -23,7 +23,7 @@ package com.github.jinahya.assertj.validation.example.user;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-class SeniorValidator
+public class SeniorValidator
         implements ConstraintValidator<Senior, User> {
 
     private static final int MIN_AGE_INCLUSIVE = UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE;

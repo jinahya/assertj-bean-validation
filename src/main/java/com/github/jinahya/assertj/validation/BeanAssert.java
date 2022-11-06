@@ -36,7 +36,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
     /**
      * Verifies that the {@code actual} bean is valid.
      * <p>
-     * {@snippet lang="java" id="example":
+     * {@snippet lang = "java" id = "example":
      * class User {
      *     @NotBlank String name;
      *     @Max(0x7F) @PositiveOrZero int age;
@@ -53,7 +53,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      *         // @end
      *     }
      * }
-     * }
+     *}
      *
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
@@ -64,7 +64,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
     /**
      * Verifies that all constraints placed on the property of specified name, of {@code actual} bean, are validated.
      * <p>
-     * {@snippet lang="java" id="example":
+     * {@snippet lang = "java" id = "example":
      * class User {
      *     @NotBlank String name;
      *     @Max(0x7F) @PositiveOrZero int age;
@@ -84,7 +84,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      *         // @end
      *     }
      * }
-     * }
+     *}
      *
      * @param propertyName the name of the property to be verified as valid; not {@code null}.
      * @return this assertion object.

@@ -21,9 +21,7 @@ package com.github.jinahya.assertj.validation.example.user;
  */
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -33,9 +31,12 @@ import javax.validation.constraints.NotNull;
 @Setter(AccessLevel.PACKAGE)
 @Getter(AccessLevel.PACKAGE)
 @ToString
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-abstract class Registration {
+public abstract class Registration {
+
+    Registration(final User user) {
+        super();
+        this.user = user;
+    }
 
     @Valid
     @NotNull

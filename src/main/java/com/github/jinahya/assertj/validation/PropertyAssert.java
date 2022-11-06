@@ -36,7 +36,7 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
      * <p>
-     * {@snippet lang="java" id="example":
+     * {@snippet lang = "java" id = "example":
      * class User {
      *     @NotBlank String name;
      *     @Max(0x7F) @PositiveOrZero int age;
@@ -58,7 +58,7 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
      *         // @end
      *     }
      * }
-     * }
+     *}
      *
      * @param beanType     the bean type; not {@code null}.
      * @param propertyName the name of the property; must not be {@code null}.

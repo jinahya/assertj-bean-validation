@@ -54,11 +54,11 @@ public abstract class AbstractValidationAssert<SELF extends AbstractValidationAs
         super(actual, selfType);
     }
 
-    @Override
-    public SELF usingValidator(final Validator validator) {
-        setValidator(validator);
-        return myself;
-    }
+//    @Override
+//    public SELF usingValidator(final Validator validator) {
+//        setValidator(validator);
+//        return myself;
+//    }
 
     @Override
     public SELF targetingGroups(final Class<?>... groups) {
@@ -78,22 +78,22 @@ public abstract class AbstractValidationAssert<SELF extends AbstractValidationAs
      * @return the validator configured to use.
      */
     Validator getValidator() {
-        if (validator == null) {
-            try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-                setValidator(factory.getValidator());
-            }
+//        if (validator == null) {
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            return factory.getValidator();
         }
-        return validator;
+//        }
+//        return validator;
     }
 
-    /**
-     * Replaces currently configured validator with specified value.
-     *
-     * @param validator new validator to use; may be {@code null}.
-     */
-    void setValidator(final Validator validator) {
-        this.validator = validator;
-    }
+//    /**
+//     * Replaces currently configured validator with specified value.
+//     *
+//     * @param validator new validator to use; may be {@code null}.
+//     */
+//    void setValidator(final Validator validator) {
+//        this.validator = validator;
+//    }
 
     /**
      * Returns currently configured groups targeted for validation.
@@ -126,10 +126,10 @@ public abstract class AbstractValidationAssert<SELF extends AbstractValidationAs
         this.consumer = consumer;
     }
 
-    /**
-     * The validator being used.
-     */
-    private Validator validator;
+//    /**
+//     * The validator being used.
+//     */
+//    private Validator validator;
 
     /**
      * The targeting groups being used.
