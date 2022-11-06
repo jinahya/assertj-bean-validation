@@ -20,6 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import javax.validation.ConstraintViolation;
+
 /**
  * A class for creating assertion instances.
  *
@@ -202,6 +204,16 @@ public final class ValidationAssertions {
 //            throw new RuntimeException("unable to find class for " + selfClassName, cnfe);
 //        }
 //    }
+
+    /**
+     * Creates a new assertion object for verifying specified actual value.
+     *
+     * @param actual the actual property value to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
+    public static ConstraintViolationAssert<?, ConstraintViolation<?>> assertThat(final ConstraintViolation<?> actual) {
+        return new ConstraintViolationAssertImpl<>(actual);
+    }
 
     /**
      * Creates a new instance.
