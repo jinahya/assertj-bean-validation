@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
@@ -27,7 +28,8 @@ import static com.github.jinahya.assertj.validation.ValidationAssertions.assertT
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class ConstraintViolationAssert_HasInvalidValue_Test {
+@Slf4j
+class ConstraintViolationAssert_HasLeafBean_Test {
 
     @Test
     void __NameIsInvalid() {
@@ -37,7 +39,7 @@ class ConstraintViolationAssert_HasInvalidValue_Test {
                         .isValid(i -> {
                             assertThat(i).singleElement().satisfies(cv -> {
                                 assertThatConstraintViolation(cv)
-                                        .hasInvalidValue(user.getName());
+                                        .hasLeafBean(user);
                             });
                         })
         )
@@ -51,7 +53,7 @@ class ConstraintViolationAssert_HasInvalidValue_Test {
                 .isValid(i -> {
                     assertThat(i).singleElement().satisfies(cv -> {
                         assertThatConstraintViolation(cv)
-                                .hasInvalidValue(user.getAge());
+                                .hasLeafBean(user);
                     });
                 }))
                 .isInstanceOf(AssertionError.class);
@@ -62,14 +64,10 @@ class ConstraintViolationAssert_HasInvalidValue_Test {
         final var user = User.newInstance(false, false);
         assertThatThrownBy(
                 () -> assertThatBean(user).isValid(i -> {
-                    assertThat(i).hasSize(2).satisfiesExactlyInAnyOrder(
+                    assertThat(i).hasSize(2).allSatisfy(
                             cv -> {
                                 assertThatConstraintViolation(cv)
-                                        .hasInvalidValue(user.getName());
-                            },
-                            cv -> {
-                                assertThatConstraintViolation(cv)
-                                        .hasInvalidValue(user.getAge());
+                                        .hasLeafBean(user);
                             }
                     );
                 })
