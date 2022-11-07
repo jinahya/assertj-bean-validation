@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import javax.validation.ConstraintViolation;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.violationsConsumerSpy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -41,13 +42,10 @@ class BeanAssert_IsValid_Test {
     @Test
     void __Valid() {
         final var bean = User.newInstance(true, true);
-        assertThatCode(
-                () -> assertThatBean(bean).isValid()
-        )
-                .doesNotThrowAnyException();
+        assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
         assertThatCode(
                 () -> assertThatBean(bean)
-                        .isValid(ValidationAssertionsTestUtils.violationsConsumerSpy(i -> {
+                        .isValid(violationsConsumerSpy(i -> {
                             assertThat(i).isEmpty();
                         }))
         )
@@ -59,8 +57,7 @@ class BeanAssert_IsValid_Test {
     void WithConsumer__Valid() {
         final var bean = User.newInstance(true, true);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
-        assertThatCode(() -> assertThatBean(bean).isValid(consumer))
-                .doesNotThrowAnyException();
+        assertThatCode(() -> assertThatBean(bean).isValid(consumer)).doesNotThrowAnyException();
         final var captor = ValidationAssertionsTestUtils.<User>constraintViolationsCaptor();
         verify(consumer, times(1)).accept(captor.capture());
         final Iterable<ConstraintViolation<User>> violations = captor.getValue();
@@ -97,8 +94,8 @@ class BeanAssert_IsValid_Test {
 
     @Test
     void __AgeIsInvalid() {
-        final var actual = User.newInstance(true, false);
-        assertThatThrownBy(() -> assertThatBean(actual).isValid())
+        final var bean = User.newInstance(true, false);
+        assertThatThrownBy(() -> assertThatBean(bean).isValid())
                 .isInstanceOf(AssertionError.class);
     }
 
@@ -120,10 +117,8 @@ class BeanAssert_IsValid_Test {
 
     @Test
     void __NameIsInvalidAgeIsInvalid() {
-        final var actual = User.newInstance(false, false);
-        final var assertion = assertThatBean(actual);
-        assertThatThrownBy(assertion::isValid)
-                .isInstanceOf(AssertionError.class);
+        final var bean = User.newInstance(false, false);
+        assertThatThrownBy(() -> assertThatBean(bean).isValid()).isInstanceOf(AssertionError.class);
     }
 
     @Test
@@ -132,8 +127,7 @@ class BeanAssert_IsValid_Test {
         final var assertion = assertThatBean(bean);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
         // WHEN
-        assertThatThrownBy(() -> assertion.isValid(consumer))
-                .isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> assertion.isValid(consumer)).isInstanceOf(AssertionError.class);
         // THEN
         final var captor = ValidationAssertionsTestUtils.<User>constraintViolationsCaptor();
         verify(consumer, times(1)).accept(captor.capture());

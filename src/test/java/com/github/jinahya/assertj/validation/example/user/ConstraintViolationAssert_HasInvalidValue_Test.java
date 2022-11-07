@@ -31,45 +31,41 @@ class ConstraintViolationAssert_HasInvalidValue_Test {
 
     @Test
     void __NameIsInvalid() {
-        final var user = User.newInstance(false, true);
+        final var bean = User.newInstance(false, true);
         assertThatThrownBy(
-                () -> assertThatBean(user)
-                        .isValid(i -> {
-                            assertThat(i).singleElement().satisfies(cv -> {
-                                assertThatConstraintViolation(cv)
-                                        .hasInvalidValue(user.getName());
-                            });
-                        })
+                () -> assertThatBean(bean).isValid(i -> {
+                    assertThat(i).singleElement().satisfies(cv -> {
+                        assertThatConstraintViolation(cv).hasInvalidValue(bean.getName());
+                    });
+                })
         )
                 .isInstanceOf(AssertionError.class);
     }
 
     @Test
     void __AgeIsInvalid() {
-        final var user = User.newInstance(true, false);
-        assertThatThrownBy(() -> assertThatBean(user)
-                .isValid(i -> {
+        final var bean = User.newInstance(true, false);
+        assertThatThrownBy(
+                () -> assertThatBean(bean).isValid(i -> {
                     assertThat(i).singleElement().satisfies(cv -> {
-                        assertThatConstraintViolation(cv)
-                                .hasInvalidValue(user.getAge());
+                        assertThatConstraintViolation(cv).hasInvalidValue(bean.getAge());
                     });
-                }))
+                })
+        )
                 .isInstanceOf(AssertionError.class);
     }
 
     @Test
     void __BothAreInvalid() {
-        final var user = User.newInstance(false, false);
+        final var bean = User.newInstance(false, false);
         assertThatThrownBy(
-                () -> assertThatBean(user).isValid(i -> {
+                () -> assertThatBean(bean).isValid(i -> {
                     assertThat(i).hasSize(2).satisfiesExactlyInAnyOrder(
                             cv -> {
-                                assertThatConstraintViolation(cv)
-                                        .hasInvalidValue(user.getName());
+                                assertThatConstraintViolation(cv).hasInvalidValue(bean.getName());
                             },
                             cv -> {
-                                assertThatConstraintViolation(cv)
-                                        .hasInvalidValue(user.getAge());
+                                assertThatConstraintViolation(cv).hasInvalidValue(bean.getAge());
                             }
                     );
                 })
