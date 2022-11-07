@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -42,14 +42,14 @@ class User2_IsValid_Test {
             final User2 bean = User2.newInstance(true, true);
             bean.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1);
             {
-                assertThatCode(() -> assertBean(bean).isValid()).doesNotThrowAnyException();
+                assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }
-            final var assertion = assertBean(bean);
+            final var assertion = assertThatBean(bean);
             assertion.targetingGroups(Junior.class);
             assertThatCode(assertion::isValid).doesNotThrowAnyException();
             {
                 assertThatThrownBy(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Senior.class)
                                 .isValid()
                 )
@@ -57,7 +57,7 @@ class User2_IsValid_Test {
             }
             {
                 assertThatThrownBy(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Senior.class, Junior.class)
                                 .isValid()
                 )
@@ -70,14 +70,14 @@ class User2_IsValid_Test {
             final User2 bean = User2.newInstance(true, true);
             bean.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE);
             {
-                assertThatCode(() -> assertBean(bean).isValid()).doesNotThrowAnyException();
+                assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }
-            final var assertion = assertBean(bean);
+            final var assertion = assertThatBean(bean);
             assertion.targetingGroups(Junior.class);
             assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
             {
                 assertThatCode(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Senior.class)
                                 .isValid()
                 )
@@ -85,7 +85,7 @@ class User2_IsValid_Test {
             }
             {
                 assertThatThrownBy(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Senior.class, Junior.class)
                                 .isValid()
                 )
@@ -102,14 +102,14 @@ class User2_IsValid_Test {
             final User2 bean = User2.newInstance(true, true);
             bean.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE);
             {
-                assertThatCode(() -> assertBean(bean).isValid()).doesNotThrowAnyException();
+                assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }
-            final var assertion = assertBean(bean);
+            final var assertion = assertThatBean(bean);
             assertion.targetingGroups(Senior.class);
             assertThatCode(assertion::isValid).doesNotThrowAnyException();
             {
                 assertThatThrownBy(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Junior.class)
                                 .isValid()
                 )
@@ -117,7 +117,7 @@ class User2_IsValid_Test {
             }
             {
                 assertThatThrownBy(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Senior.class, Junior.class)
                                 .isValid()
                 )
@@ -130,14 +130,14 @@ class User2_IsValid_Test {
             final User2 bean = User2.newInstance(true, true);
             bean.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE - 1);
             {
-                assertThatCode(() -> assertBean(bean).isValid()).doesNotThrowAnyException();
+                assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }
-            final var assertion = assertBean(bean);
+            final var assertion = assertThatBean(bean);
             assertion.targetingGroups(Senior.class);
             assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
             {
                 assertThatCode(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Junior.class)
                                 .isValid()
                 )
@@ -145,7 +145,7 @@ class User2_IsValid_Test {
             }
             {
                 assertThatThrownBy(
-                        () -> assertBean(bean)
+                        () -> assertThatBean(bean)
                                 .targetingGroups(Senior.class, Junior.class)
                                 .isValid()
                 )

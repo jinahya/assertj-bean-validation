@@ -24,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertBean;
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertProperty;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -37,7 +37,7 @@ class PropertyAssert_IsValidFor_Test {
 
         @Test
         void _ShouldFail_Null() {
-            final var assertion = assertProperty(null);
+            final var assertion = assertThatProperty(null);
             assertThatThrownBy(() -> assertion.isValidFor(Registration.class, "user"))
                     .isInstanceOf(AssertionError.class);
         }
@@ -46,10 +46,10 @@ class PropertyAssert_IsValidFor_Test {
         void _ShouldPass_InvalidNameInvalidAge() {
             final var user = User.newInstance(false, false);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatCode(() -> assertion.isValidFor(Registration.class, "user"))
                     .doesNotThrowAnyException();
         }
@@ -58,10 +58,10 @@ class PropertyAssert_IsValidFor_Test {
         void _ShouldFail_ValidNameValidAge() {
             final var user = User.newInstance(true, true);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatCode(assertion::isValid).doesNotThrowAnyException();
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatCode(() -> assertion.isValidFor(Registration.class, "user"))
                     .doesNotThrowAnyException();
         }
@@ -72,7 +72,7 @@ class PropertyAssert_IsValidFor_Test {
 
         @Test
         void _ShouldFail_Null() {
-            final var assertion = assertProperty(null);
+            final var assertion = assertThatProperty(null);
             assertThatThrownBy(() -> assertion.isValidFor(JuniorRegistration.class, "user"))
                     .isInstanceOf(AssertionError.class);
         }
@@ -82,10 +82,10 @@ class PropertyAssert_IsValidFor_Test {
             final var user = User.newInstance(false, false);
             user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatCode(() -> assertion.isValidFor(JuniorRegistration.class, "user"))
                     .doesNotThrowAnyException();
         }
@@ -95,10 +95,10 @@ class PropertyAssert_IsValidFor_Test {
             final var user = User.newInstance(false, false);
             user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatThrownBy(() -> assertion.isValidFor(JuniorRegistration.class, "user"))
                     .isInstanceOf(AssertionError.class);
         }
@@ -108,10 +108,10 @@ class PropertyAssert_IsValidFor_Test {
             final var user = User.newInstance(true, true);
             user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatCode(assertion::isValid).doesNotThrowAnyException();
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatCode(() -> assertion.isValidFor(Registration.class, "user"))
                     .doesNotThrowAnyException();
         }
@@ -122,7 +122,7 @@ class PropertyAssert_IsValidFor_Test {
 
         @Test
         void _ShouldFail_Null() {
-            final var assertion = assertProperty(null);
+            final var assertion = assertThatProperty(null);
             assertThatThrownBy(() -> assertion.isValidFor(SeniorRegistration.class, "user"))
                     .isInstanceOf(AssertionError.class);
         }
@@ -132,10 +132,10 @@ class PropertyAssert_IsValidFor_Test {
             final var user = User.newInstance(false, false);
             user.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatCode(() -> assertion.isValidFor(SeniorRegistration.class, "user"))
                     .doesNotThrowAnyException();
         }
@@ -145,10 +145,10 @@ class PropertyAssert_IsValidFor_Test {
             final var user = User.newInstance(false, false);
             user.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE - 1);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatThrownBy(() -> assertion.isValidFor(SeniorRegistration.class, "user"))
                     .isInstanceOf(AssertionError.class);
         }
@@ -158,10 +158,10 @@ class PropertyAssert_IsValidFor_Test {
             final var user = User.newInstance(true, true);
             user.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE);
             {
-                final var assertion = assertBean(user);
+                final var assertion = assertThatBean(user);
                 assertThatCode(assertion::isValid).doesNotThrowAnyException();
             }
-            final var assertion = assertProperty(user);
+            final var assertion = assertThatProperty(user);
             assertThatCode(() -> assertion.isValidFor(Registration.class, "user"))
                     .doesNotThrowAnyException();
         }

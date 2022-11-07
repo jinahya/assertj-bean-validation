@@ -22,7 +22,7 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class JuniorRegistration_IsValid_Test {
@@ -31,21 +31,21 @@ class JuniorRegistration_IsValid_Test {
     void __UserValid() {
         final var registration = new JuniorRegistration(User.newInstance(true, true));
         registration.getUser().setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1);
-        assertBean(registration)
+        assertThatBean(registration)
                 .isValid();
     }
 
     @Test
     void __UserNull() {
         final var registration = new JuniorRegistration(null);
-        final var assertion = assertBean(registration);
+        final var assertion = assertThatBean(registration);
         assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
     }
 
     @Test
     void __UserInvalid() {
         final var registration = new JuniorRegistration(User.newInstance(false, false));
-        final var assertion = assertBean(registration);
+        final var assertion = assertThatBean(registration);
         assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
     }
 }

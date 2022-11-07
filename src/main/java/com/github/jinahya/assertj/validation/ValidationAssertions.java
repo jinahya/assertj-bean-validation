@@ -31,13 +31,13 @@ import javax.validation.ConstraintViolation;
 public final class ValidationAssertions {
 
     /**
-     * Creates a new assertion object for verifying specified bean object.
+     * Creates a new assertion object for verifying specified bean value.
      *
      * @param <ACTUAL> type of actual bean
-     * @param actual   the actual bean object to verify.
+     * @param actual   the bean value to verify.
      * @return a new assertion object for verifying {@code actual}.
      */
-    public static <ACTUAL> BeanAssert<?, ACTUAL> assertBean(final ACTUAL actual) {
+    public static <ACTUAL> BeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
         return new BeanAssertImpl<>(actual);
     }
 
@@ -45,20 +45,20 @@ public final class ValidationAssertions {
      * Creates a new assertion object for verifying specified value against a property of specific bean type.
      *
      * @param <ACTUAL> type of actual value
-     * @param actual   the actual property value to verify.
+     * @param actual   the value of the property to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL> PropertyAssert<?, ACTUAL> assertProperty(final ACTUAL actual) {
+    public static <ACTUAL> PropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
         return new PropertyAssertImpl<>(actual);
     }
 
     /**
-     * Creates a new assertion object for verifying specified actual value.
+     * Creates a new assertion object for verifying specified constraint violation value.
      *
-     * @param actual the actual property value to verify.
+     * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <T, U extends ConstraintViolation<T>> ConstraintViolationAssert<?, U> assertConstraintViolation(
+    public static <T, U extends ConstraintViolation<T>> ConstraintViolationAssert<?, U> assertThatConstraintViolation(
             final U actual) {
         return new ConstraintViolationAssertImpl<>(actual);
     }

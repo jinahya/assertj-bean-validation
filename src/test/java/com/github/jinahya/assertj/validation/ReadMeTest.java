@@ -25,8 +25,8 @@ import com.github.jinahya.assertj.validation.example.user.SeniorRegistration;
 import com.github.jinahya.assertj.validation.example.user.User;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertBean;
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertProperty;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -34,48 +34,48 @@ class ReadMeTest {
 
     @Test
     void test1() {
-        assertBean(new User("Jane", 28))  // valid
-                .isValid()                // should pass
-                .hasValidProperty("name") // should pass
-                .hasValidProperty("age"); // should pass
+        assertThatBean(new User("Jane", 28))
+                .isValid()
+                .hasValidProperty("name")
+                .hasValidProperty("age");
     }
 
     @Test
     void test2() {
-        assertProperty("John").isValidFor(User.class, "name");
-        assertThatThrownBy(() -> assertProperty(null).isValidFor(User.class, "name"))
+        assertThatProperty("John").isValidFor(User.class, "name");
+        assertThatThrownBy(() -> assertThatProperty(null).isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertProperty("").isValidFor(User.class, "name"))
+        assertThatThrownBy(() -> assertThatProperty("").isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertProperty(" ").isValidFor(User.class, "name"))
+        assertThatThrownBy(() -> assertThatProperty(" ").isValidFor(User.class, "name"))
                 .isInstanceOf(AssertionError.class);
-        assertProperty(31).isValidFor(User.class, "age");
-        assertThatThrownBy(() -> assertProperty(-1).isValidFor(User.class, "age"))
+        assertThatProperty(31).isValidFor(User.class, "age");
+        assertThatThrownBy(() -> assertThatProperty(-1).isValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertProperty(297).isValidFor(User.class, "age"))
+        assertThatThrownBy(() -> assertThatProperty(297).isValidFor(User.class, "age"))
                 .isInstanceOf(AssertionError.class);
     }
 
     @Test
     void test3() {
-        assertBean(new User("Jane", 21))
+        assertThatBean(new User("Jane", 21))
                 .isValidFor(Registration.class, "user");
-        assertThatThrownBy(() -> assertBean(null).isValidFor(Registration.class, "user"))
+        assertThatThrownBy(() -> assertThatBean(null).isValidFor(Registration.class, "user"))
                 .isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertBean(new User("John", 59)).isValidFor(SeniorRegistration.class, "user"))
+        assertThatThrownBy(() -> assertThatBean(new User("John", 59)).isValidFor(SeniorRegistration.class, "user"))
                 .isInstanceOf(AssertionError.class);
     }
 
     @Test
     void test4() {
         User user = new User("John", 300);
-        assertThatThrownBy(() -> assertBean(user).isValid())
+        assertThatThrownBy(() -> assertThatBean(user).isValid())
                 .isInstanceOf(AssertionError.class);
-        assertThatCode(() -> assertBean(user).isValidFor(Registration.class, "user"))
+        assertThatCode(() -> assertThatBean(user).isValidFor(Registration.class, "user"))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> assertBean(null).isValidFor(Registration.class, "user"))
+        assertThatThrownBy(() -> assertThatBean(null).isValidFor(Registration.class, "user"))
                 .isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertBean(new SeniorRegistration(user)).isValid())
+        assertThatThrownBy(() -> assertThatBean(new SeniorRegistration(user)).isValid())
                 .isInstanceOf(AssertionError.class);
     }
 }
