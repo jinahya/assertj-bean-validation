@@ -13,7 +13,7 @@ public final class ValidationAssertionsTestUtils {
     public static <T> Consumer<Iterable<ConstraintViolation<T>>> violationsConsumerSpy(
             final Consumer<? super Iterable<? extends ConstraintViolation<T>>> consumer) {
         Objects.requireNonNull(consumer, "consumer is null");
-        final Consumer<Iterable<ConstraintViolation<T>>> wrapper = new Consumer<>() {
+        final Consumer<Iterable<ConstraintViolation<T>>> wrapper = new Consumer<>() { // DO NOT REPLACE WITH LAMBDA!!!
             @Override
             public void accept(final Iterable<ConstraintViolation<T>> violations) {
                 consumer.accept(violations);
