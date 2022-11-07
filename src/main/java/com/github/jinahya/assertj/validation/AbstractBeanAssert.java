@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see ValidationAssertions#assertThatBean(Object)
+ * @see ValidationAssertions#assertBean(Object)
  */
 @SuppressWarnings({"java:S119"})
 public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>

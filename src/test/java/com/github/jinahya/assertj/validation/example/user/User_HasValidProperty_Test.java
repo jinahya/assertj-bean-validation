@@ -29,7 +29,7 @@ import org.mockito.Mockito;
 import javax.validation.ConstraintViolation;
 import java.util.function.Consumer;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertBean;
 import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.violationsConsumerSpy;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -42,14 +42,14 @@ class User_HasValidProperty_Test {
     @Test
     void __NameIsValid() {
         final var bean = new User("Jane", -1);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_NAME)).doesNotThrowAnyException();
     }
 
     @Test
     void WithConsumer__NameIsValid() {
         final var bean = new User("Jane", -1);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         assertThatCode(
                 () -> assertion.hasValidProperty(
                         User.PROPERTY_NAME_NAME,
@@ -66,7 +66,7 @@ class User_HasValidProperty_Test {
     @Test
     void __NameIsInvalid() {
         final var bean = new User(null, 27);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_NAME))
                 .isInstanceOf(AssertionError.class);
     }
@@ -75,7 +75,7 @@ class User_HasValidProperty_Test {
     void WithConsumer__NameIsInvalid() {
         // GIVEN
         final var bean = new User(null, 27);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         final Consumer<Iterable<ConstraintViolation<User>>> consumer = violationsConsumerSpy(i -> {
         });
         // WHEN
@@ -98,14 +98,14 @@ class User_HasValidProperty_Test {
     @Test
     void __AgeIsValid() {
         final var bean = new User(null, 27);
-        final var assertion = Mockito.<BeanAssert<?, User>>spy(assertThatBean(bean));
+        final var assertion = Mockito.<BeanAssert<?, User>>spy(assertBean(bean));
         assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE)).doesNotThrowAnyException();
     }
 
     @Test
     void WithConsumer__AgeIsValid() {
         final var bean = new User("", 0);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         assertThatCode(
                 () -> assertion.hasValidProperty(
                         User.PROPERTY_NAME_AGE,
@@ -121,7 +121,7 @@ class User_HasValidProperty_Test {
     @Test
     void __AgeIsInvalid() {
         final var bean = new User("name", User.MAX_AGE + 1);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE))
                 .isInstanceOf(AssertionError.class);
     }
@@ -130,7 +130,7 @@ class User_HasValidProperty_Test {
     void WithConsumer__AgeIsInvalid() {
         // GIVEN
         final User bean = new User("name", -1);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         final Consumer<Iterable<ConstraintViolation<User>>> consumer
                 = violationsConsumerSpy();
         // WHEN

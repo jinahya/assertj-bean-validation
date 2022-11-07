@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertProperty;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
@@ -40,7 +40,7 @@ class User_IsValidFor_Test {
         @Test
         void __AgeIsValidForJunior() {
             final var age = UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1;
-            final var assertion = assertThatProperty(age);
+            final var assertion = assertProperty(age);
             assertion.isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
             });
             assertion.targetingGroups(Junior.class).isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
@@ -64,7 +64,7 @@ class User_IsValidFor_Test {
         @Test
         void __AgeIsValidForSenior() {
             final var age = UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE;
-            final var assertion = assertThatProperty(age);
+            final var assertion = assertProperty(age);
             assertion.isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
             });
             assertion.targetingGroups(Senior.class).isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {

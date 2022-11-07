@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -42,11 +42,11 @@ class BeanAssert_IsValid_Test {
     void __Valid() {
         final var bean = User.newInstance(true, true);
         assertThatCode(
-                () -> assertThatBean(bean).isValid()
+                () -> assertBean(bean).isValid()
         )
                 .doesNotThrowAnyException();
         assertThatCode(
-                () -> assertThatBean(bean)
+                () -> assertBean(bean)
                         .isValid(ValidationAssertionsTestUtils.violationsConsumerSpy(i -> {
                             assertThat(i).isEmpty();
                         }))
@@ -59,7 +59,7 @@ class BeanAssert_IsValid_Test {
     void WithConsumer__Valid() {
         final var bean = User.newInstance(true, true);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
-        assertThatCode(() -> assertThatBean(bean).isValid(consumer))
+        assertThatCode(() -> assertBean(bean).isValid(consumer))
                 .doesNotThrowAnyException();
         final var captor = ValidationAssertionsTestUtils.<User>constraintViolationsCaptor();
         verify(consumer, times(1)).accept(captor.capture());
@@ -71,7 +71,7 @@ class BeanAssert_IsValid_Test {
     @Test
     void __NameIsInvalid() {
         final var bean = User.newInstance(false, true);
-        assertThatThrownBy(() -> assertThatBean(bean).isValid())
+        assertThatThrownBy(() -> assertBean(bean).isValid())
                 .isInstanceOf(AssertionError.class)
                 .satisfies(ae -> {
                     log.debug("message: {}", ae.getMessage());
@@ -83,7 +83,7 @@ class BeanAssert_IsValid_Test {
     void WithConsumer__NameIsInvalid() {
         final var bean = User.newInstance(false, true);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
-        assertThatThrownBy(() -> assertThatBean(bean).isValid(consumer))
+        assertThatThrownBy(() -> assertBean(bean).isValid(consumer))
                 .isInstanceOf(AssertionError.class)
                 .satisfies(ae -> {
                     log.debug("message: {}", ae.getMessage());
@@ -98,14 +98,14 @@ class BeanAssert_IsValid_Test {
     @Test
     void __AgeIsInvalid() {
         final var actual = User.newInstance(true, false);
-        assertThatThrownBy(() -> assertThatBean(actual).isValid())
+        assertThatThrownBy(() -> assertBean(actual).isValid())
                 .isInstanceOf(AssertionError.class);
     }
 
     @Test
     void WithConsumer__AgeIsInvalid() {
         final var bean = User.newInstance(true, false);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
         // WHEN
         assertThatThrownBy(() -> assertion.isValid(consumer))
@@ -121,7 +121,7 @@ class BeanAssert_IsValid_Test {
     @Test
     void __NameIsInvalidAgeIsInvalid() {
         final var actual = User.newInstance(false, false);
-        final var assertion = assertThatBean(actual);
+        final var assertion = assertBean(actual);
         assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
@@ -129,7 +129,7 @@ class BeanAssert_IsValid_Test {
     @Test
     void WithConsumer__Invalid() {
         final var bean = User.newInstance(false, false);
-        final var assertion = assertThatBean(bean);
+        final var assertion = assertBean(bean);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
         // WHEN
         assertThatThrownBy(() -> assertion.isValid(consumer))
