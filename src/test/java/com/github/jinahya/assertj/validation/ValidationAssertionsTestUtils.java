@@ -1,26 +1,36 @@
 package com.github.jinahya.assertj.validation;
 
+import org.mockito.ArgumentCaptor;
+
 import javax.validation.ConstraintViolation;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static org.mockito.Mockito.spy;
 
 public final class ValidationAssertionsTestUtils {
 
-    public static Consumer<ConstraintViolation<?>> violationConsumerSpy(
-            final Consumer<? super ConstraintViolation<?>> consumer) {
-        final Consumer<ConstraintViolation<?>> wrapper = new Consumer<ConstraintViolation<?>>() {
+    public static <T> Consumer<Iterable<ConstraintViolation<T>>> violationsConsumerSpy(
+            final Consumer<? super Iterable<? extends ConstraintViolation<T>>> consumer) {
+        Objects.requireNonNull(consumer, "consumer is null");
+        final Consumer<Iterable<ConstraintViolation<T>>> wrapper = new Consumer<>() {
             @Override
-            public void accept(final ConstraintViolation<?> constraintViolation) {
-                consumer.accept(constraintViolation);
+            public void accept(final Iterable<ConstraintViolation<T>> violations) {
+                consumer.accept(violations);
             }
         };
         return spy(wrapper);
     }
 
-    public static Consumer<ConstraintViolation<?>> violationConsumerSpy() {
-        return violationConsumerSpy(cv -> {
+    public static <T> Consumer<Iterable<ConstraintViolation<T>>> violationsConsumerSpy() {
+        return violationsConsumerSpy(cv -> {
         });
+    }
+
+    public static <T> ArgumentCaptor<Iterable<ConstraintViolation<T>>> constraintViolationsCaptor() {
+        @SuppressWarnings({"unchecked"})
+        final ArgumentCaptor<Iterable<ConstraintViolation<T>>> captor = ArgumentCaptor.forClass(Iterable.class);
+        return captor;
     }
 
     private ValidationAssertionsTestUtils() {

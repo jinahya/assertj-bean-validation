@@ -211,7 +211,7 @@ public final class ValidationAssertions {
      * @param actual the actual property value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static ConstraintViolationAssert<?, ConstraintViolation<?>> assertThat(final ConstraintViolation<?> actual) {
+    public static <T, U extends ConstraintViolation<T>> ConstraintViolationAssert<?, U> assertThat(final U actual) {
         return new ConstraintViolationAssertImpl<>(actual);
     }
 

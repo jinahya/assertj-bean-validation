@@ -24,6 +24,7 @@ import org.assertj.core.api.Assertions;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -51,16 +52,15 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
     }
 
     @Override
-    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
+    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
+                               final Consumer<Iterable<ConstraintViolation<T>>> consumer) {
         Objects.requireNonNull(beanType, "beanType is null");
         Objects.requireNonNull(propertyName, "propertyName is null");
+        Objects.requireNonNull(consumer, "consumer is null");
         final Validator validator = getValidator();
         final Class<?>[] groups = getGroups();
         final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-        final Consumer<? super ConstraintViolation<T>> consumer = getConsumer();
-        if (consumer != null) {
-            violations.forEach(consumer);
-        }
+        consumer.accept(Collections.unmodifiableSet(violations));
         Assertions.assertThat(violations).isEmpty();
         return myself;
     }

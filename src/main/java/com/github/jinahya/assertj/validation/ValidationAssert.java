@@ -34,9 +34,6 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.Assert;
 
-import javax.validation.ConstraintViolation;
-import java.util.function.Consumer;
-
 /**
  * A base interface for verifying beans and values.
  *
@@ -64,12 +61,12 @@ public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, A
      */
     SELF targetingGroups(Class<?>... groups);
 
-    /**
-     * Configures this assertion object to accept constraint violations, if any populated while validating the
-     * {@code actual} value, to specified consumer.
-     *
-     * @param consumer the consumer accepts each constraint violations; may be {@code null}.
-     * @return this assertion object.
-     */
-    SELF consumingViolations(Consumer<? super ConstraintViolation<?>> consumer);
+//    /**
+//     * Configures this assertion object to accept constraint violations, if any populated while validating the
+//     * {@code actual} value, to specified consumer.
+//     *
+//     * @param consumer the consumer accepts each constraint violations; may be {@code null}.
+//     * @return this assertion object.
+//     */
+//    SELF consumingEachViolation(Consumer<? super ConstraintViolation<?>> consumer);
 }
