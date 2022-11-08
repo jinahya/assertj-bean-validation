@@ -22,6 +22,12 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import com.github.jinahya.assertj.validation.ConstraintViolationAssert;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * A class for testing {@link ConstraintViolationAssert#hasLeafBean(Object)} method.
@@ -31,50 +37,50 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class ConstraintViolationAssert_HasLeafBean_Test {
 
-//    @Test
-//    void __NameIsInvalid() {
-//        final var bean = User.newInstance(false, true);
-//        assertThatThrownBy(
-//                () -> assertThatBean(bean).isValid(i -> {
-//                    assertThat(i).singleElement().satisfies(cv -> {
-//                        assertThatConstraintViolation(cv).hasLeafBean(bean);
-//                        assertThatThrownBy(() -> assertThatConstraintViolation(cv).hasLeafBean(new User("", 0)))
-//                                .isInstanceOf(AssertionError.class)
-//                                .satisfies(ae -> {
-//                                    log.debug("message: {}", ae.getMessage());
-//                                });
-//                    });
-//                })
-//        )
-//                .isInstanceOf(AssertionError.class);
-//    }
-//
-//    @Test
-//    void __AgeIsInvalid() {
-//        final var bean = User.newInstance(true, false);
-//        assertThatThrownBy(
-//                () -> assertThatBean(bean).isValid(i -> {
-//                    assertThat(i).singleElement().satisfies(cv -> {
-//                        assertThatConstraintViolation(cv).hasLeafBean(bean);
-//                    });
-//                })
-//        )
-//                .isInstanceOf(AssertionError.class);
-//    }
-//
-//    @Test
-//    void __BothAreInvalid() {
-//        final var bean = User.newInstance(false, false);
-//        assertThatThrownBy(
-//                () -> assertThatBean(bean).isValid(i -> {
-//                    assertThat(i).hasSize(2).allSatisfy(
-//                            cv -> {
-//                                assertThatConstraintViolation(cv)
-//                                        .hasLeafBean(bean);
-//                            }
-//                    );
-//                })
-//        )
-//                .isInstanceOf(AssertionError.class);
-//    }
+    @Test
+    void __NameIsInvalid() {
+        final var bean = User.newInstance(false, true);
+        assertThatThrownBy(
+                () -> assertThatBean(bean).isValid(i -> {
+                    assertThat(i).singleElement().satisfies(cv -> {
+                        assertThatConstraintViolation(cv).hasLeafBean(bean);
+                        assertThatThrownBy(() -> assertThatConstraintViolation(cv).hasLeafBean(new User("", 0)))
+                                .isInstanceOf(AssertionError.class)
+                                .satisfies(ae -> {
+                                    log.debug("message: {}", ae.getMessage());
+                                });
+                    });
+                })
+        )
+                .isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    void __AgeIsInvalid() {
+        final var bean = User.newInstance(true, false);
+        assertThatThrownBy(
+                () -> assertThatBean(bean).isValid(i -> {
+                    assertThat(i).singleElement().satisfies(cv -> {
+                        assertThatConstraintViolation(cv).hasLeafBean(bean);
+                    });
+                })
+        )
+                .isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    void __BothAreInvalid() {
+        final var bean = User.newInstance(false, false);
+        assertThatThrownBy(
+                () -> assertThatBean(bean).isValid(i -> {
+                    assertThat(i).hasSize(2).allSatisfy(
+                            cv -> {
+                                assertThatConstraintViolation(cv)
+                                        .hasLeafBean(bean);
+                            }
+                    );
+                })
+        )
+                .isInstanceOf(AssertionError.class);
+    }
 }

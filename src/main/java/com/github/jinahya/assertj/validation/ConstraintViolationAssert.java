@@ -112,16 +112,35 @@ public abstract class ConstraintViolationAssert<
         return myself;
     }
 
-//    /**
-//     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getLeafBean() leafBean} is
-//     * equal to specified value.
-//     *
-//     * @param expectedLeafBean the expected value of {@code actual.leafBean}.
-//     * @return this assertion object.
-//     * @see ConstraintViolation#getLeafBean()
-//     */
-//    SELF hasLeafBean(Object expectedLeafBean);
-//
+    private static final Function<ConstraintViolation<?>, ?> LEAF_BEAN_EXTRACTOR
+            = ConstraintViolation::getLeafBean;
+
+    @SuppressWarnings({"unchecked"})
+    public <T, ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingLeafBean(
+            final AssertFactory<T, ASSERT> assertFactory) {
+        return isNotNull()
+                .extracting(a -> (T) LEAF_BEAN_EXTRACTOR.apply(a), assertFactory);
+    }
+
+    public <T> AbstractObjectAssert<?, T> extractingLeafBean() {
+        return extractingLeafBean(new ObjectAssertFactory<>());
+    }
+
+    /**
+     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getLeafBean() leafBean} is
+     * equal to specified value.
+     *
+     * @param expectedLeafBean the expected value of {@code actual.leafBean}.
+     * @return this assertion object.
+     * @see ConstraintViolation#getLeafBean()
+     */
+    public SELF hasLeafBean(final Object expectedLeafBean) {
+        extractingLeafBean()
+                .isEqualTo(expectedLeafBean);
+        return myself;
+    }
+
+    //
 //    /**
 //     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getRootBean() leafBean} is
 //     * equal to specified value.
