@@ -20,6 +20,8 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.IterableAssert;
+
 import javax.validation.Path;
 
 /**
@@ -51,4 +53,6 @@ public interface PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extend
 
         SELF hasName(String expectedName);
     }
+
+    IterableAssert<Path.Node> asIterableAssert();
 }
