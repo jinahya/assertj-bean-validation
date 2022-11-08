@@ -29,47 +29,47 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConstraintViolationAssert_HasInvalidValue_Test {
 
-//    @Test
-//    void __NameIsInvalid() {
-//        final var bean = User.newInstance(false, true);
-//        assertThatThrownBy(
-//                () -> assertThatBean(bean).isValid(i -> {
-//                    assertThat(i).singleElement().satisfies(cv -> {
-//                        assertThatConstraintViolation(cv).hasInvalidValue(bean.getName());
-//                    });
-//                })
-//        )
-//                .isInstanceOf(AssertionError.class);
-//    }
-//
-//    @Test
-//    void __AgeIsInvalid() {
-//        final var bean = User.newInstance(true, false);
-//        assertThatThrownBy(
-//                () -> assertThatBean(bean).isValid(i -> {
-//                    assertThat(i).singleElement().satisfies(cv -> {
-//                        assertThatConstraintViolation(cv).hasInvalidValue(bean.getAge());
-//                    });
-//                })
-//        )
-//                .isInstanceOf(AssertionError.class);
-//    }
-//
-//    @Test
-//    void __BothAreInvalid() {
-//        final var bean = User.newInstance(false, false);
-//        assertThatThrownBy(
-//                () -> assertThatBean(bean).isValid(i -> {
-//                    assertThat(i).hasSize(2).satisfiesExactlyInAnyOrder(
-//                            cv -> {
-//                                assertThatConstraintViolation(cv).hasInvalidValue(bean.getName());
-//                            },
-//                            cv -> {
-//                                assertThatConstraintViolation(cv).hasInvalidValue(bean.getAge());
-//                            }
-//                    );
-//                })
-//        )
-//                .isInstanceOf(AssertionError.class);
-//    }
+    @Test
+    void __NameIsInvalid() {
+        final var bean = User.newInstance(false, true);
+        assertThatThrownBy(
+                () -> assertThatBean(bean).isValid(i -> {
+                    assertThat(i).singleElement().satisfies(cv -> {
+                        assertThatConstraintViolation(cv).hasInvalidValue(bean.getName());
+                    });
+                })
+        )
+                .isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    void __AgeIsInvalid() {
+        final var bean = User.newInstance(true, false);
+        assertThatThrownBy(
+                () -> assertThatBean(bean).isValid(i -> {
+                    assertThat(i).singleElement().satisfies(cv -> {
+                        assertThatConstraintViolation(cv).hasInvalidValue(bean.getAge());
+                    });
+                })
+        )
+                .isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    void __BothAreInvalid() {
+        final var bean = User.newInstance(false, false);
+        assertThatThrownBy(
+                () -> assertThatBean(bean).isValid(i -> {
+                    assertThat(i).hasSize(2).satisfiesExactlyInAnyOrder(
+                            cv -> {
+                                assertThatConstraintViolation(cv).hasInvalidValue(bean.getName());
+                            },
+                            cv -> {
+                                assertThatConstraintViolation(cv).hasInvalidValue(bean.getAge());
+                            }
+                    );
+                })
+        )
+                .isInstanceOf(AssertionError.class);
+    }
 }

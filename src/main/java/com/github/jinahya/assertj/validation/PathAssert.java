@@ -20,7 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.IterableAssert;
+import org.assertj.core.api.AbstractAssert;
 
 import javax.validation.Path;
 
@@ -32,8 +32,9 @@ import javax.validation.Path;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public interface PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extends Path>
-        extends ValidationAssert<SELF, ACTUAL> {
+public abstract class PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extends Path>
+        extends AbstractAssert<SELF, ACTUAL>
+        implements ValidationAssert<SELF, ACTUAL> {
 
     /**
      * An interface for verifying {@link Path.Node} values.
@@ -42,17 +43,24 @@ public interface PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extend
      * @param <ACTUAL> actual type parameter
      * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
      */
-    interface NodeAssert<SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
-            extends ValidationAssert<SELF, ACTUAL> {
+    public static abstract class NodeAssert<SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
+            extends AbstractAssert<SELF, ACTUAL>
+            implements ValidationAssert<SELF, ACTUAL> {
 
-        SELF hasIndex(Integer expectedIndex);
-
-        SELF hasKey(Object expectedIndex);
-
-//        SELF hasElementKind(ElementKind expectedElementKind);
-
-        SELF hasName(String expectedName);
+        protected NodeAssert(final ACTUAL actual, final Class<?> selfType) {
+            super(actual, selfType);
+        }
     }
 
-    IterableAssert<Path.Node> asIterableAssert();
+    static class NodeAssertImpl
+            extends NodeAssert<NodeAssertImpl, Path.Node> {
+
+        protected NodeAssertImpl(final Path.Node actual) {
+            super(actual, NodeAssertImpl.class);
+        }
+    }
+
+    protected PathAssert(final ACTUAL actual, final Class<?> selfType) {
+        super(actual, selfType);
+    }
 }
