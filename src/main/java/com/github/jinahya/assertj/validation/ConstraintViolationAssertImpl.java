@@ -23,7 +23,7 @@ package com.github.jinahya.assertj.validation;
 import javax.validation.ConstraintViolation;
 
 class ConstraintViolationAssertImpl<ACTUAL extends ConstraintViolation<?>>
-        extends AbstractConstraintViolationAssert<ConstraintViolationAssertImpl<ACTUAL>, ACTUAL> {
+        extends ConstraintViolationAssert<ConstraintViolationAssertImpl<ACTUAL>, ACTUAL> {
 
     /**
      * Creates a new instance for verifying specified actual value.

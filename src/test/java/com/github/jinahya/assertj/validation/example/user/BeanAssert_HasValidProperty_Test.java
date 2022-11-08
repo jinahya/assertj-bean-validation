@@ -37,7 +37,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @Slf4j
-class User_HasValidProperty_Test {
+class BeanAssert_HasValidProperty_Test {
 
     @Test
     void __NameIsValid() {

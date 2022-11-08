@@ -20,10 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-abstract class AbstractBeanAssertTest<T extends AbstractBeanAssert<T, ?>>
-        extends AbstractPropertyAssertTest<T> {
+abstract class PropertyAssertTest<T extends PropertyAssert<T, ?>>
+        extends ValidationAssertTest<T> {
 
-    AbstractBeanAssertTest(final Class<T> assertionClass) {
+    PropertyAssertTest(final Class<T> assertionClass) {
         super(assertionClass);
     }
 }

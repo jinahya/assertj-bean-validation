@@ -20,8 +20,13 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.Assertions;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -32,36 +37,12 @@ import java.util.function.Consumer;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
+public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         extends PropertyAssert<SELF, ACTUAL> {
 
-    /**
-     * Verifies that the {@code actual} bean is valid.
-     * <p>
-     * {@snippet lang = "java" id = "example":
-     * class User {
-     *     @NotBlank String name;
-     *     @Max(0x7F) @PositiveOrZero int age;
-     * }
-     *
-     * class UserTest {
-     *     @Test void test() {
-     *         // @highlight region substring="fail" type=highlighted
-     *         // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
-     *         assertThatBean(new User("Jane", 28)).isValid(); // should pass
-     *         assertThatBean(new User(  null,  0)).isValid(); // should fail // @highlight regex="\-?null" type=highlighted
-     *         assertThatBean(new User("John", -1)).isValid(); // should fail // @highlight regex="\-?\d+" type=highlighted
-     *         // @end
-     *         // @end
-     *     }
-     * }
-     *}
-     *
-     * @return this assertion object.
-     * @throws AssertionError when the {@code actual} is {@code null} or invalid.
-     */
-    // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
-    SELF isValid(Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer);
+    public BeanAssert(final ACTUAL actual, final Class<?> selfType) {
+        super(actual, selfType);
+    }
 
     /**
      * Verifies that the {@code actual} bean is valid.
@@ -89,7 +70,44 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
      */
     // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
-    default SELF isValid() {
+    public SELF isValid(final Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer) {
+        Objects.requireNonNull(consumer, "consumer is null");
+        final SELF self = isNotNull();
+        final Validator validator = helper.getValidator();
+        final Class<?>[] groups = helper.getGroups();
+        final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
+        consumer.accept(Collections.unmodifiableSet(violations));
+        Assertions.assertThat(violations).isEmpty();
+        return self;
+    }
+
+    /**
+     * Verifies that the {@code actual} bean is valid.
+     * <p>
+     * {@snippet lang = "java" id = "example":
+     * class User {
+     *     @NotBlank String name;
+     *     @Max(0x7F) @PositiveOrZero int age;
+     * }
+     *
+     * class UserTest {
+     *     @Test void test() {
+     *         // @highlight region substring="fail" type=highlighted
+     *         // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+     *         assertThatBean(new User("Jane", 28)).isValid(); // should pass
+     *         assertThatBean(new User(  null,  0)).isValid(); // should fail // @highlight regex="\-?null" type=highlighted
+     *         assertThatBean(new User("John", -1)).isValid(); // should fail // @highlight regex="\-?\d+" type=highlighted
+     *         // @end
+     *         // @end
+     *     }
+     * }
+     *}
+     *
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is {@code null} or invalid.
+     */
+    // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
+    public SELF isValid() {
         return isValid(
                 i -> {
                 }
@@ -130,7 +148,18 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * @apiNote Note that the {@link javax.validation.Valid @Valid}, as specified, is not honored by the
      * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies.
      */
-    SELF hasValidProperty(String propertyName, Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer);
+    public SELF hasValidProperty(final String propertyName,
+                                 final Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer) {
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        Objects.requireNonNull(consumer, "consumer is null");
+        final SELF self = isNotNull();
+        final Validator validator = helper.getValidator();
+        final Class<?>[] groups = helper.getGroups();
+        final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
+        consumer.accept(Collections.unmodifiableSet(violations));
+        Assertions.assertThat(violations).isEmpty();
+        return self;
+    }
 
     /**
      * Verifies that all constraints placed on the property of specified name, of {@code actual} bean, are validated.
@@ -164,11 +193,13 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * @apiNote Note that the {@link javax.validation.Valid @Valid}, as specified, is not honored by the
      * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies.
      */
-    default SELF hasValidProperty(final String propertyName) {
+    public SELF hasValidProperty(final String propertyName) {
         return hasValidProperty(
                 propertyName,
                 i -> {
                 }
         );
     }
+
+    private final ValidationAssertHelper helper = new ValidationAssertHelper();
 }

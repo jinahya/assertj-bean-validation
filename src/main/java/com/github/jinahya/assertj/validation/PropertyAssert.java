@@ -20,8 +20,14 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Assertions;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -32,10 +38,26 @@ import java.util.function.Consumer;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
-        extends ValidationAssert<SELF, ACTUAL> {
+public abstract class PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
+        extends AbstractAssert<SELF, ACTUAL>
+        implements ValidationAssert<SELF, ACTUAL> {
 
-    <T> SELF isValidFor(Class<T> beanType, String propertyName, Consumer<Iterable<ConstraintViolation<T>>> consumer);
+    public PropertyAssert(final ACTUAL actual, final Class<?> selfType) {
+        super(actual, selfType);
+    }
+
+    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
+                               final Consumer<Iterable<ConstraintViolation<T>>> consumer) {
+        Objects.requireNonNull(beanType, "beanType is null");
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        Objects.requireNonNull(consumer, "consumer is null");
+        final Validator validator = helper.getValidator();
+        final Class<?>[] groups = helper.getGroups();
+        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+        consumer.accept(Collections.unmodifiableSet(violations));
+        Assertions.assertThat(violations).isEmpty();
+        return myself;
+    }
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
@@ -72,7 +94,7 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
      * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
      * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
      */
-    default <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
+    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
         return isValidFor(
                 beanType,
                 propertyName,
@@ -80,4 +102,17 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
                 }
         );
     }
+
+    /**
+     * Configures this assertion object to use specified groups targeted for validation.
+     *
+     * @param groups the validation groups to use; may be {@code null} or empty.
+     * @return this assertion object.
+     */
+    public SELF targetingGroups(final Class<?>... groups) {
+        helper.setGroups(groups);
+        return myself;
+    }
+
+    private final ValidationAssertHelper helper = new ValidationAssertHelper();
 }

@@ -25,12 +25,14 @@ import com.github.jinahya.assertj.validation.example.user.Senior;
 import com.github.jinahya.assertj.validation.example.user.User;
 import com.github.jinahya.assertj.validation.example.user.UserConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Disabled
 @Slf4j
 class User_IsValidFor_Test {
 
