@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
-class User_IsValidFor_Test {
+class PropertyAssert_IsValidFor_Test {
 
     @Nested
     class RegistrationTest {

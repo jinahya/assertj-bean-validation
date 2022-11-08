@@ -22,7 +22,6 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -30,7 +29,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * An abstract base class for verifying beans and values.
@@ -66,11 +64,17 @@ public abstract class AbstractValidationAssert<SELF extends AbstractValidationAs
         return myself;
     }
 
-    @Override
-    public SELF consumingViolations(final Consumer<? super ConstraintViolation<?>> consumer) {
-        setConsumer(consumer);
-        return myself;
-    }
+//    @Override
+//    public SELF consumingEachViolation(final Consumer<? super ConstraintViolation<?>> consumer) {
+//        setEachConsumer(consumer);
+//        return myself;
+//    }
+
+//    @Override
+//    public <T> SELF consumingViolations(final Consumer<? super Iterable<? extends ConstraintViolation<T>>> consumer) {
+//        setConsumer((Consumer<? super Iterable<? extends ConstraintViolation<?>>>) consumer);
+//        return myself;
+//    }
 
     /**
      * Returns the validator configured to use.
@@ -78,22 +82,10 @@ public abstract class AbstractValidationAssert<SELF extends AbstractValidationAs
      * @return the validator configured to use.
      */
     Validator getValidator() {
-//        if (validator == null) {
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             return factory.getValidator();
         }
-//        }
-//        return validator;
     }
-
-//    /**
-//     * Replaces currently configured validator with specified value.
-//     *
-//     * @param validator new validator to use; may be {@code null}.
-//     */
-//    void setValidator(final Validator validator) {
-//        this.validator = validator;
-//    }
 
     /**
      * Returns currently configured groups targeted for validation.
@@ -118,26 +110,40 @@ public abstract class AbstractValidationAssert<SELF extends AbstractValidationAs
         }
     }
 
-    Consumer<? super ConstraintViolation<?>> getConsumer() {
-        return consumer;
-    }
+//    Consumer<? super ConstraintViolation<?>> getEachConsumer() {
+//        return eachConsumer;
+//    }
+//
+//    void setEachConsumer(final Consumer<? super ConstraintViolation<?>> consumer) {
+//        this.eachConsumer = consumer;
+//    }
 
-    void setConsumer(final Consumer<? super ConstraintViolation<?>> consumer) {
-        this.consumer = consumer;
-    }
-
-//    /**
-//     * The validator being used.
-//     */
-//    private Validator validator;
+//    <T> Consumer<? super Iterable<? extends ConstraintViolation<T>>> getConsumer() {
+//        return consumer;
+//    }
+//
+//    void setConsumer(final Consumer<? super Iterable<? extends ConstraintViolation<?>>> consumer) {
+//        this.consumer = consumer;
+//    }
+//
+//    <T> void acceptViolations(final Set<? extends ConstraintViolation<T>> violations) {
+//        Objects.requireNonNull(violations, "violations is null");
+//        Optional.ofNullable(this.<T>getConsumer())
+//                .ifPresent(c -> c.accept(Collections.unmodifiableSet(violations)));
+//    }
 
     /**
      * The targeting groups being used.
      */
     private final Set<Class<?>> groups = new HashSet<>();
 
-    /**
-     * The consumer accepts constraint violations, one by one.
-     */
-    private Consumer<? super ConstraintViolation<?>> consumer;
+////    /**
+////     * The consumer accepts constraint violations, one by one.
+////     */
+////    private Consumer<? super ConstraintViolation<?>> eachConsumer;
+//
+//    /**
+//     * The consumer accepts constraint violations, one by one.
+//     */
+//    private Consumer<? super Iterable<? extends ConstraintViolation<?>>> consumer;
 }

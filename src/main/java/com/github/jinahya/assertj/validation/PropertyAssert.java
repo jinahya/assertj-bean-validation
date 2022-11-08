@@ -20,7 +20,9 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.function.Consumer;
 
 /**
  * An interface for verifying values against properties of bean types.
@@ -32,6 +34,8 @@ import javax.validation.Validator;
 @SuppressWarnings({"java:S119"})
 public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends ValidationAssert<SELF, ACTUAL> {
+
+    <T> SELF isValidFor(Class<T> beanType, String propertyName, Consumer<Iterable<ConstraintViolation<T>>> consumer);
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
@@ -60,14 +64,20 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
      * }
      *}
      *
-     * @param beanType     the bean type; not {@code null}.
-     * @param propertyName the name of the property; must not be {@code null}.
+     * @param beanType     the bean type; must be not {@code null}.
+     * @param propertyName the name of the property; must be not {@code null}.
      * @param <T>          type of the object to validate
      * @return this assertion object.
-     * @throws AssertionError when the {@code actual} is {@code null} or is not valid for
-     *                        {@code beanType#propertyName}.
+     * @throws AssertionError when the {@code actual} is not valid for {@code beanType#propertyName}.
      * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
      * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
      */
-    <T> SELF isValidFor(final Class<T> beanType, final String propertyName);
+    default <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
+        return isValidFor(
+                beanType,
+                propertyName,
+                i -> {
+                }
+        );
+    }
 }

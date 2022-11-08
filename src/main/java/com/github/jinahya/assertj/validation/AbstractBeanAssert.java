@@ -24,6 +24,7 @@ import org.assertj.core.api.Assertions;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -52,30 +53,27 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
     }
 
     @Override
-    public SELF isValid() {
+    public SELF isValid(final Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer) {
+        Objects.requireNonNull(consumer, "consumer is null");
         final SELF self = isNotNull();
         final Validator validator = getValidator();
         final Class<?>[] groups = getGroups();
         final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
-        final Consumer<? super ConstraintViolation<ACTUAL>> consumer = getConsumer();
-        if (consumer != null) {
-            violations.forEach(consumer);
-        }
+        consumer.accept(Collections.unmodifiableSet(violations));
         Assertions.assertThat(violations).isEmpty();
         return self;
     }
 
     @Override
-    public SELF hasValidProperty(final String propertyName) {
+    public SELF hasValidProperty(final String propertyName,
+                                 final Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer) {
         Objects.requireNonNull(propertyName, "propertyName is null");
+        Objects.requireNonNull(consumer, "consumer is null");
         final SELF self = isNotNull();
         final Validator validator = getValidator();
         final Class<?>[] groups = getGroups();
         final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
-        final Consumer<? super ConstraintViolation<ACTUAL>> consumer = getConsumer();
-        if (consumer != null) {
-            violations.forEach(consumer);
-        }
+        consumer.accept(Collections.unmodifiableSet(violations));
         Assertions.assertThat(violations).isEmpty();
         return self;
     }
