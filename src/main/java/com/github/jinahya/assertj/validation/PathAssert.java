@@ -45,7 +45,7 @@ public abstract class PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL e
      * @param <ACTUAL> actual type parameter
      * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
      */
-    public static abstract class NodeAssert<SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
+    public abstract static class NodeAssert<SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
             extends AbstractAssert<SELF, ACTUAL>
             implements ValidationAssert<SELF, ACTUAL> {
 
