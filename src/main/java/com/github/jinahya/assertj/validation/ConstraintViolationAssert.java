@@ -22,9 +22,11 @@ package com.github.jinahya.assertj.validation;
 
 import javax.validation.ConstraintViolation;
 
+@SuppressWarnings({
+        "java:S119" // <SELF>, <ACTUAL>
+})
 public interface ConstraintViolationAssert<
-        SELF extends ConstraintViolationAssert<SELF, ACTUAL>,
-        ACTUAL extends ConstraintViolation<?>>
+        SELF extends ConstraintViolationAssert<SELF, ACTUAL>, ACTUAL extends ConstraintViolation<?>>
         extends ValidationAssert<SELF, ACTUAL> {
 
     /**
@@ -68,7 +70,7 @@ public interface ConstraintViolationAssert<
     SELF hasLeafBean(Object expectedLeafBean);
 
     /**
-     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getRootBean() leafBean} is
+     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getRootBean() rootBean} is
      * equal to specified value.
      *
      * @param expectedRootBean the expected value of {@code actual.rootBean}.
@@ -79,11 +81,11 @@ public interface ConstraintViolationAssert<
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s
-     * {@link ConstraintViolation#getRootBeanClass() leafBeanClass} is equal to specified value.
+     * {@link ConstraintViolation#getRootBeanClass() rootBeanClass} is equal to specified value.
      *
-     * @param expectedRootBean the expected value of {@code actual.rootBeanClass}.
+     * @param expectedRootBeanClass the expected value of {@code actual.rootBeanClass}.
      * @return this assertion object.
      * @see ConstraintViolation#getRootBeanClass()
      */
-    <T> SELF hasRootBeanClass(Class<T> expectedRootBean);
+    <T> SELF hasRootBeanClass(Class<T> expectedRootBeanClass);
 }

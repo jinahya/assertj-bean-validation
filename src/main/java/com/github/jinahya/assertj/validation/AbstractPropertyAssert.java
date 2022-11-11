@@ -82,4 +82,26 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
                 .isEmpty();
         return myself;
     }
+
+    <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName) {
+        Objects.requireNonNull(beanType, "beanType is null");
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        final Validator validator = getValidator();
+        final Class<?>[] groups = getGroups();
+        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual  : %s%n"
+                    + "\tbeanType: %s%n"
+                    + "\tproperty: %s%n"
+                    + "\tgroups  : %s%n",
+                    actual,
+                    beanType,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage("%nexpected to be not empty but is empty")
+                .isNotEmpty();
+        return myself;
+    }
 }
