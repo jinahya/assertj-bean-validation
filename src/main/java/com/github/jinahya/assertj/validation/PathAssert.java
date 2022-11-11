@@ -31,7 +31,9 @@ import javax.validation.Path;
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
+@SuppressWarnings({
+        "java:S119" // <SELF>, <ACTUAL>
+})
 public abstract class PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extends Path>
         extends AbstractAssert<SELF, ACTUAL>
         implements ValidationAssert<SELF, ACTUAL> {

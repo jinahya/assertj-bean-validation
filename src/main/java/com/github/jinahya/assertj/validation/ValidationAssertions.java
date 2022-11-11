@@ -27,7 +27,9 @@ import javax.validation.ConstraintViolation;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
+@SuppressWarnings({
+        "java:S119" // <ACTUAL>
+})
 public final class ValidationAssertions {
 
     /**

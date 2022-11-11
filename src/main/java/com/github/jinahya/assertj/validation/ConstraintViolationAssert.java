@@ -30,6 +30,9 @@ import org.assertj.core.api.ObjectAssertFactory;
 import javax.validation.ConstraintViolation;
 import java.util.function.Function;
 
+@SuppressWarnings({
+        "java:S119" // <SELF>, <ACTUAL>
+})
 public abstract class ConstraintViolationAssert<
         SELF extends ConstraintViolationAssert<SELF, ACTUAL>,
         ACTUAL extends ConstraintViolation<?>>

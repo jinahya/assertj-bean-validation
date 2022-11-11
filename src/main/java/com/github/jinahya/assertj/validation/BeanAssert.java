@@ -24,6 +24,7 @@ import org.assertj.core.api.Assertions;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -36,7 +37,9 @@ import java.util.function.Consumer;
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
+@SuppressWarnings({
+        "java:S119" // <SELF, ACTUAL>
+})
 public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         extends PropertyAssert<SELF, ACTUAL> {
 
@@ -77,7 +80,20 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         final Class<?>[] groups = helper.getGroups();
         final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
         consumer.accept(Collections.unmodifiableSet(violations));
-        Assertions.assertThat(violations).isEmpty();
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "\tgroups: %s%n",
+                    actual,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage(() -> String.format(
+                        "%nexpected to be empty but contains %1$d element(s)%n"
+                        + "%2$s",
+                        violations.size(),
+                        Formats.format(violations)
+                ))
+                .isEmpty();
         return self;
     }
 

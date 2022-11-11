@@ -22,6 +22,9 @@ package com.github.jinahya.assertj.validation;
 
 import javax.validation.ConstraintViolation;
 
+@SuppressWarnings({
+        "java:S119" // <ACTUAL>
+})
 class ConstraintViolationAssertImpl<ACTUAL extends ConstraintViolation<?>>
         extends ConstraintViolationAssert<ConstraintViolationAssertImpl<ACTUAL>, ACTUAL> {
 

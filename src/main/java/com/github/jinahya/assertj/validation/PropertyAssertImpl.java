@@ -20,6 +20,9 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+@SuppressWarnings({
+        "java:S119" // <ACTUAL>
+})
 class PropertyAssertImpl<ACTUAL>
         extends PropertyAssert<PropertyAssertImpl<ACTUAL>, ACTUAL> {
 
