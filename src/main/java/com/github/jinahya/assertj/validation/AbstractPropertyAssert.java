@@ -24,6 +24,7 @@ import org.assertj.core.api.Assertions;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -61,7 +62,24 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
         final Class<?>[] groups = getGroups();
         final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
         consumer.accept(Collections.unmodifiableSet(violations));
-        Assertions.assertThat(violations).isEmpty();
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual  : %s%n"
+                    + "\tbeanType: %s%n"
+                    + "\tproperty: %s%n"
+                    + "\tgroups  : %s%n",
+                    actual,
+                    beanType,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage(() -> String.format(
+                        "%nexpected to be empty but contains %1$d element(s)%n"
+                        + "%2$s",
+                        violations.size(),
+                        Formats.format(violations)
+                ))
+                .isEmpty();
         return myself;
     }
 }
