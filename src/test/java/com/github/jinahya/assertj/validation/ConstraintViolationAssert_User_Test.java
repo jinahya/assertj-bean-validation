@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableConstraintViolations;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableOfConstraintViolations;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ConstraintViolationAssert_User_Test {
@@ -26,7 +26,7 @@ class ConstraintViolationAssert_User_Test {
         if (!validName || !validAge) {
             assertThatThrownBy(
                     () -> assertion.isValid(a -> {
-                        final var a2 = assertThatIterableConstraintViolations(a);
+                        final var a2 = assertThatIterableOfConstraintViolations(a);
                     })
             )
                     .isInstanceOf(AssertionError.class);

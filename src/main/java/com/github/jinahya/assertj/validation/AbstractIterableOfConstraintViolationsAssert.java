@@ -7,9 +7,9 @@ import javax.validation.ConstraintViolation;
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>, ...
 })
-public abstract class IterableConstraintViolationAssert<
+public abstract class AbstractIterableOfConstraintViolationsAssert<
         // @formatter:off
-            SELF extends IterableConstraintViolationAssert<SELF, T>,
+            SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>,
             T
         // @formatter:on
         >
@@ -18,12 +18,12 @@ public abstract class IterableConstraintViolationAssert<
             SELF,
             Iterable<? extends ConstraintViolation<T>>,
             ConstraintViolation<T>,
-            ConstraintViolationAssertImpl<T>
+        ConstraintViolationAssert<T>
         // @formatter:on
         > {
 
-    protected IterableConstraintViolationAssert(final Iterable<? extends ConstraintViolation<T>> actual,
-                                                final Class<?> selfType) {
+    protected AbstractIterableOfConstraintViolationsAssert(final Iterable<? extends ConstraintViolation<T>> actual,
+                                                           final Class<?> selfType) {
         super(actual, selfType);
     }
 }

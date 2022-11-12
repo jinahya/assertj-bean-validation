@@ -20,15 +20,11 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-public class ValidationInstanceOfAssertFactories {
+public interface ValidationInstanceOfAssertFactories {
 //
 //    public static <T, U extends ConstraintViolation<T>> InstanceOfAssertFactory<U, ConstraintViolationAssert<?, U>>
 //    constraintViolation() {
 ////        return new InstanceOfAssertFactory<>(ConstraintViolation.class, cv -> ValidationAssertions.assertThat((U) cv));
 //        return null;
 //    }
-
-    protected ValidationInstanceOfAssertFactories() {
-        super();
-    }
 }

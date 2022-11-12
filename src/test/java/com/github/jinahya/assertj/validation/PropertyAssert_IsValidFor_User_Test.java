@@ -4,7 +4,7 @@ import com.github.jinahya.assertj.validation.example.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableConstraintViolations;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableOfConstraintViolations;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -38,7 +38,7 @@ class PropertyAssert_IsValidFor_User_Test {
                         "age"
                         ,
                         i -> {
-                            assertThatIterableConstraintViolations(i)
+                            assertThatIterableOfConstraintViolations(i)
                                     .singleElement()
                                     .hasRootBeanClass(User.class)
                                     .hasRootBean(null)
