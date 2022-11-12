@@ -9,7 +9,7 @@ class IterableConstraintViolationAssertImpl<T>
         extends IterableConstraintViolationAssert<IterableConstraintViolationAssertImpl<T>, T> {
 
     IterableConstraintViolationAssertImpl(final Iterable<? extends ConstraintViolation<T>> actual) {
-        super(actual, ConstraintViolationAssertImpl.class);
+        super(actual, IterableConstraintViolationAssertImpl.class);
     }
 
     @Override

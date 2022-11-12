@@ -31,9 +31,9 @@ import javax.validation.constraints.NotNull;
 @Setter(AccessLevel.PACKAGE)
 @Getter(AccessLevel.PACKAGE)
 @ToString
-public class Registration {
+public class Registration2 {
 
-    Registration(final User2 user2) {
+    Registration2(final User2 user2) {
         super();
         this.user = user2;
     }

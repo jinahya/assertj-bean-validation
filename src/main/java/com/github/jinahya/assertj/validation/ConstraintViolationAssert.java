@@ -181,6 +181,7 @@ public abstract class ConstraintViolationAssert<
      * @see ConstraintViolation#getRootBeanClass()
      */
     public <T> SELF hasRootBeanClass(Class<T> expectedRootBeanClass) {
+//    public SELF hasRootBeanClass(final Class<?> expectedRootBeanClass) {
         extractingRootBeanClass()
                 .isEqualTo(expectedRootBeanClass);
         return myself;

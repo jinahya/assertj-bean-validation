@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -49,5 +50,20 @@ final class ValidationAssertDelegate {
         }
     }
 
+    @SuppressWarnings({"unchecked"})
+    public <T> Set<ConstraintViolation<T>> getViolations() {
+        final Set<ConstraintViolation<T>> set = new HashSet<>();
+        violations.forEach(v -> set.add((ConstraintViolation<T>) v));
+        return set;
+    }
+
+    public <T> void setViolations(final Set<ConstraintViolation<T>> violations) {
+        Objects.requireNonNull(violations, "violations is null");
+        this.violations.clear();
+        this.violations.addAll(violations);
+    }
+
     private final Set<Class<?>> groups = new HashSet<>();
+
+    private final Set<ConstraintViolation<?>> violations = new HashSet<>();
 }
