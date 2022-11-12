@@ -40,7 +40,7 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
         extends AbstractAssert<SELF, ConstraintViolation<T>>
         implements ValidationAssert<SELF, ConstraintViolation<T>> {
 
-    protected ConstraintViolationAssert(final ConstraintViolation<T> actual, Class<?> selfType) {
+    protected ConstraintViolationAssert(final ConstraintViolation<T> actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
@@ -63,7 +63,7 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
         return myself;
     }
 
-    public <U, ASSERT extends AbstractAssert<?, U>> ASSERT extractingExecutableReturnValue(
+    public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingExecutableReturnValue(
             final AssertFactory<U, ASSERT> assertFactory) {
         @SuppressWarnings({"unchecked"})
         final Function<? super ConstraintViolation<T>, U> extractor = a -> (U) a.getExecutableReturnValue();
@@ -84,18 +84,19 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
      * @see ConstraintViolation#getExecutableReturnValue()
      */
     public SELF hasExecutableReturnValue(final Object expectedExecutableReturnValue) {
-        extractingExecutableReturnValue().isEqualTo(expectedExecutableReturnValue);
+        extractingExecutableReturnValue()
+                .isEqualTo(expectedExecutableReturnValue);
         return myself;
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T, ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingInvalidValue(
-            final AssertFactory<T, ASSERT> assertFactory) {
+    public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingInvalidValue(
+            final AssertFactory<U, ASSERT> assertFactory) {
         return isNotNull()
-                .extracting(a -> (T) a.getInvalidValue(), assertFactory);
+                .extracting(a -> (U) a.getInvalidValue(), assertFactory);
     }
 
-    public <T> ObjectAssert<T> extractingInvalidValue() {
+    public <U> ObjectAssert<U> extractingInvalidValue() {
         return extractingInvalidValue(new ObjectAssertFactory<>());
     }
 
@@ -114,12 +115,12 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T, ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingLeafBean(
-            final AssertFactory<T, ASSERT> assertFactory) {
-        return isNotNull().extracting(a -> (T) a.getLeafBean(), assertFactory);
+    public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingLeafBean(
+            final AssertFactory<U, ASSERT> assertFactory) {
+        return isNotNull().extracting(a -> (U) a.getLeafBean(), assertFactory);
     }
 
-    public <T> ObjectAssert<T> extractingLeafBean() {
+    public <U> ObjectAssert<U> extractingLeafBean() {
         return extractingLeafBean(new ObjectAssertFactory<>());
     }
 
@@ -132,18 +133,18 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
      * @see ConstraintViolation#getLeafBean()
      */
     public SELF hasLeafBean(final Object expectedLeafBean) {
-        extractingLeafBean().isEqualTo(expectedLeafBean);
+        extractingLeafBean()
+                .isEqualTo(expectedLeafBean);
         return myself;
     }
 
-    @SuppressWarnings({"unchecked"})
-    public <T, ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingRootBean(
+    public <ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingRootBean(
             final AssertFactory<T, ASSERT> assertFactory) {
         return isNotNull()
-                .extracting(a -> (T) a.getRootBean(), assertFactory);
+                .extracting(ConstraintViolation::getRootBean, assertFactory);
     }
 
-    public <T> ObjectAssert<T> extractingRootBean() {
+    public ObjectAssert<T> extractingRootBean() {
         return extractingRootBean(new ObjectAssertFactory<>());
     }
 
@@ -155,15 +156,14 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
      * @return this assertion object.
      * @see ConstraintViolation#getRootBean()
      */
-    public <T> SELF hasRootBean(final T expectedRootBean) {
+    public SELF hasRootBean(final T expectedRootBean) {
         extractingRootBean()
                 .isEqualTo(expectedRootBean);
         return myself;
     }
 
-    @SuppressWarnings({"unchecked"})
-    public <T> ClassAssert extractingRootBeanClass(final AssertFactory<Class<T>, ClassAssert> assertFactory) {
-        return isNotNull().extracting(a -> (Class<T>) a.getRootBeanClass(), assertFactory);
+    public ClassAssert extractingRootBeanClass(final AssertFactory<Class<T>, ClassAssert> assertFactory) {
+        return isNotNull().extracting(ConstraintViolation::getRootBeanClass, assertFactory);
     }
 
     public ClassAssert extractingRootBeanClass() {
@@ -178,8 +178,7 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
      * @return this assertion object.
      * @see ConstraintViolation#getRootBeanClass()
      */
-    public <T> SELF hasRootBeanClass(Class<T> expectedRootBeanClass) {
-//    public SELF hasRootBeanClass(final Class<?> expectedRootBeanClass) {
+    public SELF hasRootBeanClass(final Class<T> expectedRootBeanClass) {
         extractingRootBeanClass()
                 .isEqualTo(expectedRootBeanClass);
         return myself;

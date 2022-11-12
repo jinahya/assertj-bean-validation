@@ -33,16 +33,17 @@ class PropertyAssert_IsValidFor_User_Test {
         assertThatThrownBy(
                 () -> assertion.isValidFor(
                         User.class,
-                        "age",
-                        i -> {
-                            assertThatIterableConstraintViolations(i)
-                                    .<ConstraintViolationAssert<?, User>>singleElement(new InstanceOfAssertFactory<>(
-                                            ConstraintViolation.class, ValidationAssertions::assertThatConstraintViolation))
-                                    .hasRootBeanClass(User.class)
-                                    .hasRootBean(age)
-                                    .hasInvalidValue(age)
-                            ;
-                        }
+                        "age"
+//                        ,
+//                        i -> {
+//                            assertThatIterableConstraintViolations(i)
+//                                    .<ConstraintViolationAssert<?, User>>singleElement(new InstanceOfAssertFactory<>(
+//                                            ConstraintViolation.class, ValidationAssertions::assertThatConstraintViolation))
+//                                    .hasRootBeanClass(User.class)
+//                                    .hasRootBean(age)
+//                                    .hasInvalidValue(age)
+//                            ;
+//                        }
                 )
         )
                 .isInstanceOf(AssertionError.class)
