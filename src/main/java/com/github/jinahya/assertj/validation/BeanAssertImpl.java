@@ -25,9 +25,11 @@ package com.github.jinahya.assertj.validation;
  *
  * @param <ACTUAL> actual type parameter
  */
-@SuppressWarnings({"unchecked", "java:S119"})
+@SuppressWarnings({
+        "java:S119" // <ACTUAL>
+})
 class BeanAssertImpl<ACTUAL>
-        extends AbstractBeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
+        extends BeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
 
     /**
      * Creates a new instance for verifying specified actual value.
@@ -35,7 +37,6 @@ class BeanAssertImpl<ACTUAL>
      * @param actual the actual value to verify.
      */
     BeanAssertImpl(final ACTUAL actual) {
-//        super(actual, (Class<BeanAssertImpl<ACTUAL>>) (Class<?>) BeanAssertImpl.class);
         super(actual, BeanAssertImpl.class);
     }
 }

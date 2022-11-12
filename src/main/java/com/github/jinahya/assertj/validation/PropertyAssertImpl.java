@@ -20,12 +20,13 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-@SuppressWarnings({"unchecked", "java:S119"})
+@SuppressWarnings({
+        "java:S119" // <ACTUAL>
+})
 class PropertyAssertImpl<ACTUAL>
-        extends AbstractPropertyAssert<PropertyAssertImpl<ACTUAL>, ACTUAL> {
+        extends PropertyAssert<PropertyAssertImpl<ACTUAL>, ACTUAL> {
 
     PropertyAssertImpl(final ACTUAL actual) {
-//        super(actual, (Class<PropertyAssertImpl<ACTUAL>>) (Class<?>) PropertyAssertImpl.class);
         super(actual, PropertyAssertImpl.class);
     }
 }

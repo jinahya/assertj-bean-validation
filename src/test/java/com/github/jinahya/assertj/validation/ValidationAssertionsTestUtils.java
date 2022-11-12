@@ -9,9 +9,9 @@ package com.github.jinahya.assertj.validation;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,32 +24,33 @@ import org.mockito.ArgumentCaptor;
 
 import javax.validation.ConstraintViolation;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static org.mockito.Mockito.spy;
 
 public final class ValidationAssertionsTestUtils {
 
-    public static <T> Consumer<Iterable<ConstraintViolation<T>>> violationsConsumerSpy(
-            final Consumer<? super Iterable<? extends ConstraintViolation<T>>> consumer) {
+    public static <T> Consumer<Set<ConstraintViolation<T>>> violationsConsumerSpy(
+            final Consumer<? super Set<? extends ConstraintViolation<T>>> consumer) {
         Objects.requireNonNull(consumer, "consumer is null");
-        final Consumer<Iterable<ConstraintViolation<T>>> wrapper = new Consumer<>() { // DO NOT REPLACE WITH LAMBDA!!!
+        final Consumer<Set<ConstraintViolation<T>>> wrapper = new Consumer<>() { // DO NOT REPLACE WITH LAMBDA!!!
             @Override
-            public void accept(final Iterable<ConstraintViolation<T>> violations) {
+            public void accept(final Set<ConstraintViolation<T>> violations) {
                 consumer.accept(violations);
             }
         };
         return spy(wrapper);
     }
 
-    public static <T> Consumer<Iterable<ConstraintViolation<T>>> violationsConsumerSpy() {
+    public static <T> Consumer<Set<ConstraintViolation<T>>> violationsConsumerSpy() {
         return violationsConsumerSpy(cv -> {
         });
     }
 
-    public static <T> ArgumentCaptor<Iterable<ConstraintViolation<T>>> constraintViolationsCaptor() {
+    public static <T> ArgumentCaptor<Set<ConstraintViolation<T>>> constraintViolationsCaptor() {
         @SuppressWarnings({"unchecked"})
-        final ArgumentCaptor<Iterable<ConstraintViolation<T>>> captor = ArgumentCaptor.forClass(Iterable.class);
+        final ArgumentCaptor<Set<ConstraintViolation<T>>> captor = ArgumentCaptor.forClass(Set.class);
         return captor;
     }
 

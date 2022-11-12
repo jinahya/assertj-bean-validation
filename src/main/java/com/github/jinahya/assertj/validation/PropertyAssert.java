@@ -20,8 +20,14 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Assertions;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -32,10 +38,101 @@ import java.util.function.Consumer;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({"java:S119"})
-public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
-        extends ValidationAssert<SELF, ACTUAL> {
+public abstract class PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
+        extends AbstractAssert<SELF, ACTUAL>
+        implements ValidationAssert<SELF, ACTUAL> {
 
-    <T> SELF isValidFor(Class<T> beanType, String propertyName, Consumer<Iterable<ConstraintViolation<T>>> consumer);
+    protected PropertyAssert(final ACTUAL actual, final Class<?> selfType) {
+        super(actual, selfType);
+    }
+
+    @SuppressWarnings({
+            "java:S1181", // catch(Throwable)
+            "java:S106" // System.err
+    })
+    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
+                               final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
+        Objects.requireNonNull(beanType, "beanType is null");
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        Objects.requireNonNull(consumer, "consumer is null");
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
+        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+        ValidationAssertUtils.accept(violations, consumer);
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "\tagainst%n"
+                    + "\t\tbeanType: %s%n"
+                    + "\t\tproperty: '%s'%n"
+                    + "\tfor%n"
+                    + "\t\tgroups: %s%n",
+                    actual,
+                    beanType,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage(() -> String.format(
+                        "%nexpected to be empty but contains %1$d element(s)%n"
+                        + "%2$s",
+                        violations.size(),
+                        ValidationAssertMessages.format(violations)
+                ))
+                .isEmpty();
+        return myself;
+    }
+
+//    <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName) {
+//        Objects.requireNonNull(beanType, "beanType is null");
+//        Objects.requireNonNull(propertyName, "propertyName is null");
+//        final Validator validator = delegate.getValidator();
+//        final Class<?>[] groups = delegate.getGroups();
+//        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+//        delegate.setViolations(violations);
+//        Assertions.assertThat(delegate.getViolations())
+//                .as("%nThe set of constraint violations resulted while validating%n"
+//                    + "\tactual: %s%n"
+//                    + "\tagainst%n"
+//                    + "\t\tbeanType: %s%n"
+//                    + "\t\tproperty: '%s'%n"
+//                    + "\tfor%n"
+//                    + "\t\tgroups: %s%n",
+//                    actual,
+//                    beanType,
+//                    propertyName,
+//                    Arrays.asList(groups)
+//                )
+//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
+//                .isNotEmpty();
+//        return myself;
+//    }
+//
+//    <T> IterableConstraintViolationAssert<?, T> isNotValidForExtractingConstraintViolations(
+//            final Class<T> beanType, final String propertyName) {
+//        Objects.requireNonNull(beanType, "beanType is null");
+//        Objects.requireNonNull(propertyName, "propertyName is null");
+//        final Validator validator = delegate.getValidator();
+//        final Class<?>[] groups = delegate.getGroups();
+//        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+//        delegate.setViolations(violations);
+//        Assertions.assertThat(delegate.getViolations())
+//                .as("%nThe set of constraint violations resulted while validating%n"
+//                    + "\tactual: %s%n"
+//                    + "\tagainst%n"
+//                    + "\t\tbeanType: %s%n"
+//                    + "\t\tproperty: '%s'%n"
+//                    + "\tfor%n"
+//                    + "\t\tgroups: %s%n",
+//                    actual,
+//                    beanType,
+//                    propertyName,
+//                    Arrays.asList(groups)
+//                )
+//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n")
+//                )
+//                .isNotEmpty();
+//        return ValidationAssertions.assertThatIterableConstraintViolations(violations);
+//    }
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
@@ -72,7 +169,7 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
      * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
      * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
      */
-    default <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
+    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
         return isValidFor(
                 beanType,
                 propertyName,
@@ -80,4 +177,17 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
                 }
         );
     }
+
+    /**
+     * Configures this assertion object to use specified groups targeted for validation.
+     *
+     * @param groups the validation groups to use; may be {@code null} or empty.
+     * @return this assertion object.
+     */
+    public SELF targetingGroups(final Class<?>... groups) {
+        delegate.setGroups(groups);
+        return myself;
+    }
+
+    private final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

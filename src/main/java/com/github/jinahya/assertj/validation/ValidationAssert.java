@@ -34,39 +34,10 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.Assert;
 
-/**
- * A base interface for verifying beans and values.
- *
- * @param <SELF>   self type parameter
- * @param <ACTUAL> actual type parameter
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
-@SuppressWarnings({"java:S119"})
-public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
+@SuppressWarnings({
+        "java:S119" // <SELF>, <ACTUAL>
+})
+interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends Assert<SELF, ACTUAL> {
 
-//    /**
-//     * Configures this assertion object to use specified validator for validation.
-//     *
-//     * @param validator the validator to use; may be {@code null}.
-//     * @return this assertion object.
-//     */
-//    SELF usingValidator(Validator validator);
-
-    /**
-     * Configures this assertion object to use specified groups targeted for validation.
-     *
-     * @param groups the validation groups to use; may be {@code null} or empty.
-     * @return this assertion object.
-     */
-    SELF targetingGroups(Class<?>... groups);
-
-//    /**
-//     * Configures this assertion object to accept constraint violations, if any populated while validating the
-//     * {@code actual} value, to specified consumer.
-//     *
-//     * @param consumer the consumer accepts each constraint violations; may be {@code null}.
-//     * @return this assertion object.
-//     */
-//    SELF consumingEachViolation(Consumer<? super ConstraintViolation<?>> consumer);
 }

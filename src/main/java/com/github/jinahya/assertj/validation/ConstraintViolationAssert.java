@@ -20,14 +20,34 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ClassAssert;
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.ObjectArrayAssert;
+import org.assertj.core.api.ObjectAssert;
+import org.assertj.core.api.ObjectAssertFactory;
+
 import javax.validation.ConstraintViolation;
+import java.util.function.Function;
 
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-public interface ConstraintViolationAssert<
-        SELF extends ConstraintViolationAssert<SELF, ACTUAL>, ACTUAL extends ConstraintViolation<?>>
-        extends ValidationAssert<SELF, ACTUAL> {
+public abstract class ConstraintViolationAssert<SELF extends ConstraintViolationAssert<SELF, T>, T>
+        extends AbstractAssert<SELF, ConstraintViolation<T>>
+        implements ValidationAssert<SELF, ConstraintViolation<T>> {
+
+    protected ConstraintViolationAssert(final ConstraintViolation<T> actual, final Class<?> selfType) {
+        super(actual, selfType);
+    }
+
+    public ObjectArrayAssert<Object> extractingExecutableParameters() {
+        return isNotNull()
+                .extracting(ConstraintViolation::getExecutableParameters, InstanceOfAssertFactories.ARRAY);
+    }
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s
@@ -37,7 +57,23 @@ public interface ConstraintViolationAssert<
      * @return this assertion object.
      * @see ConstraintViolation#getExecutableParameters()
      */
-    SELF hasExecutableParameters(Object[] expectedExecutableParameters);
+    public SELF hasExecutableParameters(final Object[] expectedExecutableParameters) {
+        extractingExecutableParameters()
+                .isEqualTo(expectedExecutableParameters);
+        return myself;
+    }
+
+    public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingExecutableReturnValue(
+            final AssertFactory<U, ASSERT> assertFactory) {
+        @SuppressWarnings({"unchecked"})
+        final Function<? super ConstraintViolation<T>, U> extractor = a -> (U) a.getExecutableReturnValue();
+        return isNotNull()
+                .extracting(extractor, assertFactory);
+    }
+
+    public <U> ObjectAssert<U> extractingExecutableReturnValue() {
+        return extractingExecutableReturnValue(new ObjectAssertFactory<>());
+    }
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s
@@ -47,7 +83,22 @@ public interface ConstraintViolationAssert<
      * @return this assertion object.
      * @see ConstraintViolation#getExecutableReturnValue()
      */
-    SELF hasExecutableReturnValue(Object expectedExecutableReturnValue);
+    public SELF hasExecutableReturnValue(final Object expectedExecutableReturnValue) {
+        extractingExecutableReturnValue()
+                .isEqualTo(expectedExecutableReturnValue);
+        return myself;
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingInvalidValue(
+            final AssertFactory<U, ASSERT> assertFactory) {
+        return isNotNull()
+                .extracting(a -> (U) a.getInvalidValue(), assertFactory);
+    }
+
+    public <U> ObjectAssert<U> extractingInvalidValue() {
+        return extractingInvalidValue(new ObjectAssertFactory<>());
+    }
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getInvalidValue() invalidValue}
@@ -57,7 +108,21 @@ public interface ConstraintViolationAssert<
      * @return this assertion object.
      * @see ConstraintViolation#getInvalidValue()
      */
-    SELF hasInvalidValue(Object expectedInvalidValue);
+    public SELF hasInvalidValue(final Object expectedInvalidValue) {
+        extractingInvalidValue()
+                .isEqualTo(expectedInvalidValue);
+        return myself;
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingLeafBean(
+            final AssertFactory<U, ASSERT> assertFactory) {
+        return isNotNull().extracting(a -> (U) a.getLeafBean(), assertFactory);
+    }
+
+    public <U> ObjectAssert<U> extractingLeafBean() {
+        return extractingLeafBean(new ObjectAssertFactory<>());
+    }
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getLeafBean() leafBean} is
@@ -67,7 +132,21 @@ public interface ConstraintViolationAssert<
      * @return this assertion object.
      * @see ConstraintViolation#getLeafBean()
      */
-    SELF hasLeafBean(Object expectedLeafBean);
+    public SELF hasLeafBean(final Object expectedLeafBean) {
+        extractingLeafBean()
+                .isEqualTo(expectedLeafBean);
+        return myself;
+    }
+
+    public <ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingRootBean(
+            final AssertFactory<T, ASSERT> assertFactory) {
+        return isNotNull()
+                .extracting(ConstraintViolation::getRootBean, assertFactory);
+    }
+
+    public ObjectAssert<T> extractingRootBean() {
+        return extractingRootBean(new ObjectAssertFactory<>());
+    }
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getRootBean() rootBean} is
@@ -77,7 +156,19 @@ public interface ConstraintViolationAssert<
      * @return this assertion object.
      * @see ConstraintViolation#getRootBean()
      */
-    <T> SELF hasRootBean(T expectedRootBean);
+    public SELF hasRootBean(final T expectedRootBean) {
+        extractingRootBean()
+                .isEqualTo(expectedRootBean);
+        return myself;
+    }
+
+    public ClassAssert extractingRootBeanClass(final AssertFactory<Class<T>, ClassAssert> assertFactory) {
+        return isNotNull().extracting(ConstraintViolation::getRootBeanClass, assertFactory);
+    }
+
+    public ClassAssert extractingRootBeanClass() {
+        return extractingRootBeanClass(Assertions::assertThat);
+    }
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s
@@ -87,5 +178,9 @@ public interface ConstraintViolationAssert<
      * @return this assertion object.
      * @see ConstraintViolation#getRootBeanClass()
      */
-    <T> SELF hasRootBeanClass(Class<T> expectedRootBeanClass);
+    public SELF hasRootBeanClass(final Class<T> expectedRootBeanClass) {
+        extractingRootBeanClass()
+                .isEqualTo(expectedRootBeanClass);
+        return myself;
+    }
 }

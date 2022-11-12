@@ -27,7 +27,9 @@ import javax.validation.ConstraintViolation;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
+@SuppressWarnings({
+        "java:S119" // <ACTUAL>
+})
 public final class ValidationAssertions {
 
     /**
@@ -58,9 +60,14 @@ public final class ValidationAssertions {
      * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <T, U extends ConstraintViolation<T>> ConstraintViolationAssert<?, U> assertThatConstraintViolation(
-            final U actual) {
+    static <T> ConstraintViolationAssert<?, T> assertThatConstraintViolation(
+            final ConstraintViolation<T> actual) {
         return new ConstraintViolationAssertImpl<>(actual);
+    }
+
+    static <T> IterableConstraintViolationAssert<?, T> assertThatIterableConstraintViolations(
+            final Iterable<? extends ConstraintViolation<T>> actual) {
+        return new IterableConstraintViolationAssertImpl<>(actual);
     }
 
     /**

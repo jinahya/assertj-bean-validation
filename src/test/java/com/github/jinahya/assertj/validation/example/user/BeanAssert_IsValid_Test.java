@@ -42,12 +42,12 @@ class BeanAssert_IsValid_Test {
     @Test
     void __Valid() {
         final var bean = User.newInstance(true, true);
+        final var assertion = assertThatBean(bean);
         assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
         assertThatCode(
-                () -> assertThatBean(bean)
-                        .isValid(violationsConsumerSpy(i -> {
-                            assertThat(i).isEmpty();
-                        }))
+                () -> assertion.isValid(violationsConsumerSpy(i -> {
+                    assertThat(i).isEmpty();
+                }))
         )
                 .doesNotThrowAnyException();
     }
@@ -56,8 +56,9 @@ class BeanAssert_IsValid_Test {
     @Test
     void WithConsumer__Valid() {
         final var bean = User.newInstance(true, true);
+        final var assertion = assertThatBean(bean);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
-        assertThatCode(() -> assertThatBean(bean).isValid(consumer)).doesNotThrowAnyException();
+        assertThatCode(() -> assertion.isValid(consumer)).doesNotThrowAnyException();
         final var captor = ValidationAssertionsTestUtils.<User>constraintViolationsCaptor();
         verify(consumer, times(1)).accept(captor.capture());
         final Iterable<ConstraintViolation<User>> violations = captor.getValue();
@@ -68,7 +69,8 @@ class BeanAssert_IsValid_Test {
     @Test
     void __NameIsInvalid() {
         final var bean = User.newInstance(false, true);
-        assertThatThrownBy(() -> assertThatBean(bean).isValid())
+        final var assertion = assertThatBean(bean);
+        assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class)
                 .satisfies(ae -> {
                     log.debug("message: {}", ae.getMessage());
@@ -79,8 +81,9 @@ class BeanAssert_IsValid_Test {
     @Test
     void WithConsumer__NameIsInvalid() {
         final var bean = User.newInstance(false, true);
+        final var assertion = assertThatBean(bean);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
-        assertThatThrownBy(() -> assertThatBean(bean).isValid(consumer))
+        assertThatThrownBy(() -> assertion.isValid(consumer))
                 .isInstanceOf(AssertionError.class)
                 .satisfies(ae -> {
                     log.debug("message: {}", ae.getMessage());
@@ -95,8 +98,12 @@ class BeanAssert_IsValid_Test {
     @Test
     void __AgeIsInvalid() {
         final var bean = User.newInstance(true, false);
-        assertThatThrownBy(() -> assertThatBean(bean).isValid())
-                .isInstanceOf(AssertionError.class);
+        final var assertion = assertThatBean(bean);
+        assertThatThrownBy(assertion::isValid)
+                .isInstanceOf(AssertionError.class)
+                .satisfies(ae -> {
+                    log.debug("message: {}", ae.getMessage());
+                });
     }
 
     @Test
@@ -105,8 +112,7 @@ class BeanAssert_IsValid_Test {
         final var assertion = assertThatBean(bean);
         final var consumer = ValidationAssertionsTestUtils.<User>violationsConsumerSpy();
         // WHEN
-        assertThatThrownBy(() -> assertion.isValid(consumer))
-                .isInstanceOf(AssertionError.class);
+        assertThatThrownBy(() -> assertion.isValid(consumer)).isInstanceOf(AssertionError.class);
         // THEN
         final var captor = ValidationAssertionsTestUtils.<User>constraintViolationsCaptor();
         verify(consumer, times(1)).accept(captor.capture());
@@ -118,7 +124,8 @@ class BeanAssert_IsValid_Test {
     @Test
     void __NameIsInvalidAgeIsInvalid() {
         final var bean = User.newInstance(false, false);
-        assertThatThrownBy(() -> assertThatBean(bean).isValid()).isInstanceOf(AssertionError.class);
+        final var assertion = assertThatBean(bean);
+        assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
     }
 
     @Test

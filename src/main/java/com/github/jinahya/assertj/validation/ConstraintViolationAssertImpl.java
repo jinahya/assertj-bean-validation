@@ -23,17 +23,17 @@ package com.github.jinahya.assertj.validation;
 import javax.validation.ConstraintViolation;
 
 @SuppressWarnings({
-        "java:S119" // <SELF>, <ACTUAL>
+        "java:S119" // <ACTUAL>
 })
-class ConstraintViolationAssertImpl<ACTUAL extends ConstraintViolation<?>>
-        extends AbstractConstraintViolationAssert<ConstraintViolationAssertImpl<ACTUAL>, ACTUAL> {
+class ConstraintViolationAssertImpl<T>
+        extends ConstraintViolationAssert<ConstraintViolationAssertImpl<T>, T> {
 
     /**
      * Creates a new instance for verifying specified actual value.
      *
      * @param actual the actual value to verify.
      */
-    ConstraintViolationAssertImpl(final ACTUAL actual) {
+    ConstraintViolationAssertImpl(final ConstraintViolation<T> actual) {
         super(actual, ConstraintViolationAssertImpl.class);
     }
 }
