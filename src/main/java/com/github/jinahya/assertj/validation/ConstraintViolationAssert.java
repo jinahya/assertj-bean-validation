@@ -36,9 +36,7 @@ import java.util.function.Function;
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-public abstract class ConstraintViolationAssert<
-        SELF extends ConstraintViolationAssert<SELF, T>,
-        T>
+public abstract class ConstraintViolationAssert<SELF extends ConstraintViolationAssert<SELF, T>, T>
         extends AbstractAssert<SELF, ConstraintViolation<T>>
         implements ValidationAssert<SELF, ConstraintViolation<T>> {
 
