@@ -5,22 +5,12 @@ import org.assertj.core.api.AbstractIterableAssert;
 import javax.validation.ConstraintViolation;
 
 @SuppressWarnings({
-        "java:S119" // <SELF>, <ACTUAL>, ...
+        "java:S119" // <SELF>
 })
 public abstract class AbstractIterableOfConstraintViolationsAssert<
-        // @formatter:off
-        SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>,
-        T
-        // @formatter:on
-        >
+        SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>, T>
         extends AbstractIterableAssert<
-        // @formatter:off
-        SELF,
-        Iterable<? extends ConstraintViolation<T>>,
-        ConstraintViolation<T>,
-        ConstraintViolationAssert<T>
-        // @formatter:on
-        > {
+        SELF, Iterable<? extends ConstraintViolation<T>>, ConstraintViolation<T>, ConstraintViolationAssert<T>> {
 
     protected AbstractIterableOfConstraintViolationsAssert(final Iterable<? extends ConstraintViolation<T>> actual,
                                                            final Class<?> selfType) {

@@ -160,14 +160,14 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
         }
     }
 
-    abstract static class AbstractCrossParameterNodeAssert<
+    public abstract static class AbstractCrossParameterNodeAssert<
             SELF extends AbstractCrossParameterNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.CrossParameterNode>
             extends ParameterizedNodeAssert<SELF, ACTUAL> {
 
-        static class CrossParameterNodeAssert
+        public static class CrossParameterNodeAssert
                 extends AbstractCrossParameterNodeAssert<CrossParameterNodeAssert, Path.CrossParameterNode> {
 
-            CrossParameterNodeAssert(final Path.CrossParameterNode actual) {
+            public CrossParameterNodeAssert(final Path.CrossParameterNode actual) {
                 super(actual, CrossParameterNodeAssert.class);
             }
         }
@@ -177,25 +177,26 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
         }
     }
 
-    abstract static class AbstractMethodNodeAssert<
+    public abstract static class AbstractMethodNodeAssert<
             SELF extends AbstractMethodNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.MethodNode>
-            extends AbstractNodeAssert<SELF, ACTUAL> {
+            extends ParameterizedNodeAssert<SELF, ACTUAL> {
 
-        static class MethodNodeAssert
+        public static class MethodNodeAssert
                 extends AbstractMethodNodeAssert<MethodNodeAssert, Path.MethodNode> {
 
-            MethodNodeAssert(final Path.MethodNode actual) {
+            public MethodNodeAssert(final Path.MethodNode actual) {
                 super(actual, MethodNodeAssert.class);
             }
         }
 
-        AbstractMethodNodeAssert(final ACTUAL actual, Class<?> selfType) {
+        protected AbstractMethodNodeAssert(final ACTUAL actual, Class<?> selfType) {
             super(actual, selfType);
         }
 
+        @SuppressWarnings({"unchecked"})
         public ListAssert<Class<?>> extractingParameterTypes() {
-            return isNotNull()
-                    .extracting(Path.MethodNode::getParameterTypes, Assertions::assertThat);
+            return (ListAssert<Class<?>>) (Object) isNotNull()
+                    .extracting(v -> ((Path.MethodNode) v).getParameterTypes(), Assertions::assertThat);
         }
     }
 
@@ -211,7 +212,7 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
             }
         }
 
-        AbstractParameterNodeAssert(final ACTUAL actual, final Class<?> selfType) {
+        protected AbstractParameterNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
         }
 
@@ -239,36 +240,36 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
         }
     }
 
-    abstract static class PropertyNodeAssert<
-            SELF extends PropertyNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.PropertyNode>
-            extends AbstractNodeAssert<SELF, ACTUAL> {
+    public abstract static class AbstractPropertyNodeAssert<
+            SELF extends AbstractPropertyNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.PropertyNode>
+            extends ParameterizedNodeAssert<SELF, ACTUAL> {
 
-        static class PropertyNodeAssertImpl
-                extends PropertyNodeAssert<PropertyNodeAssertImpl, Path.PropertyNode> {
+        public static class PropertyNodeAssert
+                extends AbstractPropertyNodeAssert<PropertyNodeAssert, Path.PropertyNode> {
 
-            PropertyNodeAssertImpl(final Path.PropertyNode actual) {
-                super(actual, PropertyNodeAssertImpl.class);
+            public PropertyNodeAssert(final Path.PropertyNode actual) {
+                super(actual, PropertyNodeAssert.class);
             }
         }
 
-        PropertyNodeAssert(final ACTUAL actual, final Class<?> selfType) {
+        protected AbstractPropertyNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
         }
     }
 
-    abstract static class ReturnValueNodeAssert<
-            SELF extends ReturnValueNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.ReturnValueNode>
-            extends AbstractNodeAssert<SELF, Path.ReturnValueNode> {
+    public abstract static class AbstractReturnValueNodeAssert<
+            SELF extends AbstractReturnValueNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.ReturnValueNode>
+            extends ParameterizedNodeAssert<SELF, Path.ReturnValueNode> {
 
-        static class ReturnValueNodeAssertImpl
-                extends ReturnValueNodeAssert<ReturnValueNodeAssertImpl, Path.ReturnValueNode> {
+        public static class ReturnValueNodeAssert
+                extends AbstractReturnValueNodeAssert<ReturnValueNodeAssert, Path.ReturnValueNode> {
 
-            ReturnValueNodeAssertImpl(final Path.ReturnValueNode actual) {
-                super(actual, ReturnValueNodeAssertImpl.class);
+            public ReturnValueNodeAssert(final Path.ReturnValueNode actual) {
+                super(actual, ReturnValueNodeAssert.class);
             }
         }
 
-        ReturnValueNodeAssert(final Path.ReturnValueNode actual, final Class<?> selfType) {
+        protected AbstractReturnValueNodeAssert(final Path.ReturnValueNode actual, final Class<?> selfType) {
             super(actual, selfType);
         }
     }

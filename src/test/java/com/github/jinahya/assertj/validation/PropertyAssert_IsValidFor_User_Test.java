@@ -81,7 +81,7 @@ class PropertyAssert_IsValidFor_User_Test {
         )
                 .isInstanceOf(AssertionError.class)
                 .satisfies(ae -> {
-                    log.debug("message: {}", ae);
+                    log.debug("message: {}", ae.getMessage());
                 });
     }
 }

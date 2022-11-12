@@ -72,10 +72,6 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
      */
     // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
-    @SuppressWarnings({
-            "java:S1181", // catch(Throwable)
-            "java:S106" // System.err
-    })
     public SELF isValid(final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer) {
         Objects.requireNonNull(consumer, "consumer is null");
         final SELF self = isNotNull();
@@ -168,10 +164,6 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      * @apiNote Note that the {@link javax.validation.Valid @Valid}, as specified, is not honored by the
      * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies.
      */
-    @SuppressWarnings({
-            "java:S1181", // catch(Throwable)
-            "java:S106" // System.err
-    })
     public SELF hasValidProperty(final String propertyName,
                                  final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer) {
         Objects.requireNonNull(propertyName, "propertyName is null");
