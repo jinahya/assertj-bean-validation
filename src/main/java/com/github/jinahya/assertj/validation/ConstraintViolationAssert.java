@@ -172,7 +172,7 @@ public abstract class ConstraintViolationAssert<SELF extends ConstraintViolation
 
     /**
      * Verifies that the actual {@link ConstraintViolation}'s
-     * {@link ConstraintViolation#getRootBeanClass() leafBeanClass} is equal to specified value.
+     * {@link ConstraintViolation#getRootBeanClass() rootBeanClass} is equal to specified value.
      *
      * @param expectedRootBeanClass the expected value of {@code actual.rootBeanClass}.
      * @return this assertion object.

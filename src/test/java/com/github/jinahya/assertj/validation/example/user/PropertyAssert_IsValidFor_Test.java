@@ -40,6 +40,7 @@ class PropertyAssert_IsValidFor_Test {
             final var assertion = assertThatProperty(null);
             assertThatThrownBy(() -> assertion.isValidFor(Registration.class, "user"))
                     .isInstanceOf(AssertionError.class);
+//            assertion.isValidFor(Registration.class, "user");
         }
 
         @Test
@@ -47,7 +48,10 @@ class PropertyAssert_IsValidFor_Test {
             final var user = User.newInstance(false, false);
             {
                 final var assertion = assertThatBean(user);
-                assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
+                assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class).satisfies(ae -> {
+                    log.debug("message: {}", ae.getMessage());
+                });
+//                assertion.isValid();
             }
             final var assertion = assertThatProperty(user);
             assertThatCode(() -> assertion.isValidFor(Registration.class, "user"))
@@ -150,7 +154,9 @@ class PropertyAssert_IsValidFor_Test {
             }
             final var assertion = assertThatProperty(user);
             assertThatThrownBy(() -> assertion.isValidFor(SeniorRegistration.class, "user"))
-                    .isInstanceOf(AssertionError.class);
+                    .isInstanceOf(AssertionError.class).satisfies(ae -> {
+                        log.debug("message: {}", ae.getMessage());
+                    });
         }
 
         @Test
