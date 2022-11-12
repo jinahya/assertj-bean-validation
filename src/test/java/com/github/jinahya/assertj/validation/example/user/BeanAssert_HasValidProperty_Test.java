@@ -27,6 +27,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import javax.validation.ConstraintViolation;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
@@ -76,7 +77,7 @@ class BeanAssert_HasValidProperty_Test {
         // GIVEN
         final var bean = new User(null, 27);
         final var assertion = assertThatBean(bean);
-        final Consumer<Iterable<ConstraintViolation<User>>> consumer = violationsConsumerSpy(i -> {
+        final Consumer<Set<ConstraintViolation<User>>> consumer = violationsConsumerSpy(i -> {
         });
         // WHEN
         assertThatThrownBy(
@@ -88,7 +89,7 @@ class BeanAssert_HasValidProperty_Test {
                 .isInstanceOf(AssertionError.class);
         // THEN
         @SuppressWarnings({"unchecked"})
-        final ArgumentCaptor<Iterable<ConstraintViolation<User>>> captor = ArgumentCaptor.forClass(Iterable.class);
+        final ArgumentCaptor<Set<ConstraintViolation<User>>> captor = ArgumentCaptor.forClass(Set.class);
         verify(consumer, times(1)).accept(captor.capture());
         final Iterable<ConstraintViolation<User>> violations = captor.getValue();
 //        assertThat(violations.getRootBeanClass()).isSameAs(User.class);
@@ -131,8 +132,7 @@ class BeanAssert_HasValidProperty_Test {
         // GIVEN
         final User bean = new User("name", -1);
         final var assertion = assertThatBean(bean);
-        final Consumer<Iterable<ConstraintViolation<User>>> consumer
-                = violationsConsumerSpy();
+        final Consumer<Set<ConstraintViolation<User>>> consumer = violationsConsumerSpy();
         // WHEN
         assertThatThrownBy(
                 () -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE, consumer)
@@ -140,7 +140,7 @@ class BeanAssert_HasValidProperty_Test {
                 .isInstanceOf(AssertionError.class);
         // THEN
         @SuppressWarnings({"unchecked"})
-        final ArgumentCaptor<Iterable<ConstraintViolation<User>>> captor = ArgumentCaptor.forClass(Iterable.class);
+        final ArgumentCaptor<Set<ConstraintViolation<User>>> captor = ArgumentCaptor.forClass(Set.class);
         verify(consumer, times(1)).accept(captor.capture());
         final Iterable<ConstraintViolation<User>> violations = captor.getValue();
 //        assertThat(violations).singleElement(new InstanceOfAssertFactory<ConstraintViolation<User>, ConstraintViolationAssert<?, ConstraintViolation<User>>>(ConstraintViolation.class, a -> new ValidationAssertions.assertThat(a)));

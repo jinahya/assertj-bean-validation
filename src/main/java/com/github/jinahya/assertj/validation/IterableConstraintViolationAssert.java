@@ -8,24 +8,22 @@ import javax.validation.ConstraintViolation;
         "java:S119" // <SELF>, <ACTUAL>, ...
 })
 public abstract class IterableConstraintViolationAssert<
-        SELF extends IterableConstraintViolationAssert<SELF, ACTUAL, ELEMENT, ELEMENT_ASSERT>,
-        ACTUAL extends Iterable<? extends ELEMENT>,
-        ELEMENT extends ConstraintViolation<?>,
-        ELEMENT_ASSERT extends ConstraintViolationAssert<ELEMENT_ASSERT, ELEMENT>
+        // @formatter:off
+            SELF extends IterableConstraintViolationAssert<SELF, T>,
+            T
+        // @formatter:on
         >
-        extends AbstractIterableAssert<SELF, ACTUAL, ELEMENT, ELEMENT_ASSERT> {
+        extends AbstractIterableAssert<
+        // @formatter:off
+            SELF,
+            Iterable<? extends ConstraintViolation<T>>,
+            ConstraintViolation<T>,
+            ConstraintViolationAssertImpl<T>
+        // @formatter:on
+        > {
 
-    protected IterableConstraintViolationAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected IterableConstraintViolationAssert(final Iterable<? extends ConstraintViolation<T>> actual,
+                                                final Class<?> selfType) {
         super(actual, selfType);
-    }
-
-    @Override
-    protected ELEMENT_ASSERT toAssert(final ELEMENT element, final String description) {
-        return null;
-    }
-
-    @Override
-    protected SELF newAbstractIterableAssert(final Iterable<? extends ELEMENT> iterable) {
-        return null;
     }
 }

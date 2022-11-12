@@ -26,7 +26,6 @@ import org.assertj.core.api.Assertions;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -43,25 +42,30 @@ public abstract class PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, 
         extends AbstractAssert<SELF, ACTUAL>
         implements ValidationAssert<SELF, ACTUAL> {
 
-    public PropertyAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected PropertyAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
+    @SuppressWarnings({
+            "java:S1181", // catch(Throwable)
+            "java:S106" // System.err
+    })
     public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
-                               final Consumer<Iterable<ConstraintViolation<T>>> consumer) {
+                               final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
         Objects.requireNonNull(beanType, "beanType is null");
         Objects.requireNonNull(propertyName, "propertyName is null");
         Objects.requireNonNull(consumer, "consumer is null");
-        final Validator validator = helper.getValidator();
-        final Class<?>[] groups = helper.getGroups();
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
         final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-        consumer.accept(Collections.unmodifiableSet(violations));
+        ValidationAssertUtils.accept(violations, consumer);
         Assertions.assertThat(violations)
                 .as("%nThe set of constraint violations resulted while validating%n"
-                    + "\tactual  : %s%n"
-                    + "\tbeanType: %s%n"
-                    + "\tproperty: %s%n"
-                    + "\tgroups  : %s%n",
+                    + "\tactual: %s%n"
+                    + "\tagainst%n"
+                    + "\t\tbeanType: %s%n"
+                    + "\t\tproperty: '%s'%n"
+                    + "\t\tgroups  : %s%n",
                     actual,
                     beanType,
                     propertyName,
@@ -71,9 +75,33 @@ public abstract class PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, 
                         "%nexpected to be empty but contains %1$d element(s)%n"
                         + "%2$s",
                         violations.size(),
-                        Formats.format(violations)
+                        ValidationAssertMessages.format(violations)
                 ))
                 .isEmpty();
+        return myself;
+    }
+
+    <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName) {
+        Objects.requireNonNull(beanType, "beanType is null");
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
+        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "\tagainst%n"
+                    + "\t\tbeanType: %s%n"
+                    + "\t\tproperty: '%s'%n"
+                    + "\t\tgroups  : %s%n",
+                    actual,
+                    beanType,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n")
+                )
+                .isNotEmpty();
         return myself;
     }
 
@@ -128,9 +156,9 @@ public abstract class PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, 
      * @return this assertion object.
      */
     public SELF targetingGroups(final Class<?>... groups) {
-        helper.setGroups(groups);
+        delegate.setGroups(groups);
         return myself;
     }
 
-    private final ValidationAssertHelper helper = new ValidationAssertHelper();
+    private final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

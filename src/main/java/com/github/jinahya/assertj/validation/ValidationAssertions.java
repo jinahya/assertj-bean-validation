@@ -60,9 +60,14 @@ public final class ValidationAssertions {
      * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <T, U extends ConstraintViolation<T>> ConstraintViolationAssert<?, U> assertThatConstraintViolation(
-            final U actual) {
+    public static <T> ConstraintViolationAssert<?, T> assertThatConstraintViolation(
+            final ConstraintViolation<T> actual) {
         return new ConstraintViolationAssertImpl<>(actual);
+    }
+
+    public static <T> IterableConstraintViolationAssert<?, T> assertThatIterableConstraintViolations(
+            final Iterable<? extends ConstraintViolation<T>> actual) {
+        return new IterableConstraintViolationAssertImpl<>(actual);
     }
 
     /**

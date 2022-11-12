@@ -25,7 +25,6 @@ import org.assertj.core.api.Assertions;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -43,7 +42,7 @@ import java.util.function.Consumer;
 public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         extends PropertyAssert<SELF, ACTUAL> {
 
-    public BeanAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected BeanAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
@@ -73,16 +72,21 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
      */
     // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
-    public SELF isValid(final Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer) {
+    @SuppressWarnings({
+            "java:S1181", // catch(Throwable)
+            "java:S106" // System.err
+    })
+    public SELF isValid(final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer) {
         Objects.requireNonNull(consumer, "consumer is null");
         final SELF self = isNotNull();
-        final Validator validator = helper.getValidator();
-        final Class<?>[] groups = helper.getGroups();
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
         final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
-        consumer.accept(Collections.unmodifiableSet(violations));
+        ValidationAssertUtils.accept(violations, consumer);
         Assertions.assertThat(violations)
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"
+                    + "targeting%n"
                     + "\tgroups: %s%n",
                     actual,
                     Arrays.asList(groups)
@@ -91,7 +95,7 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
                         "%nexpected to be empty but contains %1$d element(s)%n"
                         + "%2$s",
                         violations.size(),
-                        Formats.format(violations)
+                        ValidationAssertMessages.format(violations)
                 ))
                 .isEmpty();
         return self;
@@ -130,6 +134,24 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         );
     }
 
+    SELF isNotValid() {
+        final SELF self = isNotNull();
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
+        final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "targeting%n"
+                    + "\tgroups: %s%n",
+                    actual,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
+                .isNotEmpty();
+        return self;
+    }
+
     /**
      * Verified that no constraint violations populated while validating all constraints placed on the property of
      * specified name of the {@code actual}.
@@ -164,16 +186,37 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * @apiNote Note that the {@link javax.validation.Valid @Valid}, as specified, is not honored by the
      * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies.
      */
+    @SuppressWarnings({
+            "java:S1181", // catch(Throwable)
+            "java:S106" // System.err
+    })
     public SELF hasValidProperty(final String propertyName,
-                                 final Consumer<Iterable<ConstraintViolation<ACTUAL>>> consumer) {
+                                 final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer) {
         Objects.requireNonNull(propertyName, "propertyName is null");
         Objects.requireNonNull(consumer, "consumer is null");
         final SELF self = isNotNull();
-        final Validator validator = helper.getValidator();
-        final Class<?>[] groups = helper.getGroups();
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
         final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
-        consumer.accept(Collections.unmodifiableSet(violations));
-        Assertions.assertThat(violations).isEmpty();
+        ValidationAssertUtils.accept(violations, consumer);
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "for its%n"
+                    + "\tproperty: '%s'%n"
+                    + "targeting %n"
+                    + "\tgroups: %s%n",
+                    actual,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage(() -> String.format(
+                        "%nexpected to be empty but contains %1$d element(s)%n"
+                        + "%2$s",
+                        violations.size(),
+                        ValidationAssertMessages.format(violations)
+                ))
+                .isEmpty();
         return self;
     }
 
@@ -217,5 +260,27 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         );
     }
 
-    private final ValidationAssertHelper helper = new ValidationAssertHelper();
+    public SELF doesNotHaveValidProperty(final String propertyName) {
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        final SELF self = isNotNull();
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
+        final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
+        Assertions.assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "for its%n"
+                    + "\tproperty: '%s'%n"
+                    + "targeting %n"
+                    + "\tgroups: %s%n",
+                    actual,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contains any element%n"))
+                .isNotEmpty();
+        return self;
+    }
+
+    private final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

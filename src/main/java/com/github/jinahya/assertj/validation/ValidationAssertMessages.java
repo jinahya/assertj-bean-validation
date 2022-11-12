@@ -7,15 +7,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-final class Formats {
+final class ValidationAssertMessages {
 
     static String format(final ConstraintViolation<?> violation) {
         Objects.requireNonNull(violation, "violation is null");
         return String.format(
                 "message        : %1$s%n" +
-                "\t   propertyPath   : %2$s%n" +
-                "\t   rootBeanClass  : %3$s%n" +
-                "\t   messageTemplate: %4$s",
+                "   propertyPath   : %2$s%n" +
+                "   rootBeanClass  : %3$s%n" +
+                "   messageTemplate: %4$s",
                 violation.getMessage(),
                 violation.getPropertyPath(),
                 violation.getRootBeanClass(),
@@ -29,11 +29,11 @@ final class Formats {
         }
         final Iterator<? extends ConstraintViolation<?>> iterator = violations.iterator();
         return IntStream.range(0, violations.size())
-                .mapToObj(i -> String.format("\t-> %1$s", format(iterator.next())))
-                .collect(Collectors.joining("\t%n"));
+                .mapToObj(i -> String.format("-> %1$s", format(iterator.next())))
+                .collect(Collectors.joining("%n"));
     }
 
-    private Formats() {
+    private ValidationAssertMessages() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

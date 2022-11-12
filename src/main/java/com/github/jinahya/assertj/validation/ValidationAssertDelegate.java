@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-final class ValidationAssertHelper {
+final class ValidationAssertDelegate {
 
     Validator getValidator() {
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {

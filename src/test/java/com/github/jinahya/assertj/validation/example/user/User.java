@@ -42,21 +42,21 @@ public class User {
 
     public static final int MAX_AGE = 127;
 
-    static String validName() {
+    public static String validName() {
         return "name";
     }
 
-    static String invalidName() {
+    public static String invalidName() {
         return ThreadLocalRandom.current().nextBoolean()
                 ? null
                 : (ThreadLocalRandom.current().nextBoolean() ? "" : "   ");
     }
 
-    static int validAge() {
+    public static int validAge() {
         return ThreadLocalRandom.current().nextInt(MAX_AGE + 1);
     }
 
-    static int invalidAge() {
+    public static int invalidAge() {
         return (ThreadLocalRandom.current().nextBoolean()
                 ? (ThreadLocalRandom.current().nextInt() | Integer.MIN_VALUE) // not has been born yet
                 : ThreadLocalRandom.current().nextInt(MAX_AGE + 1, Integer.MAX_VALUE)) // too old
