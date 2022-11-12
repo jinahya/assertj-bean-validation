@@ -20,10 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.InstanceOfAssertFactory;
-
-import javax.validation.ConstraintViolation;
-
 public class ValidationInstanceOfAssertFactories {
 //
 //    public static <T, U extends ConstraintViolation<T>> InstanceOfAssertFactory<U, ConstraintViolationAssert<?, U>>

@@ -65,7 +65,8 @@ public abstract class PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, 
                     + "\tagainst%n"
                     + "\t\tbeanType: %s%n"
                     + "\t\tproperty: '%s'%n"
-                    + "\t\t  groups: %s%n",
+                    + "\tfor%n"
+                    + "\t\tgroups: %s%n",
                     actual,
                     beanType,
                     propertyName,
@@ -81,56 +82,57 @@ public abstract class PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, 
         return myself;
     }
 
-    <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName) {
-//        isNotValidForExtractingConstraintViolations(beanType, propertyName);
+//    <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName) {
+//        Objects.requireNonNull(beanType, "beanType is null");
+//        Objects.requireNonNull(propertyName, "propertyName is null");
+//        final Validator validator = delegate.getValidator();
+//        final Class<?>[] groups = delegate.getGroups();
+//        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+//        delegate.setViolations(violations);
+//        Assertions.assertThat(delegate.getViolations())
+//                .as("%nThe set of constraint violations resulted while validating%n"
+//                    + "\tactual: %s%n"
+//                    + "\tagainst%n"
+//                    + "\t\tbeanType: %s%n"
+//                    + "\t\tproperty: '%s'%n"
+//                    + "\tfor%n"
+//                    + "\t\tgroups: %s%n",
+//                    actual,
+//                    beanType,
+//                    propertyName,
+//                    Arrays.asList(groups)
+//                )
+//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
+//                .isNotEmpty();
 //        return myself;
-        Objects.requireNonNull(beanType, "beanType is null");
-        Objects.requireNonNull(propertyName, "propertyName is null");
-        final Validator validator = delegate.getValidator();
-        final Class<?>[] groups = delegate.getGroups();
-        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-        delegate.setViolations(violations);
-        Assertions.assertThat(delegate.getViolations())
-                .as("%nThe set of constraint violations resulted while validating%n"
-                    + "\tactual: %s%n"
-                    + "\tagainst%n"
-                    + "\t\tbeanType: %s%n"
-                    + "\t\tproperty: '%s'%n"
-                    + "\t\t  groups: %s%n",
-                    actual,
-                    beanType,
-                    propertyName,
-                    Arrays.asList(groups)
-                )
-                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
-                .isNotEmpty();
-        return myself;
-    }
-
-    <T> IterableConstraintViolationAssert<?, T> isNotValidForExtractingConstraintViolations(
-            final Class<T> beanType, final String propertyName) {
-        Objects.requireNonNull(beanType, "beanType is null");
-        Objects.requireNonNull(propertyName, "propertyName is null");
-        final Validator validator = delegate.getValidator();
-        final Class<?>[] groups = delegate.getGroups();
-        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-        Assertions.assertThat(violations)
-                .as("%nThe set of constraint violations resulted while validating%n"
-                    + "\tactual: %s%n"
-                    + "\tagainst%n"
-                    + "\t\tbeanType: %s%n"
-                    + "\t\tproperty: '%s'%n"
-                    + "\t\t  groups: %s%n",
-                    actual,
-                    beanType,
-                    propertyName,
-                    Arrays.asList(groups)
-                )
-                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n")
-                )
-                .isNotEmpty();
-        return ValidationAssertions.assertThatIterableConstraintViolations(violations);
-    }
+//    }
+//
+//    <T> IterableConstraintViolationAssert<?, T> isNotValidForExtractingConstraintViolations(
+//            final Class<T> beanType, final String propertyName) {
+//        Objects.requireNonNull(beanType, "beanType is null");
+//        Objects.requireNonNull(propertyName, "propertyName is null");
+//        final Validator validator = delegate.getValidator();
+//        final Class<?>[] groups = delegate.getGroups();
+//        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
+//        delegate.setViolations(violations);
+//        Assertions.assertThat(delegate.getViolations())
+//                .as("%nThe set of constraint violations resulted while validating%n"
+//                    + "\tactual: %s%n"
+//                    + "\tagainst%n"
+//                    + "\t\tbeanType: %s%n"
+//                    + "\t\tproperty: '%s'%n"
+//                    + "\tfor%n"
+//                    + "\t\tgroups: %s%n",
+//                    actual,
+//                    beanType,
+//                    propertyName,
+//                    Arrays.asList(groups)
+//                )
+//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n")
+//                )
+//                .isNotEmpty();
+//        return ValidationAssertions.assertThatIterableConstraintViolations(violations);
+//    }
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.

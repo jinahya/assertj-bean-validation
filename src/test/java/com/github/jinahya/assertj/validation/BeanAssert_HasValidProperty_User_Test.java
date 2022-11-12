@@ -27,33 +27,21 @@ class BeanAssert_HasValidProperty_User_Test {
         final var assertion = assertThatBean(bean);
         if (validName) {
             assertThatCode(() -> assertion.hasValidProperty("name")).doesNotThrowAnyException();
-            assertThatThrownBy(() -> assertion.doesNotHaveValidProperty("name"))
-                    .isInstanceOf(AssertionError.class)
-                    .satisfies(ar -> {
-                        log.debug("message: {}", ar.getMessage());
-                    });
         } else {
             assertThatThrownBy(() -> assertion.hasValidProperty("name"))
                     .isInstanceOf(AssertionError.class)
                     .satisfies(ar -> {
                         log.debug("message: {}", ar.getMessage());
                     });
-            assertThatCode(() -> assertion.doesNotHaveValidProperty("name")).doesNotThrowAnyException();
         }
         if (validAge) {
             assertThatCode(() -> assertion.hasValidProperty("age")).doesNotThrowAnyException();
-            assertThatThrownBy(() -> assertion.doesNotHaveValidProperty("age"))
-                    .isInstanceOf(AssertionError.class)
-                    .satisfies(ar -> {
-                        log.debug("message: {}", ar.getMessage());
-                    });
         } else {
             assertThatThrownBy(() -> assertion.hasValidProperty("age"))
                     .isInstanceOf(AssertionError.class)
                     .satisfies(ar -> {
                         log.debug("message: {}", ar.getMessage());
                     });
-            assertThatCode(() -> assertion.doesNotHaveValidProperty("age")).doesNotThrowAnyException();
         }
     }
 }

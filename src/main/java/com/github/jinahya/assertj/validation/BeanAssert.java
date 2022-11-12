@@ -134,23 +134,23 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         );
     }
 
-    SELF isNotValid() {
-        final SELF self = isNotNull();
-        final Validator validator = delegate.getValidator();
-        final Class<?>[] groups = delegate.getGroups();
-        final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
-        Assertions.assertThat(violations)
-                .as("%nThe set of constraint violations resulted while validating%n"
-                    + "\tactual: %s%n"
-                    + "targeting%n"
-                    + "\tgroups: %s%n",
-                    actual,
-                    Arrays.asList(groups)
-                )
-                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
-                .isNotEmpty();
-        return self;
-    }
+//    SELF isNotValid() {
+//        final SELF self = isNotNull();
+//        final Validator validator = delegate.getValidator();
+//        final Class<?>[] groups = delegate.getGroups();
+//        final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
+//        Assertions.assertThat(violations)
+//                .as("%nThe set of constraint violations resulted while validating%n"
+//                    + "\tactual: %s%n"
+//                    + "targeting%n"
+//                    + "\tgroups: %s%n",
+//                    actual,
+//                    Arrays.asList(groups)
+//                )
+//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
+//                .isNotEmpty();
+//        return self;
+//    }
 
     /**
      * Verified that no constraint violations populated while validating all constraints placed on the property of
@@ -260,27 +260,27 @@ public abstract class BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         );
     }
 
-    public SELF doesNotHaveValidProperty(final String propertyName) {
-        Objects.requireNonNull(propertyName, "propertyName is null");
-        final SELF self = isNotNull();
-        final Validator validator = delegate.getValidator();
-        final Class<?>[] groups = delegate.getGroups();
-        final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
-        Assertions.assertThat(violations)
-                .as("%nThe set of constraint violations resulted while validating%n"
-                    + "\tactual: %s%n"
-                    + "for its%n"
-                    + "\tproperty: '%s'%n"
-                    + "targeting %n"
-                    + "\tgroups: %s%n",
-                    actual,
-                    propertyName,
-                    Arrays.asList(groups)
-                )
-                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contains any element%n"))
-                .isNotEmpty();
-        return self;
-    }
+//    SELF doesNotHaveValidProperty(final String propertyName) {
+//        Objects.requireNonNull(propertyName, "propertyName is null");
+//        final SELF self = isNotNull();
+//        final Validator validator = delegate.getValidator();
+//        final Class<?>[] groups = delegate.getGroups();
+//        final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
+//        Assertions.assertThat(violations)
+//                .as("%nThe set of constraint violations resulted while validating%n"
+//                    + "\tactual: %s%n"
+//                    + "for its%n"
+//                    + "\tproperty: '%s'%n"
+//                    + "targeting %n"
+//                    + "\tgroups: %s%n",
+//                    actual,
+//                    propertyName,
+//                    Arrays.asList(groups)
+//                )
+//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contains any element%n"))
+//                .isNotEmpty();
+//        return self;
+//    }
 
     private final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

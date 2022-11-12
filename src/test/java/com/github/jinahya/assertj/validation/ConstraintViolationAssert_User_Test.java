@@ -24,9 +24,11 @@ class ConstraintViolationAssert_User_Test {
         final var bean = User.newInstance(validName, validAge);
         final var assertion = assertThatBean(bean);
         if (!validName || !validAge) {
-            assertThatThrownBy(() -> assertion.isValid(a -> {
-                final var a2 = assertThatIterableConstraintViolations(a);
-            }))
+            assertThatThrownBy(
+                    () -> assertion.isValid(a -> {
+                        final var a2 = assertThatIterableConstraintViolations(a);
+                    })
+            )
                     .isInstanceOf(AssertionError.class);
         }
     }

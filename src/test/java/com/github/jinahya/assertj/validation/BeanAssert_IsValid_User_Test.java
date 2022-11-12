@@ -2,6 +2,7 @@ package com.github.jinahya.assertj.validation;
 
 import com.github.jinahya.assertj.validation.example.user.User;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,6 +10,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableConstraintViolations;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -27,11 +30,6 @@ class BeanAssert_IsValid_User_Test {
         final var assertion = assertThatBean(user);
         if (validName && validAge) {
             assertThatCode(assertion::isValid).doesNotThrowAnyException();
-            assertThatThrownBy(assertion::isNotValid)
-                    .isInstanceOf(AssertionError.class)
-                    .satisfies(ae -> {
-                        log.debug("message: {}", ae.getMessage());
-                    });
             return;
         }
         assertThatThrownBy(assertion::isValid)
@@ -39,6 +37,66 @@ class BeanAssert_IsValid_User_Test {
                 .satisfies(ae -> {
                     log.debug("message: {}", ae.getMessage());
                 });
-        assertThatCode(assertion::isNotValid).doesNotThrowAnyException();
+    }
+
+    @Test
+    void __NameIsInvalid() {
+        final var user = User.newInstance(false, true);
+        final var assertion = assertThatBean(user);
+        assertThatThrownBy(
+                () -> assertion.isValid(
+                        i -> {
+                            assertThatIterableConstraintViolations(i)
+                                    .singleElement()
+                                    .hasRootBeanClass(User.class)
+                                    .hasRootBean(user)
+                                    .hasInvalidValue(user.getName());
+                        }
+                )
+        )
+                .isInstanceOf(AssertionError.class)
+                .satisfies(ae -> {
+                    log.debug("message: {}", ae.getMessage());
+                });
+    }
+
+    @Test
+    void __AgeIsInvalid() {
+        final var user = User.newInstance(true, false);
+        final var assertion = assertThatBean(user);
+        assertThatThrownBy(
+                () -> assertion.isValid(
+                        i -> {
+                            assertThatIterableConstraintViolations(i)
+                                    .singleElement()
+                                    .hasRootBeanClass(User.class)
+                                    .hasRootBean(user)
+                                    .hasInvalidValue(user.getAge());
+                        }
+                )
+        )
+                .isInstanceOf(AssertionError.class)
+                .satisfies(ae -> {
+                    log.debug("message: {}", ae.getMessage());
+                });
+    }
+
+    @Test
+    void __BothAreInvalid() {
+        final var bean = User.newInstance(false, false);
+        final var assertion = assertThatBean(bean);
+        assertThatThrownBy(() -> assertion.isValid(
+                i -> {
+                    assertThatIterableConstraintViolations(i).allSatisfy(cv -> {
+                        assertThatConstraintViolation(cv)
+                                .hasRootBeanClass(User.class)
+                                .hasRootBean(bean);
+                    });
+                }
+        ))
+                .isInstanceOf(AssertionError.class)
+                .satisfies(ae -> {
+                    log.debug("message: {}", ae.getMessage());
+                });
     }
 }
