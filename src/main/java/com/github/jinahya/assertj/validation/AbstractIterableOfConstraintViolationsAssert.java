@@ -9,15 +9,15 @@ import javax.validation.ConstraintViolation;
 })
 public abstract class AbstractIterableOfConstraintViolationsAssert<
         // @formatter:off
-            SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>,
-            T
+        SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>,
+        T
         // @formatter:on
         >
         extends AbstractIterableAssert<
         // @formatter:off
-            SELF,
-            Iterable<? extends ConstraintViolation<T>>,
-            ConstraintViolation<T>,
+        SELF,
+        Iterable<? extends ConstraintViolation<T>>,
+        ConstraintViolation<T>,
         ConstraintViolationAssert<T>
         // @formatter:on
         > {

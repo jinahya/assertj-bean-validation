@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * An interface for verifying bean objects.
+ * An abstract assert class for verifying a bean value.
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
@@ -133,24 +133,6 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                 }
         );
     }
-
-//    SELF isNotValid() {
-//        final SELF self = isNotNull();
-//        final Validator validator = delegate.getValidator();
-//        final Class<?>[] groups = delegate.getGroups();
-//        final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
-//        Assertions.assertThat(violations)
-//                .as("%nThe set of constraint violations resulted while validating%n"
-//                    + "\tactual: %s%n"
-//                    + "targeting%n"
-//                    + "\tgroups: %s%n",
-//                    actual,
-//                    Arrays.asList(groups)
-//                )
-//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
-//                .isNotEmpty();
-//        return self;
-//    }
 
     /**
      * Verified that no constraint violations populated while validating all constraints placed on the property of
@@ -259,28 +241,6 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                 }
         );
     }
-
-//    SELF doesNotHaveValidProperty(final String propertyName) {
-//        Objects.requireNonNull(propertyName, "propertyName is null");
-//        final SELF self = isNotNull();
-//        final Validator validator = delegate.getValidator();
-//        final Class<?>[] groups = delegate.getGroups();
-//        final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
-//        Assertions.assertThat(violations)
-//                .as("%nThe set of constraint violations resulted while validating%n"
-//                    + "\tactual: %s%n"
-//                    + "for its%n"
-//                    + "\tproperty: '%s'%n"
-//                    + "targeting %n"
-//                    + "\tgroups: %s%n",
-//                    actual,
-//                    propertyName,
-//                    Arrays.asList(groups)
-//                )
-//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contains any element%n"))
-//                .isNotEmpty();
-//        return self;
-//    }
 
     private final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

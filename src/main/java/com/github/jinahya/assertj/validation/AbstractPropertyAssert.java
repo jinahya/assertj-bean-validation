@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * An interface for verifying values against properties of bean types.
+ * An abstract class for verifying a value against a specific property of a specific bean type.
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
@@ -47,8 +47,8 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
     }
 
     @SuppressWarnings({
-            "java:S1181", // catch(Throwable)
-            "java:S106" // System.err
+            "java:S1181", // catch_Throwable
+            "java:S106" // System_err
     })
     public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
                                final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
@@ -81,58 +81,6 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
                 .isEmpty();
         return myself;
     }
-
-//    <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName) {
-//        Objects.requireNonNull(beanType, "beanType is null");
-//        Objects.requireNonNull(propertyName, "propertyName is null");
-//        final Validator validator = delegate.getValidator();
-//        final Class<?>[] groups = delegate.getGroups();
-//        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-//        delegate.setViolations(violations);
-//        Assertions.assertThat(delegate.getViolations())
-//                .as("%nThe set of constraint violations resulted while validating%n"
-//                    + "\tactual: %s%n"
-//                    + "\tagainst%n"
-//                    + "\t\tbeanType: %s%n"
-//                    + "\t\tproperty: '%s'%n"
-//                    + "\tfor%n"
-//                    + "\t\tgroups: %s%n",
-//                    actual,
-//                    beanType,
-//                    propertyName,
-//                    Arrays.asList(groups)
-//                )
-//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n"))
-//                .isNotEmpty();
-//        return myself;
-//    }
-//
-//    <T> IterableConstraintViolationAssert<?, T> isNotValidForExtractingConstraintViolations(
-//            final Class<T> beanType, final String propertyName) {
-//        Objects.requireNonNull(beanType, "beanType is null");
-//        Objects.requireNonNull(propertyName, "propertyName is null");
-//        final Validator validator = delegate.getValidator();
-//        final Class<?>[] groups = delegate.getGroups();
-//        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-//        delegate.setViolations(violations);
-//        Assertions.assertThat(delegate.getViolations())
-//                .as("%nThe set of constraint violations resulted while validating%n"
-//                    + "\tactual: %s%n"
-//                    + "\tagainst%n"
-//                    + "\t\tbeanType: %s%n"
-//                    + "\t\tproperty: '%s'%n"
-//                    + "\tfor%n"
-//                    + "\t\tgroups: %s%n",
-//                    actual,
-//                    beanType,
-//                    propertyName,
-//                    Arrays.asList(groups)
-//                )
-//                .withFailMessage(() -> String.format("%nexpected to be not empty but does not contain any element%n")
-//                )
-//                .isNotEmpty();
-//        return ValidationAssertions.assertThatIterableConstraintViolations(violations);
-//    }
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
