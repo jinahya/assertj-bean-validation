@@ -36,7 +36,7 @@ final class ValidationAssertUtils {
         try {
             consumer.accept(Collections.unmodifiableSet(violations));
         } catch (final Throwable t) {
-            System.err.println("failed to accept violations to " + consumer);
+            System.err.println("failed to accept violations to [" + consumer + "]; message: " + t.getMessage());
             t.printStackTrace();
         }
     }

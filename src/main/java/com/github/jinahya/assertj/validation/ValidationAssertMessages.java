@@ -12,10 +12,10 @@ final class ValidationAssertMessages {
     static String format(final ConstraintViolation<?> violation) {
         Objects.requireNonNull(violation, "violation is null");
         return String.format(
-                "message        : %1$s%n" +
-                "   propertyPath   : %2$s%n" +
-                "   rootBeanClass  : %3$s%n" +
-                "   messageTemplate: %4$s",
+                "\tmessage        : %1$s%n" +
+                "\tpropertyPath   : %2$s%n" +
+                "\trootBeanClass  : %3$s%n" +
+                "\tmessageTemplate: %4$s",
                 violation.getMessage(),
                 violation.getPropertyPath(),
                 violation.getRootBeanClass(),

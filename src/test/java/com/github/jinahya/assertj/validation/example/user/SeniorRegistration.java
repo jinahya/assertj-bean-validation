@@ -29,7 +29,7 @@ public class SeniorRegistration
 
     @Senior
     @Override
-    User getUser() {
+    public User getUser() {
         return super.getUser();
     }
 }

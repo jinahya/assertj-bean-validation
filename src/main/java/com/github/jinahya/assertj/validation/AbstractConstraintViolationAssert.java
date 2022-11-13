@@ -50,12 +50,13 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
     }
 
     /**
-     * Verifies that the actual {@link ConstraintViolation}'s
-     * {@link ConstraintViolation#getExecutableParameters() executableParameters} is equal to specified value.
+     * Verifies that the {@link ConstraintViolation#getExecutableParameters() actual.executableParameters} is equal to
+     * specified value.
      *
      * @param expectedExecutableParameters the expected value of {@code actual.executableParameters}.
      * @return this assertion object.
      * @see ConstraintViolation#getExecutableParameters()
+     * @see #extractingExecutableParameters()
      */
     public SELF hasExecutableParameters(final Object[] expectedExecutableParameters) {
         extractingExecutableParameters()
@@ -91,7 +92,7 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
 
     @SuppressWarnings({"unchecked"})
     public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingInvalidValue(
-            final AssertFactory<U, ASSERT> assertFactory) {
+            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
         return isNotNull()
                 .extracting(a -> (U) a.getInvalidValue(), assertFactory);
     }
@@ -116,7 +117,7 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
 
     @SuppressWarnings({"unchecked"})
     public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingLeafBean(
-            final AssertFactory<U, ASSERT> assertFactory) {
+            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
         return isNotNull().extracting(a -> (U) a.getLeafBean(), assertFactory);
     }
 
@@ -125,12 +126,12 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
     }
 
     /**
-     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getLeafBean() leafBean} is
-     * equal to specified value.
+     * Verifies that the {@link ConstraintViolation#getLeafBean() actual.leafBean} is equal to specified value.
      *
      * @param expectedLeafBean the expected value of {@code actual.leafBean}.
      * @return this assertion object.
      * @see ConstraintViolation#getLeafBean()
+     * @see #extractingLeafBean()
      */
     public SELF hasLeafBean(final Object expectedLeafBean) {
         extractingLeafBean()
@@ -139,7 +140,7 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
     }
 
     public <ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingRootBean(
-            final AssertFactory<T, ASSERT> assertFactory) {
+            final AssertFactory<? super T, ? extends ASSERT> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBean, assertFactory);
     }
@@ -149,12 +150,12 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
     }
 
     /**
-     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getRootBean() rootBean} is
-     * equal to specified value.
+     * Verifies that the {@link ConstraintViolation#getRootBean() actual.rootBean} is equal to specified value.
      *
      * @param expectedRootBean the expected value of {@code actual.rootBean}.
      * @return this assertion object.
      * @see ConstraintViolation#getRootBean()
+     * @see #extractingRootBean()
      */
     public SELF hasRootBean(final T expectedRootBean) {
         extractingRootBean()
@@ -171,12 +172,13 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
     }
 
     /**
-     * Verifies that the actual {@link ConstraintViolation}'s
-     * {@link ConstraintViolation#getRootBeanClass() rootBeanClass} is equal to specified value.
+     * Verifies that the {@link ConstraintViolation#getRootBeanClass() actual.rootBeanClass} is equal to specified
+     * value.
      *
      * @param expectedRootBeanClass the expected value of {@code actual.rootBeanClass}.
      * @return this assertion object.
      * @see ConstraintViolation#getRootBeanClass()
+     * @see #extractingRootBeanClass()
      */
     public SELF hasRootBeanClass(final Class<T> expectedRootBeanClass) {
         extractingRootBeanClass()
