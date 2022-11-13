@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import javax.validation.ConstraintViolation;
 import javax.validation.ElementKind;
 
+import java.util.stream.StreamSupport;
+
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableOfConstraintViolations;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;

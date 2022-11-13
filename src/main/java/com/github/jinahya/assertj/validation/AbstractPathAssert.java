@@ -24,6 +24,7 @@ import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ListAssert;
@@ -53,16 +54,16 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
             super(actual, selfType);
         }
 
+        public <ASSERT extends AbstractIntegerAssert<?>> ASSERT extractingIndex(
+                AssertFactory<? super Integer, ? extends ASSERT> assertFactory) {
+            return isNotNull()
+                    .extracting(Path.Node::getIndex, assertFactory);
+        }
+
         public SELF hasIndex(final Integer expectedIndex) {
-            final SELF self = isNotNull();
-            self.extracting(n -> {
-                        final Integer r = n.getIndex();
-//                        return n.getIndex();
-                        return r;
-                    }, Assertions.as(InstanceOfAssertFactories.INTEGER))
-                    .as("index of %s", actual)
+            extractingIndex(InstanceOfAssertFactories.INTEGER)
                     .isEqualTo(expectedIndex);
-            return self;
+            return myself;
         }
 
         public SELF hasKey(final Object expectedKey) {
