@@ -4,7 +4,10 @@ import com.github.jinahya.assertj.validation.example.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableConstraintViolations;
+import javax.validation.ConstraintViolation;
+
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableOfConstraintViolations;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -21,9 +24,10 @@ class PropertyAssert_IsValidFor_User_Test {
                 () -> assertion.isValidFor(
                         User.class,
                         "age",
-                        i -> {
-                            assertThat(i).isEmpty();
-                        })
+                        s -> {
+                            assertThat(s).isEmpty();
+                        }
+                )
         )
                 .doesNotThrowAnyException();
     }
@@ -37,12 +41,51 @@ class PropertyAssert_IsValidFor_User_Test {
                         User.class,
                         "age"
                         ,
-                        i -> {
-                            assertThatIterableConstraintViolations(i)
+                        s -> {
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getLeafBean)
+                                    .singleElement()
+                                    .isNull();
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .singleElement()
+                                    .isEqualTo(User.class);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .containsOnly(User.class);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBean)
+                                    .singleElement()
+                                    .isNull();
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBean)
+                                    .containsOnlyNulls();
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getInvalidValue)
+                                    .singleElement()
+                                    .isEqualTo(age);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getInvalidValue)
+                                    .containsOnly(age);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .singleElement()
+                                    .isEqualTo(User.class);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .containsOnly(User.class);
+                            assertThatIterableOfConstraintViolations(s)
                                     .singleElement()
                                     .hasRootBeanClass(User.class)
                                     .hasRootBean(null)
                                     .hasInvalidValue(age);
+                            s.forEach(cv -> {
+                                assertThatConstraintViolation(cv)
+                                        .hasLeafBean(null)
+                                        .hasRootBeanClass(User.class)
+                                        .hasRootBean(null)
+                                        .hasInvalidValue(age);
+                            });
                         }
                 )
         )
@@ -60,8 +103,8 @@ class PropertyAssert_IsValidFor_User_Test {
                 () -> assertion.isValidFor(
                         User.class,
                         "name",
-                        i -> {
-                            assertThat(i).isEmpty();
+                        s -> {
+                            assertThat(s).isEmpty();
                         })
         )
                 .doesNotThrowAnyException();
@@ -75,13 +118,51 @@ class PropertyAssert_IsValidFor_User_Test {
                 () -> assertion.isValidFor(
                         User.class,
                         "name",
-                        i -> {
+                        s -> {
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getLeafBean)
+                                    .singleElement()
+                                    .isNull();
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .singleElement()
+                                    .isEqualTo(User.class);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .containsOnly(User.class);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBean)
+                                    .singleElement()
+                                    .isNull();
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBean)
+                                    .containsOnlyNulls();
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getInvalidValue)
+                                    .singleElement()
+                                    .isEqualTo(name);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getInvalidValue)
+                                    .containsOnly(name);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .singleElement()
+                                    .isEqualTo(User.class);
+                            assertThat(s)
+                                    .extracting(ConstraintViolation::getRootBeanClass)
+                                    .containsOnly(User.class);
+                            assertThatIterableOfConstraintViolations(s)
+                                    .singleElement()
+                                    .hasLeafBean(null)
+                                    .hasRootBeanClass(User.class)
+                                    .hasRootBean(null)
+                                    .hasInvalidValue(name);
                         }
                 )
         )
                 .isInstanceOf(AssertionError.class)
                 .satisfies(ae -> {
-                    log.debug("message: {}", ae);
+                    log.debug("message: {}", ae.getMessage());
                 });
     }
 }

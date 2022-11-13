@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableConstraintViolations;
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableOfConstraintViolations;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -46,7 +46,7 @@ class BeanAssert_IsValid_User_Test {
         assertThatThrownBy(
                 () -> assertion.isValid(
                         i -> {
-                            assertThatIterableConstraintViolations(i)
+                            assertThatIterableOfConstraintViolations(i)
                                     .singleElement()
                                     .hasRootBeanClass(User.class)
                                     .hasRootBean(user)
@@ -67,7 +67,7 @@ class BeanAssert_IsValid_User_Test {
         assertThatThrownBy(
                 () -> assertion.isValid(
                         i -> {
-                            assertThatIterableConstraintViolations(i)
+                            assertThatIterableOfConstraintViolations(i)
                                     .singleElement()
                                     .hasRootBeanClass(User.class)
                                     .hasRootBean(user)
@@ -87,7 +87,7 @@ class BeanAssert_IsValid_User_Test {
         final var assertion = assertThatBean(bean);
         assertThatThrownBy(() -> assertion.isValid(
                 i -> {
-                    assertThatIterableConstraintViolations(i).allSatisfy(cv -> {
+                    assertThatIterableOfConstraintViolations(i).allSatisfy(cv -> {
                         assertThatConstraintViolation(cv)
                                 .hasRootBeanClass(User.class)
                                 .hasRootBean(bean);

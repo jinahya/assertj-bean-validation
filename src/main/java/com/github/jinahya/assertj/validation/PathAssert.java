@@ -20,49 +20,32 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.AbstractAssert;
-
 import javax.validation.Path;
 
 /**
  * An interface for verifying {@link Path} values.
  *
- * @param <SELF>   self type parameter
- * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-public abstract class PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extends Path>
-        extends AbstractAssert<SELF, ACTUAL>
-        implements ValidationAssert<SELF, ACTUAL> {
+public class PathAssert
+        extends AbstractPathAssert<PathAssert> {
 
-    /**
-     * An interface for verifying {@link Path.Node} values.
-     *
-     * @param <SELF>   self type parameter
-     * @param <ACTUAL> actual type parameter
-     * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
-     */
-    public abstract static class NodeAssert<SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
-            extends AbstractAssert<SELF, ACTUAL>
-            implements ValidationAssert<SELF, ACTUAL> {
-
-        protected NodeAssert(final ACTUAL actual, final Class<?> selfType) {
-            super(actual, selfType);
-        }
+    public PathAssert(final Path actual) {
+        super(actual, PathAssert.class);
     }
 
-    static class NodeAssertImpl
-            extends NodeAssert<NodeAssertImpl, Path.Node> {
-
-        protected NodeAssertImpl(final Path.Node actual) {
-            super(actual, NodeAssertImpl.class);
-        }
+    @Override
+    protected NodeAssert toAssert(final Path.Node value, final String description) {
+        return new NodeAssert(value)
+                .as(description);
     }
 
-    protected PathAssert(final ACTUAL actual, final Class<?> selfType) {
-        super(actual, selfType);
+    @Override
+    protected PathAssert newAbstractIterableAssert(final Iterable<? extends Path.Node> iterable) {
+        assert iterable instanceof Path;
+        return new PathAssert((Path) iterable);
     }
 }

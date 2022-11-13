@@ -39,8 +39,8 @@ public final class ValidationAssertions {
      * @param actual   the bean value to verify.
      * @return a new assertion object for verifying {@code actual}.
      */
-    public static <ACTUAL> BeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
-        return new BeanAssertImpl<>(actual);
+    public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
+        return new BeanAssert<>(actual);
     }
 
     /**
@@ -50,8 +50,8 @@ public final class ValidationAssertions {
      * @param actual   the value of the property to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL> PropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
-        return new PropertyAssertImpl<>(actual);
+    public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
+        return new PropertyAssert<>(actual);
     }
 
     /**
@@ -60,14 +60,14 @@ public final class ValidationAssertions {
      * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    static <T> ConstraintViolationAssert<?, T> assertThatConstraintViolation(
+    static <T> AbstractConstraintViolationAssert<?, T> assertThatConstraintViolation(
             final ConstraintViolation<T> actual) {
-        return new ConstraintViolationAssertImpl<>(actual);
+        return new ConstraintViolationAssert<>(actual);
     }
 
-    static <T> IterableConstraintViolationAssert<?, T> assertThatIterableConstraintViolations(
+    static <T> AbstractIterableOfConstraintViolationsAssert<?, T> assertThatIterableOfConstraintViolations(
             final Iterable<? extends ConstraintViolation<T>> actual) {
-        return new IterableConstraintViolationAssertImpl<>(actual);
+        return new IterableOfConstraintViolationsAssert<>(actual);
     }
 
     /**
