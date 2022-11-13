@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ElementKind;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableOfConstraintViolations;
@@ -42,49 +43,57 @@ class PropertyAssert_IsValidFor_User_Test {
                         "age"
                         ,
                         s -> {
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getLeafBean)
-                                    .singleElement()
-                                    .isNull();
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getRootBeanClass)
-                                    .singleElement()
-                                    .isEqualTo(User.class);
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getRootBeanClass)
-                                    .containsOnly(User.class);
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getRootBean)
-                                    .singleElement()
-                                    .isNull();
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getRootBean)
-                                    .containsOnlyNulls();
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getInvalidValue)
-                                    .singleElement()
-                                    .isEqualTo(age);
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getInvalidValue)
-                                    .containsOnly(age);
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getRootBeanClass)
-                                    .singleElement()
-                                    .isEqualTo(User.class);
-                            assertThat(s)
-                                    .extracting(ConstraintViolation::getRootBeanClass)
-                                    .containsOnly(User.class);
-                            assertThatIterableOfConstraintViolations(s)
-                                    .singleElement()
-                                    .hasRootBeanClass(User.class)
-                                    .hasRootBean(null)
-                                    .hasInvalidValue(age);
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getLeafBean)
+//                                    .singleElement()
+//                                    .isNull();
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getRootBeanClass)
+//                                    .singleElement()
+//                                    .isEqualTo(User.class);
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getRootBeanClass)
+//                                    .containsOnly(User.class);
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getRootBean)
+//                                    .singleElement()
+//                                    .isNull();
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getRootBean)
+//                                    .containsOnlyNulls();
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getInvalidValue)
+//                                    .singleElement()
+//                                    .isEqualTo(age);
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getInvalidValue)
+//                                    .containsOnly(age);
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getRootBeanClass)
+//                                    .singleElement()
+//                                    .isEqualTo(User.class);
+//                            assertThat(s)
+//                                    .extracting(ConstraintViolation::getRootBeanClass)
+//                                    .containsOnly(User.class);
+//                            assertThatIterableOfConstraintViolations(s)
+//                                    .singleElement()
+//                                    .hasRootBeanClass(User.class)
+//                                    .hasRootBean(null)
+//                                    .hasInvalidValue(age);
                             s.forEach(cv -> {
+//                                assertThatConstraintViolation(cv)
+//                                        .hasLeafBean(null)
+//                                        .hasRootBeanClass(User.class)
+//                                        .hasRootBean(null)
+//                                        .hasInvalidValue(age);
                                 assertThatConstraintViolation(cv)
-                                        .hasLeafBean(null)
-                                        .hasRootBeanClass(User.class)
-                                        .hasRootBean(null)
-                                        .hasInvalidValue(age);
+                                        .extractingPropertyPath()
+                                        .singleElement()
+                                        .hasIndex(null) // TODO: Check why fails....!!!!
+                                        .hasKey(null)
+                                        .hasKind(ElementKind.PROPERTY)
+                                        .hasName("age")
+                                        .isNotInIterable();
                             });
                         }
                 )

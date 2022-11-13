@@ -58,8 +58,9 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
         final Validator validator = delegate.getValidator();
         final Class<?>[] groups = delegate.getGroups();
         final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-        ValidationAssertUtils.accept(violations, consumer);
-        Assertions.assertThat(violations)
+        delegate.setViolations(violations);
+        ValidationAssertUtils.accept(delegate.getViolations(), consumer);
+        Assertions.assertThat(delegate.getViolations())
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"
                     + "\tagainst%n"

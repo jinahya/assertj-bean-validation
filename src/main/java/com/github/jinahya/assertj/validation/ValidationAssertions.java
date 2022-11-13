@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Path;
 
 /**
  * A class for creating assertion instances.
@@ -60,7 +61,7 @@ public final class ValidationAssertions {
      * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    static <T> AbstractConstraintViolationAssert<?, T> assertThatConstraintViolation(
+    public static <T> AbstractConstraintViolationAssert<?, T> assertThatConstraintViolation(
             final ConstraintViolation<T> actual) {
         return new ConstraintViolationAssert<>(actual);
     }
@@ -68,6 +69,16 @@ public final class ValidationAssertions {
     static <T> AbstractIterableOfConstraintViolationsAssert<?, T> assertThatIterableOfConstraintViolations(
             final Iterable<? extends ConstraintViolation<T>> actual) {
         return new IterableOfConstraintViolationsAssert<>(actual);
+    }
+
+    /**
+     * Creates a new assertion object for verifying specified path value.
+     *
+     * @param actual the path value to verify.
+     * @return a new assertion instance for {@code actual}.
+     */
+    public static AbstractPathAssert<?> assertThatPath(final Path actual) {
+        return new PathAssert(actual);
     }
 
     /**

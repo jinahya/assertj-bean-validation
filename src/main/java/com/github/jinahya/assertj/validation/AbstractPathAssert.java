@@ -55,7 +55,12 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
 
         public SELF hasIndex(final Integer expectedIndex) {
             final SELF self = isNotNull();
-            self.extracting(Path.Node::getIndex, InstanceOfAssertFactories.INTEGER)
+            self.extracting(n -> {
+                        final Integer r = n.getIndex();
+//                        return n.getIndex();
+                        return r;
+                    }, Assertions.as(InstanceOfAssertFactories.INTEGER))
+                    .as("index of %s", actual)
                     .isEqualTo(expectedIndex);
             return self;
         }

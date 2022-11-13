@@ -31,6 +31,7 @@ import org.assertj.core.api.ObjectAssert;
 import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Path;
 import java.util.function.Function;
 
 @SuppressWarnings({
@@ -184,5 +185,15 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
         extractingRootBeanClass()
                 .isEqualTo(expectedRootBeanClass);
         return myself;
+    }
+
+    public <ASSERT extends AbstractAssert<?, ? extends Path>> ASSERT extractingPropertyPath(
+            final AssertFactory<? super Path, ? extends ASSERT> assertFactory) {
+        return isNotNull()
+                .extracting(ConstraintViolation::getPropertyPath, assertFactory);
+    }
+
+    public AbstractPathAssert<?> extractingPropertyPath() {
+        return extractingPropertyPath(ValidationAssertions::assertThatPath);
     }
 }
