@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>assertj-bean-validation</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
   <packaging>jar</packaging>
 
   <name>${project.artifactId}</name>
@@ -40,7 +40,7 @@
     <connection>scm:git:git@github.com:jinahya/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:jinahya/${project.artifactId}.git</developerConnection>
     <url>https://github.com:jinahya/${project.artifactId}</url>
-    <tag>0.2.1</tag>
+    <tag>0.3.0</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
@@ -107,19 +107,6 @@
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish</groupId>
-      <artifactId>javax.el</artifactId>
-      <version>3.0.1-b12</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency><!-- https://hibernate.org/validator/documentation/migration-guide/ -->
-      <!-- https://hibernate.org/validator/releases/ -->
-      <groupId>org.hibernate.validator</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>6.2.5.Final</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -244,7 +231,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.4.1</version>
           <configuration>
             <links>
               <!--              <link>https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation-base/latest</link>-->
@@ -310,7 +297,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.4.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -508,6 +495,39 @@
   </reporting>
 
   <profiles>
+    <profile>
+      <id>hibernate-validator</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.glassfish</groupId>
+          <artifactId>javax.el</artifactId>
+          <version>3.0.1-b12</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency><!-- https://hibernate.org/validator/documentation/migration-guide/ -->
+          <!-- https://hibernate.org/validator/releases/ -->
+          <groupId>org.hibernate.validator</groupId>
+          <artifactId>hibernate-validator</artifactId>
+          <version>6.2.5.Final</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>apache-bval</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.bval</groupId>
+<!--          <artifactId>org.apache.bval.bundle</artifactId>-->
+          <artifactId>bval-jsr</artifactId>
+          <version>2.0.6</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
     <profile>
       <id>jakarta</id>
       <activation>

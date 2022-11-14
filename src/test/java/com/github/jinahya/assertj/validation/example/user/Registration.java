@@ -20,7 +20,6 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,12 +27,12 @@ import lombok.ToString;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-@Setter(AccessLevel.PACKAGE)
-@Getter(AccessLevel.PACKAGE)
+@Setter
+@Getter
 @ToString
 public abstract class Registration {
 
-    Registration(final User user) {
+    public Registration(final User user) {
         super();
         this.user = user;
     }

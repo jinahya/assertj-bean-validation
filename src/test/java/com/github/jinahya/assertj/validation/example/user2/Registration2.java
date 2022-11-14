@@ -1,10 +1,10 @@
-package com.github.jinahya.assertj.validation;
+package com.github.jinahya.assertj.validation.example.user2;
 
 /*-
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,25 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-@SuppressWarnings({"unchecked", "java:S119"})
-class PropertyAssertImpl<ACTUAL>
-        extends AbstractPropertyAssert<PropertyAssertImpl<ACTUAL>, ACTUAL> {
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-    PropertyAssertImpl(final ACTUAL actual) {
-//        super(actual, (Class<PropertyAssertImpl<ACTUAL>>) (Class<?>) PropertyAssertImpl.class);
-        super(actual, PropertyAssertImpl.class);
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+@Setter(AccessLevel.PACKAGE)
+@Getter(AccessLevel.PACKAGE)
+@ToString
+public class Registration2 {
+
+    Registration2(final User2 user2) {
+        super();
+        this.user = user2;
     }
+
+    @Valid
+    @NotNull
+    private User2 user;
 }
