@@ -177,7 +177,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      * @throws AssertionError when the {@code actual} is {@code null} or its current value of {@code propertyName} is
      *                        not valid.
      * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
-     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a *
+     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a
      * href="https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods">6.1.1.
      * Validation methods (Jakarta Bean Validation 3.0)</a>.
      * @see #hasValidProperty(String)
@@ -242,7 +242,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      * @throws AssertionError when the {@code actual} is {@code null} or its current value of the {@code propertyName}
      *                        is not valid.
      * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
-     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a *
+     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a
      * href="https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods">6.1.1.
      * Validation methods (Jakarta Bean Validation 3.0)</a>.
      * @see #hasValidProperty(String, Consumer)
