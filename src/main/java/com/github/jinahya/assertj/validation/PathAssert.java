@@ -30,7 +30,7 @@ import javax.validation.Path;
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-public class PathAssert
+class PathAssert
         extends AbstractPathAssert<PathAssert> {
 
     public PathAssert(final Path actual) {

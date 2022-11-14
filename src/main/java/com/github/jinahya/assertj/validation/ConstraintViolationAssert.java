@@ -26,7 +26,7 @@ import javax.validation.ConstraintViolation;
         "java:S119" // <ACTUAL>
 })
 class ConstraintViolationAssert<T>
-        extends AbstractConstraintViolationAssert<ConstraintViolationAssert<T>, T> {
+        extends AbstractConstraintViolationAssert<ConstraintViolationAssert<T>, ConstraintViolation<T>, T> {
 
     /**
      * Creates a new instance for verifying specified actual value.

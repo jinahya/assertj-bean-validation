@@ -35,7 +35,7 @@ import javax.validation.ElementKind;
 import javax.validation.Path;
 
 /**
- * An interface for verifying {@link Path} values.
+ * An abstract class for verifying {@link Path} values.
  *
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
@@ -43,7 +43,7 @@ import javax.validation.Path;
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
+abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
         extends AbstractIterableAssert<SELF, Path, Path.Node, AbstractPathAssert.NodeAssert>
         implements ValidationAssert<SELF, Path> {
 

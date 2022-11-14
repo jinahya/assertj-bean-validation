@@ -61,7 +61,7 @@ public final class ValidationAssertions {
      * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <T> AbstractConstraintViolationAssert<?, T> assertThatConstraintViolation(
+    public static <T> AbstractConstraintViolationAssert<?, ConstraintViolation<T>, T> assertThatConstraintViolation(
             final ConstraintViolation<T> actual) {
         return new ConstraintViolationAssert<>(actual);
     }
@@ -77,7 +77,7 @@ public final class ValidationAssertions {
      * @param actual the path value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static AbstractPathAssert<?> assertThatPath(final Path actual) {
+    static AbstractPathAssert<?> assertThatPath(final Path actual) {
         return new PathAssert(actual);
     }
 

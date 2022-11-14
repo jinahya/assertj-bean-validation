@@ -42,10 +42,30 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
         extends AbstractAssert<SELF, ACTUAL>
         implements ValidationAssert<SELF, ACTUAL> {
 
+    /**
+     * Creates a new assertion object for verifying specified actual value.
+     *
+     * @param actual   the value of {@link ACTUAL} to verify.
+     * @param selfType a class of {@link SELF}.
+     */
     protected AbstractPropertyAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
+    /**
+     * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type while
+     * accepting a set of constraint violations to specified consumer.
+     *
+     * @param beanType     the bean type; must be not {@code null}.
+     * @param propertyName the name of the property; must be not {@code null}.
+     * @param consumer     the consumer accepts the set of constraint violations.
+     * @param <T>          type of the object to validate
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is not valid for {@code beanType#propertyName}.
+     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
+     * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
+     * @see #isValidFor(Class, String)
+     */
     @SuppressWarnings({
             "java:S1181", // catch_Throwable
             "java:S106" // System_err
@@ -57,8 +77,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
         Objects.requireNonNull(consumer, "consumer is null");
         final Validator validator = delegate.getValidator();
         final Class<?>[] groups = delegate.getGroups();
-        final Set<ConstraintViolation<T>> violations = validator.validateValue(beanType, propertyName, actual, groups);
-        delegate.setViolations(violations);
+        delegate.setViolations(validator.validateValue(beanType, propertyName, actual, groups));
         ValidationAssertUtils.accept(delegate.getViolations(), consumer);
         Assertions.assertThat(delegate.getViolations())
                 .as("%nThe set of constraint violations resulted while validating%n"
@@ -76,8 +95,8 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
                 .withFailMessage(() -> String.format(
                         "%nexpected to be empty but contains %1$d element(s)%n"
                         + "%2$s",
-                        violations.size(),
-                        ValidationAssertMessages.format(violations)
+                        delegate.getViolations().size(),
+                        ValidationAssertMessages.format(delegate.getViolations())
                 ))
                 .isEmpty();
         return myself;
@@ -117,12 +136,14 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      * @throws AssertionError when the {@code actual} is not valid for {@code beanType#propertyName}.
      * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
      * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
+     * @see #isValidFor(Class, String, Consumer)
      */
     public <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
         return isValidFor(
                 beanType,
                 propertyName,
-                i -> {
+                s -> {
+                    // does nothing
                 }
         );
     }

@@ -21,10 +21,11 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractClassAssert;
+import org.assertj.core.api.AbstractObjectArrayAssert;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ClassAssert;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ObjectArrayAssert;
 import org.assertj.core.api.ObjectAssert;
@@ -32,22 +33,40 @@ import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
-import java.util.function.Function;
 
+/**
+ * An abstract assertion class for verifying {@link ConstraintViolation} values.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ * @param <T>      root bean type parameter
+ */
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-public abstract class AbstractConstraintViolationAssert<SELF extends AbstractConstraintViolationAssert<SELF, T>, T>
-        extends AbstractAssert<SELF, ConstraintViolation<T>>
-        implements ValidationAssert<SELF, ConstraintViolation<T>> {
+public abstract class AbstractConstraintViolationAssert<
+        SELF extends AbstractConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
+        extends AbstractAssert<SELF, ACTUAL>
+        implements ValidationAssert<SELF, ACTUAL> {
 
-    protected AbstractConstraintViolationAssert(final ConstraintViolation<T> actual, final Class<?> selfType) {
+    /**
+     * Creates a new instance with specified arguments.
+     *
+     * @param actual   an actual value to verify.
+     * @param selfType self type.
+     */
+    protected AbstractConstraintViolationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
-    public ObjectArrayAssert<Object> extractingExecutableParameters() {
+    public <ASSERT extends AbstractObjectArrayAssert<?, Object>> ASSERT extractingExecutableParameters(
+            final AssertFactory<Object, ? extends ASSERT> assertFactory) {
         return isNotNull()
-                .extracting(ConstraintViolation::getExecutableParameters, InstanceOfAssertFactories.ARRAY);
+                .extracting(ConstraintViolation::getExecutableParameters, assertFactory);
+    }
+
+    public AbstractObjectArrayAssert<?, Object> extractingExecutableParameters() {
+        return extractingExecutableParameters(InstanceOfAssertFactories.ARRAY);
     }
 
     /**
@@ -65,15 +84,14 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
         return myself;
     }
 
+    @SuppressWarnings({"unchecked"})
     public <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingExecutableReturnValue(
-            final AssertFactory<U, ASSERT> assertFactory) {
-        @SuppressWarnings({"unchecked"})
-        final Function<? super ConstraintViolation<T>, U> extractor = a -> (U) a.getExecutableReturnValue();
+            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
         return isNotNull()
-                .extracting(extractor, assertFactory);
+                .extracting(a -> (U) a.getExecutableReturnValue(), assertFactory);
     }
 
-    public <U> ObjectAssert<U> extractingExecutableReturnValue() {
+    public <U> AbstractObjectAssert<?, U> extractingExecutableReturnValue() {
         return extractingExecutableReturnValue(new ObjectAssertFactory<>());
     }
 
@@ -98,7 +116,7 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
                 .extracting(a -> (U) a.getInvalidValue(), assertFactory);
     }
 
-    public <U> ObjectAssert<U> extractingInvalidValue() {
+    public <U> AbstractObjectAssert<?, U> extractingInvalidValue() {
         return extractingInvalidValue(new ObjectAssertFactory<>());
     }
 
@@ -122,7 +140,7 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
         return isNotNull().extracting(a -> (U) a.getLeafBean(), assertFactory);
     }
 
-    public <U> ObjectAssert<U> extractingLeafBean() {
+    public <U> AbstractObjectAssert<?, U> extractingLeafBean() {
         return extractingLeafBean(new ObjectAssertFactory<>());
     }
 
@@ -146,7 +164,7 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
                 .extracting(ConstraintViolation::getRootBean, assertFactory);
     }
 
-    public ObjectAssert<T> extractingRootBean() {
+    public AbstractObjectAssert<?, T> extractingRootBean() {
         return extractingRootBean(new ObjectAssertFactory<>());
     }
 
@@ -164,11 +182,13 @@ public abstract class AbstractConstraintViolationAssert<SELF extends AbstractCon
         return myself;
     }
 
-    public ClassAssert extractingRootBeanClass(final AssertFactory<Class<T>, ClassAssert> assertFactory) {
-        return isNotNull().extracting(ConstraintViolation::getRootBeanClass, assertFactory);
+    public <ASSERT extends AbstractClassAssert<?>> ASSERT extractingRootBeanClass(
+            final AssertFactory<Class<T>, ? extends ASSERT> assertFactory) {
+        return isNotNull()
+                .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
     }
 
-    public ClassAssert extractingRootBeanClass() {
+    public AbstractClassAssert<?> extractingRootBeanClass() {
         return extractingRootBeanClass(Assertions::assertThat);
     }
 
