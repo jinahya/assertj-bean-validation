@@ -24,6 +24,8 @@ import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.AbstractStringAssert;
+import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ListAssert;
@@ -33,7 +35,7 @@ import javax.validation.ElementKind;
 import javax.validation.Path;
 
 /**
- * An interface for verifying {@link Path} values.
+ * An abstract class for verifying {@link Path} values.
  *
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
@@ -41,7 +43,7 @@ import javax.validation.Path;
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
+abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
         extends AbstractIterableAssert<SELF, Path, Path.Node, AbstractPathAssert.NodeAssert>
         implements ValidationAssert<SELF, Path> {
 
@@ -53,37 +55,50 @@ public abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
             super(actual, selfType);
         }
 
+        private <ASSERT extends AbstractIntegerAssert<?>> ASSERT extractingIndex(
+                AssertFactory<? super Integer, ? extends ASSERT> assertFactory) {
+            return isNotNull()
+                    .extracting(Path.Node::getIndex, assertFactory);
+        }
+
         public SELF hasIndex(final Integer expectedIndex) {
-            final SELF self = isNotNull();
-            self.extracting(Path.Node::getIndex, InstanceOfAssertFactories.INTEGER)
+            extractingIndex(InstanceOfAssertFactories.INTEGER)
                     .isEqualTo(expectedIndex);
-            return self;
+            return myself;
+        }
+
+        private <ASSERT extends AbstractObjectAssert<?, Object>> ASSERT extractingKey(
+                final AssertFactory<Object, ? extends ASSERT> assertFactory) {
+            return isNotNull().extracting(Path.Node::getKey, assertFactory);
         }
 
         public SELF hasKey(final Object expectedKey) {
-            final SELF self = isNotNull();
-            self.extracting(Path.Node::getKey, new ObjectAssertFactory<>())
-                    .isEqualTo(expectedKey);
-            return self;
+            extractingKey(new ObjectAssertFactory<>()).isEqualTo(expectedKey);
+            return myself;
+        }
+
+        private <ASSERT extends AbstractObjectAssert<?, ElementKind>> ASSERT extractingElementKind(
+                final AssertFactory<? super ElementKind, ? extends ASSERT> assertFactory) {
+            return isNotNull().extracting(Path.Node::getKind, assertFactory);
         }
 
         public SELF hasKind(final ElementKind expectedKind) {
-            final SELF self = isNotNull();
-            self.extracting(Path.Node::getKind, new ObjectAssertFactory<>())
-                    .isSameAs(expectedKind);
-            return self;
+            extractingElementKind(new ObjectAssertFactory<>()).isSameAs(expectedKind);
+            return myself;
+        }
+
+        private <ASSERT extends AbstractStringAssert<?>> ASSERT extractingName(
+                final AssertFactory<? super String, ? extends ASSERT> assertFactory) {
+            return isNotNull().extracting(Path.Node::getName, assertFactory);
         }
 
         public SELF hasName(final String expectedName) {
-            final SELF self = isNotNull();
-            self.extracting(Path.Node::getName, InstanceOfAssertFactories.STRING)
-                    .isEqualTo(expectedName);
-            return self;
+            extractingName(InstanceOfAssertFactories.STRING).isEqualTo(expectedName);
+            return myself;
         }
 
         private AbstractBooleanAssert<?> extractingInIterable() {
-            return isNotNull()
-                    .extracting(Path.Node::isInIterable, InstanceOfAssertFactories.BOOLEAN);
+            return isNotNull().extracting(Path.Node::isInIterable, InstanceOfAssertFactories.BOOLEAN);
         }
 
         public SELF isInIterable() {

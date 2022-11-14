@@ -7,7 +7,7 @@ import javax.validation.ConstraintViolation;
 @SuppressWarnings({
         "java:S119" // <SELF>
 })
-public abstract class AbstractIterableOfConstraintViolationsAssert<
+abstract class AbstractIterableOfConstraintViolationsAssert<
         SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>, T>
         extends AbstractIterableAssert<
         SELF, Iterable<? extends ConstraintViolation<T>>, ConstraintViolation<T>, ConstraintViolationAssert<T>> {

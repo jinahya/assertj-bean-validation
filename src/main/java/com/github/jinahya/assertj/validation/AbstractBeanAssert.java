@@ -35,6 +35,9 @@ import java.util.function.Consumer;
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ * @see Validator#validate(Object, Class[])
+ * @see Validator#validateProperty(Object, String, Class[])
+ * @see Validator#validateValue(Class, String, Object, Class[])
  */
 @SuppressWarnings({
         "java:S119" // <SELF, ACTUAL>
@@ -42,12 +45,19 @@ import java.util.function.Consumer;
 public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractPropertyAssert<SELF, ACTUAL> {
 
+    /**
+     * Creates a new instance for verifying specified actual value.
+     *
+     * @param actual   the value of {@link ACTUAL} to verify.
+     * @param selfType a class of {@link SELF}.
+     */
     protected AbstractBeanAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
     /**
-     * Verifies that the {@code actual} bean is valid.
+     * Verifies that the {@code actual} bean is valid while accepting the set of constraint violations, which may be
+     * empty, to specified consumer.
      * <p>
      * {@snippet lang = "java" id = "example":
      * class User {
@@ -68,8 +78,10 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      * }
      *}
      *
+     * @param consumer the consumer accepts the set of constraint violations which may be empty.
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
+     * @see #isValid()
      */
     // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
     public SELF isValid(final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer) {
@@ -77,9 +89,9 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
         final SELF self = isNotNull();
         final Validator validator = delegate.getValidator();
         final Class<?>[] groups = delegate.getGroups();
-        final Set<ConstraintViolation<ACTUAL>> violations = validator.validate(actual, groups);
-        ValidationAssertUtils.accept(violations, consumer);
-        Assertions.assertThat(violations)
+        delegate.setViolations(validator.validate(actual, groups));
+        ValidationAssertUtils.accept(delegate.getViolations(), consumer);
+        Assertions.assertThat(delegate.getViolations())
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"
                     + "targeting%n"
@@ -90,8 +102,8 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
                 .withFailMessage(() -> String.format(
                         "%nexpected to be empty but contains %1$d element(s)%n"
                         + "%2$s",
-                        violations.size(),
-                        ValidationAssertMessages.format(violations)
+                        delegate.getViolations().size(),
+                        ValidationAssertMessages.format(delegate.getViolations())
                 ))
                 .isEmpty();
         return self;
@@ -121,6 +133,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      *
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
+     * @see #isValid(Consumer)
      */
     // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
     public SELF isValid() {
@@ -132,7 +145,8 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
 
     /**
      * Verified that no constraint violations populated while validating all constraints placed on the property of
-     * specified name of the {@code actual}.
+     * specified name of the {@code actual}, and accepts the set of constraint violations, which may be empty, to
+     * specified consumer.
      *
      * <p>
      * {@snippet lang = "java" id = "example":
@@ -158,11 +172,15 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      *}
      *
      * @param propertyName the name of the property to be verified as valid; not {@code null}.
+     * @param consumer     the consumer accepts the set of constraint violations.
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or its current value of {@code propertyName} is
      *                        not valid.
-     * @apiNote Note that the {@link javax.validation.Valid @Valid}, as specified, is not honored by the
-     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies.
+     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
+     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a *
+     * href="https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods">6.1.1.
+     * Validation methods (Jakarta Bean Validation 3.0)</a>.
+     * @see #hasValidProperty(String)
      */
     public SELF hasValidProperty(final String propertyName,
                                  final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer) {
@@ -223,13 +241,17 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or its current value of the {@code propertyName}
      *                        is not valid.
-     * @apiNote Note that the {@link javax.validation.Valid @Valid}, as specified, is not honored by the
-     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies.
+     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
+     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a *
+     * href="https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods">6.1.1.
+     * Validation methods (Jakarta Bean Validation 3.0)</a>.
+     * @see #hasValidProperty(String, Consumer)
      */
     public SELF hasValidProperty(final String propertyName) {
         return hasValidProperty(
                 propertyName,
-                i -> {
+                s -> {
+                    // does nothing
                 }
         );
     }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ElementKind;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatIterableOfConstraintViolations;
@@ -85,6 +86,14 @@ class PropertyAssert_IsValidFor_User_Test {
                                         .hasRootBeanClass(User.class)
                                         .hasRootBean(null)
                                         .hasInvalidValue(age);
+                                assertThatConstraintViolation(cv)
+                                        .extractingPropertyPath()
+                                        .singleElement()
+                                        .hasIndex(null)
+                                        .hasKey(null)
+                                        .hasKind(ElementKind.PROPERTY)
+                                        .hasName("age")
+                                        .isNotInIterable();
                             });
                         }
                 )
@@ -157,6 +166,21 @@ class PropertyAssert_IsValidFor_User_Test {
                                     .hasRootBeanClass(User.class)
                                     .hasRootBean(null)
                                     .hasInvalidValue(name);
+                            s.forEach(cv -> {
+                                assertThatConstraintViolation(cv)
+                                        .hasLeafBean(null)
+                                        .hasRootBeanClass(User.class)
+                                        .hasRootBean(null)
+                                        .hasInvalidValue(name);
+                                assertThatConstraintViolation(cv)
+                                        .extractingPropertyPath()
+                                        .singleElement()
+                                        .hasIndex(null)
+                                        .hasKey(null)
+                                        .hasKind(ElementKind.PROPERTY)
+                                        .hasName("name")
+                                        .isNotInIterable();
+                            });
                         }
                 )
         )
