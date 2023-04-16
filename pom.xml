@@ -72,9 +72,11 @@
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-surefire>3.0.0-M7</version.maven-surefire>
     <version.org.eclipse.transformer>0.5.0</version.org.eclipse.transformer>
-    <version.org.junit.jupiter>5.9.1</version.org.junit.jupiter>
-    <version.org.mockito>4.8.1</version.org.mockito>
-    <version.org.projectlombok>1.18.24</version.org.projectlombok>
+    <version.org.junit.jupiter>5.9.2</version.org.junit.jupiter>
+<!--    <version.org.mockito>4.8.1</version.org.mockito>-->
+    <version.org.mockito>5.3.0</version.org.mockito>
+    <version.org.mockito-inline>5.2.0</version.org.mockito-inline>
+    <version.org.projectlombok>1.18.26</version.org.projectlombok>
   </properties>
 
   <dependencyManagement>
@@ -123,7 +125,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>${version.org.mockito}</version>
+      <version>${version.org.mockito-inline}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -368,6 +370,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <doclint>none</doclint>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
