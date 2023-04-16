@@ -29,7 +29,7 @@ class JuniorRegistration
 
     @Junior
     @Override
-    User getUser() {
+    public User getUser() {
         return super.getUser();
     }
 }

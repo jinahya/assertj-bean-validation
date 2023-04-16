@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation.example.user2;
+package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
@@ -20,25 +20,10 @@ package com.github.jinahya.assertj.validation.example.user2;
  * #L%
  */
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+abstract class PropertyAssertTest<T extends AbstractPropertyAssert<T, ?>>
+        extends ValidationAssertTest<T> {
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-@Setter(AccessLevel.PACKAGE)
-@Getter(AccessLevel.PACKAGE)
-@ToString
-public class Registration {
-
-    Registration(final User2 user2) {
-        super();
-        this.user = user2;
+    PropertyAssertTest(final Class<T> assertionClass) {
+        super(assertionClass);
     }
-
-    @Valid
-    @NotNull
-    private User2 user;
 }

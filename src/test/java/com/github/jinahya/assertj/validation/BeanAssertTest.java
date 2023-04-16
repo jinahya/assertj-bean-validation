@@ -4,7 +4,7 @@ package com.github.jinahya.assertj.validation;
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,10 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-/**
- * A default assertion class for verifying bean values.
- *
- * @param <ACTUAL> actual type parameter
- */
-@SuppressWarnings({"unchecked", "java:S119"})
-class BeanAssertImpl<ACTUAL>
-        extends AbstractBeanAssert<BeanAssertImpl<ACTUAL>, ACTUAL> {
+abstract class BeanAssertTest<T extends AbstractBeanAssert<T, ?>>
+        extends PropertyAssertTest<T> {
 
-    /**
-     * Creates a new instance for verifying specified actual value.
-     *
-     * @param actual the actual value to verify.
-     */
-    BeanAssertImpl(final ACTUAL actual) {
-//        super(actual, (Class<BeanAssertImpl<ACTUAL>>) (Class<?>) BeanAssertImpl.class);
-        super(actual, BeanAssertImpl.class);
+    BeanAssertTest(final Class<T> assertionClass) {
+        super(assertionClass);
     }
 }

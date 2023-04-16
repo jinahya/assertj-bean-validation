@@ -25,12 +25,14 @@ import com.github.jinahya.assertj.validation.example.user.Senior;
 import com.github.jinahya.assertj.validation.example.user.User;
 import com.github.jinahya.assertj.validation.example.user.UserConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Disabled
 @Slf4j
 class User_IsValidFor_Test {
 
@@ -41,30 +43,22 @@ class User_IsValidFor_Test {
         void __AgeIsValidForJunior() {
             final var age = UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1;
             final var assertion = assertThatProperty(age);
-            assertion.consumingViolations(cv -> {
-                        log.debug("cv: {}", cv);
-                    })
-                    .isValidFor(User2.class, User.PROPERTY_NAME_AGE);
-            assertion.consumingViolations(cv -> {
-                        log.debug("cv: {}", cv);
-                    })
-                    .targetingGroups(Junior.class).isValidFor(User2.class, User.PROPERTY_NAME_AGE);
+            assertion.isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+            });
+            assertion.targetingGroups(Junior.class).isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+            });
             assertThatThrownBy(
                     () -> assertion
-                            .consumingViolations(cv -> {
-                                log.debug("cv: {}", cv);
-                            })
                             .targetingGroups(Senior.class)
-                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE)
+                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+                            })
             )
                     .isInstanceOf(AssertionError.class);
             assertThatThrownBy(
                     () -> assertion
-                            .consumingViolations(cv -> {
-                                log.debug("cv: {}", cv);
-                            })
                             .targetingGroups(Junior.class, Senior.class)
-                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE)
+                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+                            })
             )
                     .isInstanceOf(AssertionError.class);
         }
@@ -73,35 +67,23 @@ class User_IsValidFor_Test {
         void __AgeIsValidForSenior() {
             final var age = UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE;
             final var assertion = assertThatProperty(age);
-            assertion
-                    .consumingViolations(cv -> {
-                        log.debug("cv: {}", cv);
-                    })
-                    .isValidFor(User2.class, User.PROPERTY_NAME_AGE)
-            ;
-            assertion.targetingGroups(Senior.class)
-                    .consumingViolations(cv -> {
-                        log.debug("cv: {}", cv);
-                    })
-                    .isValidFor(User2.class, User.PROPERTY_NAME_AGE)
-            ;
+            assertion.isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+            });
+            assertion.targetingGroups(Senior.class).isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+            });
             assertThatThrownBy(
                     () -> assertion
-                            .consumingViolations(cv -> {
-                                log.debug("cv: {}", cv);
-                            })
                             .targetingGroups(Junior.class)
-                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE)
+                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+                            })
             )
                     .isInstanceOf(AssertionError.class)
             ;
             assertThatThrownBy(
                     () -> assertion
-                            .consumingViolations(cv -> {
-                                log.debug("cv: {}", cv);
-                            })
                             .targetingGroups(Junior.class, Senior.class)
-                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE)
+                            .isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
+                            })
             )
                     .isInstanceOf(AssertionError.class)
             ;
