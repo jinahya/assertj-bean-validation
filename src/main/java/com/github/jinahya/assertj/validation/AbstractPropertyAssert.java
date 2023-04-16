@@ -159,5 +159,16 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
         return myself;
     }
 
+    /**
+     * Configures this assertion object to use specified validator.
+     *
+     * @param validator the validator to use.
+     * @return this assertion object.
+     */
+    public SELF usingValidator(final Validator validator) {
+        delegate.setValidator(validator);
+        return myself;
+    }
+
     private final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

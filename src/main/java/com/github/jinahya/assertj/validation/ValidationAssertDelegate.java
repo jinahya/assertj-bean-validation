@@ -31,12 +31,6 @@ import java.util.Set;
 
 final class ValidationAssertDelegate {
 
-    Validator getValidator() {
-        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-            return factory.getValidator();
-        }
-    }
-
     Class<?>[] getGroups() {
         return groups.toArray(new Class<?>[0]);
     }
@@ -63,7 +57,22 @@ final class ValidationAssertDelegate {
         this.violations.addAll(violations);
     }
 
+    Validator getValidator() {
+        if (validator == null) {
+            try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+                validator = factory.getValidator();
+            }
+        }
+        return validator;
+    }
+
+    void setValidator(final Validator validator) {
+        this.validator = validator;
+    }
+
     private final Set<Class<?>> groups = new HashSet<>();
 
     private final Set<ConstraintViolation<?>> violations = new HashSet<>();
+
+    private Validator validator;
 }
