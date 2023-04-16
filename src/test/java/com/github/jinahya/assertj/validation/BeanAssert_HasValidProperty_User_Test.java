@@ -6,6 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 import java.util.stream.Stream;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
@@ -25,6 +27,9 @@ class BeanAssert_HasValidProperty_User_Test {
     void __(final boolean validName, final boolean validAge) {
         final var bean = User.newInstance(validName, validAge);
         final var assertion = assertThatBean(bean);
+        if (true) {
+            assertion.usingValidator(Validation.buildDefaultValidatorFactory().getValidator());
+        }
         if (validName) {
             assertThatCode(() -> assertion.hasValidProperty("name")).doesNotThrowAnyException();
         } else {
