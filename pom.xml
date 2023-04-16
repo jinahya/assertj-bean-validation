@@ -233,8 +233,9 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.4.1</version>
+          <version>3.5.0</version>
           <configuration>
+            <doclint>none</doclint>
             <links>
               <!--              <link>https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation-base/latest</link>-->
               <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}</link>
@@ -370,9 +371,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <doclint>none</doclint>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
