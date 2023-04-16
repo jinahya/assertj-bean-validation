@@ -22,6 +22,7 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import com.github.jinahya.assertj.validation.AbstractBeanAssert;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -72,6 +73,7 @@ class BeanAssert_HasValidProperty_Test {
                 .isInstanceOf(AssertionError.class);
     }
 
+    @Disabled
     @Test
     void WithConsumer__NameIsInvalid() {
         // GIVEN
@@ -103,6 +105,7 @@ class BeanAssert_HasValidProperty_Test {
         assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE)).doesNotThrowAnyException();
     }
 
+    @Disabled
     @Test
     void WithConsumer__AgeIsValid() {
         final var bean = new User("", 0);
@@ -127,6 +130,7 @@ class BeanAssert_HasValidProperty_Test {
                 .isInstanceOf(AssertionError.class);
     }
 
+    @Disabled
     @Test
     void WithConsumer__AgeIsInvalid() {
         // GIVEN

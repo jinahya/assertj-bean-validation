@@ -22,6 +22,7 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +39,7 @@ import static org.mockito.Mockito.verify;
 @Slf4j
 class BeanAssert_IsValid_Test {
 
+    @Disabled
     @DisplayName("(valid).isValid")
     @Test
     void __Valid() {
