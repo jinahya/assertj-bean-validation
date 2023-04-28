@@ -39,6 +39,9 @@ import java.util.function.Consumer;
  * @see Validator#validateProperty(Object, String, Class[])
  * @see Validator#validateValue(Class, String, Object, Class[])
  */
+@SuppressWarnings({
+        "java:S2160" // override equals/hashCode
+})
 public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractPropertyAssert<SELF, ACTUAL> {
 

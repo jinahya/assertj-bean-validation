@@ -37,7 +37,10 @@ import java.util.function.Consumer;
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({"java:S119"})
+@SuppressWarnings({
+        "java:S119",
+        "java:S2160" // override equals
+})
 public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractAssert<SELF, ACTUAL>
         implements ValidationAssert<SELF, ACTUAL> {
@@ -68,7 +71,6 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      */
     @SuppressWarnings({
             "java:S1181", // catch_Throwable
-            "java:S106" // System_err
     })
     public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
                                final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
