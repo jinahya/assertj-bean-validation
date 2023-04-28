@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import java.util.stream.Stream;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
@@ -31,7 +30,8 @@ class BeanAssert_HasValidProperty_User_Test {
             assertion.usingValidator(Validation.buildDefaultValidatorFactory().getValidator());
         }
         if (validName) {
-            assertThatCode(() -> assertion.hasValidProperty("name")).doesNotThrowAnyException();
+            assertThatCode(() -> assertion.hasValidProperty("name"))
+                    .doesNotThrowAnyException();
         } else {
             assertThatThrownBy(() -> assertion.hasValidProperty("name"))
                     .isInstanceOf(AssertionError.class)
@@ -40,7 +40,8 @@ class BeanAssert_HasValidProperty_User_Test {
                     });
         }
         if (validAge) {
-            assertThatCode(() -> assertion.hasValidProperty("age")).doesNotThrowAnyException();
+            assertThatCode(() -> assertion.hasValidProperty("age"))
+                    .doesNotThrowAnyException();
         } else {
             assertThatThrownBy(() -> assertion.hasValidProperty("age"))
                     .isInstanceOf(AssertionError.class)

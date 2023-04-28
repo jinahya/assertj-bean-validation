@@ -54,7 +54,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type while
-     * accepting a set of constraint violations to specified consumer.
+     * accepting a set of constraint violations, which may be empty, to specified consumer.
      *
      * @param beanType     the bean type; must be not {@code null}.
      * @param propertyName the name of the property; must be not {@code null}.
@@ -111,22 +111,18 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      *     @Max(0x7F) @PositiveOrZero int age;
      * }
      *
-     * class UserTest {
-     *     @Test void test() {
-     *         // @highlight region substring="fail" type=highlighted
-     *         // @link region substring="assertThatProperty" target="ValidationAssertions#assertThatProperty(Object)"
-     *         assertThatProperty("Jane").isValidFor(User.class, "name"); // should pass
-     *         assertThatProperty(  null).isValidFor(User.class, "name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
-     *         assertThatProperty(    "").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\"|name)' type=highlighted
-     *         assertThatProperty(   " ").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\s\"|name)' type=highlighted
-     *         assertThatProperty(     0).isValidFor(User.class,  "age"); // should pass
-     *         assertThatProperty(    28).isValidFor(User.class,  "age"); // should pass
-     *         assertThatProperty(    -1).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
-     *         assertThatProperty(   300).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
-     *         // @end
-     *         // @end
-     *     }
-     * }
+     * // @highlight region substring="fail" type=highlighted
+     * // @link region substring="assertThatProperty" target="ValidationAssertions#assertThatProperty(Object)"
+     * assertThatProperty("Jane").isValidFor(User.class, "name"); // should pass
+     * assertThatProperty(  null).isValidFor(User.class, "name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
+     * assertThatProperty(    "").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\"|name)' type=highlighted
+     * assertThatProperty(   " ").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\s\"|name)' type=highlighted
+     * assertThatProperty(     0).isValidFor(User.class,  "age"); // should pass
+     * assertThatProperty(    28).isValidFor(User.class,  "age"); // should pass
+     * assertThatProperty(    -1).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
+     * assertThatProperty(   300).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
+     * // @end
+     * // @end
      *}
      *
      * @param beanType     the bean type; must be not {@code null}.

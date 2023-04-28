@@ -27,8 +27,6 @@ import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.assertj.core.api.ObjectArrayAssert;
-import org.assertj.core.api.ObjectAssert;
 import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
@@ -41,9 +39,6 @@ import javax.validation.Path;
  * @param <ACTUAL> actual type parameter
  * @param <T>      root bean type parameter
  */
-@SuppressWarnings({
-        "java:S119" // <SELF>, <ACTUAL>
-})
 public abstract class AbstractConstraintViolationAssert<
         SELF extends AbstractConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
         extends AbstractAssert<SELF, ACTUAL>

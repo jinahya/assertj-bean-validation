@@ -34,9 +34,6 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.Assert;
 
-@SuppressWarnings({
-        "java:S119" // <SELF>, <ACTUAL>
-})
 interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends Assert<SELF, ACTUAL> {
 

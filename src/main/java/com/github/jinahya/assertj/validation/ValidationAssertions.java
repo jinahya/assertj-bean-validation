@@ -58,7 +58,7 @@ public final class ValidationAssertions {
     /**
      * Creates a new assertion object for verifying specified constraint violation value.
      *
-     * @param <T> actual type parameter
+     * @param <T>    actual type parameter
      * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */

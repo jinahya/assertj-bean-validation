@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -32,7 +33,7 @@
         <role>developer</role>
       </roles>
       <timezone>Asia/Seoul</timezone>
-      <properties />
+      <properties/>
     </developer>
   </developers>
 
@@ -62,30 +63,27 @@
     <sonar.organization>jinahya-github</sonar.organization>
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <version.animal-sniffer>1.21</version.animal-sniffer>
-    <version.assertj-core>3.23.1</version.assertj-core>
-    <version.checkstyle>10.4</version.checkstyle>
-    <!--    <version.jakarta.validation-api>3.0.2</version.jakarta.validation-api> &lt;!&ndash; latest &ndash;&gt;-->
+    <version.animal-sniffer>1.23</version.animal-sniffer>
+    <version.assertj-core>3.24.2</version.assertj-core>
+    <version.checkstyle>10.10.0</version.checkstyle>
     <version.javax.validation-api>2.0.1.Final</version.javax.validation-api>
-    <!--π    <version.logback-classic>1.3.0-alpha14</version.logback-classic>-->
-    <version.logback-classic>1.4.4</version.logback-classic>
+    <version.logback-classic>1.4.7</version.logback-classic>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
-    <version.maven-surefire>3.0.0-M7</version.maven-surefire>
+    <version.maven-surefire>3.0.0</version.maven-surefire>
     <version.org.eclipse.transformer>0.5.0</version.org.eclipse.transformer>
-    <version.org.junit.jupiter>5.9.2</version.org.junit.jupiter>
-<!--    <version.org.mockito>4.8.1</version.org.mockito>-->
-    <version.org.mockito>5.3.0</version.org.mockito>
+    <version.org.junit.jupiter>5.9.3</version.org.junit.jupiter>
+    <version.org.mockito>5.3.1</version.org.mockito>
     <version.org.mockito-inline>5.2.0</version.org.mockito-inline>
     <version.org.projectlombok>1.18.26</version.org.projectlombok>
   </properties>
 
   <dependencyManagement>
     <dependencies>
-      <!--      <dependency>-->
-      <!--        <groupId>jakarta.validation</groupId>-->
-      <!--        <artifactId>jakarta.validation-api</artifactId>-->
-      <!--        <version>${version.jakarta.validation-api}</version>-->
-      <!--      </dependency>-->
+      <dependency>
+        <groupId>com.puppycrawl.tools</groupId>
+        <artifactId>checkstyle</artifactId>
+        <version>${version.checkstyle}</version>
+      </dependency>
       <dependency>
         <groupId>javax.validation</groupId>
         <artifactId>validation-api</artifactId>
@@ -147,12 +145,12 @@
         <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
-          <version>4.7.1.1</version>
+          <version>4.7.3.4</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.2.2</version>
           <dependencies>
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
@@ -164,7 +162,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.10.1</version>
+          <version>3.11.0</version>
           <configuration>
             <annotationProcessorPaths>
               <path>
@@ -181,14 +179,14 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.3.0</version>
           <executions>
             <execution>
               <id>enforce</id>
               <configuration>
                 <skip>true</skip>
                 <rules>
-                  <dependencyConvergence />
+                  <dependencyConvergence/>
                 </rules>
               </configuration>
               <goals>
@@ -266,19 +264,15 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${version.maven-surefire}</version>
           <configuration>
-            <systemProperties>
-              <property>
-                <name>derby.stream.error.file</name>
-                <value>target/derby.log</value>
-              </property>
-            </systemProperties>
+            <forkCount>0</forkCount>
+            <argLine>@{argLine}</argLine>
             <trimStackTrace>false</trimStackTrace>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.2.2</version>
+          <version>3.3.0</version>
           <configuration>
             <archive>
               <manifestEntries>
@@ -290,17 +284,17 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jxr-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
-          <version>3.17.0</version>
+          <version>3.20.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.4.2</version>
+          <version>3.4.3</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -321,7 +315,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>2.0.0</version>
+          <version>2.0.1.1</version>
           <configuration>
             <licenseName>apache_v2</licenseName>
           </configuration>
@@ -334,7 +328,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>versions-maven-plugin</artifactId>
-          <version>2.13.0</version>
+          <version>2.15.0</version>
         </plugin>
         <plugin>
           <groupId>org.eclipse.transformer</groupId>
@@ -344,7 +338,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.8</version>
+          <version>0.8.10</version>
           <executions>
             <execution>
               <id>default-prepare-agent</id>
@@ -363,7 +357,7 @@
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.6.12</version>
+          <version>1.6.13</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -401,38 +395,6 @@
             <jakartaDefaults>true</jakartaDefaults>
           </rules>
         </configuration>
-        <!--        <executions>-->
-        <!--          <execution>-->
-        <!--            <id>jakarta</id>-->
-        <!--            <phase>prepare-package</phase>-->
-        <!--            <goals>-->
-        <!--              <goal>transform</goal>-->
-        <!--            </goals>-->
-        <!--            <configuration>-->
-        <!--              <transformDirectory>${project.build.outputDirectory}-jakarta</transformDirectory>-->
-        <!--            </configuration>-->
-        <!--          </execution>-->
-        <!--          <execution>-->
-        <!--            <id>transform-release-sour11-jakarta</id>-->
-        <!--            <phase>prepare-package</phase>-->
-        <!--            <goals>-->
-        <!--              <goal>transform</goal>-->
-        <!--            </goals>-->
-        <!--            <configuration>-->
-        <!--              <transformDirectory>${project.build.outputDirectory}-release-11-jakarta</transformDirectory>-->
-        <!--            </configuration>-->
-        <!--          </execution>-->
-        <!--          <execution>-->
-        <!--            <id>transform-release-17-jakarta</id>-->
-        <!--            <phase>prepare-package</phase>-->
-        <!--            <goals>-->
-        <!--              <goal>transform</goal>-->
-        <!--            </goals>-->
-        <!--            <configuration>-->
-        <!--              <transformDirectory>${project.build.outputDirectory}-release-17-jakarta</transformDirectory>-->
-        <!--            </configuration>-->
-        <!--          </execution>-->
-        <!--        </executions>-->
       </plugin>
     </plugins>
   </build>

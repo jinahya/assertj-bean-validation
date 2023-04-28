@@ -71,11 +71,14 @@ class ReadMeTest {
         User user = new User("John", 300);
         assertThatThrownBy(() -> assertThatBean(user).isValid())
                 .isInstanceOf(AssertionError.class);
-        assertThatCode(() -> assertThatBean(user).isValidFor(Registration.class, "user"))
+        assertThatCode(() -> assertThatBean(user)
+                .isValidFor(Registration.class, "user"))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> assertThatBean(null).isValidFor(Registration.class, "user"))
+        assertThatThrownBy(() -> assertThatBean(null)
+                .isValidFor(Registration.class, "user"))
                 .isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertThatBean(new SeniorRegistration(user)).isValid())
+        assertThatThrownBy(() -> assertThatBean(new SeniorRegistration(user))
+                .isValid())
                 .isInstanceOf(AssertionError.class);
     }
 }
