@@ -41,7 +41,8 @@ import java.util.function.Consumer;
         "java:S2160" // override equals
 })
 public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractValidationAssert<SELF, ACTUAL> {
+        extends AbstractValidationAssert<SELF, ACTUAL>
+        implements PropertyAssert<SELF, ACTUAL> {
 
     /**
      * Creates a new assertion object for verifying specified actual value.
@@ -100,48 +101,6 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
                 ))
                 .isEmpty();
         return myself;
-    }
-
-    /**
-     * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
-     * <p>
-     * {@snippet lang = "java" id = "example":
-     * class User {
-     *     @NotBlank String name;
-     *     @Max(0x7F) @PositiveOrZero int age;
-     * }
-     *
-     * // @highlight region substring="fail" type=highlighted
-     * // @link region substring="assertThatProperty" target="ValidationAssertions#assertThatProperty(Object)"
-     * assertThatProperty("Jane").isValidFor(User.class, "name"); // should pass
-     * assertThatProperty(  null).isValidFor(User.class, "name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
-     * assertThatProperty(    "").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\"|name)' type=highlighted
-     * assertThatProperty(   " ").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\s\"|name)' type=highlighted
-     * assertThatProperty(     0).isValidFor(User.class,  "age"); // should pass
-     * assertThatProperty(    28).isValidFor(User.class,  "age"); // should pass
-     * assertThatProperty(    -1).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
-     * assertThatProperty(   300).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
-     * // @end
-     * // @end
-     *}
-     *
-     * @param beanType     the bean type; must be not {@code null}.
-     * @param propertyName the name of the property; must be not {@code null}.
-     * @param <T>          type of the object to validate
-     * @return this assertion object.
-     * @throws AssertionError when the {@code actual} is not valid for {@code beanType#propertyName}.
-     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
-     * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
-     * @see #isValidFor(Class, String, Consumer)
-     */
-    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName) {
-        return isValidFor(
-                beanType,
-                propertyName,
-                s -> {
-                    // does nothing
-                }
-        );
     }
 
     /**
