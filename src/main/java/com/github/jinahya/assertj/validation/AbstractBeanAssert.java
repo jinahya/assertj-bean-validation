@@ -42,7 +42,7 @@ import java.util.function.Consumer;
 @SuppressWarnings({
         "java:S2160" // override equals/hashCode
 })
-public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
+abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractPropertyAssert<SELF, ACTUAL>
         implements BeanAssert<SELF, ACTUAL> {
 

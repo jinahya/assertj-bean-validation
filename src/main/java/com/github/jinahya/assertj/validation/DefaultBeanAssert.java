@@ -25,7 +25,7 @@ package com.github.jinahya.assertj.validation;
  *
  * @param <ACTUAL> actual type parameter
  */
-public class DefaultBeanAssert<ACTUAL>
+class DefaultBeanAssert<ACTUAL>
         extends AbstractBeanAssert<DefaultBeanAssert<ACTUAL>, ACTUAL> {
 
     /**

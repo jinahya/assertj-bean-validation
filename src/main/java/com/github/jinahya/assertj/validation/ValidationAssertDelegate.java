@@ -30,9 +30,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
-@SuppressWarnings({
-        "java:S1948" // accessor w/o get|set = field
-})
 final class ValidationAssertDelegate {
 
     private static final Supplier<? extends Validator> DEFAULT_VALIDATOR_SUPPLIER = () -> {

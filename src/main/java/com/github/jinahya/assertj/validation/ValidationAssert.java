@@ -38,7 +38,7 @@ import javax.validation.Validator;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
+public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends Assert<SELF, ACTUAL> {
 
     /**

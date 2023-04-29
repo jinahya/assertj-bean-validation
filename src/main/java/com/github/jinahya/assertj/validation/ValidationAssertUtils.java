@@ -27,10 +27,6 @@ import java.util.function.Consumer;
 
 final class ValidationAssertUtils {
 
-    @SuppressWarnings({
-            "java:S1181", // Throwable
-            "java:S106" // System.err
-    })
     static <T> void accept(final Set<? extends ConstraintViolation<T>> violations,
                            final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
         try {

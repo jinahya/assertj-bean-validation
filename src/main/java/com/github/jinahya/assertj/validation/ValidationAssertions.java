@@ -48,7 +48,7 @@ public final class ValidationAssertions {
      * @param actual   the value of the property to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
+    public static <ACTUAL> PropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
         return new DefaultPropertyAssert<>(actual);
     }
 

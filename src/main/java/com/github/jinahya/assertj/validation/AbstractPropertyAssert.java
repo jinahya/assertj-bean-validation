@@ -40,7 +40,7 @@ import java.util.function.Consumer;
         "java:S119",
         "java:S2160" // override equals
 })
-public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
+abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssert<SELF, ACTUAL>
         implements PropertyAssert<SELF, ACTUAL> {
 

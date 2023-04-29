@@ -26,7 +26,7 @@ package com.github.jinahya.assertj.validation;
  * @param <ACTUAL> the type of value to verify
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class DefaultPropertyAssert<ACTUAL>
+class DefaultPropertyAssert<ACTUAL>
         extends AbstractPropertyAssert<DefaultPropertyAssert<ACTUAL>, ACTUAL> {
 
     /**
