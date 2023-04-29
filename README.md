@@ -120,11 +120,11 @@ class Test {
     @Test
     void test3() {
         assertThatBean(new User("Jane", 21))
-                .isValidFor(Registration.class, "user");             // should pass
+                .isValidFor(Registration.class, "user");       // should pass
         assertThatBean(null)
-                .isValidFor(Registration.class, "user"); // should fail; @NotNull
+                .isValidFor(Registration.class, "user");       // should fail; @NotNull
         assertThatBean(new User("John", 59))
-                .isValidFor(SeniorRegistration.class, "user");       // should fail; age should be >= 60
+                .isValidFor(SeniorRegistration.class, "user"); // should fail; age should be >= 60
     }
 }
 ```
