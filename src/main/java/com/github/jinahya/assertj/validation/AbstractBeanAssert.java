@@ -43,7 +43,8 @@ import java.util.function.Consumer;
         "java:S2160" // override equals/hashCode
 })
 public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractPropertyAssert<SELF, ACTUAL> {
+        extends AbstractPropertyAssert<SELF, ACTUAL>
+        implements BeanAssert<SELF, ACTUAL> {
 
     /**
      * Creates a new instance for verifying specified actual value.
@@ -120,7 +121,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
         );
     }
 
-    SELF isNotValid() {
+    public SELF isNotValid() {
         isNotNull();
         final Validator validator = delegate.getValidator();
         final Class<?>[] groups = delegate.getGroups();
@@ -224,7 +225,7 @@ public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, A
         );
     }
 
-    SELF doesNotHaveValidProperty(final String propertyName) {
+    public SELF doesNotHaveValidProperty(final String propertyName) {
         Objects.requireNonNull(propertyName, "propertyName is null");
         isNotNull();
         final Validator validator = delegate.getValidator();

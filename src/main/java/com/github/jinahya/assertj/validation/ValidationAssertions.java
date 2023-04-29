@@ -28,9 +28,6 @@ import javax.validation.Path;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({
-        "java:S119" // <ACTUAL>
-})
 public final class ValidationAssertions {
 
     /**
@@ -40,8 +37,8 @@ public final class ValidationAssertions {
      * @param actual   the bean value to verify.
      * @return a new assertion object for verifying {@code actual}.
      */
-    public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
-        return new BeanAssert<>(actual);
+    public static <ACTUAL> BeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
+        return new DefaultBeanAssert<>(actual);
     }
 
     /**
@@ -52,7 +49,7 @@ public final class ValidationAssertions {
      * @return a new assertion instance for {@code actual}.
      */
     public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
-        return new PropertyAssert<>(actual);
+        return new DefaultPropertyAssert<>(actual);
     }
 
     /**

@@ -20,7 +20,7 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-import com.github.jinahya.assertj.validation.AbstractBeanAssert;
+import com.github.jinahya.assertj.validation.BeanAssert;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -102,7 +102,7 @@ class BeanAssert_HasValidProperty_Test {
     @Test
     void __AgeIsValid() {
         final var bean = new User(null, 27);
-        final var assertion = Mockito.<AbstractBeanAssert<?, User>>spy(assertThatBean(bean));
+        final var assertion = Mockito.<BeanAssert<?, User>>spy(assertThatBean(bean));
         assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE)).doesNotThrowAnyException();
     }
 

@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 
 import javax.validation.ConstraintViolation;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * An abstract class for verifying a value against a specific property of a specific bean type.
@@ -40,8 +42,9 @@ import java.util.function.Consumer;
         "java:S119",
         "java:S2160" // override equals
 })
-public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
-        extends AbstractValidationAssert<SELF, ACTUAL> {
+abstract class AbstractValidationAssert<SELF extends AbstractValidationAssert<SELF, ACTUAL>, ACTUAL>
+        extends AbstractAssert<SELF, ACTUAL>
+        implements ValidationAssert<SELF, ACTUAL> {
 
     /**
      * Creates a new assertion object for verifying specified actual value.
@@ -49,7 +52,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
      * @param actual   the value of {@link ACTUAL} to verify.
      * @param selfType a class of {@link SELF}.
      */
-    protected AbstractPropertyAssert(final ACTUAL actual, final Class<?> selfType) {
+    protected AbstractValidationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
     }
 
@@ -166,17 +169,16 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
 //        return myself;
 //    }
 
-//    /**
-//     * Configures this assertion object to use validators supplied by specified supplier.
-//     *
-//     * @param validatorSupplier the supplier supplying validators; {@code null} to reset.
-//     * @return this assertion object.
-//     */
-//    @Override
-//    public SELF usingValidatorSuppliedBy(final Supplier<? extends Validator> validatorSupplier) {
-//        delegate.setValidatorSupplier(validatorSupplier);
-//        return myself;
-//    }
+    /**
+     * Configures this assertion object to use validators supplied by specified supplier.
+     *
+     * @param validatorSupplier the supplier supplying validators; {@code null} to reset.
+     * @return this assertion object.
+     */
+    public final SELF usingValidatorSuppliedBy(final Supplier<? extends Validator> validatorSupplier) {
+        delegate.setValidatorSupplier(validatorSupplier);
+        return myself;
+    }
 
-//    final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
+    final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }
