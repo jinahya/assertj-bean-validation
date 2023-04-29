@@ -22,22 +22,29 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.function.Supplier;
 
 @Setter
 @Getter
-@ToString
 public abstract class Registration {
 
-    public Registration(final User user) {
-        super();
-        this.user = user;
+    static <T extends Registration> T of(final Supplier<? extends T> initializer, final User user) {
+        final T instance = initializer.get();
+        instance.user = user;
+        return instance;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + '{' +
+               "user=" + user +
+               '}';
     }
 
     @Valid
     @NotNull
-    private User user;
+    User user;
 }

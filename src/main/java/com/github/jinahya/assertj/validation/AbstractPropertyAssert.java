@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * An abstract class for verifying a value against a specific property of a specific bean type.
@@ -149,7 +150,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
     /**
      * Configures this assertion object to use specified groups targeted for validation.
      *
-     * @param groups the validation groups to use; may be {@code null} or empty.
+     * @param groups the validation groups to use; {@code null} or empty for clearing the group.
      * @return this assertion object.
      */
     public SELF targetingGroups(final Class<?>... groups) {
@@ -160,7 +161,7 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
     /**
      * Configures this assertion object to use specified validator.
      *
-     * @param validator the validator to use.
+     * @param validator the validator to use; {@code null} to reset.
      * @return this assertion object.
      */
     public SELF usingValidator(final Validator validator) {
@@ -168,5 +169,16 @@ public abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert
         return myself;
     }
 
-    private final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
+    /**
+     * Configures this assertion object to use validators supplied by specified supplier.
+     *
+     * @param validatorSupplier the supplier supplying validators; {@code null} to reset.
+     * @return this assertion object.
+     */
+    public SELF usingValidatorSuppliedBy(final Supplier<? extends Validator> validatorSupplier) {
+        delegate.setValidatorSupplier(validatorSupplier);
+        return myself;
+    }
+
+    final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

@@ -2,7 +2,7 @@
  * Defines assertion classes, based on top of <a href="https://assertj.github.io/doc/">AssertJ</a>, for fluently
  * verifying objects and values using <a href="https://beanvalidation.org/">Bean-Validation</a>.
  * <p>
- * {@snippet lang = "java" id = "example":
+ * {@snippet lang = "java" id = "user":
  * class User {
  *     @NotBlank String name;
  *     @Max(0x7F) @PositiveOrZero int age;
@@ -29,6 +29,24 @@
  * // @end
  * // @end
  * // @end
+ *}
+ * {@snippet lang = "java" id = "registration":
+ * abstract class Registration {
+ *
+ *     @Valid @NotNull private User user; // @highlight regex='@(Valid|NotNull)' type=highlighted
+ * }
+ *
+ * class JuniorRegistration extends Registration { // @highlight region regex="@Junior" type=highlighted
+ *
+ *     @Junior // [age] should be less than 60
+ *     @Override User getUser() { return super.getUser(); }
+ * } // @end
+ *
+ * class SeniorRegistration extends Registration { // @highlight region regex="@Senior" type=highlighted
+ *
+ *     @Senior // [age] should be greater than or equal to 60
+ *     @Override User getUser() { return super.getUser(); }
+ * } // @end
  *}
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;

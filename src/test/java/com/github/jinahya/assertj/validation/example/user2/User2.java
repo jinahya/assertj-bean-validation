@@ -23,7 +23,6 @@ package com.github.jinahya.assertj.validation.example.user2;
 import com.github.jinahya.assertj.validation.example.user.Junior;
 import com.github.jinahya.assertj.validation.example.user.Senior;
 import com.github.jinahya.assertj.validation.example.user.User;
-import com.github.jinahya.assertj.validation.example.user.UserConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +32,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
+
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE;
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE_FOR_JUNIOR;
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MIN_AGE_FOR_SENIOR;
 
 @Setter
 @Getter
@@ -51,9 +54,9 @@ public class User2 {
     @NotBlank
     private String name;
 
-    @Max(User.MAX_AGE)
-    @Min(value = UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE, groups = {Senior.class})
-    @Max(value = UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1, groups = {Junior.class})
+    @Max(MAX_AGE)
+    @Min(value = MIN_AGE_FOR_SENIOR, groups = {Senior.class})
+    @Max(value = MAX_AGE_FOR_JUNIOR, groups = {Junior.class})
     @PositiveOrZero
     private int age;
 }

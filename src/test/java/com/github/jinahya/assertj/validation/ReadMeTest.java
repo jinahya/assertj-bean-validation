@@ -77,7 +77,7 @@ class ReadMeTest {
         assertThatThrownBy(() -> assertThatBean(null)
                 .isValidFor(Registration.class, "user"))
                 .isInstanceOf(AssertionError.class);
-        assertThatThrownBy(() -> assertThatBean(new SeniorRegistration(user))
+        assertThatThrownBy(() -> assertThatBean(SeniorRegistration.of(user))
                 .isValid())
                 .isInstanceOf(AssertionError.class);
     }

@@ -20,11 +20,11 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-class JuniorRegistration
+public class JuniorRegistration
         extends Registration {
 
-    JuniorRegistration(final User user) {
-        super(user);
+    public static JuniorRegistration of(final User user) {
+        return Registration.of(JuniorRegistration::new, user);
     }
 
     @Junior

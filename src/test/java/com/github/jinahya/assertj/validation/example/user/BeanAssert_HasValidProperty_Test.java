@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
 import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.violationsConsumerSpy;
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
@@ -124,7 +125,7 @@ class BeanAssert_HasValidProperty_Test {
 
     @Test
     void __AgeIsInvalid() {
-        final var bean = new User("name", User.MAX_AGE + 1);
+        final var bean = new User("name", MAX_AGE + 1);
         final var assertion = assertThatBean(bean);
         assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE))
                 .isInstanceOf(AssertionError.class);
