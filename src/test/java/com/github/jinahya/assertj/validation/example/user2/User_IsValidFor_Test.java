@@ -41,7 +41,7 @@ class User_IsValidFor_Test {
 
         @Test
         void __AgeIsValidForJunior() {
-            final var age = UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1;
+            final var age = UserConstants.MAX_AGE_FOR_JUNIOR;
             final var assertion = assertThatProperty(age);
             assertion.isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
             });
@@ -65,7 +65,7 @@ class User_IsValidFor_Test {
 
         @Test
         void __AgeIsValidForSenior() {
-            final var age = UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE;
+            final var age = UserConstants.MIN_AGE_FOR_SENIOR;
             final var assertion = assertThatProperty(age);
             assertion.isValidFor(User2.class, User.PROPERTY_NAME_AGE, i -> {
             });

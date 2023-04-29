@@ -38,14 +38,14 @@ class UserConditionsTest {
         @Test
         void _Pass_Junior() {
             final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1);
+            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR);
             assertThat(user).is(JUNIOR);
         }
 
         @Test
         void _Fail_Junior() {
             final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE);
+            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR + 1);
             final var assertion = assertThat(user);
             assertThatThrownBy(() -> assertion.is(JUNIOR))
                     .isInstanceOf(AssertionError.class)
@@ -61,14 +61,14 @@ class UserConditionsTest {
         @Test
         void _Pass_Senior() {
             final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE);
+            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR);
             assertThat(user).is(SENIOR);
         }
 
         @Test
         void _Fail_Senior() {
             final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE - 1);
+            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR - 1);
             final var assertion = assertThat(user);
             assertThatThrownBy(() -> assertion.is(SENIOR))
                     .isInstanceOf(AssertionError.class)

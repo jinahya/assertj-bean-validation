@@ -42,7 +42,7 @@ class User2_IsValid_Test {
         @Test
         void __AgeIsValidForJunior() {
             final User2 bean = User2.newInstance(true, true);
-            bean.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1);
+            bean.setAge(UserConstants.MAX_AGE_FOR_JUNIOR);
             {
                 assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }
@@ -70,7 +70,7 @@ class User2_IsValid_Test {
         @Test
         void __AgeIsInvalidForJunior() {
             final User2 bean = User2.newInstance(true, true);
-            bean.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE);
+            bean.setAge(UserConstants.MAX_AGE_FOR_JUNIOR);
             {
                 assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }
@@ -102,7 +102,7 @@ class User2_IsValid_Test {
         @Test
         void __AgeIsValidForSenior() {
             final User2 bean = User2.newInstance(true, true);
-            bean.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE);
+            bean.setAge(UserConstants.MIN_AGE_FOR_SENIOR);
             {
                 assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }
@@ -130,7 +130,7 @@ class User2_IsValid_Test {
         @Test
         void __AgeIsInvalidForSenior() {
             final User2 bean = User2.newInstance(true, true);
-            bean.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE - 1);
+            bean.setAge(UserConstants.MIN_AGE_FOR_SENIOR - 1);
             {
                 assertThatCode(() -> assertThatBean(bean).isValid()).doesNotThrowAnyException();
             }

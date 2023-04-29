@@ -43,9 +43,7 @@ import java.lang.annotation.Target;
 })
 public @interface Senior {
 
-    String message() default "`age` should be greater than or equal to ["
-                             + UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE
-                             + ']';
+    String message() default "`age` should be greater than or equal to [" + UserConstants.MIN_AGE_FOR_SENIOR + ']';
 
     Class<?>[] groups() default {};
 

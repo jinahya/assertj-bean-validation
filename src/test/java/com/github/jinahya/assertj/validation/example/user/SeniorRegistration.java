@@ -23,8 +23,8 @@ package com.github.jinahya.assertj.validation.example.user;
 public class SeniorRegistration
         extends Registration {
 
-    public SeniorRegistration(final User user) {
-        super(user);
+    public static SeniorRegistration of(final User user) {
+        return of(SeniorRegistration::new, user);
     }
 
     @Senior

@@ -40,8 +40,7 @@ class PropertyAssert_IsValidFor_User_Test {
         assertThatThrownBy(
                 () -> assertion.isValidFor(
                         User.class,
-                        "age"
-                        ,
+                        "age",
                         s -> {
                             assertThat(s)
                                     .extracting(ConstraintViolation::getLeafBean)
@@ -96,8 +95,7 @@ class PropertyAssert_IsValidFor_User_Test {
                                         .isNotInIterable();
                             });
                         }
-                )
-        )
+                ))
                 .isInstanceOf(AssertionError.class)
                 .satisfies(ae -> {
                     log.debug("message: {}", ae.getMessage());

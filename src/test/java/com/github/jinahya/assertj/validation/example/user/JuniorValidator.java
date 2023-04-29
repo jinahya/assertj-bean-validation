@@ -23,10 +23,10 @@ package com.github.jinahya.assertj.validation.example.user;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE_FOR_JUNIOR;
+
 public class JuniorValidator
         implements ConstraintValidator<Junior, User> {
-
-    private static final int MAX_AGE_EXCLUSIVE = UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE;
 
     @Override
     public void initialize(final Junior junior) {
@@ -38,6 +38,6 @@ public class JuniorValidator
         if (value == null) {
             return true;
         }
-        return value.getAge() < MAX_AGE_EXCLUSIVE;
+        return value.getAge() <= MAX_AGE_FOR_JUNIOR;
     }
 }

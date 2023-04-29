@@ -26,9 +26,6 @@ package com.github.jinahya.assertj.validation;
  * @param <ACTUAL> the type of value to verify
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({
-        "java:S119" // <ACTUAL>
-})
 public class PropertyAssert<ACTUAL>
         extends AbstractPropertyAssert<PropertyAssert<ACTUAL>, ACTUAL> {
 

@@ -1,6 +1,53 @@
 /**
  * Defines assertion classes, based on top of <a href="https://assertj.github.io/doc/">AssertJ</a>, for fluently
  * verifying objects and values using <a href="https://beanvalidation.org/">Bean-Validation</a>.
+ * <p>
+ * {@snippet lang = "java" id = "user":
+ * class User {
+ *     @NotBlank String name;
+ *     @Max(0x7F) @PositiveOrZero int age;
+ * }
+ *
+ * // @highlight region substring="fail" type=highlighted
+ * // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+ * // @link region substring="assertThatProperty" target="ValidationAssertions#assertThatProperty(Object)"
+ * assertThatBean(new User("Jane", 28)).hasValidProperty("name"); // should pass
+ * assertThatBean(new User("John", 28)).hasValidProperty( "age"); // should pass
+ * assertThatBean(new User(  null,  0)).hasValidProperty("name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
+ * assertThatBean(new User(  null,  0)).hasValidProperty( "age"); // should pass
+ * assertThatBean(new User("John", -1)).hasValidProperty("name"); // should pass
+ * assertThatBean(new User("John", -1)).hasValidProperty( "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
+ *
+ * assertThatProperty("Jane").isValidFor(User.class, "name"); // should pass
+ * assertThatProperty(  null).isValidFor(User.class, "name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
+ * assertThatProperty(    "").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\"|name)' type=highlighted
+ * assertThatProperty(   " ").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\s\"|name)' type=highlighted
+ * assertThatProperty(     0).isValidFor(User.class,  "age"); // should pass
+ * assertThatProperty(    28).isValidFor(User.class,  "age"); // should pass
+ * assertThatProperty(    -1).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
+ * assertThatProperty(   300).isValidFor(User.class,  "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
+ * // @end
+ * // @end
+ * // @end
+ *}
+ * {@snippet lang = "java" id = "registration":
+ * abstract class Registration {
+ *
+ *     @Valid @NotNull private User user; // @highlight regex='@(Valid|NotNull)' type=highlighted
+ * }
+ *
+ * class JuniorRegistration extends Registration { // @highlight region regex="@Junior" type=highlighted
+ *
+ *     @Junior // [age] should be less than 60
+ *     @Override User getUser() { return super.getUser(); }
+ * } // @end
+ *
+ * class SeniorRegistration extends Registration { // @highlight region regex="@Senior" type=highlighted
+ *
+ *     @Senior // [age] should be greater than or equal to 60
+ *     @Override User getUser() { return super.getUser(); }
+ * } // @end
+ *}
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */

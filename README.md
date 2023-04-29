@@ -5,7 +5,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/jinahya/assertj-bean-validation/badge.svg)](https://snyk.io/test/github/jinahya/assertj-bean-validation)
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.jinahya/assertj-bean-validation?label=maven-central)](https://search.maven.org/artifact/com.github.jinahya/assertj-bean-validation)
-[![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation-javax/javadoc.svg?label=javadoc.io)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation)
+[![javadoc](https://javadoc.io/badge2/com.github.jinahya/assertj-bean-validation/javadoc.svg)](https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation)
 
 An [AssertJ](https://assertj.github.io/doc/) extension for [Bean-Validation](https://beanvalidation.org/).
 
@@ -41,7 +41,7 @@ This module has the [latest org.assertj:assertj-core](https://javadoc.io/doc/org
 
 ### JDK
 
-The main sources's target/release is `8` yet requires the **latest JDK**(currently, 19), especially with its test sources, for building itself.
+The main sources's target/release is `8` yet requires the **latest JDK**, especially with its test sources, for building itself.
 
 ## Usages
 
@@ -120,10 +120,11 @@ class Test {
     @Test
     void test3() {
         assertThatBean(new User("Jane", 21))
-                .isValidFor(Registration.class, "user");             // should pass
-        assertThatBean(null).isValidFor(Registration.class, "user"); // should fail; @NotNull
+                .isValidFor(Registration.class, "user");       // should pass
+        assertThatBean(null)
+                .isValidFor(Registration.class, "user");       // should fail; @NotNull
         assertThatBean(new User("John", 59))
-                .isValidFor(SeniorRegistration.class, "user");       // should fail; age should be >= 60
+                .isValidFor(SeniorRegistration.class, "user"); // should fail; age should be >= 60
     }
 }
 ```
@@ -151,6 +152,14 @@ class Test {
 ```java
 assertThatBean(user)
         .targetingGroups(..., ...) // null or empty to reset
+        .isValid();
+```
+
+### Using a custom validator
+
+```java
+assertThatBean(user)
+        .usingValidator(myValidator) // null to reset
         .isValid();
 ```
 

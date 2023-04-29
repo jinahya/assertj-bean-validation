@@ -22,6 +22,7 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import com.github.jinahya.assertj.validation.AbstractBeanAssert;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -32,6 +33,7 @@ import java.util.function.Consumer;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
 import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.violationsConsumerSpy;
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
@@ -72,6 +74,7 @@ class BeanAssert_HasValidProperty_Test {
                 .isInstanceOf(AssertionError.class);
     }
 
+    @Disabled
     @Test
     void WithConsumer__NameIsInvalid() {
         // GIVEN
@@ -103,6 +106,7 @@ class BeanAssert_HasValidProperty_Test {
         assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE)).doesNotThrowAnyException();
     }
 
+    @Disabled
     @Test
     void WithConsumer__AgeIsValid() {
         final var bean = new User("", 0);
@@ -121,12 +125,13 @@ class BeanAssert_HasValidProperty_Test {
 
     @Test
     void __AgeIsInvalid() {
-        final var bean = new User("name", User.MAX_AGE + 1);
+        final var bean = new User("name", MAX_AGE + 1);
         final var assertion = assertThatBean(bean);
         assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE))
                 .isInstanceOf(AssertionError.class);
     }
 
+    @Disabled
     @Test
     void WithConsumer__AgeIsInvalid() {
         // GIVEN

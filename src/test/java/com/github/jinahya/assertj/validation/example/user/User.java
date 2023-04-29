@@ -26,9 +26,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE;
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE_FOR_JUNIOR;
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MIN_AGE;
+import static com.github.jinahya.assertj.validation.example.user.UserConstants.MIN_AGE_FOR_SENIOR;
 
 @Setter
 @Getter
@@ -39,8 +45,6 @@ public class User {
     public static final String PROPERTY_NAME_NAME = "name";
 
     public static final String PROPERTY_NAME_AGE = "age";
-
-    public static final int MAX_AGE = 127;
 
     public static String validName() {
         return "name";
@@ -56,6 +60,14 @@ public class User {
         return ThreadLocalRandom.current().nextInt(MAX_AGE + 1);
     }
 
+    public static int validAgeForJunior() {
+        return ThreadLocalRandom.current().nextInt(MIN_AGE, MAX_AGE_FOR_JUNIOR + 1);
+    }
+
+    public static int validAgeForSenior() {
+        return ThreadLocalRandom.current().nextInt(MIN_AGE_FOR_SENIOR, MAX_AGE + 1);
+    }
+
     public static int invalidAge() {
         return (ThreadLocalRandom.current().nextBoolean()
                 ? (ThreadLocalRandom.current().nextInt() | Integer.MIN_VALUE) // not has been born yet
@@ -69,10 +81,24 @@ public class User {
         return new User(name, age);
     }
 
+    public static User newJunior() {
+        final var name = validName();
+        final var age = validAgeForJunior();
+        return new User(name, age);
+    }
+
+    public static User newSenior() {
+        final var name = validName();
+        final var age = validAgeForSenior();
+        return new User(name, age);
+    }
+
     @NotBlank
     private String name;
 
     @Max(MAX_AGE)
+    @Min(value = MIN_AGE_FOR_SENIOR, groups = {Senior.class})
+    @Max(value = MAX_AGE_FOR_JUNIOR, groups = {Junior.class})
     @PositiveOrZero
     private int age;
 }

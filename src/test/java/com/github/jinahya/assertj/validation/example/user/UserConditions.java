@@ -25,15 +25,15 @@ import org.assertj.core.api.Condition;
 final class UserConditions {
 
     public static final Condition<User> JUNIOR = new Condition<>(
-            v -> v.getAge() < UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE,
-            "a junior whose `age` is less than [%d]",
-            UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE
+            v -> v.getAge() <= UserConstants.MAX_AGE_FOR_JUNIOR,
+            "a junior whose `age` is less than or equal to [%d]",
+            UserConstants.MAX_AGE_FOR_JUNIOR
     );
 
     public static final Condition<User> SENIOR = new Condition<>(
-            v -> v.getAge() >= UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE,
+            v -> v.getAge() >= UserConstants.MIN_AGE_FOR_SENIOR,
             "a senior whose 'age' is greater than or equal to [%d]",
-            UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE
+            UserConstants.MIN_AGE_FOR_SENIOR
     );
 
     private UserConditions() {

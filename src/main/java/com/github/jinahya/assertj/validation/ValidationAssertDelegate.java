@@ -28,14 +28,29 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
+@SuppressWarnings({
+        "java:S1948" // accessor w/o get|set = field
+})
 final class ValidationAssertDelegate {
 
+    private static final Supplier<? extends Validator> DEFAULT_VALIDATOR_SUPPLIER = () -> {
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            return factory.getValidator();
+        }
+    };
+
+    /**
+     * Returns groups targeted.
+     *
+     * @return the targeting group; never {@code null}.
+     */
     Class<?>[] getGroups() {
         return groups.toArray(new Class<?>[0]);
     }
 
-    void setGroups(final Class<?>[] groups) {
+    void setGroups(final Class<?>... groups) {
         this.groups.clear();
         if (groups != null) {
             Arrays.stream(groups)
@@ -45,34 +60,41 @@ final class ValidationAssertDelegate {
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T> Set<ConstraintViolation<T>> getViolations() {
+    <T> Set<ConstraintViolation<T>> getViolations() {
         final Set<ConstraintViolation<T>> set = new HashSet<>();
         violations.forEach(v -> set.add((ConstraintViolation<T>) v));
         return set;
     }
 
-    public <T> void setViolations(final Set<ConstraintViolation<T>> violations) {
+    <T> void setViolations(final Set<ConstraintViolation<T>> violations) {
         Objects.requireNonNull(violations, "violations is null");
         this.violations.clear();
         this.violations.addAll(violations);
     }
 
     Validator getValidator() {
-        if (validator == null) {
-            try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-                validator = factory.getValidator();
-            }
-        }
-        return validator;
+        return Objects.requireNonNull(validatorSupplier.get(), "null supplied by " + validatorSupplier);
     }
 
     void setValidator(final Validator validator) {
-        this.validator = validator;
+        if (validator != null) {
+            validatorSupplier = () -> validator;
+            return;
+        }
+        validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
     }
 
-    private final Set<Class<?>> groups = new HashSet<>();
+    void setValidatorSupplier(final Supplier<? extends Validator> validatorSupplier) {
+        if (validatorSupplier == null) {
+            this.validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
+            return;
+        }
+        this.validatorSupplier = validatorSupplier;
+    }
 
-    private final Set<ConstraintViolation<?>> violations = new HashSet<>();
+    final Set<Class<?>> groups = new HashSet<>();
 
-    private Validator validator;
+    final Set<ConstraintViolation<?>> violations = new HashSet<>();
+
+    private Supplier<? extends Validator> validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
 }

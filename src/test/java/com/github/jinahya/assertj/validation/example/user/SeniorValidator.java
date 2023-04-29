@@ -26,7 +26,7 @@ import javax.validation.ConstraintValidatorContext;
 public class SeniorValidator
         implements ConstraintValidator<Senior, User> {
 
-    private static final int MIN_AGE_INCLUSIVE = UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE;
+    private static final int MIN_AGE_INCLUSIVE = UserConstants.MIN_AGE_FOR_SENIOR;
 
     @Override
     public void initialize(final Senior junior) {
