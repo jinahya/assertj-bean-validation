@@ -21,14 +21,8 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.Assertions;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -38,10 +32,6 @@ import java.util.function.Supplier;
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({
-        "java:S119",
-        "java:S2160" // override equals
-})
 abstract class AbstractValidationAssert<SELF extends AbstractValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractAssert<SELF, ACTUAL>
         implements ValidationAssert<SELF, ACTUAL> {
@@ -57,75 +47,15 @@ abstract class AbstractValidationAssert<SELF extends AbstractValidationAssert<SE
     }
 
     /**
-     * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type while
-     * accepting a set of constraint violations, which may be empty, to specified consumer.
-     *
-     * @param beanType     the bean type; must be not {@code null}.
-     * @param propertyName the name of the property; must be not {@code null}.
-     * @param consumer     the consumer accepts the set of constraint violations.
-     * @param <T>          type of the object to validate
-     * @return this assertion object.
-     * @throws AssertionError when the {@code actual} is not valid for {@code beanType#propertyName}.
-     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
-     * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
-     * @see #isValidFor(Class, String)
-     */
-    @SuppressWarnings({
-            "java:S1181", // catch_Throwable
-    })
-    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
-                               final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
-        Objects.requireNonNull(beanType, "beanType is null");
-        Objects.requireNonNull(propertyName, "propertyName is null");
-        Objects.requireNonNull(consumer, "consumer is null");
-        final Validator validator = delegate.getValidator();
-        final Class<?>[] groups = delegate.getGroups();
-        delegate.setViolations(validator.validateValue(beanType, propertyName, actual, groups));
-        ValidationAssertUtils.accept(delegate.getViolations(), consumer);
-        Assertions.assertThat(delegate.getViolations())
-                .as("%nThe set of constraint violations resulted while validating%n"
-                    + "\tactual: %s%n"
-                    + "\tagainst%n"
-                    + "\t\tbeanType: %s%n"
-                    + "\t\tproperty: '%s'%n"
-                    + "\tfor%n"
-                    + "\t\tgroups: %s%n",
-                    actual,
-                    beanType,
-                    propertyName,
-                    Arrays.asList(groups)
-                )
-                .withFailMessage(() -> String.format(
-                        "%nexpected to be empty but contains %1$d element(s)%n"
-                        + "%2$s",
-                        delegate.getViolations().size(),
-                        ValidationAssertMessages.format(delegate.getViolations())
-                ))
-                .isEmpty();
-        return myself;
-    }
-
-    /**
      * Configures this assertion object to use specified groups targeted for validation.
      *
      * @param groups the validation groups to use; {@code null} or empty for clearing the group.
      * @return this assertion object.
      */
-    public SELF targetingGroups(final Class<?>... groups) {
+    public final SELF targetingGroups(final Class<?>... groups) {
         delegate.setGroups(groups);
         return myself;
     }
-
-//    /**
-//     * Configures this assertion object to use specified validator.
-//     *
-//     * @param validator the validator to use; {@code null} to reset.
-//     * @return this assertion object.
-//     */
-//    public SELF usingValidator(final Validator validator) {
-//        delegate.setValidator(validator);
-//        return myself;
-//    }
 
     /**
      * Configures this assertion object to use validators supplied by specified supplier.
@@ -139,4 +69,8 @@ abstract class AbstractValidationAssert<SELF extends AbstractValidationAssert<SE
     }
 
     final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
+
+    ACTUAL actual() {
+        return actual;
+    }
 }

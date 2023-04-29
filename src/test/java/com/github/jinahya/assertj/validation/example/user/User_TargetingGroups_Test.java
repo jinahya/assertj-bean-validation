@@ -50,7 +50,7 @@ class User_TargetingGroups_Test {
         final var junior = User.newJunior();
         final var assertion = assertThatBean(junior);
         assertion.targetingGroups(Senior.class);
-        assertThatThrownBy(() -> assertion.isValid())
+        assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
 
@@ -69,7 +69,7 @@ class User_TargetingGroups_Test {
         final var senior = User.newSenior();
         final var assertion = assertThatBean(senior);
         assertion.targetingGroups(Junior.class);
-        assertThatThrownBy(() -> assertion.isValid())
+        assertThatThrownBy(assertion::isValid)
                 .isInstanceOf(AssertionError.class);
     }
 }

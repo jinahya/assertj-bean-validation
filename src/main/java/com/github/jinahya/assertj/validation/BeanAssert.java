@@ -26,32 +26,28 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * An abstract assert class for verifying a bean value.
+ * An interface for verifying a bean value.
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- * @see Validator#validate(Object, Class[])
- * @see Validator#validateProperty(Object, String, Class[])
- * @see Validator#validateValue(Class, String, Object, Class[])
  */
 public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         extends PropertyAssert<SELF, ACTUAL> {
 
     /**
-     * Verifies that the {@code actual} bean is valid while accepting the set of constraint violations, which may be
-     * empty, to specified consumer.
+     * Verifies that the {@code actual} bean value is valid, while accepting the set of constraint violations which may
+     * be empty to specified consumer.
      *
      * @param consumer the consumer accepts the set of constraint violations which may be empty.
      * @return this assertion object.
      * @throws AssertionError when the {@code actual} is {@code null} or invalid.
      * @see #isValid()
      */
-    // https://docs.oracle.com/en/java/javase/18/code-snippet/index.html
     SELF isValid(final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer);
 
     /**
-     * Verifies that the {@code actual} bean is valid.
+     * Verifies that the {@code actual} bean value is valid.
      * <p>
      * {@snippet lang = "java" id = "example":
      * class User {
@@ -79,12 +75,10 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         );
     }
 
-    SELF isNotValid();
-
     /**
      * Verified that no constraint violations populated while validating all constraints placed on the property of
-     * specified name of the {@code actual}, and accepts the set of constraint violations, which may be empty, to
-     * specified consumer.
+     * specified name of the {@code actual} bean value, while accepts the set of constraint violations which may be
+     * empty to specified consumer.
      *
      * @param propertyName the name of the property to be verified as valid; not {@code null}.
      * @param consumer     the consumer accepts the set of constraint violations.
@@ -97,11 +91,11 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
      * Validation methods (Jakarta Bean Validation 3.0)</a>.
      * @see #hasValidProperty(String)
      */
-    SELF hasValidProperty(final String propertyName,
-                          final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer);
+    SELF hasValidProperty(final String propertyName, final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer);
 
     /**
-     * Verifies that all constraints placed on the property of specified name, of {@code actual} bean, are validated.
+     * Verified that no constraint violations populated while validating all constraints placed on the property of
+     * specified name of the {@code actual} bean value, are validated.
      * <p>
      * {@snippet lang = "java" id = "example":
      * class User {
@@ -139,6 +133,4 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
                 }
         );
     }
-
-    SELF doesNotHaveValidProperty(final String propertyName);
 }

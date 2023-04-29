@@ -4,7 +4,7 @@ package com.github.jinahya.assertj.validation.example.user;
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 - 2023 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,47 +20,42 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jinahya.assertj.validation.BeanAssertCompanion.isNotValid;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class BeanAssert_HasValidProperty_Test {
+@Slf4j
+class BeanAssertCompanion_IsNotValid_Test {
 
     @Test
-    void hasValidProperty__() {
+    void __() {
         {
             final var user = User.newInstance(true, true);
             final var assertion = assertThatBean(user);
-            assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_NAME))
-                    .doesNotThrowAnyException();
-            assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE))
-                    .doesNotThrowAnyException();
+            assertThatThrownBy(() -> isNotValid(assertion))
+                    .isInstanceOf(AssertionError.class);
         }
         {
             final var user = User.newInstance(false, true);
             final var assertion = assertThatBean(user);
-            assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_NAME))
-                    .isInstanceOf(AssertionError.class);
-            assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE))
+            assertThatCode(() -> isNotValid(assertion))
                     .doesNotThrowAnyException();
         }
         {
             final var user = User.newInstance(true, false);
             final var assertion = assertThatBean(user);
-            assertThatCode(() -> assertion.hasValidProperty(User.PROPERTY_NAME_NAME))
+            assertThatCode(() -> isNotValid(assertion))
                     .doesNotThrowAnyException();
-            assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE))
-                    .isInstanceOf(AssertionError.class);
         }
         {
             final var user = User.newInstance(false, false);
             final var assertion = assertThatBean(user);
-            assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_NAME))
-                    .isInstanceOf(AssertionError.class);
-            assertThatThrownBy(() -> assertion.hasValidProperty(User.PROPERTY_NAME_AGE))
-                    .isInstanceOf(AssertionError.class);
+            assertThatCode(() -> isNotValid(assertion))
+                    .doesNotThrowAnyException();
         }
     }
 }

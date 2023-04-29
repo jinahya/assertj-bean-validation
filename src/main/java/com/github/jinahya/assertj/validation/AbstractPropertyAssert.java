@@ -29,17 +29,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * An abstract class for verifying a value against a specific property of a specific bean type.
- *
- * @param <SELF>   self type parameter
- * @param <ACTUAL> actual type parameter
- * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
- */
-@SuppressWarnings({
-        "java:S119",
-        "java:S2160" // override equals
-})
 abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssert<SELF, ACTUAL>
         implements PropertyAssert<SELF, ACTUAL> {
@@ -54,24 +43,8 @@ abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, 
         super(actual, selfType);
     }
 
-    /**
-     * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type while
-     * accepting a set of constraint violations, which may be empty, to specified consumer.
-     *
-     * @param beanType     the bean type; must be not {@code null}.
-     * @param propertyName the name of the property; must be not {@code null}.
-     * @param consumer     the consumer accepts the set of constraint violations.
-     * @param <T>          type of the object to validate
-     * @return this assertion object.
-     * @throws AssertionError when the {@code actual} is not valid for {@code beanType#propertyName}.
-     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
-     * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
-     * @see #isValidFor(Class, String)
-     */
-    @SuppressWarnings({
-            "java:S1181", // catch_Throwable
-    })
-    public <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
+    @Override
+    public final <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
                                final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
         Objects.requireNonNull(beanType, "beanType is null");
         Objects.requireNonNull(propertyName, "propertyName is null");
@@ -102,40 +75,4 @@ abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, 
                 .isEmpty();
         return myself;
     }
-
-    /**
-     * Configures this assertion object to use specified groups targeted for validation.
-     *
-     * @param groups the validation groups to use; {@code null} or empty for clearing the group.
-     * @return this assertion object.
-     */
-    public SELF targetingGroups(final Class<?>... groups) {
-        delegate.setGroups(groups);
-        return myself;
-    }
-
-//    /**
-//     * Configures this assertion object to use specified validator.
-//     *
-//     * @param validator the validator to use; {@code null} to reset.
-//     * @return this assertion object.
-//     */
-//    public SELF usingValidator(final Validator validator) {
-//        delegate.setValidator(validator);
-//        return myself;
-//    }
-
-//    /**
-//     * Configures this assertion object to use validators supplied by specified supplier.
-//     *
-//     * @param validatorSupplier the supplier supplying validators; {@code null} to reset.
-//     * @return this assertion object.
-//     */
-//    @Override
-//    public SELF usingValidatorSuppliedBy(final Supplier<? extends Validator> validatorSupplier) {
-//        delegate.setValidatorSupplier(validatorSupplier);
-//        return myself;
-//    }
-
-//    final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

@@ -25,12 +25,19 @@ import javax.validation.Validator;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * An interface for verifying a value against a specific property of a specific bean type.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends ValidationAssert<SELF, ACTUAL> {
 
     /**
-     * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type while
-     * accepting a set of constraint violations, which may be empty, to specified consumer.
+     * Verifies that the {@code actual} property value is valid for the property of specified name of specified bean
+     * type, while accepting a set of constraint violations which may be empty to specified consumer.
      *
      * <p>
      * {@snippet lang = "java" id = "example":
@@ -63,9 +70,6 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
      * {@link Validator#validateValue(Class, String, Object, Class[])} method on which this method relies.
      * @see #isValidFor(Class, String)
      */
-    @SuppressWarnings({
-            "java:S1181", // catch_Throwable
-    })
     <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
                         final Consumer<? super Set<ConstraintViolation<T>>> consumer);
 
