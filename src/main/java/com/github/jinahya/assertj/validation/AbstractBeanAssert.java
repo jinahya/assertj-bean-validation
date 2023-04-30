@@ -20,14 +20,14 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.Assertions;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * An abstract assert class for verifying a bean value.
@@ -64,7 +64,7 @@ abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>,
         final Class<?>[] groups = delegate.getGroups();
         delegate.setViolations(validator.validate(actual, groups));
         ValidationAssertUtils.accept(delegate.getViolations(), consumer);
-        Assertions.assertThat(delegate.getViolations())
+        assertThat(delegate.getViolations())
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"
                     + "targeting%n"
@@ -83,6 +83,25 @@ abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>,
     }
 
     @Override
+    public final SELF isNotValid() {
+        isNotNull();
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
+        delegate.setViolations(validator.validate(actual, groups));
+        assertThat(delegate.getViolations())
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "targeting%n"
+                    + "\tgroups: %s%n",
+                    actual,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage("%nexpected to be not empty but empty")
+                .isNotEmpty();
+        return myself;
+    }
+
+    @Override
     public final SELF hasValidProperty(final String propertyName,
                                        final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer) {
         Objects.requireNonNull(propertyName, "propertyName is null");
@@ -92,7 +111,7 @@ abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>,
         final Class<?>[] groups = delegate.getGroups();
         final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
         ValidationAssertUtils.accept(violations, consumer);
-        Assertions.assertThat(violations)
+        assertThat(violations)
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"
                     + "for its%n"
@@ -110,6 +129,29 @@ abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>,
                         ValidationAssertMessages.format(violations)
                 ))
                 .isEmpty();
+        return myself;
+    }
+
+    @Override
+    public final SELF doesNotHaveValidProperty(final String propertyName) {
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        isNotNull();
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
+        final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
+        assertThat(violations)
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "for its%n"
+                    + "\tproperty: '%s'%n"
+                    + "targeting %n"
+                    + "\tgroups: %s%n",
+                    actual,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage("%nexpected to be not empty but empty")
+                .isNotEmpty();
         return myself;
     }
 }

@@ -33,7 +33,7 @@ class User_UsingValidatorSuppliedBy_Test {
     @DisplayName("usingValidator(null)")
     @Test
     void __Null() {
-        final var user = User.newInstance(true, true);
+        final var user = User.newUser(true, true);
         final var assertion = assertThatBean(user);
         assertion.usingValidatorSuppliedBy(null).isValid();
     }
@@ -41,7 +41,7 @@ class User_UsingValidatorSuppliedBy_Test {
     @DisplayName("usingValidator(non-null)")
     @Test
     void __NonNull() {
-        final var user = User.newInstance(true, true);
+        final var user = User.newUser(true, true);
         final var assertion = assertThatBean(user);
         assertion.usingValidatorSuppliedBy(() -> {
                     try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {

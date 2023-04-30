@@ -20,14 +20,14 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.Assertions;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractValidationAssert<SELF, ACTUAL>
@@ -45,7 +45,7 @@ abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, 
 
     @Override
     public final <T> SELF isValidFor(final Class<T> beanType, final String propertyName,
-                               final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
+                                     final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
         Objects.requireNonNull(beanType, "beanType is null");
         Objects.requireNonNull(propertyName, "propertyName is null");
         Objects.requireNonNull(consumer, "consumer is null");
@@ -53,7 +53,7 @@ abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, 
         final Class<?>[] groups = delegate.getGroups();
         delegate.setViolations(validator.validateValue(beanType, propertyName, actual, groups));
         ValidationAssertUtils.accept(delegate.getViolations(), consumer);
-        Assertions.assertThat(delegate.getViolations())
+        assertThat(delegate.getViolations())
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"
                     + "\tagainst%n"
@@ -73,6 +73,31 @@ abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, 
                         ValidationAssertMessages.format(delegate.getViolations())
                 ))
                 .isEmpty();
+        return myself;
+    }
+
+    @Override
+    public final <T> SELF isNotValidFor(final Class<T> beanType, final String propertyName) {
+        Objects.requireNonNull(beanType, "beanType is null");
+        Objects.requireNonNull(propertyName, "propertyName is null");
+        final Validator validator = delegate.getValidator();
+        final Class<?>[] groups = delegate.getGroups();
+        delegate.setViolations(validator.validateValue(beanType, propertyName, actual, groups));
+        assertThat(delegate.getViolations())
+                .as("%nThe set of constraint violations resulted while validating%n"
+                    + "\tactual: %s%n"
+                    + "\tagainst%n"
+                    + "\t\tbeanType: %s%n"
+                    + "\t\tproperty: '%s'%n"
+                    + "\tfor%n"
+                    + "\t\tgroups: %s%n",
+                    actual,
+                    beanType,
+                    propertyName,
+                    Arrays.asList(groups)
+                )
+                .withFailMessage("%nexpected to be not empty but empty")
+                .isNotEmpty();
         return myself;
     }
 }

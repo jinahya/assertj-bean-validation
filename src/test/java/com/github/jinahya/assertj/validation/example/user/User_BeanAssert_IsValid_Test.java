@@ -29,46 +29,30 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
-class BeanAssert_IsValid_Test {
+class User_BeanAssert_IsValid_Test {
 
     @DisplayName("(valid).isValid")
     @Test
     void __() {
         {
-            final var user = User.newInstance(true, true);
+            final var user = User.newUser(true, true);
             final var assertion = assertThatBean(user);
-            assertThatCode(assertion::isValid)
-                    .doesNotThrowAnyException();
-            assertThatCode(() -> assertion.isValid(s -> {
-            }))
-                    .doesNotThrowAnyException();
+            assertThatCode(assertion::isValid).doesNotThrowAnyException();
         }
         {
-            final var user = User.newInstance(false, true);
+            final var user = User.newUser(false, true);
             final var assertion = assertThatBean(user);
-            assertThatThrownBy(assertion::isValid)
-                    .isInstanceOf(AssertionError.class);
-            assertThatThrownBy(() -> assertion.isValid(s -> {
-            }))
-                    .isInstanceOf(AssertionError.class);
+            assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
         }
         {
-            final var user = User.newInstance(true, false);
+            final var user = User.newUser(true, false);
             final var assertion = assertThatBean(user);
-            assertThatThrownBy(assertion::isValid)
-                    .isInstanceOf(AssertionError.class);
-            assertThatThrownBy(() -> assertion.isValid(s -> {
-            }))
-                    .isInstanceOf(AssertionError.class);
+            assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
         }
         {
-            final var user = User.newInstance(false, false);
+            final var user = User.newUser(false, false);
             final var assertion = assertThatBean(user);
-            assertThatThrownBy(assertion::isValid)
-                    .isInstanceOf(AssertionError.class);
-            assertThatThrownBy(() -> assertion.isValid(s -> {
-            }))
-                    .isInstanceOf(AssertionError.class);
+            assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
         }
     }
 }

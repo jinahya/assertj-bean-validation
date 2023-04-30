@@ -23,39 +23,34 @@ package com.github.jinahya.assertj.validation.example.user;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.BeanAssertCompanion.isNotValid;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
-class BeanAssertCompanion_IsNotValid_Test {
+class User_BeanAssert_IsNotValid_Test {
 
     @Test
     void __() {
         {
-            final var user = User.newInstance(true, true);
+            final var user = User.newUser(true, true);
             final var assertion = assertThatBean(user);
-            assertThatThrownBy(() -> isNotValid(assertion))
-                    .isInstanceOf(AssertionError.class);
+            assertThatThrownBy(assertion::isNotValid).isInstanceOf(AssertionError.class);
         }
         {
-            final var user = User.newInstance(false, true);
+            final var user = User.newUser(false, true);
             final var assertion = assertThatBean(user);
-            assertThatCode(() -> isNotValid(assertion))
-                    .doesNotThrowAnyException();
+            assertThatCode(assertion::isNotValid).doesNotThrowAnyException();
         }
         {
-            final var user = User.newInstance(true, false);
+            final var user = User.newUser(true, false);
             final var assertion = assertThatBean(user);
-            assertThatCode(() -> isNotValid(assertion))
-                    .doesNotThrowAnyException();
+            assertThatCode(assertion::isNotValid).doesNotThrowAnyException();
         }
         {
-            final var user = User.newInstance(false, false);
+            final var user = User.newUser(false, false);
             final var assertion = assertThatBean(user);
-            assertThatCode(() -> isNotValid(assertion))
-                    .doesNotThrowAnyException();
+            assertThatCode(assertion::isNotValid).doesNotThrowAnyException();
         }
     }
 }
