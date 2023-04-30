@@ -27,13 +27,14 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import static com.github.jinahya.assertj.validation.example.user.User.newValidUser;
 
 class User_UsingValidatorSuppliedBy_Test {
 
     @DisplayName("usingValidator(null)")
     @Test
     void __Null() {
-        final var user = User.newUser(true, true);
+        final var user = newValidUser();
         final var assertion = assertThatBean(user);
         assertion.usingValidatorSuppliedBy(null).isValid();
     }
@@ -41,7 +42,7 @@ class User_UsingValidatorSuppliedBy_Test {
     @DisplayName("usingValidator(non-null)")
     @Test
     void __NonNull() {
-        final var user = User.newUser(true, true);
+        final var user = newValidUser();
         final var assertion = assertThatBean(user);
         assertion.usingValidatorSuppliedBy(() -> {
                     try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {

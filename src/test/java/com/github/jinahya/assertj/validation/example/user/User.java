@@ -82,6 +82,10 @@ final class User {
         return of(name, age);
     }
 
+    static User newValidUser() {
+        return newUser(true, true);
+    }
+
     static User newJunior() {
         return of(validName(), validAgeForJunior());
     }

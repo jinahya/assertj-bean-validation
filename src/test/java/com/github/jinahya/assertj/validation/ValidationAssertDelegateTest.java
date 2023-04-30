@@ -49,7 +49,7 @@ class ValidationAssertDelegateTest {
         @Test
         void setGroups__Null() {
             final var delegate = new ValidationAssertDelegate();
-            delegate.setGroups(null);
+            delegate.setGroups((Class<?>[]) null);
             assertThat(delegate.groups).isEmpty();
         }
 
@@ -57,7 +57,7 @@ class ValidationAssertDelegateTest {
         @Test
         void setGroups__Empty() {
             final var delegate = new ValidationAssertDelegate();
-            delegate.setGroups(new Class<?>[0]);
+            delegate.setGroups();
             assertThat(delegate.groups).isEmpty();
         }
 

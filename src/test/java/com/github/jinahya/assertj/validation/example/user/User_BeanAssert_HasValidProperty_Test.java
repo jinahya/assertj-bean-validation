@@ -26,6 +26,7 @@ import static com.github.jinahya.assertj.validation.ValidationAssertions.assertT
 import static com.github.jinahya.assertj.validation.example.user.User.PROPERTY_NAME_AGE;
 import static com.github.jinahya.assertj.validation.example.user.User.PROPERTY_NAME_NAME;
 import static com.github.jinahya.assertj.validation.example.user.User.newUser;
+import static com.github.jinahya.assertj.validation.example.user.User.newValidUser;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -34,7 +35,7 @@ class User_BeanAssert_HasValidProperty_Test {
     @Test
     void __() {
         {
-            final var user = newUser(true, true);
+            final var user = newValidUser();
             final var assertion = assertThatBean(user);
             assertThatCode(() -> assertion.hasValidProperty(PROPERTY_NAME_NAME)).doesNotThrowAnyException();
             assertThatCode(() -> assertion.hasValidProperty(PROPERTY_NAME_AGE)).doesNotThrowAnyException();

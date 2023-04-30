@@ -24,35 +24,35 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
-import static com.github.jinahya.assertj.validation.example.user.JuniorRegistration.juniorRegistrationOf;
+import static com.github.jinahya.assertj.validation.example.user.SeniorRegistration.seniorRegistrationOf;
 import static com.github.jinahya.assertj.validation.example.user.User.newJunior;
 import static com.github.jinahya.assertj.validation.example.user.User.newSenior;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("assertThatBean(JuniorRegistration).isValid()")
-class JuniorRegistration_IsValid_Test {
+@DisplayName("assertThatBean(SeniorRegistration).isValid()")
+class SeniorRegistration_IsValid_Test {
 
     @DisplayName("user is null")
     @Test
     void __UserNull() {
-        final var registration = JuniorRegistration.of(null);
+        final var registration = SeniorRegistration.of(null);
         final var assertion = assertThatBean(registration);
         assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
     }
 
-    @DisplayName("user is junior")
+    @DisplayName("user is senior")
     @Test
-    void __UserJunior() {
-        final var registration = juniorRegistrationOf(newJunior());
+    void __UserSenior() {
+        final var registration = seniorRegistrationOf(newSenior());
         final var assertion = assertThatBean(registration);
         assertThatCode(assertion::isValid).doesNotThrowAnyException();
     }
 
     @DisplayName("user is senior")
     @Test
-    void __UserSenior() {
-        final var registration = juniorRegistrationOf(newSenior());
+    void __UserJunior() {
+        final var registration = seniorRegistrationOf(newJunior());
         final var assertion = assertThatBean(registration);
         assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
     }
@@ -61,12 +61,12 @@ class JuniorRegistration_IsValid_Test {
     @Test
     void __UserInvalid() {
         {
-            final var registration = juniorRegistrationOf(newJunior().invalidate());
+            final var registration = seniorRegistrationOf(newSenior().invalidate());
             final var assertion = assertThatBean(registration);
             assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
         }
         {
-            final var registration = juniorRegistrationOf(newSenior().invalidate());
+            final var registration = seniorRegistrationOf(newJunior().invalidate());
             final var assertion = assertThatBean(registration);
             assertThatThrownBy(assertion::isValid).isInstanceOf(AssertionError.class);
         }

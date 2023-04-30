@@ -33,7 +33,7 @@ class BeanAssertCompanion_User_DoesNotHaveValidProperty_Test {
     @Test
     void __() {
         {
-            final var user = User.newUser(true, true);
+            final var user = User.newValidUser();
             final var assertion = assertThatBean(user);
             assertThatThrownBy(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_NAME))
                     .isInstanceOf(AssertionError.class);
