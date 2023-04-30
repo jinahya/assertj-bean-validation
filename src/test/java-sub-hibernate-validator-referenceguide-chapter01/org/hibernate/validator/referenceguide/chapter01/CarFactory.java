@@ -25,7 +25,7 @@ final class CarFactory {
     }
 
     static int validSeatCount() {
-        return (current().nextInt() >>> 1) & 2;
+        return (current().nextInt() >>> 1) | 2;
     }
 
     static int invalidSeatCount() {
