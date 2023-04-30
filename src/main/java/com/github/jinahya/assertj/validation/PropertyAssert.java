@@ -95,7 +95,7 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
     }
 
     /**
-     * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type.
+     * Verifies that the {@code actual} value is <em>not</em> valid for the property of specified name of specified bean type.
      * <p>
      * {@snippet lang = "java" id = "example":
      * class User {
