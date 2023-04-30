@@ -2,9 +2,9 @@ package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
- * assertj-bean-validation
+ * assertj-bean-validation-javax
  * %%
- * Copyright (C) 2021 Jinahya, Inc.
+ * Copyright (C) 2021 - 2022 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,179 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import java.util.Set;
+import java.util.function.Consumer;
+
 /**
- * A default assertion class for verifying bean values.
+ * An interface for verifying a bean value.
  *
+ * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-public class BeanAssert<ACTUAL>
-        extends AbstractBeanAssert<BeanAssert<ACTUAL>, ACTUAL> {
+public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
+        extends PropertyAssert<SELF, ACTUAL> {
 
     /**
-     * Creates a new instance for verifying specified actual value.
+     * Verifies that the {@code actual} bean value is valid, while accepting the set of constraint violations which may
+     * be empty to specified consumer.
      *
-     * @param actual the actual value to verify.
+     * @param consumer the consumer accepts the set of constraint violations which may be empty.
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is {@code null} or invalid.
+     * @see #isValid()
+     * @see #isNotValid()
      */
-    public BeanAssert(final ACTUAL actual) {
-        super(actual, BeanAssert.class);
+    SELF isValid(final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer);
+
+    /**
+     * Verifies that the {@code actual} bean value is valid.
+     * <p>
+     * {@snippet lang = "java" id = "example":
+     * class User {
+     *     @NotBlank String name;
+     *     @Max(0x7F) @PositiveOrZero int age;
+     * }
+     *
+     * // @highlight region substring="fail" type=highlighted
+     * // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+     * assertThatBean(new User("Jane", 28)).isValid(); // should pass
+     * assertThatBean(new User(  null,  0)).isValid(); // should fail // @highlight regex="\-?null" type=highlighted
+     * assertThatBean(new User("John", -1)).isValid(); // should fail // @highlight regex="\-?\d+" type=highlighted
+     * // @end
+     * // @end
+     *}
+     *
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is {@code null} or invalid.
+     * @see #isValid(Consumer)
+     * @see #isNotValid()
+     */
+    default SELF isValid() {
+        return isValid(
+                i -> {
+                }
+        );
     }
+
+    /**
+     * Verifies that the {@code actual} bean value is <em>not</em> valid.
+     * <p>
+     * {@snippet lang = "java" id = "example":
+     * class User {
+     *     @NotBlank String name;
+     *     @Max(0x7F) @PositiveOrZero int age;
+     * }
+     *
+     * // @highlight region substring="pass" type=highlighted
+     * // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+     * assertThatBean(new User("Jane", 28)).isNotValid(); // should fail
+     * assertThatBean(new User(  null,  0)).isNotValid(); // should pass // @highlight regex="\-?null" type=highlighted
+     * assertThatBean(new User("John", -1)).isNotValid(); // should pass // @highlight regex="\-?\d+" type=highlighted
+     * // @end
+     * // @end
+     *}
+     *
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is {@code null} or invalid.
+     * @see #isValid(Consumer)
+     * @see #isValid()
+     */
+    SELF isNotValid();
+
+    /**
+     * Verified that no constraint violations populated while validating all constraints placed on the property of
+     * specified name of the {@code actual} bean value, while accepts the set of constraint violations which may be
+     * empty to specified consumer.
+     *
+     * @param propertyName the name of the property to be verified as valid; not {@code null}.
+     * @param consumer     the consumer accepts the set of constraint violations.
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is {@code null} or its current value of {@code propertyName} is
+     *                        not valid.
+     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
+     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a
+     * href="https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods">6.1.1.
+     * Validation methods (Jakarta Bean Validation 3.0)</a>.
+     * @see #hasValidProperty(String)
+     * @see #doesNotHaveValidProperty(String)
+     */
+    SELF hasValidProperty(final String propertyName, final Consumer<? super Set<ConstraintViolation<ACTUAL>>> consumer);
+
+    /**
+     * Verified that no constraint violations populated while validating all constraints placed on the property of
+     * specified name of the {@code actual} bean value, are validated.
+     * <p>
+     * {@snippet lang = "java" id = "example":
+     * class User {
+     *     @NotBlank String name;
+     *     @Max(0x7F) @PositiveOrZero int age;
+     * }
+     * // @highlight region substring="fail" type=highlighted
+     * // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+     * assertThatBean(new User("Jane", 28)).hasValidProperty("name"); // should pass
+     * assertThatBean(new User("John", 28)).hasValidProperty( "age"); // should pass
+     * assertThatBean(new User(  null,  0)).hasValidProperty("name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
+     * assertThatBean(new User(  null,  0)).hasValidProperty( "age"); // should pass
+     * assertThatBean(new User("John", -1)).hasValidProperty("name"); // should pass
+     * assertThatBean(new User("John", -1)).hasValidProperty( "age"); // should fail // @highlight regex="\-?(\d+|age)" type=highlighted
+     * // @end
+     * // @end
+     *}
+     *
+     * @param propertyName the name of the property to be verified as valid; not {@code null}.
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is {@code null} or its current value of the {@code propertyName}
+     *                        is not valid.
+     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
+     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a
+     * href="https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods">6.1.1.
+     * Validation methods (Jakarta Bean Validation 3.0)</a>.
+     * @see #hasValidProperty(String, Consumer)
+     * @see #doesNotHaveValidProperty(String)
+     */
+    default SELF hasValidProperty(final String propertyName) {
+        return hasValidProperty(
+                propertyName,
+                s -> {
+                    // does nothing
+                }
+        );
+    }
+
+    /**
+     * Verified that any constraint violation populated while validating all constraints placed on the property of
+     * specified name of the {@code actual} bean value, is not validated.
+     * <p>
+     * {@snippet lang = "java" id = "example":
+     * class User {
+     *     @NotBlank String name;
+     *     @Max(0x7F) @PositiveOrZero int age;
+     * }
+     * // @highlight region substring="pass" type=highlighted
+     * // @link region substring="assertThatBean" target="com.github.jinahya.assertj.validation.ValidationAssertions#assertThatBean(Object)"
+     * assertThatBean(new User("Jane", 28)).doesNotHaveValidProperty("name"); // should fail
+     * assertThatBean(new User("John", 28)).doesNotHaveValidProperty( "age"); // should fail
+     * assertThatBean(new User(  null,  0)).doesNotHaveValidProperty("name"); // should pass // @highlight regex="\-?(null|name)" type=highlighted
+     * assertThatBean(new User(  null,  0)).doesNotHaveValidProperty( "age"); // should fail
+     * assertThatBean(new User("John", -1)).doesNotHaveValidProperty("name"); // should fail
+     * assertThatBean(new User("John", -1)).doesNotHaveValidProperty( "age"); // should pass // @highlight regex="\-?(\d+|age)" type=highlighted
+     * // @end
+     * // @end
+     *}
+     *
+     * @param propertyName the name of the property to be verified as valid; not {@code null}.
+     * @return this assertion object.
+     * @throws AssertionError when the {@code actual} is {@code null} or its current value of the {@code propertyName}
+     *                        is not valid.
+     * @apiNote Note that the {@link javax.validation.Valid @Valid} is not honored by the
+     * {@link Validator#validateProperty(Object, String, Class[])} method on which this method relies. See <a
+     * href="https://jakarta.ee/specifications/bean-validation/3.0/jakarta-bean-validation-spec-3.0.html#validationapi-validatorapi-validationmethods">6.1.1.
+     * Validation methods (Jakarta Bean Validation 3.0)</a>.
+     * @see #hasValidProperty(String, Consumer)
+     * @see #hasValidProperty(String)
+     */
+    SELF doesNotHaveValidProperty(final String propertyName);
 }

@@ -26,13 +26,13 @@ final class UserConditions {
 
     public static final Condition<User> JUNIOR = new Condition<>(
             v -> v.getAge() <= UserConstants.MAX_AGE_FOR_JUNIOR,
-            "a junior whose `age` is less than or equal to [%d]",
+            "a junior user whose `age` is less than or equal to [%d]",
             UserConstants.MAX_AGE_FOR_JUNIOR
     );
 
     public static final Condition<User> SENIOR = new Condition<>(
             v -> v.getAge() >= UserConstants.MIN_AGE_FOR_SENIOR,
-            "a senior whose 'age' is greater than or equal to [%d]",
+            "a senior user whose 'age' is greater than or equal to [%d]",
             UserConstants.MIN_AGE_FOR_SENIOR
     );
 

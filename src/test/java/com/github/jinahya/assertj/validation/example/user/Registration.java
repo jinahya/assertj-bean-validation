@@ -20,21 +20,23 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
-@Setter
-@Getter
-public abstract class Registration {
+abstract class Registration {
 
-    static <T extends Registration> T of(final Supplier<? extends T> initializer, final User user) {
-        final T instance = initializer.get();
-        instance.user = user;
-        return instance;
+    static <T extends Registration> T of(final Function<? super User, ? extends T> initializer, final User user) {
+        return initializer.apply(user);
+    }
+
+    Registration(final User user) {
+        super();
+//        this.user = Objects.requireNonNull(user, "user is null");
+        this.user = user;
     }
 
     @Override
@@ -46,5 +48,6 @@ public abstract class Registration {
 
     @Valid
     @NotNull
-    User user;
+    @Getter(AccessLevel.PACKAGE)
+    final User user;
 }

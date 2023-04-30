@@ -20,85 +20,119 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Objects;
 
 import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE;
 import static com.github.jinahya.assertj.validation.example.user.UserConstants.MAX_AGE_FOR_JUNIOR;
 import static com.github.jinahya.assertj.validation.example.user.UserConstants.MIN_AGE;
 import static com.github.jinahya.assertj.validation.example.user.UserConstants.MIN_AGE_FOR_SENIOR;
+import static java.util.concurrent.ThreadLocalRandom.current;
 
-@Setter
-@Getter
-@ToString
-@AllArgsConstructor
-public class User {
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+final class User {
 
-    public static final String PROPERTY_NAME_NAME = "name";
+    static final String PROPERTY_NAME_NAME = "name";
 
-    public static final String PROPERTY_NAME_AGE = "age";
+    static final String PROPERTY_NAME_AGE = "age";
 
-    public static String validName() {
+    static String validName() {
         return "name";
     }
 
-    public static String invalidName() {
-        return ThreadLocalRandom.current().nextBoolean()
-                ? null
-                : (ThreadLocalRandom.current().nextBoolean() ? "" : "   ");
+    static String invalidName() {
+        return current().nextBoolean() ? null : (current().nextBoolean() ? "" : "   ");
     }
 
-    public static int validAge() {
-        return ThreadLocalRandom.current().nextInt(MAX_AGE + 1);
+    static int validAge() {
+        return current().nextInt(MAX_AGE + 1);
     }
 
-    public static int validAgeForJunior() {
-        return ThreadLocalRandom.current().nextInt(MIN_AGE, MAX_AGE_FOR_JUNIOR + 1);
+    static int validAgeForJunior() {
+        return current().nextInt(MIN_AGE, MAX_AGE_FOR_JUNIOR + 1);
     }
 
-    public static int validAgeForSenior() {
-        return ThreadLocalRandom.current().nextInt(MIN_AGE_FOR_SENIOR, MAX_AGE + 1);
+    static int validAgeForSenior() {
+        return current().nextInt(MIN_AGE_FOR_SENIOR, MAX_AGE + 1);
     }
 
-    public static int invalidAge() {
-        return (ThreadLocalRandom.current().nextBoolean()
-                ? (ThreadLocalRandom.current().nextInt() | Integer.MIN_VALUE) // not has been born yet
-                : ThreadLocalRandom.current().nextInt(MAX_AGE + 1, Integer.MAX_VALUE)) // too old
+    static int invalidAge() {
+        return (current().nextBoolean()
+                ? (current().nextInt() | Integer.MIN_VALUE) // not has been born yet
+                : current().nextInt(MAX_AGE + 1, Integer.MAX_VALUE)) // too old
                 ;
     }
 
-    public static User newInstance(final boolean validName, final boolean validAge) {
+    static User of(final String name, final int age) {
+        return new User(name, age);
+    }
+
+    static User newUser(final boolean validName, final boolean validAge) {
         final var name = validName ? validName() : invalidName();
         final var age = validAge ? validAge() : invalidAge();
-        return new User(name, age);
+        return of(name, age);
     }
 
-    public static User newJunior() {
-        final var name = validName();
-        final var age = validAgeForJunior();
-        return new User(name, age);
+    static User newValidUser() {
+        return newUser(true, true);
     }
 
-    public static User newSenior() {
-        final var name = validName();
-        final var age = validAgeForSenior();
-        return new User(name, age);
+    static User newJunior() {
+        return of(validName(), validAgeForJunior());
+    }
+
+    static User newSenior() {
+        return of(validName(), validAgeForSenior());
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + '{' +
+               "name=" + name +
+               ",age=" + age +
+               '}';
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof User)) return false;
+        final User that = (User) obj;
+        return age == that.age && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
     }
 
     @NotBlank
-    private String name;
+    @Getter(AccessLevel.PACKAGE)
+    private final String name;
 
     @Max(MAX_AGE)
     @Min(value = MIN_AGE_FOR_SENIOR, groups = {Senior.class})
     @Max(value = MAX_AGE_FOR_JUNIOR, groups = {Junior.class})
     @PositiveOrZero
-    private int age;
+    @Getter(AccessLevel.PACKAGE)
+    private final int age;
+
+    User invalidate() {
+        object = null;
+        return this;
+    }
+
+    @NotNull
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private Object object = new Object();
 }

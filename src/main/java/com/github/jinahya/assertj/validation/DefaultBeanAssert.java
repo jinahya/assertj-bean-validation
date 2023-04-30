@@ -1,10 +1,10 @@
-package com.github.jinahya.assertj.validation.example.user2;
+package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 - 2022 Jinahya, Inc.
+ * Copyright (C) 2021 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,20 @@ package com.github.jinahya.assertj.validation.example.user2;
  * #L%
  */
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+/**
+ * A default assertion class for verifying bean values.
+ *
+ * @param <ACTUAL> actual type parameter
+ */
+class DefaultBeanAssert<ACTUAL>
+        extends AbstractBeanAssert<DefaultBeanAssert<ACTUAL>, ACTUAL> {
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-@Setter(AccessLevel.PACKAGE)
-@Getter(AccessLevel.PACKAGE)
-@ToString
-public class Registration2 {
-
-    Registration2(final User2 user2) {
-        super();
-        this.user = user2;
+    /**
+     * Creates a new instance for verifying specified actual value.
+     *
+     * @param actual the actual value to verify.
+     */
+    public DefaultBeanAssert(final ACTUAL actual) {
+        super(actual, DefaultBeanAssert.class);
     }
-
-    @Valid
-    @NotNull
-    private User2 user;
 }

@@ -33,6 +33,8 @@ import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ElementKind;
 import javax.validation.Path;
+import javax.validation.Validator;
+import java.util.function.Supplier;
 
 /**
  * An abstract class for verifying {@link Path} values.
@@ -292,4 +294,18 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF>>
     protected AbstractPathAssert(final Path actual, final Class<?> selfType) {
         super(actual, selfType);
     }
+
+    @Override
+    public SELF targetingGroups(Class<?>... groups) {
+        delegate.setGroups(groups);
+        return myself;
+    }
+
+    @Override
+    public SELF usingValidatorSuppliedBy(final Supplier<? extends Validator> validatorSupplier) {
+        delegate.setValidatorSupplier(validatorSupplier);
+        return myself;
+    }
+
+    final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

@@ -31,6 +31,11 @@ import static org.mockito.Mockito.spy;
 
 public final class ValidationAssertionsTestUtils {
 
+    public static <T> Consumer<? super Set<ConstraintViolation<T>>> violationsConsumerEmpty() {
+        return s -> {
+        };
+    }
+
     public static <T> Consumer<Set<ConstraintViolation<T>>> violationsConsumerSpy(
             final Consumer<? super Set<? extends ConstraintViolation<T>>> consumer) {
         Objects.requireNonNull(consumer, "consumer is null");

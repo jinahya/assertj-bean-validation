@@ -41,8 +41,7 @@ import javax.validation.Path;
  */
 abstract class AbstractConstraintViolationAssert<
         SELF extends AbstractConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
-        extends AbstractAssert<SELF, ACTUAL>
-        implements ValidationAssert<SELF, ACTUAL> {
+        extends AbstractValidationAssert<SELF, ACTUAL> {
 
     /**
      * Creates a new instance with specified arguments.
