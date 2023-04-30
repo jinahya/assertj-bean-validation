@@ -6,3 +6,6 @@
 [submodule "sub/hibernate-validator"]
 	path = sub/hibernate-validator
 	url = https://github.com/hibernate/hibernate-validator.git
+[submodule "sub/bval"]
+	path = sub/bval
+	url = https://github.com/apache/bval.git
