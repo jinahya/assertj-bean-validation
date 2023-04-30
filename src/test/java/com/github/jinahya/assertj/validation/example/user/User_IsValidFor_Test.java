@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation.example.user;
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
@@ -33,9 +34,11 @@ import static com.github.jinahya.assertj.validation.example.user.User.validName;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DisplayName("isValidFor")
 @Slf4j
-class User_PropertyAssert_IsValidFor_Test {
+class User_IsValidFor_Test {
 
+    @DisplayName("valid name isValidFor User#name")
     @Test
     void __ValidName() {
         final var name = validName();
@@ -43,6 +46,7 @@ class User_PropertyAssert_IsValidFor_Test {
         assertThatCode(() -> assertion.isValidFor(User.class, PROPERTY_NAME_NAME)).doesNotThrowAnyException();
     }
 
+    @DisplayName("invalid name isValidFor User#name")
     @Test
     void __InvalidName() {
         final var name = invalidName();
