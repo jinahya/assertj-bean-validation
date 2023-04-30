@@ -76,6 +76,10 @@ final class User {
         return new User(name, age);
     }
 
+    static User userWith(final String name, final int age) {
+        return of(name, age);
+    }
+
     static User newUser(final boolean validName, final boolean validAge) {
         final var name = validName ? validName() : invalidName();
         final var age = validAge ? validAge() : invalidAge();
