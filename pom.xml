@@ -253,7 +253,7 @@
             <doclint>none</doclint>
             <links>
               <!--              <link>https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation-base/latest</link>-->
-              <link>https://javadoc.io/static/org.assertj/assertj-core/${version.assertj-core}</link>
+              <link>https://javadoc.io/static/org.assertj/assertj-core/${version.org.assertj}</link>
               <!--              <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>-->
               <link>https://javadoc.io/static/javax.validation/validation-api/${version.javax.validation-api}/</link>
             </links>

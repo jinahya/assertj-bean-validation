@@ -9,16 +9,22 @@ import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtil
 class User_README_Test {
 
     @Test
-    void isValidFor__() {
+    void isValidFor__Name() {
         // @formatter:off
-        shouldPass(() -> assertThatProperty("Jane").isValidFor(User.class, "name")); // should pass
-        shouldFail(() -> assertThatProperty(  null).isValidFor(User.class, "name")); // should fail
-        shouldFail(() -> assertThatProperty(    "").isValidFor(User.class, "name")); // should fail
-        shouldFail(() -> assertThatProperty(   " ").isValidFor(User.class, "name")); // should fail
-        shouldPass(() -> assertThatProperty(     0).isValidFor(User.class,  "age")); // should pass
-        shouldPass(() -> assertThatProperty(    28).isValidFor(User.class,  "age")); // should pass
-        shouldFail(() -> assertThatProperty(    -1).isValidFor(User.class,  "age")); // should fail
-        shouldFail(() -> assertThatProperty(   300).isValidFor(User.class,  "age")); // should fail
+        shouldPass(() -> assertThatProperty("Jane").isValidFor(User.class, "name"));
+        shouldFail(() -> assertThatProperty(  null).isValidFor(User.class, "name"));
+        shouldFail(() -> assertThatProperty(    "").isValidFor(User.class, "name"));
+        shouldFail(() -> assertThatProperty(   " ").isValidFor(User.class, "name"));
+        // @formatter:on
+    }
+
+    @Test
+    void isValidFor__Age() {
+        // @formatter:off
+        shouldPass(() -> assertThatProperty(  0).isValidFor(User.class, "age"));
+        shouldPass(() -> assertThatProperty( 28).isValidFor(User.class, "age"));
+        shouldFail(() -> assertThatProperty( -1).isValidFor(User.class, "age"));
+        shouldFail(() -> assertThatProperty(300).isValidFor(User.class, "age"));
         // @formatter:on
     }
 }

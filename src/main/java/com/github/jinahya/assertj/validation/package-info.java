@@ -21,6 +21,16 @@
  * // @link region substring="isValid" target="BeanAssert#isValid()"
  * // @link region substring="isValidFor" target="PropertyAssert#isValidFor(Class, String)"
  * // @link region substring="isNotValidFor" target="PropertyAssert#isNotValidFor(Class, String)"
+ * shouldPass(() -> assertThatProperty("Jane").isValidFor(User.class, "name"));
+ * shouldFail(() -> assertThatProperty(  null).isValidFor(User.class, "name"));
+ * shouldFail(() -> assertThatProperty(    "").isValidFor(User.class, "name"));
+ * shouldFail(() -> assertThatProperty(   " ").isValidFor(User.class, "name"));
+ *
+ * shouldPass(() -> assertThatProperty(  0).isValidFor(User.class, "age"));
+ * shouldPass(() -> assertThatProperty( 28).isValidFor(User.class, "age"));
+ * shouldFail(() -> assertThatProperty( -1).isValidFor(User.class, "age"));
+ * shouldFail(() -> assertThatProperty(300).isValidFor(User.class, "age"));
+ *
  * assertThatProperty("Jane").isValidFor(User.class, "name"); // should pass
  * assertThatProperty(  null).isValidFor(User.class, "name"); // should fail // @highlight regex="\-?(null|name)" type=highlighted
  * assertThatProperty(    "").isValidFor(User.class, "name"); // should fail // @highlight regex='(\"\"|name)' type=highlighted
