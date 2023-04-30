@@ -47,6 +47,8 @@ The main sources's target/release is `8` yet requires the **latest JDK**, especi
 
 Say, we have the following classes.
 
+https://github.com/jinahya/assertj-bean-validation/blob/bb00ad89a5bcd5d2234d7165e627276db02c7041/src/test/java/com/github/jinahya/assertj/validation/example/user/User.java#L42
+
 https://github.com/jinahya/assertj-bean-validation/blob/develop/README.md?plain=1.
 
 https://github.com/stevemar/code-reference-in-readme/blob/031e04f922c14ecd5b03a79d8c979ba8f3ab1e39/src/main.py#L1-L6
