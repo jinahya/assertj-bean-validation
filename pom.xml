@@ -63,12 +63,12 @@
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <version.animal-sniffer>1.23</version.animal-sniffer>
-    <version.assertj-core>3.24.2</version.assertj-core>
     <version.checkstyle>10.10.0</version.checkstyle>
     <version.javax.validation-api>2.0.1.Final</version.javax.validation-api>
     <version.logback-classic>1.4.7</version.logback-classic>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-surefire>3.0.0</version.maven-surefire>
+    <version.org.assertj>3.24.2</version.org.assertj>
     <version.org.eclipse.transformer>0.5.0</version.org.eclipse.transformer>
     <version.org.junit>5.9.3</version.org.junit>
     <version.org.mockito>5.3.1</version.org.mockito>
@@ -87,6 +87,13 @@
         <groupId>javax.validation</groupId>
         <artifactId>validation-api</artifactId>
         <version>${version.javax.validation-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-bom</artifactId>
+        <version>${version.org.assertj}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.junit</groupId>
@@ -117,9 +124,14 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>${version.assertj-core}</version>
       <scope>provided</scope>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.assertj</groupId>-->
+<!--      <artifactId>assertj-core</artifactId>-->
+<!--      <classifier>test</classifier>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
