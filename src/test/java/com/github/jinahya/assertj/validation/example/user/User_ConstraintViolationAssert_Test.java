@@ -63,10 +63,14 @@ class User_ConstraintViolationAssert_Test {
                     () -> assertions.isValidFor(User.class, "name", s -> {
                         assertThat(s).hasSize(1).allSatisfy(cv -> {
                             assertThatConstraintViolation(cv)
+                                    .hasNoExecutableParameters()
+                                    .hasNoExecutableReturnValue()
                                     .hasInvalidValue(name)
                                     .hasNoLeafBean()
                                     .hasNoRootBean()
                                     .hasRootBeanClass(User.class);
+                            assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
+                            assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
                             assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(name);
                             assertThatConstraintViolation(cv).extractingLeafBean().isNull();
                             assertThatConstraintViolation(cv).extractingRootBean().isNull();
@@ -99,10 +103,14 @@ class User_ConstraintViolationAssert_Test {
                     () -> assertions.isValidFor(User.class, "age", s -> {
                         assertThat(s).hasSize(1).allSatisfy(cv -> {
                             assertThatConstraintViolation(cv)
+                                    .hasNoExecutableParameters()
+                                    .hasNoExecutableReturnValue()
                                     .hasInvalidValue(age)
                                     .hasNoLeafBean()
                                     .hasNoRootBean()
                                     .hasRootBeanClass(User.class);
+                            assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
+                            assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
                             assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(age);
                             assertThatConstraintViolation(cv).extractingLeafBean().isNull();
                             assertThatConstraintViolation(cv).extractingRootBean().isNull();

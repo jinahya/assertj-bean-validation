@@ -25,8 +25,6 @@ import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractObjectArrayAssert;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
-import org.assertj.core.api.InstanceOfAssertFactories;
-import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
@@ -54,54 +52,20 @@ public abstract class AbstractConstraintViolationAssert<
         super(actual, selfType);
     }
 
-    <ASSERT extends AbstractObjectArrayAssert<?, Object>> ASSERT extractingExecutableParameters(
-            final AssertFactory<Object, ? extends ASSERT> assertFactory) {
+    // -------------------------------------------------------------------------------------------- executableParameters
+    @Override
+    public <A extends AbstractObjectArrayAssert<?, Object>> A extractingExecutableParameters(
+            final AssertFactory<Object, ? extends A> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getExecutableParameters, assertFactory);
     }
 
-    AbstractObjectArrayAssert<?, Object> extractingExecutableParameters() {
-        return extractingExecutableParameters(InstanceOfAssertFactories.ARRAY);
-    }
-
-    /**
-     * Verifies that the {@link ConstraintViolation#getExecutableParameters() actual.executableParameters} is equal to
-     * specified value.
-     *
-     * @param expectedExecutableParameters the expected value of {@code actual.executableParameters}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getExecutableParameters()
-     * @see #extractingExecutableParameters()
-     */
-    SELF hasExecutableParameters(final Object[] expectedExecutableParameters) {
-        extractingExecutableParameters()
-                .isEqualTo(expectedExecutableParameters);
-        return myself;
-    }
-
-    @SuppressWarnings({"unchecked"})
-    <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingExecutableReturnValue(
-            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
-        return isNotNull()
-                .extracting(a -> (U) a.getExecutableReturnValue(), assertFactory);
-    }
-
-    <U> AbstractObjectAssert<?, U> extractingExecutableReturnValue() {
-        return extractingExecutableReturnValue(new ObjectAssertFactory<>());
-    }
-
-    /**
-     * Verifies that the actual {@link ConstraintViolation}'s
-     * {@link ConstraintViolation#getExecutableReturnValue() executableReturnValue} is equal to specified value.
-     *
-     * @param expectedExecutableReturnValue the expected value of {@code actual.executableReturnValue}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getExecutableReturnValue()
-     */
-    SELF hasExecutableReturnValue(final Object expectedExecutableReturnValue) {
-        extractingExecutableReturnValue()
-                .isEqualTo(expectedExecutableReturnValue);
-        return myself;
+    // ------------------------------------------------------------------------------------------- executableReturnValue
+    @Override
+    public <U, A extends AbstractObjectAssert<?, U>> A extractingExecutableReturnValue(
+            final Function<? super ACTUAL, ? extends U> valueExtractor,
+            final AssertFactory<? super U, ? extends A> assertFactory) {
+        return isNotNull().extracting(valueExtractor, assertFactory);
     }
 
     // ---------------------------------------------------------------------------------------------------- invalidValue
@@ -129,6 +93,9 @@ public abstract class AbstractConstraintViolationAssert<
         return isNotNull()
                 .extracting(ConstraintViolation::getPropertyPath, assertFactory);
     }
+//    public AbstractPathAssert<?> extractingPropertyPath() {
+//        return extractingPropertyPath(ValidationAssertions::assertThatPath);
+//    }
 
     // -------------------------------------------------------------------------------------------------------- rootBean
     @Override
@@ -146,7 +113,4 @@ public abstract class AbstractConstraintViolationAssert<
                 .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
     }
 
-    public AbstractPathAssert<?> extractingPropertyPath() {
-        return extractingPropertyPath(ValidationAssertions::assertThatPath);
-    }
 }

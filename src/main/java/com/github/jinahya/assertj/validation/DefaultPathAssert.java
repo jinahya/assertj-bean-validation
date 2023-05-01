@@ -23,21 +23,29 @@ package com.github.jinahya.assertj.validation;
 import javax.validation.Path;
 
 /**
- * An abstract class for verifying {@link Path} values.
+ * An interface for verifying {@link Path} values.
  *
- * @param <SELF>   self type parameter
- * @param <ACTUAL> path type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-interface PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extends Path>
-        extends ValidationAssert<SELF, ACTUAL> {
+class DefaultPathAssert
+        extends AbstractPathAssert<DefaultPathAssert> {
 
-    interface NodeAssert<
-            SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
-            extends ValidationAssert<SELF, ACTUAL> {
+    public DefaultPathAssert(final Path actual) {
+        super(actual, DefaultPathAssert.class);
+    }
 
+    @Override
+    protected NodeAssert toAssert(final Path.Node value, final String description) {
+        return new NodeAssert(value)
+                .as(description);
+    }
+
+    @Override
+    protected DefaultPathAssert newAbstractIterableAssert(final Iterable<? extends Path.Node> iterable) {
+        assert iterable instanceof Path;
+        return new DefaultPathAssert((Path) iterable);
     }
 }

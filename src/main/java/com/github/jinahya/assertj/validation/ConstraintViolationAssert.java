@@ -21,9 +21,11 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractClassAssert;
+import org.assertj.core.api.AbstractObjectArrayAssert;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
@@ -39,6 +41,70 @@ import java.util.function.Function;
 public interface ConstraintViolationAssert<
         SELF extends ConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
         extends ValidationAssert<SELF, ACTUAL> {
+
+    // -------------------------------------------------------------------------------------------- executableParameters
+    <ASSERT extends AbstractObjectArrayAssert<?, Object>> ASSERT extractingExecutableParameters(
+            final AssertFactory<Object, ? extends ASSERT> assertFactory);
+
+    default AbstractObjectArrayAssert<?, Object> extractingExecutableParameters() {
+        return extractingExecutableParameters(InstanceOfAssertFactories.ARRAY);
+    }
+
+    /**
+     * Verifies that the {@link ConstraintViolation#getExecutableParameters() actual.executableParameters} is equal to
+     * specified value.
+     *
+     * @param expectedExecutableParameters the expected value of {@code actual.executableParameters}.
+     * @return this assertion object.
+     * @see ConstraintViolation#getExecutableParameters()
+     * @see #extractingExecutableParameters()
+     */
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default SELF hasExecutableParameters(final Object[] expectedExecutableParameters) {
+        extractingExecutableParameters().isEqualTo(expectedExecutableParameters);
+        return (SELF) this;
+    }
+
+    default SELF hasNoExecutableParameters() {
+        return hasExecutableParameters(null);
+    }
+
+    // ------------------------------------------------------------------------------------------- executableReturnValue
+    <U, A extends AbstractObjectAssert<?, U>> A extractingExecutableReturnValue(
+            final Function<? super ACTUAL, ? extends U> valueExtractor,
+            final AssertFactory<? super U, ? extends A> assertFactory);
+
+    @SuppressWarnings({"unchecked"})
+    default <U, A extends AbstractObjectAssert<?, U>> A extractingExecutableReturnValue(
+            final AssertFactory<? super U, ? extends A> assertFactory) {
+        return extractingExecutableReturnValue(a -> (U) a.getExecutableReturnValue(), assertFactory);
+    }
+
+    default <U> AbstractObjectAssert<?, U> extractingExecutableReturnValue() {
+        return extractingExecutableReturnValue(new ObjectAssertFactory<>());
+    }
+
+    /**
+     * Verifies that the actual {@link ConstraintViolation}'s
+     * {@link ConstraintViolation#getExecutableReturnValue() executableReturnValue} is equal to specified value.
+     *
+     * @param expectedExecutableReturnValue the expected value of {@code actual.executableReturnValue}.
+     * @return this assertion object.
+     * @see ConstraintViolation#getExecutableReturnValue()
+     */
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default SELF hasExecutableReturnValue(final Object expectedExecutableReturnValue) {
+        extractingExecutableReturnValue().isEqualTo(expectedExecutableReturnValue);
+        return (SELF) this;
+    }
+
+    default SELF hasNoExecutableReturnValue() {
+        return hasExecutableReturnValue(null);
+    }
 
     // ---------------------------------------------------------------------------------------------------- invalidValue
     <U, A extends AbstractObjectAssert<?, U>> A extractingInvalidValue(

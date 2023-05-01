@@ -76,7 +76,7 @@ public final class ValidationAssertions {
      * @return a new assertion instance for {@code actual}.
      */
     static AbstractPathAssert<?> assertThatPath(final Path actual) {
-        return new PathAssert(actual);
+        return new DefaultPathAssert(actual);
     }
 
     /**
