@@ -52,7 +52,7 @@ abstract class AbstractPropertyAssert<SELF extends AbstractPropertyAssert<SELF, 
         final Validator validator = delegate.getValidator();
         final Class<?>[] groups = delegate.getGroups();
         delegate.setViolations(validator.validateValue(beanType, propertyName, actual, groups));
-        ValidationAssertUtils.accept(delegate.getViolations(), consumer);
+        delegate.acceptViolations(consumer);
         assertThat(delegate.getViolations())
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"

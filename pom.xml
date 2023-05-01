@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -32,7 +33,7 @@
         <role>developer</role>
       </roles>
       <timezone>Asia/Seoul</timezone>
-      <properties />
+      <properties/>
     </developer>
   </developers>
 
@@ -64,10 +65,12 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <version.animal-sniffer>1.23</version.animal-sniffer>
     <version.checkstyle>10.10.0</version.checkstyle>
+    <version.jakarta.validation-api>3.0.2</version.jakarta.validation-api>
     <version.javax.validation-api>2.0.1.Final</version.javax.validation-api>
     <version.logback-classic>1.4.7</version.logback-classic>
     <version.maven-failsafe>${version.maven-surefire}</version.maven-failsafe>
     <version.maven-surefire>3.0.0</version.maven-surefire>
+    <version.org.apache.bval>2.0.6</version.org.apache.bval>
     <version.org.assertj>3.24.2</version.org.assertj>
     <version.org.eclipse.transformer>0.5.0</version.org.eclipse.transformer>
     <version.org.junit>5.9.3</version.org.junit>
@@ -83,10 +86,20 @@
         <artifactId>checkstyle</artifactId>
         <version>${version.checkstyle}</version>
       </dependency>
+      <dependency> <!-- only for the javadoc -->
+        <groupId>jakarta.validation</groupId>
+        <artifactId>jakarta.validation-api</artifactId>
+        <version>${version.jakarta.validation-api}</version>
+      </dependency>
       <dependency>
         <groupId>javax.validation</groupId>
         <artifactId>validation-api</artifactId>
         <version>${version.javax.validation-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.bval</groupId>
+        <artifactId>bval-jsr</artifactId>
+        <version>${version.org.apache.bval}</version>
       </dependency>
       <dependency>
         <groupId>org.assertj</groupId>
@@ -116,6 +129,11 @@
       <version>${version.logback-classic}</version>
       <scope>test</scope>
     </dependency>
+    <dependency> <!-- only for the javadoc -->
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
@@ -126,12 +144,12 @@
       <artifactId>assertj-core</artifactId>
       <scope>provided</scope>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.assertj</groupId>-->
-<!--      <artifactId>assertj-core</artifactId>-->
-<!--      <classifier>test</classifier>-->
-<!--      <scope>test</scope>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.assertj</groupId>-->
+    <!--      <artifactId>assertj-core</artifactId>-->
+    <!--      <classifier>test</classifier>-->
+    <!--      <scope>test</scope>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -203,7 +221,7 @@
               <configuration>
                 <skip>true</skip>
                 <rules>
-                  <dependencyConvergence />
+                  <dependencyConvergence/>
                 </rules>
               </configuration>
               <goals>
@@ -254,7 +272,7 @@
             <links>
               <!--              <link>https://javadoc.io/doc/com.github.jinahya/assertj-bean-validation-base/latest</link>-->
               <link>https://javadoc.io/static/org.assertj/assertj-core/${version.org.assertj}</link>
-              <!--              <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>-->
+              <link>https://javadoc.io/static/jakarta.validation/jakarta.validation-api/${version.jakarta.validation-api}/</link>
               <link>https://javadoc.io/static/javax.validation/validation-api/${version.javax.validation-api}/</link>
             </links>
             <tags>
@@ -503,9 +521,7 @@
       <dependencies>
         <dependency>
           <groupId>org.apache.bval</groupId>
-          <!--          <artifactId>org.apache.bval.bundle</artifactId>-->
           <artifactId>bval-jsr</artifactId>
-          <version>2.0.6</version>
           <scope>test</scope>
         </dependency>
       </dependencies>

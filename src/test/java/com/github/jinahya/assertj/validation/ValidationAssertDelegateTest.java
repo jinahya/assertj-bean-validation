@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.groups.Default;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -39,18 +40,19 @@ class ValidationAssertDelegateTest {
 
         @DisplayName("getGroups()")
         @Test
-        void getGroups_NotNullEmpty_() {
+        void groups_NotNullEmpty_() {
             final var delegate = new ValidationAssertDelegate();
-            final var groups = delegate.getGroups();
-            assertThat(groups).isEmpty();
+            assertThat(delegate.groups).isEmpty();
+            assertThat(delegate.getGroups()).hasSize(1).containsOnly(Default.class);
         }
 
         @DisplayName("setGroups(null)")
         @Test
-        void setGroups__Null() {
+        void groups__Null() {
             final var delegate = new ValidationAssertDelegate();
             delegate.setGroups((Class<?>[]) null);
             assertThat(delegate.groups).isEmpty();
+            assertThat(delegate.getGroups()).hasSize(1).containsOnly(Default.class);
         }
 
         @DisplayName("setGroups(empty)")

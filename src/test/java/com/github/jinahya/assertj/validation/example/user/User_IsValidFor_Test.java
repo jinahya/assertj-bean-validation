@@ -22,51 +22,86 @@ package com.github.jinahya.assertj.validation.example.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
+import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.shouldFail;
+import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.shouldPass;
 import static com.github.jinahya.assertj.validation.example.user.User.PROPERTY_NAME_AGE;
 import static com.github.jinahya.assertj.validation.example.user.User.PROPERTY_NAME_NAME;
 import static com.github.jinahya.assertj.validation.example.user.User.invalidAge;
 import static com.github.jinahya.assertj.validation.example.user.User.invalidName;
 import static com.github.jinahya.assertj.validation.example.user.User.validAge;
+import static com.github.jinahya.assertj.validation.example.user.User.validAgeForJunior;
+import static com.github.jinahya.assertj.validation.example.user.User.validAgeForSenior;
 import static com.github.jinahya.assertj.validation.example.user.User.validName;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("isValidFor")
 @Slf4j
 class User_IsValidFor_Test {
 
-    @DisplayName("valid name isValidFor User#name")
-    @Test
-    void __ValidName() {
-        final var name = validName();
-        final var assertion = assertThatProperty(name);
-        assertThatCode(() -> assertion.isValidFor(User.class, PROPERTY_NAME_NAME)).doesNotThrowAnyException();
+    @DisplayName("name")
+    @Nested
+    class NameTest {
+
+        @DisplayName("valid name isValidFor User#name")
+        @Test
+        void __Valid() {
+            final var name = validName();
+            final var assertion = assertThatProperty(name);
+            shouldPass(() -> assertion.isValidFor(User.class, PROPERTY_NAME_NAME));
+        }
+
+        @DisplayName("invalid name isValidFor User#name")
+        @Test
+        void __Invalid() {
+            final var name = invalidName();
+            final var assertion = assertThatProperty(name);
+            shouldFail(() -> assertion.isValidFor(User.class, PROPERTY_NAME_NAME));
+        }
     }
 
-    @DisplayName("invalid name isValidFor User#name")
-    @Test
-    void __InvalidName() {
-        final var name = invalidName();
-        final var assertion = assertThatProperty(name);
-        assertThatThrownBy(() -> assertion.isValidFor(User.class, PROPERTY_NAME_NAME))
-                .isInstanceOf(AssertionError.class);
-    }
+    @DisplayName("age")
+    @Nested
+    class AgeTest {
 
-    @Test
-    void __ValidAge() {
-        final var age = validAge();
-        final var assertion = assertThatProperty(age);
-        assertThatCode(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE)).doesNotThrowAnyException();
-    }
+        @DisplayName("validAge() should be valid for User#age")
+        @Test
+        void __ValidAge() {
+            final var age = validAge();
+            final var assertion = assertThatProperty(age);
+            shouldPass(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+        }
 
-    @Test
-    void __InvalidAge() {
-        final var age = invalidAge();
-        final var assertion = assertThatProperty(age);
-        assertThatThrownBy(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE))
-                .isInstanceOf(AssertionError.class);
+        @DisplayName("validAgeForJunior() should be valid for User#age targeting Junior.class")
+        @Test
+        void __ValidAgeForJunior() {
+            final var age = validAgeForJunior();
+            final var assertion = assertThatProperty(age);
+            shouldPass(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+            assertion.targetingGroups(Junior.class);
+            shouldPass(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+            assertion.targetingGroups(Senior.class);
+            shouldFail(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+        }
+
+        @Test
+        void __ValidAgeForSenior() {
+            final var age = validAgeForSenior();
+            final var assertion = assertThatProperty(age);
+            shouldPass(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+            assertion.targetingGroups(Senior.class);
+            shouldPass(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+            assertion.targetingGroups(Junior.class);
+            shouldFail(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+        }
+
+        @Test
+        void __InvalidAge() {
+            final var age = invalidAge();
+            final var assertion = assertThatProperty(age);
+            shouldFail(() -> assertion.isValidFor(User.class, PROPERTY_NAME_AGE));
+        }
     }
 }

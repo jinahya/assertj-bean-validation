@@ -20,9 +20,9 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-final class ValidationAssertUtils {
+final class ValidationAssertConstants {
 
-    private ValidationAssertUtils() {
+    private ValidationAssertConstants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

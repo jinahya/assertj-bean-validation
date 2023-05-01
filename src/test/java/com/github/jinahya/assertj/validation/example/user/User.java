@@ -76,7 +76,7 @@ final class User {
         return new User(name, age);
     }
 
-    static User userWith(final String name, final int age) {
+    static User userOf(final String name, final int age) {
         return of(name, age);
     }
 

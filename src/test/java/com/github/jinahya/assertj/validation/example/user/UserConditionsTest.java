@@ -24,11 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.example.user.UserConditions.JUNIOR;
-import static com.github.jinahya.assertj.validation.example.user.UserConditions.SENIOR;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 @Slf4j
 class UserConditionsTest {
 

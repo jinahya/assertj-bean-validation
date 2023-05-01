@@ -70,7 +70,7 @@ abstract class AbstractValidationAssert<SELF extends AbstractValidationAssert<SE
 
     final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 
-    ACTUAL actual() {
-        return actual;
-    }
+//    ACTUAL actual() {
+//        return actual;
+//    }
 }
