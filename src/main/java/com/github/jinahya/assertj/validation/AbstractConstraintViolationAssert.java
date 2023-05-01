@@ -39,7 +39,7 @@ import java.util.function.Function;
  * @param <ACTUAL> actual type parameter
  * @param <T>      root bean type parameter
  */
-abstract class AbstractConstraintViolationAssert<
+public abstract class AbstractConstraintViolationAssert<
         SELF extends AbstractConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
         extends AbstractValidationAssert<SELF, ACTUAL>
         implements ConstraintViolationAssert<SELF, ACTUAL, T> {
