@@ -59,8 +59,8 @@ public abstract class AbstractConstraintDescriptorAssert<
         return null;
     }
 
-    @Override
-    public <U, A extends AbstractMapAssert<?, ? extends Map<String, Object>, String, Object>> A extractingAttributes(Function<? super ACTUAL, ? extends Map<String, Object>> attributesExtractor, AssertFactory<? super U, ? extends A> assertFactory) {
-        return null;
-    }
+//    @Override
+//    public <U, A extends AbstractMapAssert<?, ? extends Map<String, Object>, String, Object>> A extractingAttributes(Function<? super ACTUAL, ? extends Map<String, Object>> attributesExtractor, AssertFactory<? super U, ? extends A> assertFactory) {
+//        return null;
+//    }
 }

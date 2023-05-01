@@ -20,12 +20,12 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.AbstractMapAssert;
+import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.Assertions;
 
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -43,15 +43,34 @@ public interface ConstraintDescriptorAssert<
 {
 
     // ------------------------------------------------------------------------------------------------------ annotation
-    SELF hasAnnotation(T expectedAnnotation);
+    <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
+            final Function<? super ACTUAL, ? extends T> annotationExtractor,
+            final AssertFactory<? super T, ? extends A> assertFactory);
+
+    default <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
+            final AssertFactory<? super T, ? extends A> assertFactory) {
+        return extractingAnnotation(ConstraintDescriptor::getAnnotation, assertFactory);
+    }
+
+    default AbstractObjectAssert<?, T> extractingAnnotation() {
+        return extractingAnnotation(Assertions::assertThat);
+    }
+
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default SELF hasAnnotation(final T expectedAnnotation) {
+        extractingAnnotation().isEqualTo(expectedAnnotation);
+        return (SELF) this;
+    }
 
     // ------------------------------------------------------------------------------------------------------ attributes
-    <U, A extends AbstractMapAssert<?, ? extends Map<String, Object>, String, Object>> A extractingAttributes(
-            final Function<? super ACTUAL, ? extends Map<String, Object>> attributesExtractor,
-            final AssertFactory<? super U, ? extends A> assertFactory);
-
-    default <U, A extends AbstractMapAssert<?, ? extends Map<String, Object>, String, Object>> A extractingAttributes(
-            final AssertFactory<? super U, ? extends A> assertFactory) {
-        return extractingAttributes(ConstraintDescriptor::getAttributes, assertFactory);
-    }
+//    <U, A extends AbstractMapAssert<?, ? extends Map<String, Object>, String, Object>> A extractingAttributes(
+//            final Function<? super ACTUAL, ? extends Map<String, Object>> attributesExtractor,
+//            final AssertFactory<? super U, ? extends A> assertFactory);
+//
+//    default <U, A extends AbstractMapAssert<?, ? extends Map<String, Object>, String, Object>> A extractingAttributes(
+//            final AssertFactory<? super U, ? extends A> assertFactory) {
+//        return extractingAttributes(ConstraintDescriptor::getAttributes, assertFactory);
+//    }
 }

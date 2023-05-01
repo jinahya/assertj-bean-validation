@@ -42,6 +42,8 @@ public interface ConstraintViolationAssert<
         SELF extends ConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
         extends ValidationAssert<SELF, ACTUAL> {
 
+    // -------------------------------------------------------------------------------------------- constraintDescriptor
+
     // -------------------------------------------------------------------------------------------- executableParameters
     <ASSERT extends AbstractObjectArrayAssert<?, Object>> ASSERT extractingExecutableParameters(
             final AssertFactory<Object, ? extends ASSERT> assertFactory);
