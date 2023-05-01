@@ -36,8 +36,8 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
         extends PropertyAssert<SELF, ACTUAL> {
 
     /**
-     * Verifies that the {@code actual} value is valid, while accepting the set of constraint violations which may be
-     * empty to specified consumer.
+     * Verifies that the {@code actual} value is valid, while accepting the set of constraint violations, which may be
+     * empty, to specified consumer.
      *
      * @param consumer the consumer accepts the set of constraint violations which may be empty.
      * @return this assertion object.
@@ -123,7 +123,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
 
     /**
      * Verified that no constraint violations populated while validating all constraints placed on the property of
-     * specified name of the {@code actual} value, are validated.
+     * specified name of the {@code actual} value.
      * <p>
      * {@snippet lang = "java" id = "example":
      * class User {
@@ -164,7 +164,7 @@ public interface BeanAssert<SELF extends BeanAssert<SELF, ACTUAL>, ACTUAL>
 
     /**
      * Verified that any constraint violation populated while validating all constraints placed on the property of
-     * specified name of the {@code actual} value, is not validated.
+     * specified name of the {@code actual} value.
      * <p>
      * {@snippet lang = "java" id = "example":
      * class User {
