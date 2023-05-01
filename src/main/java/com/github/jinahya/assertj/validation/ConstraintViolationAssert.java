@@ -72,6 +72,50 @@ public interface ConstraintViolationAssert<
         return (SELF) this;
     }
 
+    // -------------------------------------------------------------------------------------------------------- leafBean
+    <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
+            final Function<? super ACTUAL, ? extends U> beanExtractor,
+            final AssertFactory<? super U, ? extends A> assertFactory);
+
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
+            final AssertFactory<? super U, ? extends A> assertFactory) {
+        return extractingLeafBean(a -> (U) a.getLeafBean(), assertFactory);
+    }
+
+    default <U> AbstractObjectAssert<?, U> extractingLeafBean() {
+        return extractingLeafBean(new ObjectAssertFactory<>());
+    }
+
+    /**
+     * Verifies that the {@link ConstraintViolation#getLeafBean() actual.leafBean} is equal to specified value.
+     *
+     * @param expectedLeafBean the expected value of {@code actual.leafBean}.
+     * @return this assertion object.
+     * @see ConstraintViolation#getLeafBean()
+     * @see #extractingLeafBean()
+     */
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default SELF hasLeafBean(final Object expectedLeafBean) {
+        extractingLeafBean()
+                .isEqualTo(expectedLeafBean);
+        return (SELF) this;
+    }
+
+    /**
+     * Verifies that the {@code actual} constraint violation has no {@link ConstraintViolation#getLeafBean() leafBean}.
+     *
+     * @return this assertion object.
+     * @apiNote This method is equivalent to invoking {@link #hasLeafBean(Object)} method with {@code null}.
+     */
+    default SELF hasNoLeafBean() {
+        return hasLeafBean(null);
+    }
+
     // -------------------------------------------------------------------------------------------------------- rootBean
     <A extends AbstractObjectAssert<?, T>> A extractingRootBean(
             final AssertFactory<? super T, ? extends A> assertFactory);
@@ -93,6 +137,16 @@ public interface ConstraintViolationAssert<
     default SELF hasRootBean(final T expectedRootBean) {
         extractingRootBean().isEqualTo(expectedRootBean);
         return (SELF) this;
+    }
+
+    /**
+     * Verifies that the {@code actual} constraint violation has no {@link ConstraintViolation#getRootBean() rootBean}.
+     *
+     * @return this assertion object.
+     * @apiNote This method is equivalent to invoking {@link #hasRootBean(Object)} method with {@code null}.
+     */
+    default SELF hasNoRootBean() {
+        return hasRootBean(null);
     }
 
     // --------------------------------------------------------------------------------------------------- rootBeanClass

@@ -114,30 +114,20 @@ public abstract class AbstractConstraintViolationAssert<
     }
 
     // -------------------------------------------------------------------------------------------------------- leafBean
-    @SuppressWarnings({
-            "unchecked"
-    })
-    <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
+
+    @Override
+    public <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
+            final Function<? super ACTUAL, ? extends U> beanExtractor,
             final AssertFactory<? super U, ? extends A> assertFactory) {
-        return isNotNull().extracting(a -> (U) a.getLeafBean(), assertFactory);
+        return isNotNull()
+                .extracting(beanExtractor, assertFactory);
     }
 
-    <U> AbstractObjectAssert<?, U> extractingLeafBean() {
-        return extractingLeafBean(new ObjectAssertFactory<>());
-    }
-
-    /**
-     * Verifies that the {@link ConstraintViolation#getLeafBean() actual.leafBean} is equal to specified value.
-     *
-     * @param expectedLeafBean the expected value of {@code actual.leafBean}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getLeafBean()
-     * @see #extractingLeafBean()
-     */
-    SELF hasLeafBean(final Object expectedLeafBean) {
-        extractingLeafBean()
-                .isEqualTo(expectedLeafBean);
-        return myself;
+    // ---------------------------------------------------------------------------------------------------- propertyPath
+    <A extends AbstractAssert<?, ? extends Path>> A extractingPropertyPath(
+            final AssertFactory<? super Path, ? extends A> assertFactory) {
+        return isNotNull()
+                .extracting(ConstraintViolation::getPropertyPath, assertFactory);
     }
 
     // -------------------------------------------------------------------------------------------------------- rootBean
@@ -154,12 +144,6 @@ public abstract class AbstractConstraintViolationAssert<
             final AssertFactory<? super Class<T>, ? extends A> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
-    }
-
-    <ASSERT extends AbstractAssert<?, ? extends Path>> ASSERT extractingPropertyPath(
-            final AssertFactory<? super Path, ? extends ASSERT> assertFactory) {
-        return isNotNull()
-                .extracting(ConstraintViolation::getPropertyPath, assertFactory);
     }
 
     public AbstractPathAssert<?> extractingPropertyPath() {

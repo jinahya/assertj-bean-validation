@@ -64,9 +64,11 @@ class User_ConstraintViolationAssert_Test {
                         assertThat(s).hasSize(1).allSatisfy(cv -> {
                             assertThatConstraintViolation(cv)
                                     .hasInvalidValue(name)
-                                    .hasRootBean(null)
+                                    .hasNoLeafBean()
+                                    .hasNoRootBean()
                                     .hasRootBeanClass(User.class);
                             assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(name);
+                            assertThatConstraintViolation(cv).extractingLeafBean().isNull();
                             assertThatConstraintViolation(cv).extractingRootBean().isNull();
                             assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
                         });
@@ -98,9 +100,11 @@ class User_ConstraintViolationAssert_Test {
                         assertThat(s).hasSize(1).allSatisfy(cv -> {
                             assertThatConstraintViolation(cv)
                                     .hasInvalidValue(age)
-                                    .hasRootBean(null)
+                                    .hasNoLeafBean()
+                                    .hasNoRootBean()
                                     .hasRootBeanClass(User.class);
                             assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(age);
+                            assertThatConstraintViolation(cv).extractingLeafBean().isNull();
                             assertThatConstraintViolation(cv).extractingRootBean().isNull();
                             assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
                         });
