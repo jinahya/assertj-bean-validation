@@ -38,6 +38,13 @@ import javax.validation.Validator;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * A base interface for verifying values and beans.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
 public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends Assert<SELF, ACTUAL> {
 
