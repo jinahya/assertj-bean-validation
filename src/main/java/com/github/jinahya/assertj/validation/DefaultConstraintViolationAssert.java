@@ -4,7 +4,7 @@ package com.github.jinahya.assertj.validation;
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 - 2023 Jinahya, Inc.
+ * Copyright (C) 2021 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,17 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.AbstractIterableAssert;
-
 import javax.validation.ConstraintViolation;
 
-@SuppressWarnings({
-        "java:S119" // <SELF>
-})
-abstract class AbstractIterableOfConstraintViolationsAssert<
-        SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>, T>
-        extends AbstractIterableAssert<
-        SELF, Iterable<? extends ConstraintViolation<T>>, ConstraintViolation<T>, DefaultConstraintViolationAssert<T>> {
+class DefaultConstraintViolationAssert<T>
+        extends AbstractConstraintViolationAssert<DefaultConstraintViolationAssert<T>, ConstraintViolation<T>, T> {
 
-    protected AbstractIterableOfConstraintViolationsAssert(final Iterable<? extends ConstraintViolation<T>> actual,
-                                                           final Class<?> selfType) {
-        super(actual, selfType);
+    /**
+     * Creates a new instance for verifying specified actual value.
+     *
+     * @param actual the actual value to verify.
+     */
+    DefaultConstraintViolationAssert(final ConstraintViolation<T> actual) {
+        super(actual, DefaultConstraintViolationAssert.class);
     }
 }
