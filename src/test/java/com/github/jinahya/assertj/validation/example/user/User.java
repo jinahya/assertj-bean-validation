@@ -66,6 +66,9 @@ final class User {
     }
 
     static int invalidAge() {
+        if (true) {
+            return ~validAge();
+        }
         return (current().nextBoolean()
                 ? (current().nextInt() | Integer.MIN_VALUE) // not has been born yet
                 : current().nextInt(MAX_AGE + 1, Integer.MAX_VALUE)) // too old

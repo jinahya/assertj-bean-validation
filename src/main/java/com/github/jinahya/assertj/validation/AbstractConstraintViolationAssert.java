@@ -28,6 +28,7 @@ import org.assertj.core.api.AssertFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
+import javax.validation.metadata.ConstraintDescriptor;
 import java.util.function.Function;
 
 /**
@@ -50,6 +51,16 @@ public abstract class AbstractConstraintViolationAssert<
      */
     protected AbstractConstraintViolationAssert(final ACTUAL actual, final Class<?> selfType) {
         super(actual, selfType);
+    }
+
+    // -------------------------------------------------------------------------------------------- constraintDescriptor
+    @Override
+    public <DESCRIPTOR extends ConstraintDescriptor<?>,
+            ASSERT extends AbstractConstraintDescriptorAssert<?, DESCRIPTOR, ?>>
+    ASSERT extractingConstraintDescriptor(
+            final Function<? super ACTUAL, ? extends DESCRIPTOR> descriptorExtractor,
+            final AssertFactory<? super DESCRIPTOR, ? extends ASSERT> assertFactory) {
+        return isNotNull().extracting(descriptorExtractor, assertFactory::createAssert);
     }
 
     // -------------------------------------------------------------------------------------------- executableParameters
@@ -112,5 +123,4 @@ public abstract class AbstractConstraintViolationAssert<
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
     }
-
 }

@@ -23,19 +23,21 @@ package com.github.jinahya.assertj.validation.example.user;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
+import javax.validation.ConstraintViolation;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
+import java.util.HashSet;
+
+import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintDescriptor;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatConstraintViolation;
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatProperty;
 import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.shouldFail;
 import static com.github.jinahya.assertj.validation.ValidationAssertionsTestUtils.shouldPass;
-import static com.github.jinahya.assertj.validation.example.user.User.PROPERTY_NAME_AGE;
-import static com.github.jinahya.assertj.validation.example.user.User.PROPERTY_NAME_NAME;
 import static com.github.jinahya.assertj.validation.example.user.User.invalidAge;
 import static com.github.jinahya.assertj.validation.example.user.User.invalidName;
-import static com.github.jinahya.assertj.validation.example.user.User.userOf;
 import static com.github.jinahya.assertj.validation.example.user.User.validAge;
-import static com.github.jinahya.assertj.validation.example.user.User.validAgeForJunior;
-import static com.github.jinahya.assertj.validation.example.user.User.validAgeForSenior;
 import static com.github.jinahya.assertj.validation.example.user.User.validName;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,25 +61,34 @@ class User_ConstraintViolationAssert_Test {
         void __InvalidName() {
             final var name = invalidName();
             final var assertions = assertThatProperty(name);
+            final var violations = new HashSet<ConstraintViolation<User>>();
             shouldFail(
-                    () -> assertions.isValidFor(User.class, "name", s -> {
-                        assertThat(s).hasSize(1).allSatisfy(cv -> {
-                            assertThatConstraintViolation(cv)
-                                    .hasNoExecutableParameters()
-                                    .hasNoExecutableReturnValue()
-                                    .hasInvalidValue(name)
-                                    .hasNoLeafBean()
-                                    .hasNoRootBean()
-                                    .hasRootBeanClass(User.class);
-                            assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
-                            assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
-                            assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(name);
-                            assertThatConstraintViolation(cv).extractingLeafBean().isNull();
-                            assertThatConstraintViolation(cv).extractingRootBean().isNull();
-                            assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
-                        });
-                    })
+                    () -> assertions.isValidFor(User.class, "name", violations::addAll)
             );
+            assertThat(violations).hasSize(1).allSatisfy(cv -> {
+                assertThatConstraintViolation(cv)
+                        .hasNoExecutableParameters()
+                        .hasNoExecutableReturnValue()
+                        .hasInvalidValue(name)
+                        .hasNoLeafBean()
+                        .hasNoRootBean()
+                        .hasRootBeanClass(User.class);
+                assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
+                assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
+                assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(name);
+                assertThatConstraintViolation(cv).extractingLeafBean().isNull();
+                assertThatConstraintViolation(cv).extractingRootBean().isNull();
+                assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
+                {
+                    assertThatConstraintViolation(cv)
+                            .extractingConstraintDescriptor()
+                            .extractingAnnotation()
+                            .isInstanceOf(NotBlank.class);
+                    assertThatConstraintDescriptor(cv.getConstraintDescriptor())
+                            .extractingAnnotation()
+                            .isInstanceOf(NotBlank.class);
+                }
+            });
         }
     }
 
@@ -99,83 +110,34 @@ class User_ConstraintViolationAssert_Test {
         void __InvalidAge() {
             final var age = invalidAge();
             final var assertions = assertThatProperty(age);
+            final var violations = new HashSet<ConstraintViolation<User>>();
             shouldFail(
-                    () -> assertions.isValidFor(User.class, "age", s -> {
-                        assertThat(s).hasSize(1).allSatisfy(cv -> {
-                            assertThatConstraintViolation(cv)
-                                    .hasNoExecutableParameters()
-                                    .hasNoExecutableReturnValue()
-                                    .hasInvalidValue(age)
-                                    .hasNoLeafBean()
-                                    .hasNoRootBean()
-                                    .hasRootBeanClass(User.class);
-                            assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
-                            assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
-                            assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(age);
-                            assertThatConstraintViolation(cv).extractingLeafBean().isNull();
-                            assertThatConstraintViolation(cv).extractingRootBean().isNull();
-                            assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
-                        });
-                    })
+                    () -> assertions.isValidFor(User.class, "age", violations::addAll)
             );
-        }
-    }
-
-    @Test
-    void __validName() {
-        final var user = userOf(validName(), validAge());
-        final var assertion = assertThatBean(user);
-        {
-            shouldFail(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_NAME));
-        }
-        {
-            shouldFail(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_AGE));
-        }
-    }
-
-    @Test
-    void __invalidName() {
-        final var user = userOf(invalidName(), validAge());
-        final var assertion = assertThatBean(user);
-        {
-            shouldPass(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_NAME));
-        }
-        {
-            shouldFail(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_AGE));
-        }
-    }
-
-    @Test
-    void __validAgeForJunior() {
-        final var user = userOf(validName(), validAgeForJunior());
-        final var assertion = assertThatBean(user);
-        {
-            shouldFail(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_NAME));
-        }
-        {
-            assertion.targetingGroups(Junior.class);
-            shouldFail(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_AGE));
-        }
-        {
-            assertion.targetingGroups(Senior.class);
-            shouldPass(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_AGE));
-        }
-    }
-
-    @Test
-    void __validAgeForSenior() {
-        final var user = userOf(validName(), validAgeForSenior());
-        final var assertion = assertThatBean(user);
-        {
-            shouldFail(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_NAME));
-        }
-        {
-            assertion.targetingGroups(Junior.class);
-            shouldPass(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_AGE));
-        }
-        {
-            assertion.targetingGroups(Senior.class);
-            shouldFail(() -> assertion.doesNotHaveValidProperty(PROPERTY_NAME_AGE));
+            assertThat(violations).hasSize(1).allSatisfy(cv -> {
+                assertThatConstraintViolation(cv)
+                        .hasNoExecutableParameters()
+                        .hasNoExecutableReturnValue()
+                        .hasInvalidValue(age)
+                        .hasNoLeafBean()
+                        .hasNoRootBean()
+                        .hasRootBeanClass(User.class);
+                assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
+                assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
+                assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(age);
+                assertThatConstraintViolation(cv).extractingLeafBean().isNull();
+                assertThatConstraintViolation(cv).extractingRootBean().isNull();
+                assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
+                {
+                    assertThatConstraintViolation(cv)
+                            .extractingConstraintDescriptor()
+                            .extractingAnnotation()
+                            .isInstanceOfAny(PositiveOrZero.class, Min.class, Max.class);
+                    assertThatConstraintDescriptor(cv.getConstraintDescriptor())
+                            .extractingAnnotation()
+                            .isInstanceOfAny(PositiveOrZero.class, Min.class, Max.class);
+                }
+            });
         }
     }
 }

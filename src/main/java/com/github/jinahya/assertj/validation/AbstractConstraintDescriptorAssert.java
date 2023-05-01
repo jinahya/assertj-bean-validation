@@ -20,13 +20,13 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.AbstractMapAssert;
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -34,11 +34,11 @@ import java.util.function.Function;
  *
  * @param <SELF>   self type parameter
  * @param <ACTUAL> actual type parameter
- * @param <T>      root bean type parameter
+ * @param <T>      constraint's annotation type
  */
 public abstract class AbstractConstraintDescriptorAssert<
         SELF extends AbstractConstraintDescriptorAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintDescriptor<T>, T extends Annotation>
-        extends AbstractValidationAssert<SELF, ACTUAL>
+        extends AbstractAssert<SELF, ACTUAL>
         implements ConstraintDescriptorAssert<SELF, ACTUAL, T> {
 
     /**
@@ -54,13 +54,10 @@ public abstract class AbstractConstraintDescriptorAssert<
     // ------------------------------------------------------------------------------------------------------ annotation
 
     @Override
-    public SELF hasAnnotation(final T expectedAnnotation) {
-//        return isNotNull()
-        return null;
+    public <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
+            final Function<? super ACTUAL, ? extends T> annotationExtractor,
+            final AssertFactory<? super T, ? extends A> assertFactory) {
+        return isNotNull()
+                .extracting(annotationExtractor, assertFactory);
     }
-
-//    @Override
-//    public <U, A extends AbstractMapAssert<?, ? extends Map<String, Object>, String, Object>> A extractingAttributes(Function<? super ACTUAL, ? extends Map<String, Object>> attributesExtractor, AssertFactory<? super U, ? extends A> assertFactory) {
-//        return null;
-//    }
 }

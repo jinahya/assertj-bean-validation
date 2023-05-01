@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
 
@@ -39,8 +40,7 @@ public interface ConstraintDescriptorAssert<
         SELF extends ConstraintDescriptorAssert<SELF, ACTUAL, T>,
         ACTUAL extends ConstraintDescriptor<T>,
         T extends Annotation>
-//        extends ValidationAssert<SELF, ACTUAL>
-{
+        extends Assert<SELF, ACTUAL> {
 
     // ------------------------------------------------------------------------------------------------------ annotation
     <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
@@ -54,14 +54,6 @@ public interface ConstraintDescriptorAssert<
 
     default AbstractObjectAssert<?, T> extractingAnnotation() {
         return extractingAnnotation(Assertions::assertThat);
-    }
-
-    @SuppressWarnings({
-            "unchecked"
-    })
-    default SELF hasAnnotation(final T expectedAnnotation) {
-        extractingAnnotation().isEqualTo(expectedAnnotation);
-        return (SELF) this;
     }
 
     // ------------------------------------------------------------------------------------------------------ attributes

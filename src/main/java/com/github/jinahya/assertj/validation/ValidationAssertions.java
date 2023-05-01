@@ -22,6 +22,8 @@ package com.github.jinahya.assertj.validation;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
+import javax.validation.metadata.ConstraintDescriptor;
+import java.lang.annotation.Annotation;
 
 /**
  * A class for creating assertion instances.
@@ -50,6 +52,11 @@ public final class ValidationAssertions {
      */
     public static <ACTUAL> PropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
         return new DefaultPropertyAssert<>(actual);
+    }
+
+    public static <T extends Annotation> AbstractConstraintDescriptorAssert<?, ?, T> assertThatConstraintDescriptor(
+            final ConstraintDescriptor<T> actual) {
+        return new DefaultConstraintDescriptorAssert<>(actual);
     }
 
     /**

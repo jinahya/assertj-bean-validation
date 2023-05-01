@@ -23,12 +23,14 @@ package com.github.jinahya.assertj.validation;
 import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractObjectArrayAssert;
 import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.metadata.ConstraintDescriptor;
 import java.util.function.Function;
 
 /**
@@ -40,9 +42,31 @@ import java.util.function.Function;
  */
 public interface ConstraintViolationAssert<
         SELF extends ConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
-        extends ValidationAssert<SELF, ACTUAL> {
+        extends Assert<SELF, ACTUAL> {
 
     // -------------------------------------------------------------------------------------------- constraintDescriptor
+    <DESCRIPTOR extends ConstraintDescriptor<?>,
+            ASSERT extends AbstractConstraintDescriptorAssert<?, DESCRIPTOR, ?>>
+    ASSERT extractingConstraintDescriptor(
+            final Function<? super ACTUAL, ? extends DESCRIPTOR> descriptorExtractor,
+            final AssertFactory<? super DESCRIPTOR, ? extends ASSERT> assertFactory);
+
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default <DESCRIPTOR extends ConstraintDescriptor<?>,
+            ASSERT extends AbstractConstraintDescriptorAssert<?, DESCRIPTOR, ?>>
+    ASSERT extractingConstraintDescriptor(
+            final AssertFactory<? super DESCRIPTOR, ? extends ASSERT> assertFactory) {
+        return extractingConstraintDescriptor(a -> (DESCRIPTOR) a.getConstraintDescriptor(), assertFactory);
+    }
+
+    default ConstraintDescriptorAssert<?, ?, ?> extractingConstraintDescriptor() {
+        return extractingConstraintDescriptor(
+                // do not change following line into a method reference!!!
+                (ConstraintDescriptor<?> cd) -> ValidationAssertions.assertThatConstraintDescriptor(cd)
+        );
+    }
 
     // -------------------------------------------------------------------------------------------- executableParameters
     <ASSERT extends AbstractObjectArrayAssert<?, Object>> ASSERT extractingExecutableParameters(
