@@ -36,7 +36,7 @@ public interface PropertyAssert<SELF extends PropertyAssert<SELF, ACTUAL>, ACTUA
 
     /**
      * Verifies that the {@code actual} value is valid for the property of specified name of specified bean type, while
-     * accepting a set of constraint violations which may be empty to specified consumer.
+     * accepting a set of constraint violations, which may be empty, to specified consumer.
      *
      * @param beanType     the bean type; must be not {@code null}.
      * @param propertyName the name of the property; must be not {@code null}.
