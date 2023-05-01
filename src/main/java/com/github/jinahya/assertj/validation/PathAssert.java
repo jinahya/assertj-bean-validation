@@ -20,24 +20,138 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractBooleanAssert;
+import org.assertj.core.api.AbstractClassAssert;
+import org.assertj.core.api.AbstractIntegerAssert;
+import org.assertj.core.api.AbstractIterableAssert;
+import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.AbstractStringAssert;
+import org.assertj.core.api.Assert;
+import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.ListAssert;
+
 import javax.validation.Path;
+import java.util.List;
 
 /**
  * An abstract class for verifying {@link Path} values.
  *
- * @param <SELF>   self type parameter
- * @param <ACTUAL> path type parameter
+ * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({
-        "java:S119" // <SELF>, <ACTUAL>
-})
-interface PathAssert<SELF extends PathAssert<SELF, ACTUAL>, ACTUAL extends Path>
-        extends ValidationAssert<SELF, ACTUAL> {
+interface PathAssert<SELF extends PathAssert<SELF>>
+        extends Assert<SELF, Path> {
 
     interface NodeAssert<
-            SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
-            extends ValidationAssert<SELF, ACTUAL> {
+            SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node> {
 
+        // ---------------------------------------------------------------------------------------------------------- as
+        <NODE extends Path.Node, ASSERT extends NodeAssert<?, NODE>> ASSERT extractingAs(
+                final Class<NODE> nodeType,
+                final AssertFactory<? super NODE, ? extends ASSERT> assertFactory
+        );
+
+        // ------------------------------------------------------------------------------------------------------- index
+        AbstractIntegerAssert<?> extractingIndex();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasIndex(final int expectedIndex) {
+            extractingIndex().isEqualTo(expectedIndex);
+            return (SELF) this;
+        }
+
+        // --------------------------------------------------------------------------------------------------------- key
+        AbstractObjectAssert<?, Object> extractingKey();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasKey(final Object expectedKey) {
+            extractingKey().isEqualTo(expectedKey);
+            return (SELF) this;
+        }
+
+        // -------------------------------------------------------------------------------------------------------- kind
+
+        // -------------------------------------------------------------------------------------------------------- name
+        AbstractStringAssert<?> extractingName();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasName(final String expectedName) {
+            extractingName().isEqualTo(expectedName);
+            return (SELF) this;
+        }
+
+        // -------------------------------------------------------------------------------------------------- inIterable
+        AbstractBooleanAssert<?> extractingInIterable();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF isInIterable() {
+            extractingInIterable().isTrue();
+            return (SELF) this;
+        }
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF isNotInIterable() {
+            extractingInIterable().isFalse();
+            return (SELF) this;
+        }
+    }
+
+    interface BeanNodeAssert<SELF extends BeanNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.BeanNode>
+            extends NodeAssert<SELF, ACTUAL> {
+
+        // ---------------------------------------------------------------------------------------------- containerClass
+        AbstractClassAssert<?> extractingContainerClass();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasContainerClass(final Class<?> expectedContainerClass) {
+            extractingContainerClass().isEqualTo(expectedContainerClass);
+            return (SELF) this;
+        }
+
+        // ------------------------------------------------------------------------------------------- typeArgumentIndex
+        AbstractIntegerAssert<?> extractingTypeArgumentIndex();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasTypeArgumentIndex(final Integer expectedTypeArgumentIndex) {
+            extractingTypeArgumentIndex().isEqualTo(expectedTypeArgumentIndex);
+            return (SELF) this;
+        }
+
+        default SELF hasNoTypeArgumentIndex() {
+            return hasTypeArgumentIndex(null);
+        }
+    }
+
+    interface ConstructorNodeAssert<
+            SELF extends ConstructorNodeAssert<SELF, ACTUAL>,
+            ACTUAL extends Path.ConstructorNode>
+            extends NodeAssert<SELF, ACTUAL> {
+
+        // ---------------------------------------------------------------------------------------------- parameterTypes
+        AbstractIterableAssert<?, ?, ? super Class<?>, ?> extractingParameterTypes4();
+
+        ListAssert<? super Class<?>> extractingParameterTypes5();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasParameterTypes(final List<Class<?>> expectedParameterTypes) {
+            extractingParameterTypes5().isEqualTo(expectedParameterTypes);
+            return (SELF) this;
+        }
     }
 }

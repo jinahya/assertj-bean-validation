@@ -98,17 +98,17 @@ public interface ConstraintViolationAssert<
     }
 
     // ------------------------------------------------------------------------------------------- executableReturnValue
-    <U, A extends AbstractObjectAssert<?, U>> A extractingExecutableReturnValue(
-            final Function<? super ACTUAL, ? extends U> valueExtractor,
-            final AssertFactory<? super U, ? extends A> assertFactory);
+    <VALUE, ASSERT extends AbstractObjectAssert<?, VALUE>> ASSERT extractingExecutableReturnValue(
+            final Function<? super ACTUAL, ? extends VALUE> valueExtractor,
+            final AssertFactory<? super VALUE, ? extends ASSERT> assertFactory);
 
     @SuppressWarnings({"unchecked"})
-    default <U, A extends AbstractObjectAssert<?, U>> A extractingExecutableReturnValue(
-            final AssertFactory<? super U, ? extends A> assertFactory) {
-        return extractingExecutableReturnValue(a -> (U) a.getExecutableReturnValue(), assertFactory);
+    default <VALUE, ASSERT extends AbstractObjectAssert<?, VALUE>> ASSERT extractingExecutableReturnValue(
+            final AssertFactory<? super VALUE, ? extends ASSERT> assertFactory) {
+        return extractingExecutableReturnValue(a -> (VALUE) a.getExecutableReturnValue(), assertFactory);
     }
 
-    default <U> AbstractObjectAssert<?, U> extractingExecutableReturnValue() {
+    default <VALUE> AbstractObjectAssert<?, VALUE> extractingExecutableReturnValue() {
         return extractingExecutableReturnValue(new ObjectAssertFactory<>());
     }
 
@@ -133,19 +133,19 @@ public interface ConstraintViolationAssert<
     }
 
     // ---------------------------------------------------------------------------------------------------- invalidValue
-    <U, A extends AbstractObjectAssert<?, U>> A extractingInvalidValue(
-            final Function<? super ACTUAL, ? extends U> valueExtractor,
-            final AssertFactory<? super U, ? extends A> assertFactory);
+    <VALUE, ASSERT extends AbstractObjectAssert<?, VALUE>> ASSERT extractingInvalidValue(
+            final Function<? super ACTUAL, ? extends VALUE> valueExtractor,
+            final AssertFactory<? super VALUE, ? extends ASSERT> assertFactory);
 
     @SuppressWarnings({
             "unchecked"
     })
-    default <U, A extends AbstractObjectAssert<?, U>> A extractingInvalidValue(
-            final AssertFactory<? super U, ? extends A> assertFactory) {
-        return extractingInvalidValue(a -> (U) a.getInvalidValue(), assertFactory);
+    default <VALUE, ASSERT extends AbstractObjectAssert<?, VALUE>> ASSERT extractingInvalidValue(
+            final AssertFactory<? super VALUE, ? extends ASSERT> assertFactory) {
+        return extractingInvalidValue(a -> (VALUE) a.getInvalidValue(), assertFactory);
     }
 
-    default <U> AbstractObjectAssert<?, U> extractingInvalidValue() {
+    default <VALUE> AbstractObjectAssert<?, VALUE> extractingInvalidValue() {
         return extractingInvalidValue(new ObjectAssertFactory<>());
     }
 
@@ -165,19 +165,19 @@ public interface ConstraintViolationAssert<
     }
 
     // -------------------------------------------------------------------------------------------------------- leafBean
-    <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
-            final Function<? super ACTUAL, ? extends U> beanExtractor,
-            final AssertFactory<? super U, ? extends A> assertFactory);
+    <BEAN, ASSERT extends AbstractObjectAssert<?, BEAN>> ASSERT extractingLeafBean(
+            final Function<? super ACTUAL, ? extends BEAN> beanExtractor,
+            final AssertFactory<? super BEAN, ? extends ASSERT> assertFactory);
 
     @SuppressWarnings({
             "unchecked"
     })
-    default <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
-            final AssertFactory<? super U, ? extends A> assertFactory) {
-        return extractingLeafBean(a -> (U) a.getLeafBean(), assertFactory);
+    default <BEAN, ASSERT extends AbstractObjectAssert<?, BEAN>> ASSERT extractingLeafBean(
+            final AssertFactory<? super BEAN, ? extends ASSERT> assertFactory) {
+        return extractingLeafBean(a -> (BEAN) a.getLeafBean(), assertFactory);
     }
 
-    default <U> AbstractObjectAssert<?, U> extractingLeafBean() {
+    default <BEAN> AbstractObjectAssert<?, BEAN> extractingLeafBean() {
         return extractingLeafBean(new ObjectAssertFactory<>());
     }
 
@@ -209,8 +209,8 @@ public interface ConstraintViolationAssert<
     }
 
     // -------------------------------------------------------------------------------------------------------- rootBean
-    <A extends AbstractObjectAssert<?, T>> A extractingRootBean(
-            final AssertFactory<? super T, ? extends A> assertFactory);
+    <ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingRootBean(
+            final AssertFactory<? super T, ? extends ASSERT> assertFactory);
 
     default AbstractObjectAssert<?, T> extractingRootBean() {
         return extractingRootBean(Assertions::assertThat);
@@ -242,8 +242,8 @@ public interface ConstraintViolationAssert<
     }
 
     // --------------------------------------------------------------------------------------------------- rootBeanClass
-    <A extends AbstractClassAssert<?>> A extractingRootBeanClass(
-            final AssertFactory<? super Class<T>, ? extends A> assertFactory);
+    <ASSERT extends AbstractClassAssert<?>> ASSERT extractingRootBeanClass(
+            final AssertFactory<? super Class<T>, ? extends ASSERT> assertFactory);
 
     default AbstractClassAssert<?> extractingRootBeanClass() {
         return extractingRootBeanClass(Assertions::assertThat);
