@@ -29,6 +29,8 @@ import java.util.function.Function;
 
 abstract class Registration {
 
+    static final String PROPERTY_NAME_USER = "user";
+
     static <T extends Registration> T of(final Function<? super User, ? extends T> initializer, final User user) {
         return initializer.apply(user);
     }

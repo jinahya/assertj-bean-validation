@@ -63,7 +63,7 @@ abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>,
         final Validator validator = delegate.getValidator();
         final Class<?>[] groups = delegate.getGroups();
         delegate.setViolations(validator.validate(actual, groups));
-        ValidationAssertUtils.accept(delegate.getViolations(), consumer);
+        delegate.acceptViolations(consumer);
         assertThat(delegate.getViolations())
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"
@@ -110,7 +110,7 @@ abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>,
         final Validator validator = delegate.getValidator();
         final Class<?>[] groups = delegate.getGroups();
         final Set<ConstraintViolation<ACTUAL>> violations = validator.validateProperty(actual, propertyName, groups);
-        ValidationAssertUtils.accept(violations, consumer);
+        delegate.acceptViolations(consumer);
         assertThat(violations)
                 .as("%nThe set of constraint violations resulted while validating%n"
                     + "\tactual: %s%n"

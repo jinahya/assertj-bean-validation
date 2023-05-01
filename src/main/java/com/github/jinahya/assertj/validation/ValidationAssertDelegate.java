@@ -24,11 +24,14 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.Arrays;
+import javax.validation.groups.Default;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static java.util.Collections.unmodifiableSet;
 
 final class ValidationAssertDelegate {
 
@@ -44,15 +47,21 @@ final class ValidationAssertDelegate {
      * @return the targeting group; never {@code null}.
      */
     Class<?>[] getGroups() {
+        if (groups.isEmpty()) {
+            return new Class<?>[]{Default.class};
+        }
         return groups.toArray(new Class<?>[0]);
     }
 
     void setGroups(final Class<?>... groups) {
         this.groups.clear();
         if (groups != null) {
-            Arrays.stream(groups)
-                    .filter(Objects::nonNull)
-                    .forEach(this.groups::add);
+            for (final Class<?> group : groups) {
+                if (group == null) {
+                    throw new IllegalArgumentException("groups contains null");
+                }
+                this.groups.add(group);
+            }
         }
     }
 
@@ -69,6 +78,14 @@ final class ValidationAssertDelegate {
         this.violations.addAll(violations);
     }
 
+    <T> void acceptViolations(final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
+        try {
+            consumer.accept(unmodifiableSet(getViolations()));
+        } catch (final Exception e) {
+            throw new RuntimeException("failed to accept violations to [" + consumer + "]", e);
+        }
+    }
+
     Validator getValidator() {
         return Objects.requireNonNull(validatorSupplier.get(), "null supplied by " + validatorSupplier);
     }
@@ -82,11 +99,11 @@ final class ValidationAssertDelegate {
     }
 
     void setValidatorSupplier(final Supplier<? extends Validator> validatorSupplier) {
-        if (validatorSupplier == null) {
-            this.validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
+        if (validatorSupplier != null) {
+            this.validatorSupplier = validatorSupplier;
             return;
         }
-        this.validatorSupplier = validatorSupplier;
+        this.validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
     }
 
     final Set<Class<?>> groups = new HashSet<>();
