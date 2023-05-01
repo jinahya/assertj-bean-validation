@@ -113,15 +113,15 @@ public abstract class AbstractConstraintViolationAssert<
                 .extracting(valueExtractor, assertFactory);
     }
 
+    // -------------------------------------------------------------------------------------------------------- leafBean
     @SuppressWarnings({
             "unchecked"
     })
-    <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingLeafBean(
-            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
+    <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
+            final AssertFactory<? super U, ? extends A> assertFactory) {
         return isNotNull().extracting(a -> (U) a.getLeafBean(), assertFactory);
     }
 
-    // -------------------------------------------------------------------------------------------------------- leafBean
     <U> AbstractObjectAssert<?, U> extractingLeafBean() {
         return extractingLeafBean(new ObjectAssertFactory<>());
     }
