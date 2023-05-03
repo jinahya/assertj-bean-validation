@@ -25,8 +25,7 @@ import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractIterableAssert;
-import org.assertj.core.api.AbstractObjectAssert;
-import org.assertj.core.api.AbstractStringAssert;
+import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -70,13 +69,13 @@ public abstract class AbstractPathAssert<
 
         // ------------------------------------------------------------------------------------------------------- index
         @Override
-        public AbstractIntegerAssert<?> extractingIndex() {
+        public Assert<?, Integer> extractingIndex() {
             return extracting(Path.Node::getIndex, InstanceOfAssertFactories.INTEGER);
         }
 
         // --------------------------------------------------------------------------------------------------------- key
         @Override
-        public AbstractObjectAssert<?, Object> extractingKey() {
+        public Assert<?, ?> extractingKey() {
             return extracting(Path.Node::getIndex, new ObjectAssertFactory<>());
         }
 
@@ -87,7 +86,7 @@ public abstract class AbstractPathAssert<
 
         // -------------------------------------------------------------------------------------------------------- name
         @Override
-        public AbstractStringAssert<?> extractingName() {
+        public Assert<?, String> extractingName() {
             return extracting(Path.Node::getName, InstanceOfAssertFactories.STRING);
         }
 
@@ -110,13 +109,24 @@ public abstract class AbstractPathAssert<
 
     abstract static class AbstractBeanNodeAssert<
             SELF extends AbstractBeanNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.BeanNode>
-            extends AbstractNodeAssert<SELF, ACTUAL> {
+            extends AbstractNodeAssert<SELF, ACTUAL>
+            implements BeanNodeAssert<SELF, ACTUAL> {
 
         AbstractBeanNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
         }
 
-//        abstract AbstractClassAssert<?> extractingContainerClass();
+        @Override
+        public Assert<?, ? extends Class<?>> extractingContainerClass() {
+            return isNotNull()
+                    .extracting(Path.BeanNode::getContainerClass, InstanceOfAssertFactories.CLASS);
+        }
+
+        @Override
+        public Assert<?, Integer> extractingTypeArgumentIndex() {
+            return isNotNull()
+                    .extracting(Path.BeanNode::getContainerClass, InstanceOfAssertFactories.INTEGER);
+        }
     }
 
     abstract static class AbstractConstructorNodeAssert<

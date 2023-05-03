@@ -20,10 +20,13 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractObjectArrayAssert;
 import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
@@ -87,14 +90,26 @@ public abstract class AbstractConstraintViolationAssert<
                 .extracting(valueExtractor, assertFactory);
     }
 
+    @Override
+    public Assert<?, ?> extractingInvalidValue2() {
+        return isNotNull()
+                .extracting(ConstraintViolation::getInvalidValue, new ObjectAssertFactory<>());
+    }
+
     // -------------------------------------------------------------------------------------------------------- leafBean
 
     @Override
-    public <U, A extends AbstractObjectAssert<?, U>> A extractingLeafBean(
+    public <U, A extends AbstractAssert<?, ? extends U>> A extractingLeafBean(
             final Function<? super ACTUAL, ? extends U> beanExtractor,
             final AssertFactory<? super U, ? extends A> assertFactory) {
         return isNotNull()
                 .extracting(beanExtractor, assertFactory);
+    }
+
+    @Override
+    public Assert<?, ?> extractingLeafBean2() {
+        return isNotNull()
+                .extracting(ConstraintViolation::getLeafBean, new ObjectAssertFactory<>());
     }
 
     // ---------------------------------------------------------------------------------------------------- propertyPath
@@ -106,7 +121,7 @@ public abstract class AbstractConstraintViolationAssert<
 
     // -------------------------------------------------------------------------------------------------------- rootBean
     @Override
-    public <A extends AbstractObjectAssert<?, T>> A extractingRootBean(
+    public <A extends AbstractAssert<?, T>> A extractingRootBean(
             final AssertFactory<? super T, ? extends A> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBean, assertFactory);
@@ -116,6 +131,13 @@ public abstract class AbstractConstraintViolationAssert<
     @Override
     public <A extends AbstractClassAssert<?>> A extractingRootBeanClass(
             final AssertFactory<? super Class<T>, ? extends A> assertFactory) {
+        return isNotNull()
+                .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
+    }
+
+    @Override
+    public <ASSERT extends AbstractAssert<?, Class<? extends T>>> ASSERT extractingRootBeanClass2(
+            final AssertFactory<? super Class<T>, ? extends ASSERT> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
     }

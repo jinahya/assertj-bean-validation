@@ -78,7 +78,7 @@ class User_ConstraintViolationAssert_Test {
                 assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
                 assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
                 assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(name);
-                assertThatConstraintViolation(cv).extractingLeafBean().isNull();
+                assertThatConstraintViolation(cv).extractingLeafBean2().isNull();
                 assertThatConstraintViolation(cv).extractingRootBean().isNull();
                 assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
                 {
@@ -134,7 +134,7 @@ class User_ConstraintViolationAssert_Test {
                 assertThatConstraintViolation(cv).extractingExecutableParameters().isNull();
                 assertThatConstraintViolation(cv).extractingExecutableReturnValue().isNull();
                 assertThatConstraintViolation(cv).extractingInvalidValue().isEqualTo(age);
-                assertThatConstraintViolation(cv).extractingLeafBean().isNull();
+                assertThatConstraintViolation(cv).extractingLeafBean2().isNull();
                 assertThatConstraintViolation(cv).extractingRootBean().isNull();
                 assertThatConstraintViolation(cv).extractingRootBeanClass().isEqualTo(User.class);
                 {

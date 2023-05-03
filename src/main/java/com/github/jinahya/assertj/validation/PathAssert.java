@@ -21,12 +21,8 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractBooleanAssert;
-import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractComparableAssert;
-import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractIterableAssert;
-import org.assertj.core.api.AbstractObjectAssert;
-import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.EnumerableAssert;
@@ -56,7 +52,7 @@ interface PathAssert<SELF extends PathAssert<SELF>>
         );
 
         // ------------------------------------------------------------------------------------------------------- index
-        AbstractIntegerAssert<?> extractingIndex();
+        Assert<?, Integer> extractingIndex();
 
         @SuppressWarnings({
                 "unchecked"
@@ -67,7 +63,7 @@ interface PathAssert<SELF extends PathAssert<SELF>>
         }
 
         // --------------------------------------------------------------------------------------------------------- key
-        AbstractObjectAssert<?, Object> extractingKey();
+        Assert<?, ?> extractingKey();
 
         @SuppressWarnings({
                 "unchecked"
@@ -89,7 +85,7 @@ interface PathAssert<SELF extends PathAssert<SELF>>
         }
 
         // -------------------------------------------------------------------------------------------------------- name
-        AbstractStringAssert<?> extractingName();
+        Assert<?, String> extractingName();
 
         @SuppressWarnings({
                 "unchecked"
@@ -123,7 +119,7 @@ interface PathAssert<SELF extends PathAssert<SELF>>
             extends NodeAssert<SELF, ACTUAL> {
 
         // ---------------------------------------------------------------------------------------------- containerClass
-        AbstractClassAssert<?> extractingContainerClass();
+        Assert<?, ? extends Class<?>> extractingContainerClass();
 
         @SuppressWarnings({
                 "unchecked"
@@ -134,7 +130,7 @@ interface PathAssert<SELF extends PathAssert<SELF>>
         }
 
         // ------------------------------------------------------------------------------------------- typeArgumentIndex
-        AbstractIntegerAssert<?> extractingTypeArgumentIndex();
+        Assert<?, Integer> extractingTypeArgumentIndex();
 
         @SuppressWarnings({
                 "unchecked"

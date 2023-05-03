@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractObjectArrayAssert;
 import org.assertj.core.api.AbstractObjectAssert;
@@ -150,6 +151,8 @@ public interface ConstraintViolationAssert<
         return extractingInvalidValue(new ObjectAssertFactory<>());
     }
 
+    Assert<?, ?> extractingInvalidValue2();
+
     /**
      * Verifies that the {@link ConstraintViolation#getInvalidValue() actual.invalidValue} is equal to specified value.
      *
@@ -161,26 +164,29 @@ public interface ConstraintViolationAssert<
             "unchecked"
     })
     default SELF hasInvalidValue(final Object expectedInvalidValue) {
+        extractingInvalidValue2().isEqualTo(expectedInvalidValue);
         extractingInvalidValue().isEqualTo(expectedInvalidValue);
         return (SELF) this;
     }
 
     // -------------------------------------------------------------------------------------------------------- leafBean
-    <BEAN, ASSERT extends AbstractObjectAssert<?, BEAN>> ASSERT extractingLeafBean(
+    <BEAN, ASSERT extends AbstractAssert<?, ? extends BEAN>> ASSERT extractingLeafBean(
             final Function<? super ACTUAL, ? extends BEAN> beanExtractor,
             final AssertFactory<? super BEAN, ? extends ASSERT> assertFactory);
 
     @SuppressWarnings({
             "unchecked"
     })
-    default <BEAN, ASSERT extends AbstractObjectAssert<?, BEAN>> ASSERT extractingLeafBean(
+    default <BEAN, ASSERT extends AbstractAssert<?, ? extends BEAN>> ASSERT extractingLeafBean(
             final AssertFactory<? super BEAN, ? extends ASSERT> assertFactory) {
         return extractingLeafBean(a -> (BEAN) a.getLeafBean(), assertFactory);
     }
 
-    default <BEAN> AbstractObjectAssert<?, BEAN> extractingLeafBean() {
-        return extractingLeafBean(new ObjectAssertFactory<>());
-    }
+//    default <BEAN> AbstractAssert<?, ? extends BEAN> extractingLeafBean() {
+//        return extractingLeafBean(new ObjectAssertFactory<>());
+//    }
+
+    Assert<?, ?> extractingLeafBean2();
 
     /**
      * Verifies that the {@link ConstraintViolation#getLeafBean() actual.leafBean} is equal to specified value.
@@ -188,14 +194,15 @@ public interface ConstraintViolationAssert<
      * @param expectedLeafBean the expected value of {@code actual.leafBean}.
      * @return this assertion object.
      * @see ConstraintViolation#getLeafBean()
-     * @see #extractingLeafBean()
+     * @see #extractingLeafBean2()
      */
     @SuppressWarnings({
             "unchecked"
     })
     default SELF hasLeafBean(final Object expectedLeafBean) {
-        extractingLeafBean()
-                .isEqualTo(expectedLeafBean);
+        extractingLeafBean2().isEqualTo(expectedLeafBean);
+//        extractingLeafBean()
+//                .isEqualTo(expectedLeafBean);
         return (SELF) this;
     }
 
@@ -209,6 +216,14 @@ public interface ConstraintViolationAssert<
         return hasLeafBean(null);
     }
 
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default SELF doesNotHaveLeafBean() {
+        extractingInvalidValue2().isNull();
+        return (SELF) this;
+    }
+
     // ---------------------------------------------------------------------------------------------------- propertyPath
     <ASSERT extends AbstractPathAssert<?, ?>> ASSERT extractingPropertyPath(
             final AssertFactory<? super Path, ? extends ASSERT> assertFactory);
@@ -218,11 +233,11 @@ public interface ConstraintViolationAssert<
     }
 
     // -------------------------------------------------------------------------------------------------------- rootBean
-    <ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingRootBean(
+    <ASSERT extends AbstractAssert<?, T>> ASSERT extractingRootBean(
             final AssertFactory<? super T, ? extends ASSERT> assertFactory);
 
-    default AbstractObjectAssert<?, T> extractingRootBean() {
-        return extractingRootBean(Assertions::assertThat);
+    default AbstractAssert<?, T> extractingRootBean() {
+        return extractingRootBean(new ObjectAssertFactory<>());
     }
 
     /**
@@ -250,8 +265,15 @@ public interface ConstraintViolationAssert<
         return hasRootBean(null);
     }
 
+    default SELF doesNotHaveRootBean() {
+        return hasRootBean(null);
+    }
+
     // --------------------------------------------------------------------------------------------------- rootBeanClass
     <ASSERT extends AbstractClassAssert<?>> ASSERT extractingRootBeanClass(
+            final AssertFactory<? super Class<T>, ? extends ASSERT> assertFactory);
+
+    <ASSERT extends AbstractAssert<?, Class<? extends T>>> ASSERT extractingRootBeanClass2(
             final AssertFactory<? super Class<T>, ? extends ASSERT> assertFactory);
 
     default AbstractClassAssert<?> extractingRootBeanClass() {
@@ -271,6 +293,8 @@ public interface ConstraintViolationAssert<
     })
     default SELF hasRootBeanClass(final Class<T> expectedRootBeanClass) {
         extractingRootBeanClass().isEqualTo(expectedRootBeanClass);
+//        extractingRootBeanClass2(rbc -> Assertions.assertThat(rbc))
+//                .isEqualTo(expectedRootBeanClass);
         return (SELF) this;
     }
 }
