@@ -30,6 +30,7 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.util.function.Function;
 
@@ -206,6 +207,14 @@ public interface ConstraintViolationAssert<
      */
     default SELF hasNoLeafBean() {
         return hasLeafBean(null);
+    }
+
+    // ---------------------------------------------------------------------------------------------------- propertyPath
+    <ASSERT extends AbstractPathAssert<?, ?>> ASSERT extractingPropertyPath(
+            final AssertFactory<? super Path, ? extends ASSERT> assertFactory);
+
+    default AbstractPathAssert<?, ?> extractingPropertyPath() {
+        return extractingPropertyPath(ValidationAssertions::assertThatPath);
     }
 
     // -------------------------------------------------------------------------------------------------------- rootBean

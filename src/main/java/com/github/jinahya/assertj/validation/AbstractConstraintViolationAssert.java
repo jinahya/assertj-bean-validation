@@ -20,7 +20,6 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractObjectArrayAssert;
 import org.assertj.core.api.AbstractObjectAssert;
@@ -99,14 +98,11 @@ public abstract class AbstractConstraintViolationAssert<
     }
 
     // ---------------------------------------------------------------------------------------------------- propertyPath
-    <A extends AbstractAssert<?, ? extends Path>> A extractingPropertyPath(
-            final AssertFactory<? super Path, ? extends A> assertFactory) {
+    @Override
+    public <ASSERT extends AbstractPathAssert<?, ?>> ASSERT extractingPropertyPath(final AssertFactory<? super Path, ? extends ASSERT> assertFactory) {
         return isNotNull()
-                .extracting(ConstraintViolation::getPropertyPath, assertFactory);
+                .extracting(ConstraintViolation::getPropertyPath, assertFactory::createAssert);
     }
-//    public AbstractPathAssert<?> extractingPropertyPath() {
-//        return extractingPropertyPath(ValidationAssertions::assertThatPath);
-//    }
 
     // -------------------------------------------------------------------------------------------------------- rootBean
     @Override

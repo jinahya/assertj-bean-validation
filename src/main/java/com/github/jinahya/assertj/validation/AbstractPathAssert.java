@@ -22,6 +22,7 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractBooleanAssert;
+import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.api.AbstractObjectAssert;
@@ -32,6 +33,7 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ListAssert;
 import org.assertj.core.api.ObjectAssertFactory;
 
+import javax.validation.ElementKind;
 import javax.validation.Path;
 
 /**
@@ -43,26 +45,16 @@ import javax.validation.Path;
 @SuppressWarnings({
         "java:S119" // <SELF>, <ACTUAL>
 })
-abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASSERT>, NODE_ASSERT extends AbstractAssert<NODE_ASSERT, Path.Node>>
-        extends AbstractIterableAssert<SELF, Path, Path.Node, NODE_ASSERT>
+public abstract class AbstractPathAssert<
+        SELF extends AbstractPathAssert<SELF, ELEMENT_ASSERT>,
+        ELEMENT_ASSERT extends AbstractAssert<ELEMENT_ASSERT, Path.Node> & PathAssert.NodeAssert<ELEMENT_ASSERT, Path.Node>>
+        extends AbstractIterableAssert<SELF, Path, Path.Node, ELEMENT_ASSERT>
         implements PathAssert<SELF> {
 
     public abstract static class AbstractNodeAssert<
             SELF extends AbstractNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node>
-            extends AbstractObjectAssert<SELF, ACTUAL>
+            extends AbstractAssert<SELF, ACTUAL>
             implements PathAssert.NodeAssert<SELF, ACTUAL> {
-
-        static class NodeAssert
-                extends AbstractNodeAssert<NodeAssert, Path.Node> {
-
-            NodeAssert(final Path.Node actual, Class<?> selfType) {
-                super(actual, selfType);
-            }
-
-            NodeAssert(final Path.Node actual) {
-                super(actual, NodeAssert.class);
-            }
-        }
 
         AbstractNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
@@ -76,21 +68,30 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
             return null;
         }
 
+        // ------------------------------------------------------------------------------------------------------- index
         @Override
         public AbstractIntegerAssert<?> extractingIndex() {
             return extracting(Path.Node::getIndex, InstanceOfAssertFactories.INTEGER);
         }
 
+        // --------------------------------------------------------------------------------------------------------- key
         @Override
         public AbstractObjectAssert<?, Object> extractingKey() {
             return extracting(Path.Node::getIndex, new ObjectAssertFactory<>());
         }
 
+        // -------------------------------------------------------------------------------------------------------- kind
+        public AbstractComparableAssert<?, ElementKind> extractingKind() {
+            return extracting(Path.Node::getKind, Assertions::assertThat);
+        }
+
+        // -------------------------------------------------------------------------------------------------------- name
         @Override
         public AbstractStringAssert<?> extractingName() {
             return extracting(Path.Node::getName, InstanceOfAssertFactories.STRING);
         }
 
+        // --------------------------------------------------------------------------------------------------- inIterable
         @Override
         public AbstractBooleanAssert<?> extractingInIterable() {
             return extracting(Path.Node::getName, InstanceOfAssertFactories.BOOLEAN);
@@ -102,14 +103,6 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
             ACTUAL extends Path.ParameterNode>
             extends AbstractNodeAssert<SELF, ACTUAL> {
 
-        static class DefaultParameterizedNodeAssert
-                extends AbstractParameterizedNodeAssert<DefaultParameterizedNodeAssert, Path.ParameterNode> {
-
-            DefaultParameterizedNodeAssert(final Path.ParameterNode actual, final Class<?> selfType) {
-                super(actual, selfType);
-            }
-        }
-
         AbstractParameterizedNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
         }
@@ -118,14 +111,6 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
     abstract static class AbstractBeanNodeAssert<
             SELF extends AbstractBeanNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.BeanNode>
             extends AbstractNodeAssert<SELF, ACTUAL> {
-
-        static class DefaultBeanNodeAssert
-                extends AbstractBeanNodeAssert<DefaultBeanNodeAssert, Path.BeanNode> {
-
-            DefaultBeanNodeAssert(final Path.BeanNode actual) {
-                super(actual, DefaultBeanNodeAssert.class);
-            }
-        }
 
         AbstractBeanNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
@@ -138,14 +123,6 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
             SELF extends AbstractConstructorNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.ConstructorNode>
             extends AbstractNodeAssert<SELF, ACTUAL>
             implements ConstructorNodeAssert<SELF, ACTUAL> {
-
-        static class DefaultConstructorNodeAssert
-                extends AbstractConstructorNodeAssert<DefaultConstructorNodeAssert, Path.ConstructorNode> {
-
-            DefaultConstructorNodeAssert(final Path.ConstructorNode actual) {
-                super(actual, DefaultConstructorNodeAssert.class);
-            }
-        }
 
         AbstractConstructorNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
@@ -170,14 +147,6 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
             SELF extends AbstractCrossParameterNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.CrossParameterNode>
             extends AbstractNodeAssert<SELF, ACTUAL> {
 
-        static class DefaultCrossParameterNodeAssert
-                extends AbstractCrossParameterNodeAssert<DefaultCrossParameterNodeAssert, Path.CrossParameterNode> {
-
-            DefaultCrossParameterNodeAssert(final Path.CrossParameterNode actual) {
-                super(actual, DefaultCrossParameterNodeAssert.class);
-            }
-        }
-
         AbstractCrossParameterNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
         }
@@ -186,14 +155,6 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
     public abstract static class AbstractMethodNodeAssert<
             SELF extends AbstractMethodNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.MethodNode>
             extends AbstractNodeAssert<SELF, ACTUAL> {
-
-        static class DefaultMethodNodeAssert
-                extends AbstractMethodNodeAssert<DefaultMethodNodeAssert, Path.MethodNode> {
-
-            DefaultMethodNodeAssert(final Path.MethodNode actual) {
-                super(actual, DefaultMethodNodeAssert.class);
-            }
-        }
 
         protected AbstractMethodNodeAssert(final ACTUAL actual, Class<?> selfType) {
             super(actual, selfType);
@@ -209,14 +170,6 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
     public abstract static class AbstractParameterNodeAssert<
             SELF extends AbstractParameterNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.ParameterNode>
             extends AbstractNodeAssert<SELF, ACTUAL> {
-
-        public static class DefaultParameterNodeAssert
-                extends AbstractParameterNodeAssert<DefaultParameterNodeAssert, Path.ParameterNode> {
-
-            DefaultParameterNodeAssert(final Path.ParameterNode actual) {
-                super(actual, DefaultParameterNodeAssert.class);
-            }
-        }
 
         protected AbstractParameterNodeAssert(final ACTUAL actual, final Class<?> selfType) {
             super(actual, selfType);
@@ -283,18 +236,4 @@ abstract class AbstractPathAssert<SELF extends AbstractPathAssert<SELF, NODE_ASS
     protected AbstractPathAssert(final Path actual, final Class<?> selfType) {
         super(actual, selfType);
     }
-
-//    @Override
-//    public SELF targetingGroups(Class<?>... groups) {
-//        delegate.setGroups(groups);
-//        return myself;
-//    }
-//
-//    @Override
-//    public SELF usingValidatorSuppliedBy(final Supplier<? extends Validator> validatorSupplier) {
-//        delegate.setValidatorSupplier(validatorSupplier);
-//        return myself;
-//    }
-
-    final ValidationAssertDelegate delegate = new ValidationAssertDelegate();
 }

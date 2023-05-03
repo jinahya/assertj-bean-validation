@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -41,6 +42,7 @@ import static com.github.jinahya.assertj.validation.example.user.User.validAge;
 import static com.github.jinahya.assertj.validation.example.user.User.validName;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 class User_ConstraintViolationAssert_Test {
 
     @Nested
@@ -87,6 +89,13 @@ class User_ConstraintViolationAssert_Test {
                     assertThatConstraintDescriptor(cv.getConstraintDescriptor())
                             .extractingAnnotation()
                             .isInstanceOf(NotBlank.class);
+                }
+                {
+                    assertThatConstraintViolation(cv)
+                            .extractingPropertyPath()
+                            .hasSize(1)
+                            .element(0)
+                            .hasName(User.PROPERTY_NAME_NAME);
                 }
             });
         }
@@ -136,6 +145,13 @@ class User_ConstraintViolationAssert_Test {
                     assertThatConstraintDescriptor(cv.getConstraintDescriptor())
                             .extractingAnnotation()
                             .isInstanceOfAny(PositiveOrZero.class, Min.class, Max.class);
+                }
+                {
+                    assertThatConstraintViolation(cv)
+                            .extractingPropertyPath()
+                            .hasSize(1)
+                            .element(0)
+                            .hasName(User.PROPERTY_NAME_AGE);
                 }
             });
         }

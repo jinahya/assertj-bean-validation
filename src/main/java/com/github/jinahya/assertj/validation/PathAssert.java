@@ -22,14 +22,17 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.AbstractBooleanAssert;
 import org.assertj.core.api.AbstractClassAssert;
+import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractIterableAssert;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.EnumerableAssert;
 import org.assertj.core.api.ListAssert;
 
+import javax.validation.ElementKind;
 import javax.validation.Path;
 import java.util.List;
 
@@ -40,7 +43,8 @@ import java.util.List;
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
 interface PathAssert<SELF extends PathAssert<SELF>>
-        extends Assert<SELF, Path> {
+        extends Assert<SELF, Path>,
+                EnumerableAssert<SELF, Path.Node> {
 
     interface NodeAssert<
             SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node> {
@@ -74,6 +78,15 @@ interface PathAssert<SELF extends PathAssert<SELF>>
         }
 
         // -------------------------------------------------------------------------------------------------------- kind
+        AbstractComparableAssert<?, ElementKind> extractingKind();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasKind(final ElementKind expectedKind) {
+            extractingKind().isSameAs(expectedKind);
+            return (SELF) this;
+        }
 
         // -------------------------------------------------------------------------------------------------------- name
         AbstractStringAssert<?> extractingName();
