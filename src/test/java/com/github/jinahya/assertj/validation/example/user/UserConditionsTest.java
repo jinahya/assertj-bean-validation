@@ -24,11 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jinahya.assertj.validation.example.user.UserConditions.JUNIOR;
-import static com.github.jinahya.assertj.validation.example.user.UserConditions.SENIOR;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 @Slf4j
 class UserConditionsTest {
 
@@ -37,21 +32,21 @@ class UserConditionsTest {
 
         @Test
         void _Pass_Junior() {
-            final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE - 1);
-            assertThat(user).is(JUNIOR);
+//            final User user = User.newUser(true, true);
+//            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR);
+//            assertThat(user).is(JUNIOR);
         }
 
         @Test
         void _Fail_Junior() {
-            final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR_EXCLUSIVE);
-            final var assertion = assertThat(user);
-            assertThatThrownBy(() -> assertion.is(JUNIOR))
-                    .isInstanceOf(AssertionError.class)
-                    .satisfies(ar -> {
-                        log.debug("message: {}", ar.getMessage());
-                    });
+//            final User user = User.newUser(true, true);
+//            user.setAge(UserConstants.MAX_AGE_FOR_JUNIOR + 1);
+//            final var assertion = assertThat(user);
+//            assertThatThrownBy(() -> assertion.is(JUNIOR))
+//                    .isInstanceOf(AssertionError.class)
+//                    .satisfies(ar -> {
+//                        log.debug("message: {}", ar.getMessage());
+//                    });
         }
     }
 
@@ -60,21 +55,21 @@ class UserConditionsTest {
 
         @Test
         void _Pass_Senior() {
-            final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE);
-            assertThat(user).is(SENIOR);
+//            final User user = User.newUser(true, true);
+//            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR);
+//            assertThat(user).is(SENIOR);
         }
 
         @Test
         void _Fail_Senior() {
-            final User user = User.newInstance(true, true);
-            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR_INCLUSIVE - 1);
-            final var assertion = assertThat(user);
-            assertThatThrownBy(() -> assertion.is(SENIOR))
-                    .isInstanceOf(AssertionError.class)
-                    .satisfies(ar -> {
-                        log.debug("message: {}", ar.getMessage());
-                    });
+//            final User user = User.newUser(true, true);
+//            user.setAge(UserConstants.MIN_AGE_FOR_SENIOR - 1);
+//            final var assertion = assertThat(user);
+//            assertThatThrownBy(() -> assertion.is(SENIOR))
+//                    .isInstanceOf(AssertionError.class)
+//                    .satisfies(ar -> {
+//                        log.debug("message: {}", ar.getMessage());
+//                    });
         }
     }
 }

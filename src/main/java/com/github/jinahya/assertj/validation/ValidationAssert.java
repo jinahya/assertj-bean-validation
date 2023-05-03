@@ -34,10 +34,47 @@ package com.github.jinahya.assertj.validation;
 
 import org.assertj.core.api.Assert;
 
-@SuppressWarnings({
-        "java:S119" // <SELF>, <ACTUAL>
-})
-interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
+import javax.validation.Validator;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+/**
+ * A base interface for verifying values and beans.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
+ */
+public interface ValidationAssert<SELF extends ValidationAssert<SELF, ACTUAL>, ACTUAL>
         extends Assert<SELF, ACTUAL> {
 
+    /**
+     * Configures this assertion object to use specified groups targeted for validation.
+     *
+     * @param groups the validation groups to use; {@code null} or empty for clearing the group.
+     * @return this assertion object.
+     */
+    SELF targetingGroups(final Class<?>... groups);
+
+    /**
+     * Configures this assertion object to use specified validator.
+     *
+     * @param validator the validator to use; {@code null} to reset.
+     * @return this assertion object.
+     */
+    default SELF usingValidator(final Validator validator) {
+        return usingValidatorSuppliedBy(
+                Optional.ofNullable(validator)
+                        .<Supplier<Validator>>map(v -> () -> v)
+                        .orElse(null)
+        );
+    }
+
+    /**
+     * Configures this assertion object to use validators supplied by specified supplier.
+     *
+     * @param validatorSupplier the supplier supplying validators; {@code null} to reset.
+     * @return this assertion object.
+     */
+    SELF usingValidatorSuppliedBy(final Supplier<? extends Validator> validatorSupplier);
 }

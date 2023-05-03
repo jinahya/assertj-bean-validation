@@ -1,10 +1,10 @@
-package com.github.jinahya.assertj.validation.example.user2;
+package org.hibernate.validator.referenceguide.chapter01;
 
 /*-
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 - 2022 Jinahya, Inc.
+ * Copyright (C) 2021 - 2023 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,11 @@ package com.github.jinahya.assertj.validation.example.user2;
  * #L%
  */
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+class Car_IsValid_Test {
 
-@Setter(AccessLevel.PACKAGE)
-@Getter(AccessLevel.PACKAGE)
-@ToString
-public class Registration2 {
-
-    Registration2(final User2 user2) {
-        super();
-        this.user = user2;
+    @Test
+    void a() {
     }
-
-    @Valid
-    @NotNull
-    private User2 user;
 }

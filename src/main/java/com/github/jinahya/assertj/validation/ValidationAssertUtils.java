@@ -20,26 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import javax.validation.ConstraintViolation;
-import java.util.Collections;
-import java.util.Set;
-import java.util.function.Consumer;
-
 final class ValidationAssertUtils {
-
-    @SuppressWarnings({
-            "java:S1181", // Throwable
-            "java:S106" // System.err
-    })
-    static <T> void accept(final Set<? extends ConstraintViolation<T>> violations,
-                           final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
-        try {
-            consumer.accept(Collections.unmodifiableSet(violations));
-        } catch (final Throwable t) {
-            System.err.println("failed to accept violations to [" + consumer + "]; message: " + t.getMessage());
-            t.printStackTrace();
-        }
-    }
 
     private ValidationAssertUtils() {
         throw new AssertionError("instantiation is not allowed");

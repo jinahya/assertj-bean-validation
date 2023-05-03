@@ -22,7 +22,11 @@ package com.github.jinahya.assertj.validation.example.user;
 
 public final class UserConstants {
 
-    public static final int MAX_AGE_FOR_JUNIOR_EXCLUSIVE = 60;
+    public static final int MIN_AGE = 0;
 
-    public static final int MIN_AGE_FOR_SENIOR_INCLUSIVE = MAX_AGE_FOR_JUNIOR_EXCLUSIVE;
+    public static final int MAX_AGE = 127;
+
+    public static final int MAX_AGE_FOR_JUNIOR = 59;
+
+    public static final int MIN_AGE_FOR_SENIOR = MAX_AGE_FOR_JUNIOR + 1;
 }

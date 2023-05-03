@@ -1,10 +1,10 @@
-package com.github.jinahya.assertj.validation.example.user2;
+package org.hibernate.validator.referenceguide.chapter01;
 
 /*-
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 - 2022 Jinahya, Inc.
+ * Copyright (C) 2021 - 2023 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,15 @@ package com.github.jinahya.assertj.validation.example.user2;
  * #L%
  */
 
-import lombok.extern.slf4j.Slf4j;
+final class CarConstants {
 
-@Slf4j
-class User2_HasValidProperty_Test {
+    static final String PROPERTY_MANUFACTURER = "manufacturer";
 
+    static final String PROPERTY_LICENSE_PLATE = "licensePlate";
+
+    static final String PROPERTY_SEAT_COUNT = "seatCount";
+
+    private CarConstants() {
+        throw new AssertionError("instantiation is not allowed");
+    }
 }

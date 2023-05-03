@@ -24,46 +24,91 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.Arrays;
+import javax.validation.groups.Default;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static java.util.Collections.unmodifiableSet;
 
 final class ValidationAssertDelegate {
 
-    Validator getValidator() {
+    private static final Supplier<? extends Validator> DEFAULT_VALIDATOR_SUPPLIER = () -> {
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             return factory.getValidator();
         }
-    }
+    };
 
+    /**
+     * Returns groups targeted.
+     *
+     * @return the targeting group; never {@code null}.
+     */
     Class<?>[] getGroups() {
+        if (groups.isEmpty()) {
+            return new Class<?>[]{Default.class};
+        }
         return groups.toArray(new Class<?>[0]);
     }
 
-    void setGroups(final Class<?>[] groups) {
+    void setGroups(final Class<?>... groups) {
         this.groups.clear();
         if (groups != null) {
-            Arrays.stream(groups)
-                    .filter(Objects::nonNull)
-                    .forEach(this.groups::add);
+            for (final Class<?> group : groups) {
+                if (group == null) {
+                    throw new IllegalArgumentException("groups contains null");
+                }
+                this.groups.add(group);
+            }
         }
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T> Set<ConstraintViolation<T>> getViolations() {
+    <T> Set<ConstraintViolation<T>> getViolations() {
         final Set<ConstraintViolation<T>> set = new HashSet<>();
         violations.forEach(v -> set.add((ConstraintViolation<T>) v));
         return set;
     }
 
-    public <T> void setViolations(final Set<ConstraintViolation<T>> violations) {
+    <T> void setViolations(final Set<ConstraintViolation<T>> violations) {
         Objects.requireNonNull(violations, "violations is null");
         this.violations.clear();
         this.violations.addAll(violations);
     }
 
-    private final Set<Class<?>> groups = new HashSet<>();
+    <T> void acceptViolations(final Consumer<? super Set<ConstraintViolation<T>>> consumer) {
+        try {
+            consumer.accept(unmodifiableSet(getViolations()));
+        } catch (final Exception e) {
+            throw new RuntimeException("failed to accept violations to [" + consumer + "]", e);
+        }
+    }
 
-    private final Set<ConstraintViolation<?>> violations = new HashSet<>();
+    Validator getValidator() {
+        return Objects.requireNonNull(validatorSupplier.get(), "null supplied by " + validatorSupplier);
+    }
+
+    void setValidator(final Validator validator) {
+        if (validator != null) {
+            validatorSupplier = () -> validator;
+            return;
+        }
+        validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
+    }
+
+    void setValidatorSupplier(final Supplier<? extends Validator> validatorSupplier) {
+        if (validatorSupplier != null) {
+            this.validatorSupplier = validatorSupplier;
+            return;
+        }
+        this.validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
+    }
+
+    final Set<Class<?>> groups = new HashSet<>();
+
+    final Set<ConstraintViolation<?>> violations = new HashSet<>();
+
+    private Supplier<? extends Validator> validatorSupplier = DEFAULT_VALIDATOR_SUPPLIER;
 }

@@ -20,6 +20,7 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.ThrowableAssert;
 import org.mockito.ArgumentCaptor;
 
 import javax.validation.ConstraintViolation;
@@ -27,9 +28,16 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.spy;
 
 public final class ValidationAssertionsTestUtils {
+
+    public static <T> Consumer<? super Set<ConstraintViolation<T>>> violationsConsumerEmpty() {
+        return s -> {
+        };
+    }
 
     public static <T> Consumer<Set<ConstraintViolation<T>>> violationsConsumerSpy(
             final Consumer<? super Set<? extends ConstraintViolation<T>>> consumer) {
@@ -52,6 +60,16 @@ public final class ValidationAssertionsTestUtils {
         @SuppressWarnings({"unchecked"})
         final ArgumentCaptor<Set<ConstraintViolation<T>>> captor = ArgumentCaptor.forClass(Set.class);
         return captor;
+    }
+
+    public static void shouldPass(final ThrowableAssert.ThrowingCallable callable) {
+        Objects.requireNonNull(callable, "callable is null");
+        assertThatCode(callable).doesNotThrowAnyException();
+    }
+
+    public static void shouldFail(final ThrowableAssert.ThrowingCallable callable) {
+        Objects.requireNonNull(callable, "callable is null");
+        assertThatThrownBy(callable).isInstanceOf(AssertionError.class);
     }
 
     private ValidationAssertionsTestUtils() {

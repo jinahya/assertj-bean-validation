@@ -20,32 +20,147 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractBooleanAssert;
+import org.assertj.core.api.AbstractComparableAssert;
+import org.assertj.core.api.AbstractIterableAssert;
+import org.assertj.core.api.Assert;
+import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.EnumerableAssert;
+import org.assertj.core.api.ListAssert;
+
+import javax.validation.ElementKind;
 import javax.validation.Path;
+import java.util.List;
 
 /**
- * An interface for verifying {@link Path} values.
+ * An abstract class for verifying {@link Path} values.
  *
+ * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-@SuppressWarnings({
-        "java:S119" // <SELF>, <ACTUAL>
-})
-class PathAssert
-        extends AbstractPathAssert<PathAssert> {
+interface PathAssert<SELF extends PathAssert<SELF>>
+        extends Assert<SELF, Path>,
+                EnumerableAssert<SELF, Path.Node> {
 
-    public PathAssert(final Path actual) {
-        super(actual, PathAssert.class);
+    interface NodeAssert<
+            SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node> {
+
+        // ---------------------------------------------------------------------------------------------------------- as
+        <NODE extends Path.Node, ASSERT extends NodeAssert<?, NODE>> ASSERT extractingAs(
+                final Class<NODE> nodeType,
+                final AssertFactory<? super NODE, ? extends ASSERT> assertFactory
+        );
+
+        // ------------------------------------------------------------------------------------------------------- index
+        Assert<?, Integer> extractingIndex();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasIndex(final int expectedIndex) {
+            extractingIndex().isEqualTo(expectedIndex);
+            return (SELF) this;
+        }
+
+        // --------------------------------------------------------------------------------------------------------- key
+        Assert<?, ?> extractingKey();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasKey(final Object expectedKey) {
+            extractingKey().isEqualTo(expectedKey);
+            return (SELF) this;
+        }
+
+        // -------------------------------------------------------------------------------------------------------- kind
+        AbstractComparableAssert<?, ElementKind> extractingKind();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasKind(final ElementKind expectedKind) {
+            extractingKind().isSameAs(expectedKind);
+            return (SELF) this;
+        }
+
+        // -------------------------------------------------------------------------------------------------------- name
+        Assert<?, String> extractingName();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasName(final String expectedName) {
+            extractingName().isEqualTo(expectedName);
+            return (SELF) this;
+        }
+
+        // -------------------------------------------------------------------------------------------------- inIterable
+        AbstractBooleanAssert<?> extractingInIterable();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF isInIterable() {
+            extractingInIterable().isTrue();
+            return (SELF) this;
+        }
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF isNotInIterable() {
+            extractingInIterable().isFalse();
+            return (SELF) this;
+        }
     }
 
-    @Override
-    protected NodeAssert toAssert(final Path.Node value, final String description) {
-        return new NodeAssert(value)
-                .as(description);
+    interface BeanNodeAssert<SELF extends BeanNodeAssert<SELF, ACTUAL>, ACTUAL extends Path.BeanNode>
+            extends NodeAssert<SELF, ACTUAL> {
+
+        // ---------------------------------------------------------------------------------------------- containerClass
+        Assert<?, ? extends Class<?>> extractingContainerClass();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasContainerClass(final Class<?> expectedContainerClass) {
+            extractingContainerClass().isEqualTo(expectedContainerClass);
+            return (SELF) this;
+        }
+
+        // ------------------------------------------------------------------------------------------- typeArgumentIndex
+        Assert<?, Integer> extractingTypeArgumentIndex();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasTypeArgumentIndex(final Integer expectedTypeArgumentIndex) {
+            extractingTypeArgumentIndex().isEqualTo(expectedTypeArgumentIndex);
+            return (SELF) this;
+        }
+
+        default SELF hasNoTypeArgumentIndex() {
+            return hasTypeArgumentIndex(null);
+        }
     }
 
-    @Override
-    protected PathAssert newAbstractIterableAssert(final Iterable<? extends Path.Node> iterable) {
-        assert iterable instanceof Path;
-        return new PathAssert((Path) iterable);
+    interface ConstructorNodeAssert<
+            SELF extends ConstructorNodeAssert<SELF, ACTUAL>,
+            ACTUAL extends Path.ConstructorNode>
+            extends NodeAssert<SELF, ACTUAL> {
+
+        // ---------------------------------------------------------------------------------------------- parameterTypes
+        AbstractIterableAssert<?, ?, ? super Class<?>, ?> extractingParameterTypes4();
+
+        ListAssert<? super Class<?>> extractingParameterTypes5();
+
+        @SuppressWarnings({
+                "unchecked"
+        })
+        default SELF hasParameterTypes(final List<Class<?>> expectedParameterTypes) {
+            extractingParameterTypes5().isEqualTo(expectedParameterTypes);
+            return (SELF) this;
+        }
     }
 }
