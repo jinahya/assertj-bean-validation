@@ -37,7 +37,6 @@ abstract class Registration {
 
     Registration(final User user) {
         super();
-//        this.user = Objects.requireNonNull(user, "user is null");
         this.user = user;
     }
 

@@ -31,7 +31,7 @@ class SeniorRegistration
         return of(user);
     }
 
-    SeniorRegistration(final User user) {
+    SeniorRegistration(@Senior final User user) {
         super(user);
     }
 

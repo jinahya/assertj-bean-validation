@@ -21,9 +21,10 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.ObjectAssertFactory;
 
+import javax.validation.ConstraintTarget;
 import javax.validation.ConstraintViolation;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
@@ -54,10 +55,35 @@ public abstract class AbstractConstraintDescriptorAssert<
     // ------------------------------------------------------------------------------------------------------ annotation
 
     @Override
-    public <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
+    public <A extends AbstractAssert<?, T>> A extractingAnnotation(
             final Function<? super ACTUAL, ? extends T> annotationExtractor,
             final AssertFactory<? super T, ? extends A> assertFactory) {
         return isNotNull()
                 .extracting(annotationExtractor, assertFactory);
     }
+    // -------------------------------------------------------------------------------------------- composingConstraints
+
+    // -------------------------------------------------------------------------------------- constraintValidatorClasses
+
+    // ---------------------------------------------------------------------------------------------------------- groups
+
+    // ------------------------------------------------------------------------------------------------- messageTemplate
+
+    // --------------------------------------------------------------------------------------------------------- payload
+
+    // --------------------------------------------------------------------------------------------- validationAppliesTo
+
+    // --------------------------------------------------------------------------------------------------- valueWrapping
+
+    // ----------------------------------------------------------------------------------------- reportAsSingleViolation
+
+    @Override
+    public SELF hostsConstraintTarget(final ConstraintTarget constraintTarget) {
+        isNotNull()
+                .extracting(ConstraintDescriptor::isReportAsSingleViolation, new ObjectAssertFactory<>())
+                .isSameAs(constraintTarget);
+        return myself;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- unwrap
 }

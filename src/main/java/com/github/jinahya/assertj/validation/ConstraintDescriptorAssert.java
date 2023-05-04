@@ -20,11 +20,12 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
-import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
-import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ObjectAssertFactory;
 
+import javax.validation.ConstraintTarget;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
 import java.util.function.Function;
@@ -43,17 +44,17 @@ public interface ConstraintDescriptorAssert<
         extends Assert<SELF, ACTUAL> {
 
     // ------------------------------------------------------------------------------------------------------ annotation
-    <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
+    <A extends AbstractAssert<?, T>> A extractingAnnotation(
             final Function<? super ACTUAL, ? extends T> annotationExtractor,
             final AssertFactory<? super T, ? extends A> assertFactory);
 
-    default <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
+    default <A extends AbstractAssert<?, T>> A extractingAnnotation(
             final AssertFactory<? super T, ? extends A> assertFactory) {
         return extractingAnnotation(ConstraintDescriptor::getAnnotation, assertFactory);
     }
 
-    default AbstractObjectAssert<?, T> extractingAnnotation() {
-        return extractingAnnotation(Assertions::assertThat);
+    default Assert<?, T> extractingAnnotation() {
+        return extractingAnnotation(new ObjectAssertFactory<>());
     }
 
     // ------------------------------------------------------------------------------------------------------ attributes
@@ -65,4 +66,27 @@ public interface ConstraintDescriptorAssert<
 //            final AssertFactory<? super U, ? extends A> assertFactory) {
 //        return extractingAttributes(ConstraintDescriptor::getAttributes, assertFactory);
 //    }
+
+    // -------------------------------------------------------------------------------------------- composingConstraints
+
+    // -------------------------------------------------------------------------------------- constraintValidatorClasses
+
+    // ---------------------------------------------------------------------------------------------------------- groups
+
+    // ------------------------------------------------------------------------------------------------- messageTemplate
+
+    // --------------------------------------------------------------------------------------------------------- payload
+
+    // --------------------------------------------------------------------------------------------- validationAppliesTo
+
+    // --------------------------------------------------------------------------------------------------- valueWrapping
+
+    // ----------------------------------------------------------------------------------------- reportAsSingleViolation
+    SELF hostsConstraintTarget(ConstraintTarget constraintTarget);
+
+    default SELF doesNotHostAnyConstraintTarget() {
+        return hostsConstraintTarget(null);
+    }
+
+    // ---------------------------------------------------------------------------------------------------------- unwrap
 }
