@@ -40,9 +40,12 @@ import java.util.function.Function;
  * @param <T>      constraint's annotation type
  */
 public abstract class AbstractConstraintDescriptorAssert<
-        SELF extends AbstractConstraintDescriptorAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintDescriptor<T>, T extends Annotation>
+        SELF extends AbstractConstraintDescriptorAssert<SELF, ACTUAL, T>,
+        ACTUAL extends ConstraintDescriptor<T>,
+        T extends Annotation>
         extends AbstractAssert<SELF, ACTUAL>
-        implements ConstraintDescriptorAssert<SELF, ACTUAL, T> {
+//        implements ConstraintDescriptorAssert<SELF, ACTUAL, T>
+{
 
     /**
      * Creates a new instance with specified arguments.
@@ -56,7 +59,7 @@ public abstract class AbstractConstraintDescriptorAssert<
 
     // ------------------------------------------------------------------------------------------------------ annotation
 
-    @Override
+//    @Override
     public <A extends AbstractAssert<?, T>> A extractingAnnotation(
             final Function<? super ACTUAL, ? extends T> annotationExtractor,
             final AssertFactory<? super T, ? extends A> assertFactory) {
@@ -65,7 +68,7 @@ public abstract class AbstractConstraintDescriptorAssert<
     }
 
     // -------------------------------------------------------------------------------------------- composingConstraints
-    @Override
+//    @Override
     public <A extends AbstractAssert<A, ? extends Set<ConstraintDescriptor<?>>>> A extractingComposingConstraints(
             final Function<? super ACTUAL, ? extends Set<ConstraintDescriptor<?>>> extractor,
             final AssertFactory<? super Set<ConstraintDescriptor<?>>, ? extends A> factory) {
@@ -73,33 +76,9 @@ public abstract class AbstractConstraintDescriptorAssert<
                 .extracting(ConstraintDescriptor::getComposingConstraints, factory);
     }
 
-    private static class ComposingConstraintsAssert
-            extends AbstractCollectionAssert<
-            ComposingConstraintsAssert,
-            Set<? extends ConstraintDescriptor<?>>,
-            ConstraintDescriptor<?>,
-            AbstractConstraintDescriptorAssert<?, ConstraintDescriptor<?>, ?>> {
-
-        public ComposingConstraintsAssert(final Set<? extends ConstraintDescriptor<?>> collection) {
-            super(collection, ComposingConstraintsAssert.class);
-        }
-
-        @Override
-        protected AbstractConstraintDescriptorAssert<?, ConstraintDescriptor<?>, ?> toAssert(
-                final ConstraintDescriptor<?> value, String description) {
-            return null;
-        }
-
-        @Override
-        protected ComposingConstraintsAssert newAbstractIterableAssert(
-                final Iterable<? extends ConstraintDescriptor<?>> iterable) {
-            return null;
-        }
-    }
-
-    @Override
+//    @Override
     public <E extends AbstractAssert<?, ? extends ConstraintDescriptor<?>>>
-    AbstractCollectionAssert<?, Set<ConstraintDescriptor<?>>, ? extends ConstraintDescriptor<?>, ? extends E>
+    AbstractCollectionAssert<?, Set<ConstraintDescriptor<?>>, ? extends ConstraintDescriptor<?>, AbstractConstraintDescriptorAssert<?, ? extends ConstraintDescriptor<?>, ?>>
     extractingComposingConstraints() {
         return isNotNull()
                 .extracting(ConstraintDescriptor::getComposingConstraints, cc -> new AbstractCollectionAssert<AbstractCollectionAssert, Set<ConstraintDescriptor<?>>, ConstraintDescriptor<?>, E>() {
@@ -114,7 +93,8 @@ public abstract class AbstractConstraintDescriptorAssert<
                     }
                 });
     }
-// -------------------------------------------------------------------------------------- constraintValidatorClasses
+
+    // -------------------------------------------------------------------------------------- constraintValidatorClasses
 
     // ---------------------------------------------------------------------------------------------------------- groups
 
@@ -123,7 +103,7 @@ public abstract class AbstractConstraintDescriptorAssert<
     // --------------------------------------------------------------------------------------------------------- payload
 
     // --------------------------------------------------------------------------------------------- validationAppliesTo
-    @Override
+//    @Override
     public SELF hostsConstraintTarget(final ConstraintTarget constraintTarget) {
         isNotNull()
                 .extracting(ConstraintDescriptor::getValidationAppliesTo, new ObjectAssertFactory<>())
@@ -137,7 +117,7 @@ public abstract class AbstractConstraintDescriptorAssert<
 
     // ---------------------------------------------------------------------------------------------------------- unwrap
 
-    @Override
+//    @Override
     public <U, A extends AbstractAssert<?, ? extends U>> A extractingAsUnwrapped(
             final Class<U> type,
             final AssertFactory<? super U, ? extends A> assertFactory) {
