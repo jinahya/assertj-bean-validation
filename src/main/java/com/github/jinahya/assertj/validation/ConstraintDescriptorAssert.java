@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractCollectionAssert;
 import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.ObjectAssertFactory;
@@ -28,6 +29,7 @@ import org.assertj.core.api.ObjectAssertFactory;
 import javax.validation.ConstraintTarget;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -39,7 +41,7 @@ import java.util.function.Function;
  */
 public interface ConstraintDescriptorAssert<
         SELF extends ConstraintDescriptorAssert<SELF, ACTUAL, T>,
-        ACTUAL extends ConstraintDescriptor<T>,
+        ACTUAL extends ConstraintDescriptor<? extends T>,
         T extends Annotation>
         extends Assert<SELF, ACTUAL> {
 
@@ -68,6 +70,18 @@ public interface ConstraintDescriptorAssert<
 //    }
 
     // -------------------------------------------------------------------------------------------- composingConstraints
+    <A extends AbstractAssert<A, ? extends Set<ConstraintDescriptor<?>>>> A extractingComposingConstraints(
+            Function<? super ACTUAL, ? extends Set<ConstraintDescriptor<?>>> extractor,
+            AssertFactory<? super Set<ConstraintDescriptor<?>>, ? extends A> factory
+    );
+
+    <E extends AbstractAssert<?, ? extends ConstraintDescriptor<?>>> AbstractCollectionAssert<
+            ?,
+            Set<ConstraintDescriptor<?>>,
+            ? extends ConstraintDescriptor<?>,
+            ? extends E>
+    extractingComposingConstraints(
+    );
 
     // -------------------------------------------------------------------------------------- constraintValidatorClasses
 
@@ -78,15 +92,38 @@ public interface ConstraintDescriptorAssert<
     // --------------------------------------------------------------------------------------------------------- payload
 
     // --------------------------------------------------------------------------------------------- validationAppliesTo
-
-    // --------------------------------------------------------------------------------------------------- valueWrapping
-
-    // ----------------------------------------------------------------------------------------- reportAsSingleViolation
     SELF hostsConstraintTarget(ConstraintTarget constraintTarget);
 
     default SELF doesNotHostAnyConstraintTarget() {
         return hostsConstraintTarget(null);
     }
 
+    // --------------------------------------------------------------------------------------------------- valueWrapping
+
+    // ----------------------------------------------------------------------------------------- reportAsSingleViolation
+
     // ---------------------------------------------------------------------------------------------------------- unwrap
+    <U, A extends AbstractAssert<?, ? extends U>> A extractingAsUnwrapped(
+            final Class<U> type,
+            final AssertFactory<? super U, ? extends A> assertFactory
+    );
+
+    /**
+     * Verifies that the {@code actual} constraint descriptor value is equal to specified value when
+     * {@link ConstraintDescriptor#unwrap(Class) unwrapped} as specified type.
+     *
+     * @param type                   the to be unwrapped as.
+     * @param expectedUnwrappedValue expected unwrapped value.
+     * @param <U>                    the type of the unwrapped object.
+     * @return this assertion object.
+     * @see ConstraintDescriptor#unwrap(Class)
+     */
+    @SuppressWarnings({
+            "unchecked"
+    })
+    default <U> SELF isEqualToWhenUnwrappedAs(final Class<U> type, final Object expectedUnwrappedValue) {
+        extractingAsUnwrapped(type, new ObjectAssertFactory<>())
+                .isEqualTo(expectedUnwrappedValue);
+        return (SELF) this;
+    }
 }

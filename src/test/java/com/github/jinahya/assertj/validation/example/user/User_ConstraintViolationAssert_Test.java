@@ -158,6 +158,10 @@ class User_ConstraintViolationAssert_Test {
                             .extractingConstraintDescriptor()
                             .extractingAnnotation()
                             .isInstanceOfAny(PositiveOrZero.class, Min.class, Max.class);
+                    log.debug("{}", cv.getConstraintDescriptor().getValidationAppliesTo());
+                    assertThatConstraintViolation(cv)
+                            .extractingConstraintDescriptor()
+                            .doesNotHostAnyConstraintTarget();
                 }
             });
         }

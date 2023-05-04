@@ -21,6 +21,7 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractCollectionAssert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.ObjectAssertFactory;
 
@@ -28,6 +29,7 @@ import javax.validation.ConstraintTarget;
 import javax.validation.ConstraintViolation;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -61,9 +63,58 @@ public abstract class AbstractConstraintDescriptorAssert<
         return isNotNull()
                 .extracting(annotationExtractor, assertFactory);
     }
-    // -------------------------------------------------------------------------------------------- composingConstraints
 
-    // -------------------------------------------------------------------------------------- constraintValidatorClasses
+    // -------------------------------------------------------------------------------------------- composingConstraints
+    @Override
+    public <A extends AbstractAssert<A, ? extends Set<ConstraintDescriptor<?>>>> A extractingComposingConstraints(
+            final Function<? super ACTUAL, ? extends Set<ConstraintDescriptor<?>>> extractor,
+            final AssertFactory<? super Set<ConstraintDescriptor<?>>, ? extends A> factory) {
+        return isNotNull()
+                .extracting(ConstraintDescriptor::getComposingConstraints, factory);
+    }
+
+    private static class ComposingConstraintsAssert
+            extends AbstractCollectionAssert<
+            ComposingConstraintsAssert,
+            Set<? extends ConstraintDescriptor<?>>,
+            ConstraintDescriptor<?>,
+            AbstractConstraintDescriptorAssert<?, ConstraintDescriptor<?>, ?>> {
+
+        public ComposingConstraintsAssert(final Set<? extends ConstraintDescriptor<?>> collection) {
+            super(collection, ComposingConstraintsAssert.class);
+        }
+
+        @Override
+        protected AbstractConstraintDescriptorAssert<?, ConstraintDescriptor<?>, ?> toAssert(
+                final ConstraintDescriptor<?> value, String description) {
+            return null;
+        }
+
+        @Override
+        protected ComposingConstraintsAssert newAbstractIterableAssert(
+                final Iterable<? extends ConstraintDescriptor<?>> iterable) {
+            return null;
+        }
+    }
+
+    @Override
+    public <E extends AbstractAssert<?, ? extends ConstraintDescriptor<?>>>
+    AbstractCollectionAssert<?, Set<ConstraintDescriptor<?>>, ? extends ConstraintDescriptor<?>, ? extends E>
+    extractingComposingConstraints() {
+        return isNotNull()
+                .extracting(ConstraintDescriptor::getComposingConstraints, cc -> new AbstractCollectionAssert<AbstractCollectionAssert, Set<ConstraintDescriptor<?>>, ConstraintDescriptor<?>, E>() {
+                    @Override
+                    protected E toAssert(ConstraintDescriptor<?> value, String description) {
+                        return null;
+                    }
+
+                    @Override
+                    protected AbstractCollectionAssert newAbstractIterableAssert(Iterable<? extends ConstraintDescriptor<?>> iterable) {
+                        return null;
+                    }
+                });
+    }
+// -------------------------------------------------------------------------------------- constraintValidatorClasses
 
     // ---------------------------------------------------------------------------------------------------------- groups
 
@@ -72,18 +123,26 @@ public abstract class AbstractConstraintDescriptorAssert<
     // --------------------------------------------------------------------------------------------------------- payload
 
     // --------------------------------------------------------------------------------------------- validationAppliesTo
+    @Override
+    public SELF hostsConstraintTarget(final ConstraintTarget constraintTarget) {
+        isNotNull()
+                .extracting(ConstraintDescriptor::getValidationAppliesTo, new ObjectAssertFactory<>())
+                .isSameAs(constraintTarget);
+        return myself;
+    }
 
     // --------------------------------------------------------------------------------------------------- valueWrapping
 
     // ----------------------------------------------------------------------------------------- reportAsSingleViolation
 
-    @Override
-    public SELF hostsConstraintTarget(final ConstraintTarget constraintTarget) {
-        isNotNull()
-                .extracting(ConstraintDescriptor::isReportAsSingleViolation, new ObjectAssertFactory<>())
-                .isSameAs(constraintTarget);
-        return myself;
-    }
-
     // ---------------------------------------------------------------------------------------------------------- unwrap
+
+    @Override
+    public <U, A extends AbstractAssert<?, ? extends U>> A extractingAsUnwrapped(
+            final Class<U> type,
+            final AssertFactory<? super U, ? extends A> assertFactory) {
+        return isNotNull()
+                .extracting(a -> a.unwrap(type), assertFactory)
+                ;
+    }
 }
