@@ -1,4 +1,4 @@
-package com.github.jinahya.assertj.validation.example.user;
+package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
@@ -20,28 +20,23 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-class SeniorRegistration
-        extends Registration {
+import org.assertj.core.api.Assert;
 
-    static SeniorRegistration of(final User user) {
-        return of(SeniorRegistration::new, user);
-    }
+import javax.validation.ConstraintValidator;
+import java.lang.annotation.Annotation;
 
-    static SeniorRegistration seniorRegistrationOf(final User user) {
-        return of(user);
-    }
+/**
+ * An assertion interface for verifying {@link ConstraintValidator} values.
+ *
+ * @param <SELF>   self type parameter
+ * @param <ACTUAL> actual type parameter
+ * @param <T>      root bean type parameter
+ */
+interface ConstraintValidatorAssert<
+        SELF extends ConstraintValidatorAssert<SELF, ACTUAL, A, T>,
+        ACTUAL extends ConstraintValidator<A, T>,
+        A extends Annotation,
+        T>
+        extends Assert<SELF, ACTUAL> {
 
-    SeniorRegistration(@Senior final User user) {
-        super(user);
-    }
-
-    private SeniorRegistration() {
-        this(null);
-    }
-
-    @Senior
-    @Override
-    User getUser() {
-        return super.getUser();
-    }
 }

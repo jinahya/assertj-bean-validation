@@ -32,26 +32,26 @@ class DefaultPathAssert
         extends AbstractPathAssert<DefaultPathAssert, DefaultPathAssert.DefaultNodeAssert> {
 
     static class DefaultNodeAssert
-            extends AbstractNodeAssert<DefaultNodeAssert, Path.Node> {
-
-        static class DefaultParameterizedNodeAssert
-                extends AbstractParameterizedNodeAssert<DefaultParameterizedNodeAssert, Path.ParameterNode> {
-
-            DefaultParameterizedNodeAssert(final Path.ParameterNode actual, final Class<?> selfType) {
-                super(actual, selfType);
-            }
-        }
+            extends AbstractNodeAssert<DefaultNodeAssert> {
 
         static class DefaultBeanNodeAssert
-                extends AbstractBeanNodeAssert<DefaultBeanNodeAssert, Path.BeanNode> {
+                extends AbstractBeanNodeAssert<DefaultBeanNodeAssert> {
 
             DefaultBeanNodeAssert(final Path.BeanNode actual) {
                 super(actual, DefaultBeanNodeAssert.class);
             }
         }
 
+        static class DefaultParameterizedNodeAssert
+                extends AbstractParameterizedNodeAssert<DefaultParameterizedNodeAssert> {
+
+            DefaultParameterizedNodeAssert(final Path.ParameterNode actual, final Class<?> selfType) {
+                super(actual, selfType);
+            }
+        }
+
         static class DefaultConstructorNodeAssert
-                extends AbstractConstructorNodeAssert<DefaultConstructorNodeAssert, Path.ConstructorNode> {
+                extends AbstractConstructorNodeAssert<DefaultConstructorNodeAssert> {
 
             DefaultConstructorNodeAssert(final Path.ConstructorNode actual) {
                 super(actual, DefaultConstructorNodeAssert.class);
@@ -59,7 +59,7 @@ class DefaultPathAssert
         }
 
         static class DefaultCrossParameterNodeAssert
-                extends AbstractCrossParameterNodeAssert<DefaultCrossParameterNodeAssert, Path.CrossParameterNode> {
+                extends AbstractCrossParameterNodeAssert<DefaultCrossParameterNodeAssert> {
 
             DefaultCrossParameterNodeAssert(final Path.CrossParameterNode actual) {
                 super(actual, DefaultCrossParameterNodeAssert.class);
@@ -67,29 +67,28 @@ class DefaultPathAssert
         }
 
         static class DefaultMethodNodeAssert
-                extends AbstractMethodNodeAssert<DefaultMethodNodeAssert, Path.MethodNode> {
+                extends AbstractMethodNodeAssert<DefaultMethodNodeAssert> {
 
             DefaultMethodNodeAssert(final Path.MethodNode actual) {
                 super(actual, DefaultMethodNodeAssert.class);
             }
         }
 
-        DefaultNodeAssert(final Path.Node actual, Class<?> selfType) {
-            super(actual, selfType);
-        }
-
-        DefaultNodeAssert(final Path.Node actual) {
-            super(actual, DefaultNodeAssert.class);
-        }
-
         static class DefaultParameterNodeAssert
-                extends AbstractParameterNodeAssert<DefaultParameterNodeAssert, Path.ParameterNode> {
+                extends AbstractParameterNodeAssert<DefaultParameterNodeAssert> {
 
             DefaultParameterNodeAssert(final Path.ParameterNode actual) {
                 super(actual, DefaultParameterNodeAssert.class);
             }
         }
+
+        // -------------------------------------------------------------------------------------------------------------
+        DefaultNodeAssert(final Path.Node actual) {
+            super(actual, DefaultNodeAssert.class);
+        }
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Creates a new instance for verifying specified actual value.
@@ -101,14 +100,12 @@ class DefaultPathAssert
     }
 
     @Override
-    protected DefaultNodeAssert toAssert(final Path.Node value, String description) {
+    protected DefaultNodeAssert toAssert(final Path.Node value, final String description) {
         return new DefaultNodeAssert(value);
     }
 
     @Override
-    @SuppressWarnings({
-            "unchecked"
-    })
+    @SuppressWarnings({"unchecked"})
     protected DefaultPathAssert newAbstractIterableAssert(final Iterable<? extends Path.Node> iterable) {
         return new DefaultPathAssert(() -> (Iterator<Path.Node>) iterable.iterator());
     }

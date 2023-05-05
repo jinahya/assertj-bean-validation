@@ -23,7 +23,6 @@ package com.github.jinahya.assertj.validation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractObjectArrayAssert;
-import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
 import org.assertj.core.api.ObjectAssertFactory;
@@ -31,6 +30,7 @@ import org.assertj.core.api.ObjectAssertFactory;
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -57,87 +57,75 @@ public abstract class AbstractConstraintViolationAssert<
 
     // -------------------------------------------------------------------------------------------- constraintDescriptor
     @Override
-    public <DESCRIPTOR extends ConstraintDescriptor<?>,
-            ASSERT extends AbstractConstraintDescriptorAssert<?, DESCRIPTOR, ?>>
-    ASSERT extractingConstraintDescriptor(
-            final Function<? super ACTUAL, ? extends DESCRIPTOR> descriptorExtractor,
-            final AssertFactory<? super DESCRIPTOR, ? extends ASSERT> assertFactory) {
-        return isNotNull().extracting(descriptorExtractor, assertFactory::createAssert);
+    public <D extends ConstraintDescriptor<?>, A extends AbstractConstraintDescriptorAssert<?, ? extends D, ?>>
+    A extractingConstraintDescriptor(
+            final Function<? super ACTUAL, ? extends D> descriptorExtractor,
+            final AssertFactory<? super D, ? extends A> assertFactory) {
+        return isNotNull().extracting(descriptorExtractor, assertFactory);
     }
 
     // -------------------------------------------------------------------------------------------- executableParameters
     @Override
-    public <A extends AbstractObjectArrayAssert<?, Object>> A extractingExecutableParameters(
-            final AssertFactory<Object, ? extends A> assertFactory) {
+    public <A extends AbstractObjectArrayAssert<?, ? extends E>, E> A extractingExecutableParameters(
+            final Function<? super ACTUAL, ? extends E[]> parametersExtractor,
+            final AssertFactory<? super E[], ? extends A> assertFactory) {
         return isNotNull()
-                .extracting(ConstraintViolation::getExecutableParameters, assertFactory);
+                .extracting(parametersExtractor, assertFactory);
     }
 
     // ------------------------------------------------------------------------------------------- executableReturnValue
     @Override
-    public <U, A extends AbstractObjectAssert<?, U>> A extractingExecutableReturnValue(
-            final Function<? super ACTUAL, ? extends U> valueExtractor,
-            final AssertFactory<? super U, ? extends A> assertFactory) {
+    public <V, A extends AbstractAssert<?, ? extends V>> A extractingExecutableReturnValue(
+            final Function<? super ACTUAL, ? extends V> valueExtractor,
+            final AssertFactory<? super V, ? extends A> assertFactory) {
         return isNotNull().extracting(valueExtractor, assertFactory);
     }
 
     // ---------------------------------------------------------------------------------------------------- invalidValue
     @Override
-    public <U, A extends AbstractObjectAssert<?, U>> A extractingInvalidValue(
-            final Function<? super ACTUAL, ? extends U> valueExtractor,
-            final AssertFactory<? super U, ? extends A> assertFactory) {
+    public <V, A extends AbstractAssert<?, ? extends V>> A extractingInvalidValue(
+            final Function<? super ACTUAL, ? extends V> valueExtractor,
+            final AssertFactory<? super V, ? extends A> assertFactory) {
         return isNotNull()
                 .extracting(valueExtractor, assertFactory);
-    }
-
-    @Override
-    public Assert<?, ?> extractingInvalidValue2() {
-        return isNotNull()
-                .extracting(ConstraintViolation::getInvalidValue, new ObjectAssertFactory<>());
     }
 
     // -------------------------------------------------------------------------------------------------------- leafBean
 
     @Override
-    public <U, A extends AbstractAssert<?, ? extends U>> A extractingLeafBean(
-            final Function<? super ACTUAL, ? extends U> beanExtractor,
-            final AssertFactory<? super U, ? extends A> assertFactory) {
+    public <B, A extends AbstractAssert<?, ? extends B>> A extractingLeafBean(
+            final Function<? super ACTUAL, ? extends B> beanExtractor,
+            final AssertFactory<? super B, ? extends A> assertFactory) {
         return isNotNull()
                 .extracting(beanExtractor, assertFactory);
     }
 
     @Override
-    public Assert<?, ?> extractingLeafBean2() {
+    public Assert<?, ?> extractingLeafBean() {
         return isNotNull()
                 .extracting(ConstraintViolation::getLeafBean, new ObjectAssertFactory<>());
     }
 
     // ---------------------------------------------------------------------------------------------------- propertyPath
     @Override
-    public <ASSERT extends AbstractPathAssert<?, ?>> ASSERT extractingPropertyPath(final AssertFactory<? super Path, ? extends ASSERT> assertFactory) {
+    public <ASSERT extends AbstractPathAssert<?, ? extends AbstractPathAssert.AbstractNodeAssert<?>>> ASSERT extractingPropertyPath(final AssertFactory<? super Path, ? extends ASSERT> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getPropertyPath, assertFactory::createAssert);
     }
 
     // -------------------------------------------------------------------------------------------------------- rootBean
     @Override
-    public <A extends AbstractAssert<?, T>> A extractingRootBean(
-            final AssertFactory<? super T, ? extends A> assertFactory) {
+    public <ASSERT extends AbstractAssert<?, T>> ASSERT extractingRootBean(
+            final AssertFactory<? super T, ? extends ASSERT> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBean, assertFactory);
     }
 
     // --------------------------------------------------------------------------------------------------- rootBeanClass
     @Override
-    public <A extends AbstractClassAssert<?>> A extractingRootBeanClass(
-            final AssertFactory<? super Class<T>, ? extends A> assertFactory) {
-        return isNotNull()
-                .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
-    }
-
-    @Override
-    public <ASSERT extends AbstractAssert<?, Class<? extends T>>> ASSERT extractingRootBeanClass2(
+    public <ASSERT extends AbstractClassAssert<?>> ASSERT extractingRootBeanClass(
             final AssertFactory<? super Class<T>, ? extends ASSERT> assertFactory) {
+        Objects.requireNonNull(assertFactory, "assertFactory is null");
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
     }

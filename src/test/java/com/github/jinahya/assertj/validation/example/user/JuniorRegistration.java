@@ -31,7 +31,7 @@ class JuniorRegistration
         return of(user);
     }
 
-    JuniorRegistration(final User user) {
+    JuniorRegistration(@Junior final User user) {
         super(user);
     }
 

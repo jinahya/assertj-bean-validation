@@ -21,9 +21,11 @@ package com.github.jinahya.assertj.validation;
  */
 
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.CollectionAssert;
+import org.assertj.core.api.ObjectAssertFactory;
 
+import javax.validation.ConstraintTarget;
 import javax.validation.ConstraintViolation;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
@@ -54,10 +56,55 @@ public abstract class AbstractConstraintDescriptorAssert<
     // ------------------------------------------------------------------------------------------------------ annotation
 
     @Override
-    public <A extends AbstractObjectAssert<?, ? super T>> A extractingAnnotation(
-            final Function<? super ACTUAL, ? extends T> annotationExtractor,
-            final AssertFactory<? super T, ? extends A> assertFactory) {
+    public <A extends AbstractAssert<?, T>> A extractingAnnotation(
+            final Function<? super ACTUAL, ? extends T> extractor,
+            final AssertFactory<? super T, ? extends A> factory) {
         return isNotNull()
-                .extracting(annotationExtractor, assertFactory);
+                .extracting(extractor, factory);
+    }
+
+    // -------------------------------------------------------------------------------------------- composingConstraints
+    @Override
+    public CollectionAssert<ConstraintDescriptor<?>> extractingComposingConstraints() {
+        return isNotNull()
+                .extracting(ConstraintDescriptor::getComposingConstraints, CollectionAssert::new);
+    }
+
+// -------------------------------------------------------------------------------------- constraintValidatorClasses
+
+    // ---------------------------------------------------------------------------------------------------------- groups
+
+    @Override
+    public CollectionAssert<Class<?>> extractingGroups() {
+        return isNotNull()
+                .extracting(ConstraintDescriptor::getGroups, CollectionAssert::new);
+    }
+
+    // ------------------------------------------------------------------------------------------------- messageTemplate
+
+    // --------------------------------------------------------------------------------------------------------- payload
+
+    // --------------------------------------------------------------------------------------------- validationAppliesTo
+    @Override
+    public SELF hostsConstraintTarget(final ConstraintTarget constraintTarget) {
+        isNotNull()
+                .extracting(ConstraintDescriptor::getValidationAppliesTo, new ObjectAssertFactory<>())
+                .isSameAs(constraintTarget);
+        return myself;
+    }
+
+    // --------------------------------------------------------------------------------------------------- valueWrapping
+
+    // ----------------------------------------------------------------------------------------- reportAsSingleViolation
+
+    // ---------------------------------------------------------------------------------------------------------- unwrap
+
+    @Override
+    public <U, A extends AbstractAssert<?, ? extends U>> A extractingAsUnwrapped(
+            final Class<U> type,
+            final AssertFactory<? super U, ? extends A> assertFactory) {
+        return isNotNull()
+                .extracting(a -> a.unwrap(type), assertFactory)
+                ;
     }
 }

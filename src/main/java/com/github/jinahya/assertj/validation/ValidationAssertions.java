@@ -76,15 +76,15 @@ public final class ValidationAssertions {
         return new IterableOfConstraintViolationsAssert<>(actual);
     }
 
-    /**
-     * Creates a new assertion object for verifying specified path value.
-     *
-     * @param actual the path value to verify.
-     * @return a new assertion instance for {@code actual}.
-     */
-    public static AbstractPathAssert<?, ?> assertThatPath(final Path actual) {
-        return new DefaultPathAssert(actual);
-    }
+//    /**
+//     * Creates a new assertion object for verifying specified path value.
+//     *
+//     * @param actual the path value to verify.
+//     * @return a new assertion instance for {@code actual}.
+//     */
+//    public static AbstractPathAssert<?, ?> assertThatPath(final Path actual) {
+//        return new DefaultPathAssert(actual);
+//    }
 
     /**
      * Creates a new instance.
