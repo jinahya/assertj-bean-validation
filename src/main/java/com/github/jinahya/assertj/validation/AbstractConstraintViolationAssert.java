@@ -23,14 +23,15 @@ package com.github.jinahya.assertj.validation;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractObjectArrayAssert;
-import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
+import javax.validation.metadata.ConstraintDescriptor;
+import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * An abstract assertion class for verifying {@link ConstraintViolation} values.
@@ -39,9 +40,10 @@ import javax.validation.Path;
  * @param <ACTUAL> actual type parameter
  * @param <T>      root bean type parameter
  */
-abstract class AbstractConstraintViolationAssert<
+public abstract class AbstractConstraintViolationAssert<
         SELF extends AbstractConstraintViolationAssert<SELF, ACTUAL, T>, ACTUAL extends ConstraintViolation<T>, T>
-        extends AbstractValidationAssert<SELF, ACTUAL> {
+        extends AbstractValidationAssert<SELF, ACTUAL>
+        implements ConstraintViolationAssert<SELF, ACTUAL, T> {
 
     /**
      * Creates a new instance with specified arguments.
@@ -53,161 +55,78 @@ abstract class AbstractConstraintViolationAssert<
         super(actual, selfType);
     }
 
-    <ASSERT extends AbstractObjectArrayAssert<?, Object>> ASSERT extractingExecutableParameters(
-            final AssertFactory<Object, ? extends ASSERT> assertFactory) {
+    // -------------------------------------------------------------------------------------------- constraintDescriptor
+    @Override
+    public <D extends ConstraintDescriptor<?>, A extends AbstractConstraintDescriptorAssert<?, ? extends D, ?>>
+    A extractingConstraintDescriptor(
+            final Function<? super ACTUAL, ? extends D> descriptorExtractor,
+            final AssertFactory<? super D, ? extends A> assertFactory) {
+        return isNotNull().extracting(descriptorExtractor, assertFactory);
+    }
+
+    // -------------------------------------------------------------------------------------------- executableParameters
+    @Override
+    public <A extends AbstractObjectArrayAssert<?, ? extends E>, E> A extractingExecutableParameters(
+            final Function<? super ACTUAL, ? extends E[]> parametersExtractor,
+            final AssertFactory<? super E[], ? extends A> assertFactory) {
         return isNotNull()
-                .extracting(ConstraintViolation::getExecutableParameters, assertFactory);
+                .extracting(parametersExtractor, assertFactory);
     }
 
-    AbstractObjectArrayAssert<?, Object> extractingExecutableParameters() {
-        return extractingExecutableParameters(InstanceOfAssertFactories.ARRAY);
+    // ------------------------------------------------------------------------------------------- executableReturnValue
+    @Override
+    public <V, A extends AbstractAssert<?, ? extends V>> A extractingExecutableReturnValue(
+            final Function<? super ACTUAL, ? extends V> valueExtractor,
+            final AssertFactory<? super V, ? extends A> assertFactory) {
+        return isNotNull().extracting(valueExtractor, assertFactory);
     }
 
-    /**
-     * Verifies that the {@link ConstraintViolation#getExecutableParameters() actual.executableParameters} is equal to
-     * specified value.
-     *
-     * @param expectedExecutableParameters the expected value of {@code actual.executableParameters}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getExecutableParameters()
-     * @see #extractingExecutableParameters()
-     */
-    SELF hasExecutableParameters(final Object[] expectedExecutableParameters) {
-        extractingExecutableParameters()
-                .isEqualTo(expectedExecutableParameters);
-        return myself;
-    }
-
-    @SuppressWarnings({"unchecked"})
-    <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingExecutableReturnValue(
-            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
+    // ---------------------------------------------------------------------------------------------------- invalidValue
+    @Override
+    public <V, A extends AbstractAssert<?, ? extends V>> A extractingInvalidValue(
+            final Function<? super ACTUAL, ? extends V> valueExtractor,
+            final AssertFactory<? super V, ? extends A> assertFactory) {
         return isNotNull()
-                .extracting(a -> (U) a.getExecutableReturnValue(), assertFactory);
+                .extracting(valueExtractor, assertFactory);
     }
 
-    <U> AbstractObjectAssert<?, U> extractingExecutableReturnValue() {
-        return extractingExecutableReturnValue(new ObjectAssertFactory<>());
-    }
+    // -------------------------------------------------------------------------------------------------------- leafBean
 
-    /**
-     * Verifies that the actual {@link ConstraintViolation}'s
-     * {@link ConstraintViolation#getExecutableReturnValue() executableReturnValue} is equal to specified value.
-     *
-     * @param expectedExecutableReturnValue the expected value of {@code actual.executableReturnValue}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getExecutableReturnValue()
-     */
-    SELF hasExecutableReturnValue(final Object expectedExecutableReturnValue) {
-        extractingExecutableReturnValue()
-                .isEqualTo(expectedExecutableReturnValue);
-        return myself;
-    }
-
-    @SuppressWarnings({"unchecked"})
-    <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingInvalidValue(
-            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
+    @Override
+    public <B, A extends AbstractAssert<?, ? extends B>> A extractingLeafBean(
+            final Function<? super ACTUAL, ? extends B> beanExtractor,
+            final AssertFactory<? super B, ? extends A> assertFactory) {
         return isNotNull()
-                .extracting(a -> (U) a.getInvalidValue(), assertFactory);
+                .extracting(beanExtractor, assertFactory);
     }
 
-    <U> AbstractObjectAssert<?, U> extractingInvalidValue() {
-        return extractingInvalidValue(new ObjectAssertFactory<>());
+    @Override
+    public Assert<?, ?> extractingLeafBean() {
+        return isNotNull()
+                .extracting(ConstraintViolation::getLeafBean, new ObjectAssertFactory<>());
     }
 
-    /**
-     * Verifies that the actual {@link ConstraintViolation}'s {@link ConstraintViolation#getInvalidValue() invalidValue}
-     * is equal to specified value.
-     *
-     * @param expectedInvalidValue the expected value of {@code actual.invalidValue}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getInvalidValue()
-     */
-    SELF hasInvalidValue(final Object expectedInvalidValue) {
-        extractingInvalidValue()
-                .isEqualTo(expectedInvalidValue);
-        return myself;
+    // ---------------------------------------------------------------------------------------------------- propertyPath
+    @Override
+    public <ASSERT extends AbstractPathAssert<?, ? extends AbstractPathAssert.AbstractNodeAssert<?>>> ASSERT extractingPropertyPath(final AssertFactory<? super Path, ? extends ASSERT> assertFactory) {
+        return isNotNull()
+                .extracting(ConstraintViolation::getPropertyPath, assertFactory::createAssert);
     }
 
-    @SuppressWarnings({"unchecked"})
-    <U, ASSERT extends AbstractObjectAssert<?, U>> ASSERT extractingLeafBean(
-            final AssertFactory<? super U, ? extends ASSERT> assertFactory) {
-        return isNotNull().extracting(a -> (U) a.getLeafBean(), assertFactory);
-    }
-
-    <U> AbstractObjectAssert<?, U> extractingLeafBean() {
-        return extractingLeafBean(new ObjectAssertFactory<>());
-    }
-
-    /**
-     * Verifies that the {@link ConstraintViolation#getLeafBean() actual.leafBean} is equal to specified value.
-     *
-     * @param expectedLeafBean the expected value of {@code actual.leafBean}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getLeafBean()
-     * @see #extractingLeafBean()
-     */
-    SELF hasLeafBean(final Object expectedLeafBean) {
-        extractingLeafBean()
-                .isEqualTo(expectedLeafBean);
-        return myself;
-    }
-
-    <ASSERT extends AbstractObjectAssert<?, T>> ASSERT extractingRootBean(
+    // -------------------------------------------------------------------------------------------------------- rootBean
+    @Override
+    public <ASSERT extends AbstractAssert<?, T>> ASSERT extractingRootBean(
             final AssertFactory<? super T, ? extends ASSERT> assertFactory) {
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBean, assertFactory);
     }
 
-    AbstractObjectAssert<?, T> extractingRootBean() {
-        return extractingRootBean(new ObjectAssertFactory<>());
-    }
-
-    /**
-     * Verifies that the {@link ConstraintViolation#getRootBean() actual.rootBean} is equal to specified value.
-     *
-     * @param expectedRootBean the expected value of {@code actual.rootBean}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getRootBean()
-     * @see #extractingRootBean()
-     */
-    SELF hasRootBean(final T expectedRootBean) {
-        extractingRootBean()
-                .isEqualTo(expectedRootBean);
-        return myself;
-    }
-
-    <ASSERT extends AbstractClassAssert<?>> ASSERT extractingRootBeanClass(
-            final AssertFactory<Class<T>, ? extends ASSERT> assertFactory) {
+    // --------------------------------------------------------------------------------------------------- rootBeanClass
+    @Override
+    public <ASSERT extends AbstractClassAssert<?>> ASSERT extractingRootBeanClass(
+            final AssertFactory<? super Class<T>, ? extends ASSERT> assertFactory) {
+        Objects.requireNonNull(assertFactory, "assertFactory is null");
         return isNotNull()
                 .extracting(ConstraintViolation::getRootBeanClass, assertFactory);
-    }
-
-    AbstractClassAssert<?> extractingRootBeanClass() {
-        return extractingRootBeanClass(Assertions::assertThat);
-    }
-
-    /**
-     * Verifies that the {@link ConstraintViolation#getRootBeanClass() actual.rootBeanClass} is equal to specified
-     * value.
-     *
-     * @param expectedRootBeanClass the expected value of {@code actual.rootBeanClass}.
-     * @return this assertion object.
-     * @see ConstraintViolation#getRootBeanClass()
-     * @see #extractingRootBeanClass()
-     */
-    SELF hasRootBeanClass(final Class<T> expectedRootBeanClass) {
-        extractingRootBeanClass()
-                .isEqualTo(expectedRootBeanClass);
-        return myself;
-    }
-
-    <ASSERT extends AbstractAssert<?, ? extends Path>> ASSERT extractingPropertyPath(
-            final AssertFactory<? super Path, ? extends ASSERT> assertFactory) {
-        return isNotNull()
-                .extracting(ConstraintViolation::getPropertyPath, assertFactory);
-    }
-
-    public AbstractPathAssert<?> extractingPropertyPath() {
-        return extractingPropertyPath(ValidationAssertions::assertThatPath);
     }
 }

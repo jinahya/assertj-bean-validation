@@ -21,7 +21,8 @@ package com.github.jinahya.assertj.validation;
  */
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Path;
+import javax.validation.metadata.ConstraintDescriptor;
+import java.lang.annotation.Annotation;
 
 /**
  * A class for creating assertion instances.
@@ -37,7 +38,7 @@ public final class ValidationAssertions {
      * @param actual   the bean value to verify.
      * @return a new assertion object for verifying {@code actual}.
      */
-    public static <ACTUAL> BeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
+    public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
         return new DefaultBeanAssert<>(actual);
     }
 
@@ -48,8 +49,13 @@ public final class ValidationAssertions {
      * @param actual   the value of the property to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL> PropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
+    public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
         return new DefaultPropertyAssert<>(actual);
+    }
+
+    public static <T extends Annotation> AbstractConstraintDescriptorAssert<?, ?, T> assertThatConstraintDescriptor(
+            final ConstraintDescriptor<T> actual) {
+        return new DefaultConstraintDescriptorAssert<>(actual);
     }
 
     /**
@@ -59,9 +65,9 @@ public final class ValidationAssertions {
      * @param actual the constraint violation value to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    static <T> AbstractConstraintViolationAssert<?, ConstraintViolation<T>, T> assertThatConstraintViolation(
+    public static <T> ConstraintViolationAssert<?, ConstraintViolation<T>, T> assertThatConstraintViolation(
             final ConstraintViolation<T> actual) {
-        return new ConstraintViolationAssert<>(actual);
+        return new DefaultConstraintViolationAssert<>(actual);
     }
 
     static <T> AbstractIterableOfConstraintViolationsAssert<?, T> assertThatIterableOfConstraintViolations(
@@ -69,15 +75,15 @@ public final class ValidationAssertions {
         return new IterableOfConstraintViolationsAssert<>(actual);
     }
 
-    /**
-     * Creates a new assertion object for verifying specified path value.
-     *
-     * @param actual the path value to verify.
-     * @return a new assertion instance for {@code actual}.
-     */
-    static AbstractPathAssert<?> assertThatPath(final Path actual) {
-        return new PathAssert(actual);
-    }
+//    /**
+//     * Creates a new assertion object for verifying specified path value.
+//     *
+//     * @param actual the path value to verify.
+//     * @return a new assertion instance for {@code actual}.
+//     */
+//    public static AbstractPathAssert<?, ?> assertThatPath(final Path actual) {
+//        return new DefaultPathAssert(actual);
+//    }
 
     /**
      * Creates a new instance.

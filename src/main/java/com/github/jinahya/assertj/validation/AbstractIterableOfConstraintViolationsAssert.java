@@ -30,7 +30,7 @@ import javax.validation.ConstraintViolation;
 abstract class AbstractIterableOfConstraintViolationsAssert<
         SELF extends AbstractIterableOfConstraintViolationsAssert<SELF, T>, T>
         extends AbstractIterableAssert<
-        SELF, Iterable<? extends ConstraintViolation<T>>, ConstraintViolation<T>, ConstraintViolationAssert<T>> {
+        SELF, Iterable<? extends ConstraintViolation<T>>, ConstraintViolation<T>, DefaultConstraintViolationAssert<T>> {
 
     protected AbstractIterableOfConstraintViolationsAssert(final Iterable<? extends ConstraintViolation<T>> actual,
                                                            final Class<?> selfType) {

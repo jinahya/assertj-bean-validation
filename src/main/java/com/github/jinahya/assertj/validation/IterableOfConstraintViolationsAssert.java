@@ -30,8 +30,8 @@ class IterableOfConstraintViolationsAssert<T>
     }
 
     @Override
-    protected ConstraintViolationAssert<T> toAssert(final ConstraintViolation<T> value, final String description) {
-        return new ConstraintViolationAssert<>(value)
+    protected DefaultConstraintViolationAssert<T> toAssert(final ConstraintViolation<T> value, final String description) {
+        return new DefaultConstraintViolationAssert<>(value)
                 .describedAs(description);
     }
 

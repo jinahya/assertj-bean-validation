@@ -1,10 +1,10 @@
-package com.github.jinahya.assertj.validation.example.user;
+package com.github.jinahya.assertj.validation;
 
 /*-
  * #%L
  * assertj-bean-validation
  * %%
- * Copyright (C) 2021 - 2022 Jinahya, Inc.
+ * Copyright (C) 2021 Jinahya, Inc.
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,28 +20,17 @@ package com.github.jinahya.assertj.validation.example.user;
  * #L%
  */
 
-class SeniorRegistration
-        extends Registration {
+import javax.validation.ConstraintViolation;
 
-    static SeniorRegistration of(final User user) {
-        return of(SeniorRegistration::new, user);
-    }
+class DefaultConstraintViolationAssert<T>
+        extends AbstractConstraintViolationAssert<DefaultConstraintViolationAssert<T>, ConstraintViolation<T>, T> {
 
-    static SeniorRegistration seniorRegistrationOf(final User user) {
-        return of(user);
-    }
-
-    SeniorRegistration(@Senior final User user) {
-        super(user);
-    }
-
-    private SeniorRegistration() {
-        this(null);
-    }
-
-    @Senior
-    @Override
-    User getUser() {
-        return super.getUser();
+    /**
+     * Creates a new instance for verifying specified actual value.
+     *
+     * @param actual the actual value to verify.
+     */
+    DefaultConstraintViolationAssert(final ConstraintViolation<T> actual) {
+        super(actual, DefaultConstraintViolationAssert.class);
     }
 }

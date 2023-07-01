@@ -42,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings({
         "java:S2160" // override equals/hashCode
 })
-abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
+public abstract class AbstractBeanAssert<SELF extends AbstractBeanAssert<SELF, ACTUAL>, ACTUAL>
         extends AbstractPropertyAssert<SELF, ACTUAL>
         implements BeanAssert<SELF, ACTUAL> {
 
