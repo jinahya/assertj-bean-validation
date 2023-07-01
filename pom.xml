@@ -72,7 +72,6 @@
     <version.org.apache.bval>2.0.6</version.org.apache.bval>
     <version.org.assertj>3.24.2</version.org.assertj>
     <version.org.eclipse.transformer>0.5.0</version.org.eclipse.transformer>
-<!--    <version.org.junit>5.9.3</version.org.junit>-->
     <version.org.junit>5.10.0-M1</version.org.junit>
     <version.org.mockito>5.4.0</version.org.mockito>
     <version.org.mockito-inline>5.2.0</version.org.mockito-inline>
@@ -144,12 +143,6 @@
       <artifactId>assertj-core</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!--    <dependency>-->
-    <!--      <groupId>org.assertj</groupId>-->
-    <!--      <artifactId>assertj-core</artifactId>-->
-    <!--      <classifier>test</classifier>-->
-    <!--      <scope>test</scope>-->
-    <!--    </dependency>-->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -247,6 +240,7 @@
               <goals>
                 <goal>enforce</goal>
               </goals>
+              <phase>verify</phase>
               <configuration>
                 <skip>false</skip>
                 <rules>
@@ -254,6 +248,19 @@
                     <version>[3.5.4,)</version>
                   </requireMavenVersion>
                 </rules>
+              </configuration>
+            </execution>
+            <execution>
+              <id>enforce-require-profile-ids-exist</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <phase>validate</phase>
+              <configuration>
+                <rules>
+                  <requireProfileIdsExist/>
+                </rules>
+                <skip>false</skip>
               </configuration>
             </execution>
           </executions>
