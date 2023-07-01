@@ -20,17 +20,20 @@ package com.github.jinahya.assertj.validation;
  * #L%
  */
 
+import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.AbstractBooleanAssert;
+import org.assertj.core.api.AbstractClassAssert;
 import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.AbstractIntegerAssert;
-import org.assertj.core.api.AbstractIterableAssert;
+import org.assertj.core.api.AbstractListAssert;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.Assert;
 import org.assertj.core.api.AssertFactory;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ClassAssert;
 import org.assertj.core.api.EnumerableAssert;
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.assertj.core.api.ListAssert;
 import org.assertj.core.api.ObjectAssertFactory;
 
 import javax.validation.ElementKind;
@@ -46,7 +49,7 @@ import java.util.function.Function;
  * @param <SELF> self type parameter
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-interface PathAssert<SELF extends PathAssert<SELF>>
+public interface PathAssert<SELF extends PathAssert<SELF>>
         extends Assert<SELF, Path>,
                 EnumerableAssert<SELF, Path.Node> {
 
@@ -59,6 +62,130 @@ interface PathAssert<SELF extends PathAssert<SELF>>
      */
     interface NodeAssert<SELF extends NodeAssert<SELF, ACTUAL>, ACTUAL extends Path.Node> {
 
+        interface HasContainerClass<SELF extends NodeAssert<SELF, ?>> {
+
+            <ASSERT extends AbstractClassAssert<? extends ASSERT>> ASSERT extractingContainerClass(
+                    AssertFactory<? super Class<?>, ? extends ASSERT> factory
+            );
+
+            @SuppressWarnings({"unchecked"})
+            default <ASSERT extends AbstractClassAssert<? extends ASSERT>> SELF hasContainerClassSatisfying(
+                    final AssertFactory<? super Class<?>, ? extends ASSERT> factory,
+                    final Consumer<? super ASSERT> consumer) {
+                Objects.requireNonNull(consumer, "consumer is null");
+                consumer.accept(extractingContainerClass(factory));
+                return (SELF) this;
+            }
+
+            default AbstractClassAssert<?> extractingContainerClass() {
+                return extractingContainerClass(InstanceOfAssertFactories.CLASS);
+            }
+
+            default SELF hasContainerClassSatisfying(final Consumer<? super AbstractClassAssert<?>> consumer) {
+                return hasContainerClassSatisfying(InstanceOfAssertFactories.CLASS, consumer);
+            }
+
+            @SuppressWarnings({
+                    "unchecked"
+            })
+            default SELF hasContainerClass(final Class<?> expectedContainerClass) {
+                extractingContainerClass().isEqualTo(expectedContainerClass);
+                return (SELF) this;
+            }
+        }
+
+        interface HasTypeArgumentIndex<SELF extends NodeAssert<SELF, ?>> {
+
+            <ASSERT extends AbstractIntegerAssert<? extends ASSERT>> ASSERT extractingTypeArgumentIndex(
+                    AssertFactory<? super Integer, ? extends ASSERT> factory
+            );
+
+            @SuppressWarnings({"unchecked"})
+            default <ASSERT extends AbstractIntegerAssert<? extends ASSERT>> SELF hasTypeArgumentIndexSatisfying(
+                    final AssertFactory<? super Integer, ? extends ASSERT> factory,
+                    final Consumer<? super ASSERT> consumer) {
+                Objects.requireNonNull(consumer, "consumer is null");
+                consumer.accept(extractingTypeArgumentIndex(factory));
+                return (SELF) this;
+            }
+
+            default AbstractIntegerAssert<?> extractingTypeArgumentIndex() {
+                return extractingTypeArgumentIndex(InstanceOfAssertFactories.INTEGER);
+            }
+
+            default SELF hasTypeArgumentIndexSatisfying(final Consumer<? super AbstractIntegerAssert<?>> consumer) {
+                return hasTypeArgumentIndexSatisfying(InstanceOfAssertFactories.INTEGER, consumer);
+            }
+
+            @SuppressWarnings({
+                    "unchecked"
+            })
+            default SELF hasTypeArgumentIndex(final Integer expectedTypeArgumentIndex) {
+                extractingTypeArgumentIndex().isEqualTo(expectedTypeArgumentIndex);
+                return (SELF) this;
+            }
+
+            default SELF doesNotHaveTypeArgumentIndex() {
+                return hasTypeArgumentIndexSatisfying(AbstractAssert::isNull);
+            }
+        }
+
+        interface HasParameterTypes<SELF extends NodeAssert<SELF, ?>> {
+
+            <ASSERT extends AbstractListAssert<?, List<Class<?>>, Class<?>, ? extends AbstractClassAssert<?>>>
+            ASSERT extractingParameterTypes(AssertFactory<? super List<Class<?>>, ? extends ASSERT> factory);
+
+            @SuppressWarnings({"unchecked"})
+            default <ASSERT extends AbstractListAssert<?, List<Class<?>>, Class<?>, ? extends AbstractClassAssert<?>>>
+            SELF hasParameterTypesSatisfying(final AssertFactory<? super List<Class<?>>, ? extends ASSERT> factory,
+                                             final Consumer<? super ASSERT> consumer) {
+                Objects.requireNonNull(consumer, "consumer is null");
+                consumer.accept(extractingParameterTypes(factory));
+                return (SELF) this;
+            }
+
+            default AbstractListAssert<?, List<Class<?>>, Class<?>, ? extends AbstractClassAssert<?>> extractingParameterTypes() {
+                return extractingParameterTypes(
+                        a -> Assertions.<List<Class<?>>, Class<?>, ClassAssert>assertThat(a, ClassAssert::new)
+                );
+            }
+        }
+
+        interface HasParameterIndex<SELF extends NodeAssert<SELF, ?>> {
+
+            <ASSERT extends AbstractIntegerAssert<? extends ASSERT>> ASSERT extractingParameterIndex(
+                    AssertFactory<? super Integer, ? extends ASSERT> factory
+            );
+
+            @SuppressWarnings({"unchecked"})
+            default <ASSERT extends AbstractIntegerAssert<? extends ASSERT>> SELF hasParameterIndexSatisfying(
+                    final AssertFactory<? super Integer, ? extends ASSERT> factory,
+                    final Consumer<? super ASSERT> consumer) {
+                Objects.requireNonNull(consumer, "consumer is null");
+                consumer.accept(extractingParameterIndex(factory));
+                return (SELF) this;
+            }
+
+            default AbstractIntegerAssert<?> extractingParameterIndex() {
+                return extractingParameterIndex(InstanceOfAssertFactories.INTEGER);
+            }
+
+            default SELF hasParameterIndexSatisfying(final Consumer<? super AbstractIntegerAssert<?>> consumer) {
+                return hasParameterIndexSatisfying(InstanceOfAssertFactories.INTEGER, consumer);
+            }
+
+            @SuppressWarnings({
+                    "unchecked"
+            })
+            default SELF hasParameterIndex(final Integer expectedParameterIndex) {
+                extractingParameterIndex().isEqualTo(expectedParameterIndex);
+                return (SELF) this;
+            }
+
+            default SELF doesNotHaveParameterIndex() {
+                return hasParameterIndexSatisfying(AbstractAssert::isNull);
+            }
+        }
         // ---------------------------------------------------------------------------------------------------------- as
 //        <NODE extends Path.Node, ASSERT extends NodeAssert<?, ? extends NODE>> ASSERT extractingAs(
 //                final Class<NODE> nodeType,
@@ -83,7 +210,7 @@ interface PathAssert<SELF extends PathAssert<SELF>>
          * Returns an assert for verifying {@link Path.Node#getIndex() actual.index} value.
          *
          * @return an assert for verifying {@link Path.Node#getIndex() actual.index} value.
-         * @see #hasIndex(int)
+         * @see #extractingIndex(AssertFactory)
          */
         default AbstractIntegerAssert<?> extractingIndex() {
             return extractingIndex(InstanceOfAssertFactories.INTEGER);
@@ -94,7 +221,7 @@ interface PathAssert<SELF extends PathAssert<SELF>>
          *
          * @param consumer the consumer verifies the {@link Path.Node#getIndex() actual.index} value.
          * @return this assertion object
-         * @see #hasIndex(int)
+         * @see #extractingIndex()
          */
         @SuppressWarnings({"unchecked"})
         default SELF hasIndexSatisfying(final Consumer<? super AbstractIntegerAssert<?>> consumer) {
@@ -110,15 +237,12 @@ interface PathAssert<SELF extends PathAssert<SELF>>
          * @return this assertion object.
          * @see #hasIndexSatisfying(Consumer)
          */
-        @SuppressWarnings({
-                "unchecked"
-        })
-        default SELF hasIndex(final int expectedIndex) {
-            if (true) {
-                return hasIndexSatisfying(a -> a.isEqualTo(expectedIndex));
-            }
-            extractingIndex().isEqualTo(expectedIndex);
-            return (SELF) this;
+        default SELF hasIndex(final Integer expectedIndex) {
+            return hasIndexSatisfying(a -> a.isEqualTo(expectedIndex));
+        }
+
+        default SELF doesNotHaveIndex() {
+            return hasIndex(null);
         }
 
         // --------------------------------------------------------------------------------------------------------- key
@@ -284,56 +408,24 @@ interface PathAssert<SELF extends PathAssert<SELF>>
 
     // -------------------------------------------------------------------------------------------------------- BeanNode
     interface BeanNodeAssert<SELF extends BeanNodeAssert<SELF>>
-            extends NodeAssert<SELF, Path.BeanNode> {
+            extends NodeAssert<SELF, Path.BeanNode>,
+                    NodeAssert.HasContainerClass<SELF>,
+                    NodeAssert.HasTypeArgumentIndex<SELF> {
 
-        // ---------------------------------------------------------------------------------------------- containerClass
-        Assert<?, ? extends Class<?>> extractingContainerClass();
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        default SELF hasContainerClass(final Class<?> expectedContainerClass) {
-            extractingContainerClass().isEqualTo(expectedContainerClass);
-            return (SELF) this;
-        }
-
-        // ------------------------------------------------------------------------------------------- typeArgumentIndex
-        Assert<?, Integer> extractingTypeArgumentIndex();
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        default SELF hasTypeArgumentIndex(final Integer expectedTypeArgumentIndex) {
-            extractingTypeArgumentIndex().isEqualTo(expectedTypeArgumentIndex);
-            return (SELF) this;
-        }
-
-        default SELF hasNoTypeArgumentIndex() {
-            return hasTypeArgumentIndex(null);
-        }
     }
 
     // ------------------------------------------------------------------------------------------------- ConstructorNode
     interface ConstructorNodeAssert<SELF extends ConstructorNodeAssert<SELF>>
-            extends NodeAssert<SELF, Path.ConstructorNode> {
+            extends NodeAssert<SELF, Path.ConstructorNode>,
+                    NodeAssert.HasParameterTypes<SELF> {
 
-        // ---------------------------------------------------------------------------------------------- parameterTypes
-        AbstractIterableAssert<?, ?, ? super Class<?>, ?> extractingParameterTypes4();
-
-        ListAssert<? super Class<?>> extractingParameterTypes5();
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        default SELF hasParameterTypes(final List<Class<?>> expectedParameterTypes) {
-            extractingParameterTypes5().isEqualTo(expectedParameterTypes);
-            return (SELF) this;
-        }
     }
 
     // -------------------------------------------------------------------------------------------- ContainerElementNode
     interface ContainerElementNodeAssert<SELF extends ContainerElementNodeAssert<SELF>>
-            extends NodeAssert<SELF, Path.ContainerElementNode> {
+            extends NodeAssert<SELF, Path.ContainerElementNode>,
+                    NodeAssert.HasContainerClass<SELF>,
+                    NodeAssert.HasTypeArgumentIndex<SELF> {
 
     }
 
@@ -345,62 +437,72 @@ interface PathAssert<SELF extends PathAssert<SELF>>
 
     // ------------------------------------------------------------------------------------------------------ MethodNode
     interface MethodNodeAssert<SELF extends MethodNodeAssert<SELF>>
-            extends NodeAssert<SELF, Path.MethodNode> {
+            extends NodeAssert<SELF, Path.MethodNode>,
+                    NodeAssert.HasParameterTypes<SELF> {
 
-        // ---------------------------------------------------------------------------------------------- parameterTypes
-        AbstractIterableAssert<?, ?, ? super Class<?>, ?> extractingParameterTypes4();
-
-        ListAssert<? super Class<?>> extractingParameterTypes5();
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        default SELF hasParameterTypes(final List<Class<?>> expectedParameterTypes) {
-            extractingParameterTypes5().isEqualTo(expectedParameterTypes);
-            return (SELF) this;
-        }
     }
 
     // --------------------------------------------------------------------------------------------------- ParameterNode
     interface ParameterNodeAssert<SELF extends ParameterNodeAssert<SELF>>
-            extends NodeAssert<SELF, Path.ParameterNode> {
+            extends NodeAssert<SELF, Path.ParameterNode>,
+                    NodeAssert.HasParameterIndex<SELF> {
 
     }
 
     // ---------------------------------------------------------------------------------------------------- PropertyNode
     interface PropertyNodeAssert<SELF extends PropertyNodeAssert<SELF>>
-            extends NodeAssert<SELF, Path.PropertyNode> {
+            extends NodeAssert<SELF, Path.PropertyNode>,
+                    NodeAssert.HasContainerClass<SELF>,
+                    NodeAssert.HasTypeArgumentIndex<SELF> {
 
-        // ---------------------------------------------------------------------------------------------- containerClass
-        Assert<?, ? extends Class<?>> extractingContainerClass();
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        default SELF hasContainerClass(final Class<?> expectedContainerClass) {
-            extractingContainerClass().isEqualTo(expectedContainerClass);
-            return (SELF) this;
-        }
-
-        // ------------------------------------------------------------------------------------------- typeArgumentIndex
-        Assert<?, Integer> extractingTypeArgumentIndex();
-
-        @SuppressWarnings({
-                "unchecked"
-        })
-        default SELF hasTypeArgumentIndex(final Integer expectedTypeArgumentIndex) {
-            extractingTypeArgumentIndex().isEqualTo(expectedTypeArgumentIndex);
-            return (SELF) this;
-        }
-
-        default SELF hasNoTypeArgumentIndex() {
-            return hasTypeArgumentIndex(null);
-        }
     }
 
     // ------------------------------------------------------------------------------------------------- ReturnValueNode
     interface ReturnValueNodeAssert<SELF extends ReturnValueNodeAssert<SELF>>
             extends NodeAssert<SELF, Path.ReturnValueNode> {
 
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    <A extends AbstractPathAssert._AbstractNodeAssert<? extends A, ? extends N>, N extends Path.Node> A extractingNode(
+            int index, Class<N> nodeType, AssertFactory<? super N, ? extends A> factory);
+
+    @SuppressWarnings({"unchecked"})
+    default <A extends AbstractPathAssert._AbstractNodeAssert<? extends A, ? extends N>, N extends Path.Node>
+    SELF hasNodeSatisfying(final int index, final Class<N> nodeType,
+                           final AssertFactory<? super N, ? extends A> factory, final Consumer<? super A> consumer) {
+        Objects.requireNonNull(consumer, "consumer is null");
+        consumer.accept(extractingNode(index, nodeType, factory));
+        return (SELF) this;
+    }
+
+    <A extends AbstractPathAssert.AbstractNodeAssert<? extends A>> A extractingNode(
+            int index, AssertFactory<? super Path.Node, ? extends A> factory);
+
+    AbstractPathAssert.AbstractNodeAssert<?> extractingNode(int index);
+
+    @SuppressWarnings({"unchecked"})
+    default SELF hasNodeSatisfying(final int index,
+                                   final Consumer<? super AbstractPathAssert.AbstractNodeAssert<?>> consumer) {
+        Objects.requireNonNull(consumer, "consumer is null");
+        consumer.accept(extractingNode(index));
+        return (SELF) this;
+    }
+
+    <A extends AbstractPathAssert.AbstractBeanNodeAssert<? extends A>> A extractingBeanNode(
+            int index, AssertFactory<? super Path.BeanNode, ? extends A> factory);
+
+    AbstractPathAssert.AbstractBeanNodeAssert<?> extractingBeanNode(int index);
+
+    <A extends AbstractPathAssert.AbstractPropertyNodeAssert<? extends A>> A extractingPropertyNode(
+            int index, AssertFactory<? super Path.PropertyNode, ? extends A> factory);
+
+    AbstractPathAssert.AbstractPropertyNodeAssert<?> extractingPropertyNode(int index);
+
+    @SuppressWarnings({"unchecked"})
+    default SELF hasPropertyNodeSatisfying(final int index, final Consumer<? super PropertyNodeAssert<?>> consumer) {
+        Objects.requireNonNull(consumer, "consumer is null");
+        consumer.accept(extractingPropertyNode(index));
+        return (SELF) this;
     }
 }

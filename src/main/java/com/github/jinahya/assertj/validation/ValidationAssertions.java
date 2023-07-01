@@ -21,7 +21,6 @@ package com.github.jinahya.assertj.validation;
  */
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.lang.annotation.Annotation;
 
@@ -39,7 +38,7 @@ public final class ValidationAssertions {
      * @param actual   the bean value to verify.
      * @return a new assertion object for verifying {@code actual}.
      */
-    public static <ACTUAL> BeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
+    public static <ACTUAL> AbstractBeanAssert<?, ACTUAL> assertThatBean(final ACTUAL actual) {
         return new DefaultBeanAssert<>(actual);
     }
 
@@ -50,7 +49,7 @@ public final class ValidationAssertions {
      * @param actual   the value of the property to verify.
      * @return a new assertion instance for {@code actual}.
      */
-    public static <ACTUAL> PropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
+    public static <ACTUAL> AbstractPropertyAssert<?, ACTUAL> assertThatProperty(final ACTUAL actual) {
         return new DefaultPropertyAssert<>(actual);
     }
 

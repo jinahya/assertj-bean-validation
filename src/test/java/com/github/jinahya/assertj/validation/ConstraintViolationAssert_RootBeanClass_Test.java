@@ -13,10 +13,13 @@ class ConstraintViolationAssert_RootBeanClass_Test
 
     @Test
     void hasRootBeanClass__() {
-        final var actual = spy(ConstraintViolation.class);
-        final var rootBeenClass = getClass();
+        @SuppressWarnings({"unchecked"})
+        final ConstraintViolation<Object> actual = (ConstraintViolation<Object>) spy(ConstraintViolation.class);
+        final Class<Object> rootBeenClass = Object.class;
         when(actual.getRootBeanClass()).thenReturn(rootBeenClass);
         final var assertion = assertion(actual);
-        assertThatCode(() -> assertion.hasRootBeanClass(rootBeenClass)).doesNotThrowAnyException();
+        assertThatCode(
+                () -> assertion.hasRootBeanClass(rootBeenClass)
+        ).doesNotThrowAnyException();
     }
 }

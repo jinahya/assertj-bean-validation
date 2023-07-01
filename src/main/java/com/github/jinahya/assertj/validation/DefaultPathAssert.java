@@ -28,10 +28,10 @@ import java.util.Iterator;
  *
  * @author Jin Kwon &lt;onacit_at_gmail.com&gt;
  */
-class DefaultPathAssert
+public class DefaultPathAssert
         extends AbstractPathAssert<DefaultPathAssert, DefaultPathAssert.DefaultNodeAssert> {
 
-    static class DefaultNodeAssert
+    public static class DefaultNodeAssert
             extends AbstractNodeAssert<DefaultNodeAssert> {
 
         static class DefaultBeanNodeAssert
@@ -43,7 +43,7 @@ class DefaultPathAssert
         }
 
         static class DefaultParameterizedNodeAssert
-                extends AbstractParameterizedNodeAssert<DefaultParameterizedNodeAssert> {
+                extends AbstractParameterNodeAssert<DefaultParameterizedNodeAssert> {
 
             DefaultParameterizedNodeAssert(final Path.ParameterNode actual, final Class<?> selfType) {
                 super(actual, selfType);
@@ -79,6 +79,14 @@ class DefaultPathAssert
 
             DefaultParameterNodeAssert(final Path.ParameterNode actual) {
                 super(actual, DefaultParameterNodeAssert.class);
+            }
+        }
+
+        public static class DefaultPropertyNodeAssert
+                extends AbstractPropertyNodeAssert<DefaultPropertyNodeAssert> {
+
+            DefaultPropertyNodeAssert(final Path.PropertyNode actual) {
+                super(actual, DefaultPropertyNodeAssert.class);
             }
         }
 

@@ -25,6 +25,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ElementKind;
+import javax.validation.Path;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -51,9 +53,9 @@ class User_ConstraintViolationAssert_Test {
         @Test
         void __ValidName() {
             final var name = validName();
-            final var assertions = assertThatProperty(name);
+            final var assertion = assertThatProperty(name);
             shouldPass(
-                    () -> assertions.isValidFor(User.class, "name", s -> {
+                    () -> assertion.isValidFor(User.class, "name", s -> {
                         assertThat(s).isEmpty();
                     })
             );
@@ -62,10 +64,10 @@ class User_ConstraintViolationAssert_Test {
         @Test
         void __InvalidName() {
             final var name = invalidName();
-            final var assertions = assertThatProperty(name);
+            final var assertion = assertThatProperty(name);
             final var violations = new HashSet<ConstraintViolation<User>>();
             shouldFail(
-                    () -> assertions.isValidFor(User.class, "name", violations::addAll)
+                    () -> assertion.isValidFor(User.class, "name", violations::addAll)
             );
             assertThat(violations).hasSize(1).allSatisfy(cv -> {
                 assertThatConstraintViolation(cv)
@@ -94,8 +96,25 @@ class User_ConstraintViolationAssert_Test {
                     assertThatConstraintViolation(cv)
                             .extractingPropertyPath()
                             .hasSize(1)
+                            .hasNodeSatisfying(0, a -> {
+                                a.doesNotHaveIndex()
+                                        .hasKey(null)
+                                        .hasKind(ElementKind.PROPERTY)
+                                        .hasName(User.PROPERTY_NAME_NAME)
+                                        .isNotInIterable();
+                            })
+                            .hasPropertyNodeSatisfying(0, a -> {
+                                a.hasContainerClass(null);
+                                a.doesNotHaveTypeArgumentIndex();
+                            })
                             .element(0)
-                            .hasName(User.PROPERTY_NAME_NAME);
+                            .isInstanceOf(Path.PropertyNode.class)
+                            .doesNotHaveIndex()
+                            .hasKey(null)
+                            .hasKind(ElementKind.PROPERTY)
+                            .hasName(User.PROPERTY_NAME_NAME)
+                            .isNotInIterable()
+                    ;
                 }
             });
         }
@@ -107,9 +126,9 @@ class User_ConstraintViolationAssert_Test {
         @Test
         void __ValidAge() {
             final var age = validAge();
-            final var assertions = assertThatProperty(age);
+            final var assertion = assertThatProperty(age);
             shouldPass(
-                    () -> assertions.isValidFor(User.class, "age", s -> {
+                    () -> assertion.isValidFor(User.class, "age", s -> {
                         assertThat(s).isEmpty();
                     })
             );
@@ -118,10 +137,10 @@ class User_ConstraintViolationAssert_Test {
         @Test
         void __InvalidAge() {
             final var age = invalidAge();
-            final var assertions = assertThatProperty(age);
+            final var assertion = assertThatProperty(age);
             final var violations = new HashSet<ConstraintViolation<User>>();
             shouldFail(
-                    () -> assertions.isValidFor(User.class, "age", violations::addAll)
+                    () -> assertion.isValidFor(User.class, "age", violations::addAll)
             );
             assertThat(violations).hasSize(1).allSatisfy(cv -> {
                 assertThatConstraintViolation(cv)
@@ -162,6 +181,29 @@ class User_ConstraintViolationAssert_Test {
                     assertThatConstraintViolation(cv)
                             .extractingConstraintDescriptor()
                             .doesNotHostAnyConstraintTarget();
+                }
+                {
+                    assertThatConstraintViolation(cv)
+                            .extractingPropertyPath()
+                            .hasSize(1)
+                            .hasNodeSatisfying(0, a -> {
+                                a.doesNotHaveIndex()
+                                        .hasKey(null)
+                                        .hasKind(ElementKind.PROPERTY)
+                                        .hasName(User.PROPERTY_NAME_AGE)
+                                        .isNotInIterable();
+                            })
+                            .hasPropertyNodeSatisfying(0, a -> {
+                                a.hasContainerClass(null);
+                                a.doesNotHaveTypeArgumentIndex();
+                            })
+                            .element(0)
+                            .isInstanceOf(Path.PropertyNode.class)
+                            .doesNotHaveIndex()
+                            .hasKey(null)
+                            .hasKind(ElementKind.PROPERTY)
+                            .hasName(User.PROPERTY_NAME_AGE)
+                            .isNotInIterable();
                 }
             });
         }
